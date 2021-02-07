@@ -1,19 +1,23 @@
 {
   "name": "cc-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "A general discord bot with multiple functionalities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "npm:clear": "rm -rf $PWD/node_modules && rm $PWD/package-lock.json && npm cache verify && npm install"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "scripts": {
-    "start": "ts-node src/index.ts",
-    "build": "tsc"
-  },
+  "repository": {},
   "devDependencies": {
+    "@typeit/discord": "^4.0.9",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
+    "discord.js": "^12.5.1",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
