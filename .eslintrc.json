@@ -10,7 +10,6 @@
       "plugin:eslint-comments/recommended",
       "plugin:@typescript-eslint/recommended",
       "plugin:import/typescript",
-      "plugin:functional/lite",
       "prettier",
       "prettier/@typescript-eslint"
     ],
@@ -24,7 +23,7 @@
       "eslint-comments/no-unused-disable": "error",
       "import/order": [
         "error",
-        { "newlines-between": "always", "alphabetize": { "order": "asc" } }
+        { "newlines-between": "never", "alphabetize": { "order": "asc" } }
       ],
       "sort-imports": [
         "error",
