@@ -1,10 +1,13 @@
-import * as config from '../bot.json';
+import * as config from '../../bot.json';
 
 export interface BotConfig {
   token: string;
 }
 
-export class AppUtils {
+export abstract class AppUtils {
+  /**
+   * Get bot configs
+   */
   static getConfig(): BotConfig {
     return config as BotConfig;
   }

@@ -1,25 +1,27 @@
 import * as fs from 'fs';
 import { Client, Command, CommandMessage, Discord, On } from '@typeit/discord';
-import { AppUtils, BotConfig } from './utlis';
+import { ChoosePlayer } from './commands/choosePlayer';
+import { AppUtils, BotConfig } from './utils';
 
 @Discord('!')
 export class AppDiscord {
   private static client: Client;
+  private choosePlayer: ChoosePlayer;
+
+  constructor() {
+    this.choosePlayer = new ChoosePlayer();
+  }
 
   static get Client(): Client {
     return this.client;
   }
 
-  static get Config(): BotConfig {
-    return AppUtils.getConfig();
-  }
-
   static start(): void {
     const __dirname = fs.realpathSync('.');
-    const config = AppUtils.getConfig() as BotConfig;
+    const token = (AppUtils.getConfig() as BotConfig)?.token;
     this.client = new Client();
 
-    this.client.login(config?.token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
+    this.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
   }
 
   @On('ready')
@@ -32,26 +34,16 @@ export class AppDiscord {
     command.reply('pong!');
   }
 
-  @Command('userchoice')
-  chooseMember(command: CommandMessage): void {
-    // Finds channel
-    const channel = command?.guild?.channels.cache.get('787770844066611200');
-    // Finds and get usernames in channel
-    const users = channel?.guild.members.cache
-      .map((x) => {
-        if (!x.user?.bot) {
-          return x.user;
-        }
+  @Command('playerchoice')
+  playerInit(command: CommandMessage): Promise<void> {
+    return this.choosePlayer
+      .init(command)
+      .then((player) => {
+        command.reply(player);
       })
-      .filter((v, i, s) => v?.id && s.indexOf(v) === i)
-      .map((x) => {
-        return x?.username as string;
+      .catch((e) => {
+        command.reply(e);
       });
-
-    // Randomly chooses channel user
-    users?.length
-      ? command.reply(users[Math.floor(Math.random() * users.length)])
-      : command.reply('Sorry I failed you!');
   }
 }
 
