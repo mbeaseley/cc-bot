@@ -28,7 +28,6 @@ export class ChoosePlayer {
   }
 
   public init(command: CommandMessage): Promise<string> {
-    // MOVE AWAy FROM DEFAULT ID
     const channel = this.getChannel(command, '787770844066611200');
 
     const users = this.getUsers(channel);

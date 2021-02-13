@@ -1,15 +1,18 @@
 import * as fs from 'fs';
 import { Client, Command, CommandMessage, Discord, On } from '@typeit/discord';
 import { ChoosePlayer } from './commands/choosePlayer';
+import { DadJoke } from './commands/dadJoke';
 import { AppUtils, BotConfig } from './utils';
 
 @Discord('!')
 export class AppDiscord {
   private static client: Client;
   private choosePlayer: ChoosePlayer;
+  private dadJoke: DadJoke;
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
+    this.dadJoke = new DadJoke();
   }
 
   static get Client(): Client {
@@ -27,6 +30,8 @@ export class AppDiscord {
   @On('ready')
   initialize(): void {
     console.log('Bot logged in.');
+
+    this.dadJoke;
   }
 
   @Command('ping')
@@ -40,6 +45,18 @@ export class AppDiscord {
       .init(command)
       .then((player) => {
         command.reply(player);
+      })
+      .catch((e) => {
+        command.reply(e);
+      });
+  }
+
+  @Command('joke')
+  jokeInit(command: CommandMessage): Promise<void> {
+    return this.dadJoke
+      .init()
+      .then((joke) => {
+        command.reply(joke);
       })
       .catch((e) => {
         command.reply(e);
