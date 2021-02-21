@@ -1,4 +1,4 @@
-import * as config from '../../bot.json';
+import * as config from '../environment/bot.json';
 
 export interface BotConfig {
   token: string;
