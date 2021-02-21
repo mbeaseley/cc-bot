@@ -11,6 +11,9 @@ export class DadJoke extends HttpClient {
     super('https://icanhazdadjoke.com/');
   }
 
+  /**
+   * Get random joke
+   */
   private getRandomJoke = () =>
     this.instance.get<JokeResponse>('', {
       headers: {
@@ -18,6 +21,9 @@ export class DadJoke extends HttpClient {
       },
     });
 
+  /**
+   * Init
+   */
   public async init(): Promise<string> {
     const res = await this.getRandomJoke();
     return res.joke;

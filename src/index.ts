@@ -36,7 +36,7 @@ export class AppDiscord {
 
   @Command('ping')
   ping(command: CommandMessage): void {
-    command.reply('pong!');
+    command.reply('STOP THAT NOW!');
   }
 
   @Command('playerchoice')
