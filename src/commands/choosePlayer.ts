@@ -29,9 +29,9 @@ export class ChoosePlayer {
    * @param channel
    */
   private getUsers(channel: GuildChannel | undefined): string[] {
-    const users = channel?.guild?.members?.cache.map((x) => {
-      if (!x.user?.bot) {
-        return x.user;
+    const users = channel?.members?.map((m) => {
+      if (!m.user?.bot) {
+        return m.user;
       }
     });
 
