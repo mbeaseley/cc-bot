@@ -1,10 +1,19 @@
 import * as fs from 'fs';
-import { Client, Command, CommandMessage, Discord, On } from '@typeit/discord';
+import {
+  Client,
+  Command,
+  CommandMessage,
+  Description,
+  Discord,
+  On,
+} from '@typeit/discord';
 import { ChoosePlayer } from './commands/choosePlayer';
 import { DadJoke } from './commands/dadJoke';
 import { AppUtils, BotConfig } from './utils';
 
-@Discord('!')
+@Discord(
+  `<${AppUtils.getConfig()?.botId}> ` || `<${AppUtils.getConfig()?.botId}> `
+)
 export class AppDiscord {
   private static client: Client;
   private choosePlayer: ChoosePlayer;
@@ -30,16 +39,13 @@ export class AppDiscord {
   @On('ready')
   initialize(): void {
     console.log('Bot logged in.');
-
-    this.dadJoke;
-  }
-
-  @Command('ping')
-  ping(command: CommandMessage): void {
-    command.reply('STOP THAT NOW!');
+    AppDiscord.client.user?.setActivity('@CC Bot', { type: 'LISTENING' });
   }
 
   @Command('playerchoice')
+  @Description(
+    'Chooses active member on the voice channel that the asker is within!'
+  )
   playerInit(command: CommandMessage): Promise<void> {
     return this.choosePlayer
       .init(command)
@@ -52,6 +58,7 @@ export class AppDiscord {
   }
 
   @Command('joke')
+  @Description(`Who doesn't want a bad joke!`)
   jokeInit(command: CommandMessage): Promise<void> {
     return this.dadJoke
       .init()
@@ -61,6 +68,11 @@ export class AppDiscord {
       .catch((e) => {
         command.reply(e);
       });
+  }
+
+  @Command('help')
+  helpInit(): void {
+    console.log(Client.getCommands());
   }
 }
 

@@ -2,6 +2,7 @@ import * as config from '../environment/bot.json';
 
 export interface BotConfig {
   token: string;
+  botId: string;
 }
 
 export abstract class AppUtils {
