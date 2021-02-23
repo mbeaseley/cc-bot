@@ -43,9 +43,7 @@ export class AppDiscord {
   }
 
   @Command('playerchoice')
-  @Description(
-    'Chooses active member on the voice channel that the asker is within!'
-  )
+  @Description('Chooses Player')
   playerInit(command: CommandMessage): Promise<void> {
     return this.choosePlayer
       .init(command)
@@ -58,7 +56,7 @@ export class AppDiscord {
   }
 
   @Command('joke')
-  @Description(`Who doesn't want a bad joke!`)
+  @Description('Joke')
   jokeInit(command: CommandMessage): Promise<void> {
     return this.dadJoke
       .init()
@@ -71,8 +69,29 @@ export class AppDiscord {
   }
 
   @Command('help')
-  helpInit(): void {
-    console.log(Client.getCommands());
+  helpInit(command: CommandMessage): void {
+    const commands = Client.getCommands();
+    const fields = commands
+      .filter((c) => c.commandName !== 'help')
+      .map((c) => {
+        return {
+          name: `**${c.description}**`,
+          value: `\`@CC Bot ${c.commandName}\``,
+          inline: true,
+        };
+      });
+
+    command.channel.send({
+      embed: {
+        color: 10181046,
+        author: {
+          name: `${command?.client?.user?.username} Plugin Commands`,
+          icon_url: command?.client?.user?.displayAvatarURL(),
+        },
+        // url: '',
+        fields,
+      },
+    });
   }
 }
 
