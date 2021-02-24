@@ -1,27 +1,32 @@
 import * as fs from 'fs';
 import {
+  ArgsOf,
   Client,
   Command,
   CommandMessage,
   Description,
   Discord,
   On,
+  Rule,
+  Rules,
 } from '@typeit/discord';
 import { ChoosePlayer } from './commands/choosePlayer';
 import { DadJoke } from './commands/dadJoke';
+import { Insult } from './commands/insults';
 import { AppUtils, BotConfig } from './utils';
 
-@Discord(
-  `<${AppUtils.getConfig()?.botId}> ` || `<${AppUtils.getConfig()?.botId}> `
-)
+@Discord('')
+@Rules(Rule().fromString(`${AppUtils.getConfig()?.botId}> `))
 export class AppDiscord {
   private static client: Client;
   private choosePlayer: ChoosePlayer;
   private dadJoke: DadJoke;
+  private insults: Insult;
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
     this.dadJoke = new DadJoke();
+    this.insults = new Insult();
   }
 
   static get Client(): Client {
@@ -63,8 +68,20 @@ export class AppDiscord {
       .then((joke) => {
         command.reply(joke);
       })
-      .catch((e) => {
-        command.reply(e);
+      .catch(() => {
+        command.reply(`I have failed you!`);
+      });
+  }
+
+  @Command('insult')
+  insultInit(command: CommandMessage): Promise<void> {
+    return this.insults
+      .init()
+      .then((insult: string) => {
+        command.reply(insult);
+      })
+      .catch(() => {
+        command.reply(`I have failed you!`);
       });
   }
 
@@ -92,6 +109,11 @@ export class AppDiscord {
         fields,
       },
     });
+  }
+
+  @On('message')
+  onInit([message]: ArgsOf<'message'>, client: Client): void {
+    console.log(message.content);
   }
 }
 
