@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import {
-  ArgsOf,
   Client,
   Command,
   CommandMessage,
@@ -15,6 +14,7 @@ import { DadJoke } from './commands/dadJoke';
 import { Insult } from './commands/insults';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
+
 @Discord('')
 @Rules(Rule().fromString(`${process.env.BOTID}> `))
 export class AppDiscord {

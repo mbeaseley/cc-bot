@@ -1,6 +1,6 @@
 import { CommandMessage } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
-import { HttpClient } from '../interceptor/HttpClient';
+import { HttpClient } from '../interceptor/httpClient';
 
 export class Insult extends HttpClient {
   constructor() {
@@ -36,10 +36,3 @@ export class Insult extends HttpClient {
     return message;
   }
 }
-
-// .then((insult: string) => {
-//   command.reply(insult);
-// })
-// .catch(() => {
-//   command.reply(`I have failed you!`);
-// });

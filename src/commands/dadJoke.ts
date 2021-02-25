@@ -1,4 +1,4 @@
-import { HttpClient } from '../interceptor/HttpClient';
+import { HttpClient } from '../interceptor/httpClient';
 
 interface JokeResponse {
   id: string;
