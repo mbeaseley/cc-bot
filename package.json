@@ -8,8 +8,9 @@
     "npm": "6.x"
   },
   "scripts": {
-    "build": "tsc",
-    "prestart": "npm run build",
+    "tsc": "tsc",
+    "postinstall": "npm run tsc",
+    "prestart": "npm run tsc",
     "start": "node ./build/",
     "start:dev": "ts-node-dev src/index.ts",
     "npm:clear": "rm -rf $PWD/node_modules && rm $PWD/package-lock.json && npm cache verify && npm install"
@@ -25,7 +26,8 @@
     "axios": "^0.21.1",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "typescript": "^4.1.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "4.14.2",
@@ -35,10 +37,8 @@
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-functional": "^3.2.1",
     "eslint-plugin-import": "^2.22.1",
-    "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
-    "ts-node-dev": "^1.1.1",
-    "typescript": "^4.1.3"
+    "ts-node-dev": "^1.1.1"
   },
   "prettier": {
     "singleQuote": true
