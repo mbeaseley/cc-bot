@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A general discord bot with multiple functionalities",
   "main": "dist/index.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
