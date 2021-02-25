@@ -74,11 +74,14 @@ export class AppDiscord {
   }
 
   @Command('insult')
+  @Description('Joke')
   insultInit(command: CommandMessage): Promise<void> {
     return this.insults
-      .init()
+      .init(command)
       .then((insult: string) => {
-        command.reply(insult);
+        insult.startsWith('<')
+          ? command.channel.send(insult)
+          : command.reply(insult);
       })
       .catch(() => {
         command.reply(`I have failed you!`);
@@ -90,11 +93,17 @@ export class AppDiscord {
     const commands = Client.getCommands();
     const fields = commands
       .filter((c) => c.commandName !== 'help')
-      .map((c) => {
+      .map((c, i) => {
+        if (c.commandName === 'insult') {
+          c.commandName = 'insult @user(optional)';
+        }
+
+        const inline = (i + 1) % 3 === 0 ? false : true;
+
         return {
           name: `**${c.description}**`,
           value: `\`@CC Bot ${c.commandName}\``,
-          inline: true,
+          inline,
         };
       });
 
