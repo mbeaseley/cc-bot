@@ -120,10 +120,10 @@ export class AppDiscord {
     });
   }
 
-  @On('message')
-  onInit([message]: ArgsOf<'message'>, client: Client): void {
-    console.log(message.content);
-  }
+  // @On('message')
+  // onInit([message]: ArgsOf<'message'>, client: Client): void {
+  //   console.log(message.content);
+  // }
 }
 
 AppDiscord.start();
