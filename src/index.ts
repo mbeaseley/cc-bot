@@ -13,10 +13,10 @@ import {
 import { ChoosePlayer } from './commands/choosePlayer';
 import { DadJoke } from './commands/dadJoke';
 import { Insult } from './commands/insults';
-import { AppUtils, BotConfig } from './utils';
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 @Discord('')
-@Rules(Rule().fromString(`${AppUtils.getConfig()?.botId}> `))
+@Rules(Rule().fromString(`${process.env.BOTID}> `))
 export class AppDiscord {
   private static client: Client;
   private choosePlayer: ChoosePlayer;
@@ -33,9 +33,9 @@ export class AppDiscord {
     return this.client;
   }
 
-  static start(): void {
+  static async start(): Promise<void> {
     const __dirname = fs.realpathSync('.');
-    const token = (AppUtils.getConfig() as BotConfig)?.token;
+    const token = process.env.TOKEN || '';
     this.client = new Client();
 
     this.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
