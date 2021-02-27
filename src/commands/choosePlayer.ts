@@ -6,7 +6,7 @@ export class ChoosePlayer {
    * Get Author of command
    * @param command
    */
-  getAuthor(command: CommandMessage): User {
+  private getAuthor(command: CommandMessage): User {
     return command?.author;
   }
 
@@ -50,15 +50,15 @@ export class ChoosePlayer {
    * Init for player choice
    * @param command
    */
-  public init(command: CommandMessage): Promise<string> {
+  public init(command: CommandMessage): Promise<void> {
     const channel = this.findUserChannel(command);
-
     const users = this.getUsers(channel);
 
-    if (!users?.length) {
-      return Promise.reject('Sorry I failed you!');
-    }
+    const content = !users?.length
+      ? 'Sorry I failed you!'
+      : users[Math.floor(Math.random() * users.length)];
 
-    return Promise.resolve(users[Math.floor(Math.random() * users.length)]);
+    command.reply(content);
+    return Promise.resolve();
   }
 }

@@ -11,22 +11,27 @@ import {
 } from '@typeit/discord';
 import { ChoosePlayer } from './commands/choosePlayer';
 import { DadJoke } from './commands/dadJoke';
+import { Help } from './commands/help';
 import { Insult } from './commands/insults';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config();
+import 'dotenv/config';
+import { Compliment } from './commands/compliment';
 
 @Discord('')
-@Rules(Rule().fromString(`${process.env.BOTID}> `))
+@Rules(Rule().fromString(`${process.env.BOTID}> ` || `${process.env.BOTID}>`))
 export class AppDiscord {
   private static client: Client;
   private choosePlayer: ChoosePlayer;
   private dadJoke: DadJoke;
   private insults: Insult;
+  private help: Help;
+  private compliment: Compliment;
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
     this.dadJoke = new DadJoke();
     this.insults = new Insult();
+    this.help = new Help();
+    this.compliment = new Compliment();
   }
 
   static get Client(): Client {
@@ -44,86 +49,49 @@ export class AppDiscord {
   @On('ready')
   initialize(): void {
     console.log('Bot logged in.');
-    AppDiscord.client.user?.setActivity('@CC Bot', { type: 'LISTENING' });
+    AppDiscord.client.user?.setActivity('@CC Bot | help', {
+      type: 'LISTENING',
+    });
   }
 
   @Command('playerchoice')
   @Description('Chooses Player')
   playerInit(command: CommandMessage): Promise<void> {
-    return this.choosePlayer
-      .init(command)
-      .then((player) => {
-        command.reply(player);
-      })
-      .catch((e) => {
-        command.reply(e);
-      });
+    return this.choosePlayer.init(command);
   }
 
   @Command('joke')
   @Description('Joke')
   jokeInit(command: CommandMessage): Promise<void> {
-    return this.dadJoke
-      .init()
-      .then((joke) => {
-        command.reply(joke);
-      })
-      .catch(() => {
-        command.reply(`I have failed you!`);
-      });
-  }
-
-  @Command('insult')
-  @Description('Joke')
-  insultInit(command: CommandMessage): Promise<void> {
-    return this.insults
-      .init(command)
-      .then((insult: string) => {
-        insult.startsWith('<')
-          ? command.channel.send(insult)
-          : command.reply(insult);
-      })
-      .catch(() => {
-        command.reply(`I have failed you!`);
-      });
-  }
-
-  @Command('help')
-  helpInit(command: CommandMessage): void {
-    const commands = Client.getCommands();
-    const fields = commands
-      .filter((c) => c.commandName !== 'help')
-      .map((c, i) => {
-        if (c.commandName === 'insult') {
-          c.commandName = 'insult @user(optional)';
-        }
-
-        const inline = (i + 1) % 3 === 0 ? false : true;
-
-        return {
-          name: `**${c.description}**`,
-          value: `\`@CC Bot ${c.commandName}\``,
-          inline,
-        };
-      });
-
-    command.channel.send({
-      embed: {
-        color: 10181046,
-        author: {
-          name: `${command?.client?.user?.username} Plugin Commands`,
-          icon_url: command?.client?.user?.displayAvatarURL(),
-        },
-        // url: '',
-        fields,
-      },
+    return this.dadJoke.init(command).catch(() => {
+      command.reply(`I have failed you!`);
     });
   }
 
-  // @On('message')
-  // onInit([message]: ArgsOf<'message'>, client: Client): void {
-  //   console.log(message.content);
-  // }
+  @Command('insult')
+  @Description('Insult')
+  insultInit(command: CommandMessage): Promise<void> {
+    return this.insults.init(command).catch(() => {
+      command.reply(`I have failed you!`);
+    });
+  }
+
+  @Command('compliment')
+  @Description('Compliment')
+  complimentInit(command: CommandMessage): Promise<void> {
+    return this.compliment.init(command).catch(() => {
+      command.reply(`I have failed you!`);
+    });
+  }
+
+  @Command('help')
+  helpInit(command: CommandMessage): Promise<void> {
+    const allCommands = Client.getCommands();
+
+    return this.help.init(command, allCommands).catch(() => {
+      command.reply(`I have failed you!`);
+    });
+  }
 }
 
 AppDiscord.start();
