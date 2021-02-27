@@ -1,3 +1,4 @@
+import { CommandMessage } from '@typeit/discord';
 import { HttpClient } from '../interceptor/httpClient';
 
 interface JokeResponse {
@@ -24,8 +25,14 @@ export class DadJoke extends HttpClient {
   /**
    * Init
    */
-  public async init(): Promise<string> {
+  public async init(command: CommandMessage): Promise<void> {
     const res = await this.getRandomJoke();
-    return res.joke;
+
+    if (!res?.joke) {
+      return Promise.reject();
+    }
+
+    command.reply(res?.joke);
+    return Promise.resolve();
   }
 }

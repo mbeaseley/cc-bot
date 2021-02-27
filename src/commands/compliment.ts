@@ -2,15 +2,15 @@ import { CommandMessage } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../interceptor/httpClient';
 
-export class Insult extends HttpClient {
+export class Compliment extends HttpClient {
   constructor() {
-    super('https://insult.mattbas.org/api/insult');
+    super('https://complimentr.com/api');
   }
 
   /**
    * Get random joke
    */
-  private getRandomInsult = (): Promise<AxiosResponse<string>> =>
+  private getRandomCompliment = (): Promise<AxiosResponse<string>> =>
     this.instance.get<string>('', {
       headers: {
         Accept: 'application/json',
@@ -30,7 +30,7 @@ export class Insult extends HttpClient {
    * Init
    */
   public async init(command: CommandMessage): Promise<void> {
-    const insult = await this.getRandomInsult();
+    const insult = await this.getRandomCompliment();
 
     if (!insult) {
       return Promise.reject();
