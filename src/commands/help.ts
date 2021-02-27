@@ -19,6 +19,10 @@ export class Help {
           c.commandName = 'compliment @user(optional)';
         }
 
+        if (c.commandName === 'sayIt') {
+          c.commandName = 'sayIt @user(optional)';
+        }
+
         return {
           name: `**${c.description}**`,
           value: `\`@CC Bot ${c.commandName}\``,
