@@ -38,7 +38,7 @@ export class Insult extends HttpClient {
 
     const message = this.createMessage(command, insult);
 
-    insult.startsWith('<')
+    message.startsWith('<')
       ? command.channel.send(message)
       : command.reply(message);
 
