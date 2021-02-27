@@ -2,6 +2,10 @@ import { CommandMessage } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../interceptor/httpClient';
 
+interface ComplimentObject {
+  compliment: string;
+}
+
 export class Compliment extends HttpClient {
   constructor() {
     super('https://complimentr.com/api');
@@ -10,8 +14,8 @@ export class Compliment extends HttpClient {
   /**
    * Get random joke
    */
-  private getRandomCompliment = (): Promise<AxiosResponse<string>> =>
-    this.instance.get<string>('', {
+  private getRandomCompliment = (): Promise<AxiosResponse<ComplimentObject>> =>
+    this.instance.get<ComplimentObject>('', {
       headers: {
         Accept: 'application/json',
       },
@@ -30,15 +34,15 @@ export class Compliment extends HttpClient {
    * Init
    */
   public async init(command: CommandMessage): Promise<void> {
-    const insult = await this.getRandomCompliment();
+    const compliment = await this.getRandomCompliment();
 
-    if (!insult) {
+    if (!compliment?.compliment) {
       return Promise.reject();
     }
 
-    const message = this.createMessage(command, insult);
+    const message = this.createMessage(command, compliment?.compliment);
 
-    insult.startsWith('<')
+    message.startsWith('<')
       ? command.channel.send(message)
       : command.reply(message);
 

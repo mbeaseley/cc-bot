@@ -9,12 +9,13 @@ import {
   Rule,
   Rules,
 } from '@typeit/discord';
+import 'dotenv/config';
 import { ChoosePlayer } from './commands/choosePlayer';
+import { Compliment } from './commands/compliment';
 import { DadJoke } from './commands/dadJoke';
 import { Help } from './commands/help';
 import { Insult } from './commands/insults';
-import 'dotenv/config';
-import { Compliment } from './commands/compliment';
+import { SayIt } from './commands/sayIt';
 
 @Discord('')
 @Rules(Rule().fromString(`${process.env.BOTID}> ` || `${process.env.BOTID}>`))
@@ -25,6 +26,7 @@ export class AppDiscord {
   private insults: Insult;
   private help: Help;
   private compliment: Compliment;
+  private sayIt: SayIt;
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
@@ -32,6 +34,7 @@ export class AppDiscord {
     this.insults = new Insult();
     this.help = new Help();
     this.compliment = new Compliment();
+    this.sayIt = new SayIt();
   }
 
   static get Client(): Client {
@@ -80,6 +83,14 @@ export class AppDiscord {
   @Description('Compliment')
   complimentInit(command: CommandMessage): Promise<void> {
     return this.compliment.init(command).catch(() => {
+      command.reply(`I have failed you!`);
+    });
+  }
+
+  @Command('sayIt')
+  @Description('Say It')
+  sayItInit(command: CommandMessage): Promise<void> {
+    return this.sayIt.init(command).catch(() => {
       command.reply(`I have failed you!`);
     });
   }
