@@ -17,16 +17,16 @@ import { Help } from './commands/help';
 import { Insult } from './commands/insults';
 import { SayIt } from './commands/sayIt';
 
-@Discord('')
+@Discord('<')
 @Rules(Rule().fromString(`${process.env.BOTID}> ` || `${process.env.BOTID}>`))
-export class AppDiscord {
-  private static client: Client;
-  private choosePlayer: ChoosePlayer;
-  private dadJoke: DadJoke;
-  private insults: Insult;
-  private help: Help;
-  private compliment: Compliment;
-  private sayIt: SayIt;
+export default class AppDiscord {
+  client: Client = new Client();
+  choosePlayer: ChoosePlayer;
+  dadJoke: DadJoke;
+  insults: Insult;
+  help: Help;
+  compliment: Compliment;
+  sayIt: SayIt;
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
@@ -37,14 +37,13 @@ export class AppDiscord {
     this.sayIt = new SayIt();
   }
 
-  static get Client(): Client {
+  get Client(): Client {
     return this.client;
   }
 
-  static async start(): Promise<void> {
+  async start(): Promise<void> {
     const __dirname = fs.realpathSync('.');
     const token = process.env.TOKEN || '';
-    this.client = new Client();
 
     this.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
   }
@@ -52,7 +51,7 @@ export class AppDiscord {
   @On('ready')
   initialize(): void {
     console.log('Bot logged in.');
-    AppDiscord.client.user?.setActivity('@CC Bot | help', {
+    this.client.user?.setActivity('@CC Bot | help', {
       type: 'LISTENING',
     });
   }
@@ -105,4 +104,4 @@ export class AppDiscord {
   }
 }
 
-AppDiscord.start();
+new AppDiscord().start();
