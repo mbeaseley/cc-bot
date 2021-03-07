@@ -15,7 +15,7 @@ export class SayIt {
    * Init
    * @param command
    */
-  init(command: CommandMessage): Promise<void> {
+  public init(command: CommandMessage): Promise<void> {
     const index = Math.round(Math.random());
 
     const promise = index
