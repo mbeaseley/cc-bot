@@ -20,7 +20,7 @@ import { SayIt } from './commands/sayIt';
 @Discord('<')
 @Rules(Rule().fromString(`${process.env.BOTID}> ` || `${process.env.BOTID}>`))
 export default class AppDiscord {
-  client: Client = new Client();
+  private static client: Client;
   choosePlayer: ChoosePlayer;
   dadJoke: DadJoke;
   insults: Insult;
@@ -37,23 +37,28 @@ export default class AppDiscord {
     this.sayIt = new SayIt();
   }
 
-  get Client(): Client {
+  static get Client(): Client {
     return this.client;
   }
 
-  async start(): Promise<void> {
+  static async start(): Promise<void> {
     const __dirname = fs.realpathSync('.');
     const token = process.env.TOKEN || '';
+    AppDiscord.client = new Client();
 
-    this.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
+    AppDiscord.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
   }
 
   @On('ready')
   initialize(): void {
-    console.log('Bot logged in.');
-    this.client.user?.setActivity('@CC Bot | help', {
-      type: 'LISTENING',
-    });
+    try {
+      console.log('Bot logged in.');
+      AppDiscord.client.user?.setActivity('@CC Bot | help', {
+        type: 'LISTENING',
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   @Command('playerchoice')
@@ -104,4 +109,4 @@ export default class AppDiscord {
   }
 }
 
-new AppDiscord().start();
+AppDiscord.start();
