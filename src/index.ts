@@ -28,6 +28,8 @@ export default class AppDiscord {
   compliment: Compliment;
   sayIt: SayIt;
 
+  private errorMessage: string = 'I have failed you!';
+
   constructor() {
     this.choosePlayer = new ChoosePlayer();
     this.dadJoke = new DadJoke();
@@ -71,7 +73,7 @@ export default class AppDiscord {
   @Description('Joke')
   jokeInit(command: CommandMessage): Promise<void> {
     return this.dadJoke.init(command).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 
@@ -79,7 +81,7 @@ export default class AppDiscord {
   @Description('Insult')
   insultInit(command: CommandMessage): Promise<void> {
     return this.insults.init(command).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 
@@ -87,7 +89,7 @@ export default class AppDiscord {
   @Description('Compliment')
   complimentInit(command: CommandMessage): Promise<void> {
     return this.compliment.init(command).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 
@@ -95,7 +97,7 @@ export default class AppDiscord {
   @Description('Say It')
   sayItInit(command: CommandMessage): Promise<void> {
     return this.sayIt.init(command).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 
@@ -104,7 +106,7 @@ export default class AppDiscord {
     const allCommands = Client.getCommands();
 
     return this.help.init(command, allCommands).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 }
