@@ -1,6 +1,6 @@
-import { Help } from './help';
+import { Help } from '../commands/help';
 
-describe('sayIt', () => {
+describe('Help', () => {
   let help: Help;
 
   beforeEach(() => {

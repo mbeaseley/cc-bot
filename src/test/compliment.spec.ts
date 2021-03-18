@@ -1,6 +1,6 @@
-import { Compliment } from './compliment';
+import { Compliment } from '../commands/compliment';
 
-describe('sayIt', () => {
+describe('Compliment', () => {
   let compliment: Compliment;
 
   beforeEach(() => {

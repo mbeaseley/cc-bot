@@ -10,14 +10,14 @@ export class Insult extends HttpClient {
   /**
    * Get random joke
    */
-  private getRandomInsult = (): Promise<AxiosResponse<string>> =>
+  getRandomInsult = (): Promise<AxiosResponse<string>> =>
     this.instance.get<string>('', {
       headers: {
         Accept: 'application/json',
       },
     });
 
-  private createMessage = (command: CommandMessage, insult: string): string => {
+  createMessage = (command: CommandMessage, insult: string): string => {
     const commandArray = command?.content?.split(' ');
     const string = commandArray[commandArray.length - 1];
 

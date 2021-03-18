@@ -1,4 +1,4 @@
-import { SayIt } from './sayIt';
+import { SayIt } from '../commands/sayIt';
 
 describe('sayIt', () => {
   let sayIt: SayIt;

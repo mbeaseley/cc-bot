@@ -1,6 +1,6 @@
-import { ChoosePlayer } from './choosePlayer';
+import { ChoosePlayer } from '../commands/choosePlayer';
 
-describe('sayIt', () => {
+describe('ChoosePlayer', () => {
   let choosePlayer: ChoosePlayer;
 
   beforeEach(() => {

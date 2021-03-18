@@ -1,6 +1,6 @@
-import { DadJoke } from './dadJoke';
+import { DadJoke } from '../commands/dadJoke';
 
-describe('sayIt', () => {
+describe('DadJoke', () => {
   let dadJoke: DadJoke;
 
   beforeEach(() => {

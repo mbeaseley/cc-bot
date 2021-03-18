@@ -53,5 +53,5 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": ["**/src/**/*.ts", "**/test/**/*.ts",],
-  "exclude": ["src/**/*.spec.ts", "src/test/utils/**.ts"]
+  "exclude": ["src/**/*.spec.ts"]
 }
