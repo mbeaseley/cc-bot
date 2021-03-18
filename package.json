@@ -10,7 +10,7 @@
     "start": "node ./build/",
     "start:dev": "ts-node-dev src/index.ts",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --detectOpenHandles",
     "npm:clear": "rm -rf $PWD/node_modules && rm $PWD/package-lock.json && npm cache verify && npm install"
   },
   "keywords": [],
