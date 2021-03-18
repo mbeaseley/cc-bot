@@ -18,7 +18,7 @@ export class Insult extends HttpClient {
     });
 
   createMessage = (command: CommandMessage, insult: string): string => {
-    const commandArray = command?.content?.split(' ');
+    const commandArray = command.content.split(' ');
     const string = commandArray[commandArray.length - 1];
 
     return string.startsWith('<') && string.endsWith('>')
