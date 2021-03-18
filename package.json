@@ -9,7 +9,7 @@
     "prestart": "npm run tsc",
     "start": "node ./build/",
     "start:dev": "ts-node-dev src/index.ts",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "npm:clear": "rm -rf $PWD/node_modules && rm $PWD/package-lock.json && npm cache verify && npm install"
   },
