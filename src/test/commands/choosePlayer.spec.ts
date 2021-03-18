@@ -1,4 +1,4 @@
-import { ChoosePlayer } from '../commands/choosePlayer';
+import { ChoosePlayer } from '../../commands/choosePlayer';
 
 describe('ChoosePlayer', () => {
   let choosePlayer: ChoosePlayer;

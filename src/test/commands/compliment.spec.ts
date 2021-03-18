@@ -1,4 +1,4 @@
-import { Compliment } from '../commands/compliment';
+import { Compliment } from '../../commands/compliment';
 
 describe('Compliment', () => {
   let compliment: Compliment;

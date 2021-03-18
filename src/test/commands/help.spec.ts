@@ -1,4 +1,4 @@
-import { Help } from '../commands/help';
+import { Help } from '../../commands/help';
 
 describe('Help', () => {
   let help: Help;

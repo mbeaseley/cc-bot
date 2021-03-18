@@ -1,4 +1,4 @@
-import { DadJoke } from '../commands/dadJoke';
+import { DadJoke } from '../../commands/dadJoke';
 
 describe('DadJoke', () => {
   let dadJoke: DadJoke;

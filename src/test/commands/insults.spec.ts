@@ -1,5 +1,5 @@
-import { Insult } from '../commands/insults';
-import { command } from './utils/command';
+import { Insult } from '../../commands/insults';
+import { command } from '../utils/command';
 
 describe('Insult', () => {
   let insult: Insult;
