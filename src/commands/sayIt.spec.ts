@@ -11,21 +11,25 @@ describe('sayIt', () => {
     expect(sayIt).toBeTruthy();
   });
 
-  // it('on init runs complient', () => {
-  //   Math.round = jest.fn().mockReturnValue(1);
+  it('on init runs complient', () => {
+    Math.round = jest.fn().mockReturnValue(1);
 
-  //   const spy = jest.spyOn(sayIt.compliment, 'init');
-  //   return sayIt.init(expect.anything()).then(() => {
-  //     expect(spy).toHaveBeenCalled();
-  //   });
-  // });
+    sayIt.compliment.init = jest.fn().mockResolvedValue({});
 
-  // xit('on init runs insult', () => {
-  //   Math.round = jest.fn().mockReturnValue(0);
+    const spy = jest.spyOn(sayIt.compliment, 'init');
+    return sayIt.init(expect.anything()).then(() => {
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 
-  //   const spy = jest.spyOn(sayIt.insult, 'init');
-  //   return sayIt.init(expect.anything()).then(() => {
-  //     expect(spy).toHaveBeenCalled();
-  //   });
-  // });
+  it('on init runs insult', () => {
+    Math.round = jest.fn().mockReturnValue(0);
+
+    sayIt.insult.init = jest.fn().mockResolvedValue({});
+
+    const spy = jest.spyOn(sayIt.insult, 'init');
+    return sayIt.init(expect.anything()).then(() => {
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 });
