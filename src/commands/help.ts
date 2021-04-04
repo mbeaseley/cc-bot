@@ -1,5 +1,6 @@
 import { CommandInfos, CommandMessage, RuleBuilder } from '@typeit/discord';
 
+const EXCLUDE_COMMANDS = ['help', 'purge'];
 export class Help {
   /**
    * Init
@@ -9,7 +10,7 @@ export class Help {
     allCommands: CommandInfos<any, RuleBuilder>[]
   ): Promise<void> {
     const fields = allCommands
-      .filter((c) => c.commandName !== 'help')
+      .filter((c) => !EXCLUDE_COMMANDS.find((name) => name === c.commandName))
       .map((c) => {
         if (c.commandName === 'insult') {
           c.commandName = 'insult @user(optional)';

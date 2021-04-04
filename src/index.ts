@@ -15,6 +15,7 @@ import { Compliment } from './commands/compliment';
 import { DadJoke } from './commands/dadJoke';
 import { Help } from './commands/help';
 import { Insult } from './commands/insults';
+import { Purge } from './commands/purge';
 import { SayIt } from './commands/sayIt';
 
 @Discord('<')
@@ -27,6 +28,7 @@ export default class AppDiscord {
   help: Help;
   compliment: Compliment;
   sayIt: SayIt;
+  purge: Purge;
 
   private errorMessage = 'I have failed you!';
 
@@ -37,6 +39,7 @@ export default class AppDiscord {
     this.help = new Help();
     this.compliment = new Compliment();
     this.sayIt = new SayIt();
+    this.purge = new Purge();
   }
 
   static get Client(): Client {
@@ -99,6 +102,14 @@ export default class AppDiscord {
   @Description('Say It')
   sayItInit(command: CommandMessage): Promise<void> {
     return this.sayIt.init(command).catch(() => {
+      command.reply(this.errorMessage);
+    });
+  }
+
+  @Command('purge')
+  @Description('Purge a maximum of 100 messages')
+  purgeInit(command: CommandMessage): Promise<void> {
+    return this.purge.init(command).catch(() => {
       command.reply(this.errorMessage);
     });
   }
