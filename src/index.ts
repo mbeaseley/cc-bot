@@ -5,6 +5,7 @@ import {
   CommandMessage,
   Description,
   Discord,
+  Guard,
   On,
   Rule,
   Rules,
@@ -17,9 +18,15 @@ import { Help } from './commands/help';
 import { Insult } from './commands/insults';
 import { Purge } from './commands/purge';
 import { SayIt } from './commands/sayIt';
+import { isAdmin } from './guards/isAdmin';
+import * as environment from './utils/environment';
 
 @Discord('<')
-@Rules(Rule().fromString(`${process.env.BOTID}> ` || `${process.env.BOTID}>`))
+@Rules(
+  Rule().fromString(
+    `${environment.default.botId}> ` || `${environment.default.botId}>`
+  )
+)
 export default class AppDiscord {
   private static client: Client;
   choosePlayer: ChoosePlayer;
@@ -48,7 +55,7 @@ export default class AppDiscord {
 
   static async start(): Promise<void> {
     const __dirname = fs.realpathSync('.');
-    const token = process.env.TOKEN || '';
+    const token = environment.default.token;
     AppDiscord.client = new Client();
 
     AppDiscord.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
@@ -108,6 +115,7 @@ export default class AppDiscord {
 
   @Command('purge')
   @Description('Purge a maximum of 100 messages')
+  @Guard(isAdmin)
   purgeInit(command: CommandMessage): Promise<void> {
     return this.purge.init(command).catch(() => {
       command.reply(this.errorMessage);
