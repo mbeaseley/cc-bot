@@ -16,12 +16,14 @@ export class Purge {
     const purgeCount = this.getPurgeCount(command.content);
 
     try {
-      command.delete();
+      await command.delete();
       const fetched = await command.channel.messages.fetch({
         limit: purgeCount,
       });
-      const textChannel = command.channel as TextChannel;
-      textChannel.bulkDelete(fetched, true);
+      await (command.channel as TextChannel)
+        .bulkDelete(fetched, true)
+        .catch(() => Promise.reject());
+
       return Promise.resolve();
     } catch (e) {
       return Promise.reject();
