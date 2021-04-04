@@ -28,7 +28,7 @@ export default class AppDiscord {
   compliment: Compliment;
   sayIt: SayIt;
 
-  private errorMessage: string = 'I have failed you!';
+  private errorMessage = 'I have failed you!';
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
@@ -66,7 +66,9 @@ export default class AppDiscord {
   @Command('playerchoice')
   @Description('Chooses Player')
   playerInit(command: CommandMessage): Promise<void> {
-    return this.choosePlayer.init(command);
+    return this.choosePlayer.init(command).catch(() => {
+      command.reply(this.errorMessage);
+    });
   }
 
   @Command('joke')

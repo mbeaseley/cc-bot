@@ -1,10 +1,12 @@
 import { Client, CommandMessage } from '@typeit/discord';
-import { MessageFlags } from 'discord.js';
+import { Guild, MessageFlags, User } from 'discord.js';
 
 export const command = (
   name: string,
   contentIncludes?: string
 ): CommandMessage | any => {
+  const guild = new Guild(new Client(), {});
+
   return {
     _edits: [],
     activity: null,
@@ -44,7 +46,7 @@ export const command = (
     fetch: jest.fn().mockResolvedValue({}),
     fetchWebhook: jest.fn().mockResolvedValue({}),
     flags: new MessageFlags(),
-    guild: expect.anything(),
+    guild: guild,
     id: '818146469046517770',
     infos: {},
     member: expect.anything(),
