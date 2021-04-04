@@ -3,8 +3,8 @@ import { Compliment } from './compliment';
 import { Insult } from './insults';
 
 export class SayIt {
-  private insult: Insult;
-  private compliment: Compliment;
+  insult: Insult;
+  compliment: Compliment;
 
   constructor() {
     this.insult = new Insult();

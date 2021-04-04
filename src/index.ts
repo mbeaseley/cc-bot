@@ -5,6 +5,7 @@ import {
   CommandMessage,
   Description,
   Discord,
+  Guard,
   On,
   Rule,
   Rules,
@@ -15,10 +16,17 @@ import { Compliment } from './commands/compliment';
 import { DadJoke } from './commands/dadJoke';
 import { Help } from './commands/help';
 import { Insult } from './commands/insults';
+import { Purge } from './commands/purge';
 import { SayIt } from './commands/sayIt';
+import { isAdmin } from './guards/isAdmin';
+import * as environment from './utils/environment';
 
 @Discord('<')
-@Rules(Rule().fromString(`${process.env.BOTID}> ` || `${process.env.BOTID}>`))
+@Rules(
+  Rule().fromString(
+    `${environment.default.botId}> ` || `${environment.default.botId}>`
+  )
+)
 export default class AppDiscord {
   private static client: Client;
   choosePlayer: ChoosePlayer;
@@ -27,6 +35,9 @@ export default class AppDiscord {
   help: Help;
   compliment: Compliment;
   sayIt: SayIt;
+  purge: Purge;
+
+  private errorMessage = 'I have failed you!';
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
@@ -35,6 +46,7 @@ export default class AppDiscord {
     this.help = new Help();
     this.compliment = new Compliment();
     this.sayIt = new SayIt();
+    this.purge = new Purge();
   }
 
   static get Client(): Client {
@@ -43,7 +55,7 @@ export default class AppDiscord {
 
   static async start(): Promise<void> {
     const __dirname = fs.realpathSync('.');
-    const token = process.env.TOKEN || '';
+    const token = environment.default.token;
     AppDiscord.client = new Client();
 
     AppDiscord.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
@@ -64,14 +76,16 @@ export default class AppDiscord {
   @Command('playerchoice')
   @Description('Chooses Player')
   playerInit(command: CommandMessage): Promise<void> {
-    return this.choosePlayer.init(command);
+    return this.choosePlayer.init(command).catch(() => {
+      command.reply(this.errorMessage);
+    });
   }
 
   @Command('joke')
   @Description('Joke')
   jokeInit(command: CommandMessage): Promise<void> {
     return this.dadJoke.init(command).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 
@@ -79,7 +93,7 @@ export default class AppDiscord {
   @Description('Insult')
   insultInit(command: CommandMessage): Promise<void> {
     return this.insults.init(command).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 
@@ -87,7 +101,7 @@ export default class AppDiscord {
   @Description('Compliment')
   complimentInit(command: CommandMessage): Promise<void> {
     return this.compliment.init(command).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 
@@ -95,7 +109,16 @@ export default class AppDiscord {
   @Description('Say It')
   sayItInit(command: CommandMessage): Promise<void> {
     return this.sayIt.init(command).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
+    });
+  }
+
+  @Command('purge')
+  @Description('Purge a maximum of 100 messages')
+  @Guard(isAdmin)
+  purgeInit(command: CommandMessage): Promise<void> {
+    return this.purge.init(command).catch(() => {
+      command.reply(this.errorMessage);
     });
   }
 
@@ -104,7 +127,7 @@ export default class AppDiscord {
     const allCommands = Client.getCommands();
 
     return this.help.init(command, allCommands).catch(() => {
-      command.reply(`I have failed you!`);
+      command.reply(this.errorMessage);
     });
   }
 }

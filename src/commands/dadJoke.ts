@@ -1,10 +1,10 @@
 import { CommandMessage } from '@typeit/discord';
 import { HttpClient } from '../interceptor/httpClient';
 
-interface JokeResponse {
+export interface JokeResponse {
   id: string;
   joke: string;
-  status: string;
+  status: number;
 }
 
 export class DadJoke extends HttpClient {
@@ -32,7 +32,7 @@ export class DadJoke extends HttpClient {
       return Promise.reject();
     }
 
-    command.reply(res?.joke);
+    command.reply(res.joke);
     return Promise.resolve();
   }
 }

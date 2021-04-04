@@ -2,15 +2,17 @@ import { CommandMessage } from '@typeit/discord';
 import { GuildChannel, User } from 'discord.js';
 
 export class ChoosePlayer {
+  private errorMessage = 'I have failed you!';
+
   /**
    * Get Author of command
    * @param command
    */
-  private getAuthor(command: CommandMessage): User {
+  getAuthor(command: CommandMessage): User {
     return command?.author;
   }
 
-  private findUserChannel(command: CommandMessage): GuildChannel | undefined {
+  findUserChannel(command: CommandMessage): GuildChannel | undefined {
     const voiceChannels = command?.guild?.channels?.cache?.filter(
       (c) => c.type === 'voice'
     );
@@ -28,7 +30,7 @@ export class ChoosePlayer {
    * Get unique username from channel
    * @param channel
    */
-  private getUsers(channel: GuildChannel | undefined): string[] {
+  getUsers(channel: GuildChannel | undefined): string[] {
     const users = channel?.members?.map((m) => {
       if (!m.user?.bot) {
         return m.user;
@@ -51,14 +53,18 @@ export class ChoosePlayer {
    * @param command
    */
   public init(command: CommandMessage): Promise<void> {
-    const channel = this.findUserChannel(command);
-    const users = this.getUsers(channel);
+    try {
+      const channel = this.findUserChannel(command);
+      const users = this.getUsers(channel);
 
-    const content = !users?.length
-      ? 'Sorry I failed you!'
-      : users[Math.floor(Math.random() * users.length)];
+      const content = !users?.length
+        ? this.errorMessage
+        : users[Math.floor(Math.random() * users.length)];
 
-    command.reply(content);
-    return Promise.resolve();
+      command.reply(content);
+      return Promise.resolve();
+    } catch (e) {
+      return Promise.reject();
+    }
   }
 }

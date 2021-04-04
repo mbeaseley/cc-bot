@@ -22,7 +22,7 @@ export class Compliment extends HttpClient {
     });
 
   private createMessage = (command: CommandMessage, insult: string): string => {
-    const commandArray = command?.content?.split(' ');
+    const commandArray = command.content.split(' ');
     const string = commandArray[commandArray.length - 1];
 
     return string.startsWith('<') && string.endsWith('>')
@@ -34,13 +34,13 @@ export class Compliment extends HttpClient {
    * Init
    */
   public async init(command: CommandMessage): Promise<void> {
-    const compliment = await this.getRandomCompliment();
+    const complimentObj = await this.getRandomCompliment();
 
-    if (!compliment?.compliment) {
+    if (!complimentObj?.compliment) {
       return Promise.reject();
     }
 
-    const message = this.createMessage(command, compliment?.compliment);
+    const message = this.createMessage(command, complimentObj.compliment);
 
     message.startsWith('<')
       ? command.channel.send(message)
