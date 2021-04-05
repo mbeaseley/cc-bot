@@ -14,12 +14,14 @@ import 'dotenv/config';
 import { ChoosePlayer } from './commands/choosePlayer';
 import { Compliment } from './commands/compliment';
 import { DadJoke } from './commands/dadJoke';
+import { Dbd } from './commands/dbd';
 import { Help } from './commands/help';
 import { Insult } from './commands/insults';
 import { Purge } from './commands/purge';
 import { SayIt } from './commands/sayIt';
 import { isAdmin } from './guards/isAdmin';
 import * as environment from './utils/environment';
+import { Message } from 'discord.js';
 
 @Discord('<')
 @Rules(
@@ -36,6 +38,7 @@ export default class AppDiscord {
   compliment: Compliment;
   sayIt: SayIt;
   purge: Purge;
+  dbd: Dbd;
 
   private errorMessage = 'I have failed you!';
 
@@ -47,6 +50,7 @@ export default class AppDiscord {
     this.compliment = new Compliment();
     this.sayIt = new SayIt();
     this.purge = new Purge();
+    this.dbd = new Dbd();
   }
 
   static get Client(): Client {
@@ -118,6 +122,14 @@ export default class AppDiscord {
   @Guard(isAdmin)
   purgeInit(command: CommandMessage): Promise<void> {
     return this.purge.init(command).catch(() => {
+      command.reply(this.errorMessage);
+    });
+  }
+
+  @Command('dbd')
+  @Description('Dbd (dbd help for all possible commands)')
+  dbdInit(command: CommandMessage): Promise<Message | void> {
+    return this.dbd.init(command).catch(() => {
       command.reply(this.errorMessage);
     });
   }
