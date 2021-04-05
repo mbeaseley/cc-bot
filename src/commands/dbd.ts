@@ -1,6 +1,7 @@
 import { CommandMessage } from '@typeit/discord';
 import { Message } from 'discord.js';
 import _ = require('underscore');
+import { commands } from '../data/dbdCommands';
 import {
   killer,
   KillerItem,
@@ -12,9 +13,6 @@ import {
   surviverOffering,
   surviverPerks,
 } from '../data/surviver';
-
-const KILLER_COMMANDS = ['killer', 'k'];
-const SURIVER_COMMANDS = ['surviver', 's'];
 
 class KillerBuild {
   name: string | undefined;
@@ -33,6 +31,9 @@ export class Dbd {
   killerBuild: KillerBuild = new KillerBuild();
   surviverBuild: SurviverBuild = new SurviverBuild();
 
+  /**
+   * Creates random killer build
+   */
   private createKillerBuild(): KillerBuild {
     const killerBuild = new KillerBuild();
 
@@ -55,6 +56,9 @@ export class Dbd {
     return killerBuild;
   }
 
+  /**
+   * Creates random surviver build
+   */
   private createSurviverBuild(): SurviverBuild {
     const surviverBuild = new SurviverBuild();
 
@@ -72,12 +76,45 @@ export class Dbd {
     return surviverBuild;
   }
 
+  /**
+   * Handles and sends message
+   * @param command
+   * @param build
+   */
   private async sendMessage(
     command: CommandMessage,
     build: KillerBuild | SurviverBuild
   ): Promise<Message | void> {
     await command.delete();
     return command.author.send(JSON.stringify(build));
+  }
+
+  /**
+   * Handles independent help info
+   * @param command
+   */
+  private createHelpMessage(command: CommandMessage): Promise<Message | void> {
+    const filterCommands = commands.filter((c) =>
+      c.tag.find((t) => t !== 'help')
+    );
+
+    const fields = filterCommands.map((c) => {
+      return {
+        name: `**${c.description}**`,
+        value: `\`@CC Bot dbd ${c.name}\``,
+      };
+    });
+
+    return command.channel.send({
+      embed: {
+        color: 10181046,
+        author: {
+          name: `${command?.client?.user?.username} DBD Plugin Commands`,
+          icon_url: command?.client?.user?.displayAvatarURL(),
+        },
+        fields,
+      },
+    });
   }
 
   /**
@@ -88,18 +125,32 @@ export class Dbd {
     const commandArray = command.content.split(' ');
     const keyCommand = commandArray[commandArray.length - 1].toLowerCase();
 
-    if (KILLER_COMMANDS.find((c) => c === keyCommand)) {
+    const kllerCommands = commands.filter((c) =>
+      c.tag.find((t) => t === 'killer')
+    );
+    const surviverCommands = commands.filter((c) =>
+      c.tag.find((t) => t === 'surviver')
+    );
+    const helpCommands = commands.filter((c) =>
+      c.tag.find((t) => t === 'help')
+    );
+
+    if (kllerCommands.find((c) => c.name === keyCommand)) {
       this.killerBuild = new KillerBuild();
       this.killerBuild = this.createKillerBuild();
 
       return this.sendMessage(command, this.killerBuild);
     }
 
-    if (SURIVER_COMMANDS.find((c) => c === keyCommand)) {
+    if (surviverCommands.find((c) => c.name === keyCommand)) {
       this.surviverBuild = new SurviverBuild();
       this.surviverBuild = this.createSurviverBuild();
 
       return this.sendMessage(command, this.surviverBuild);
+    }
+
+    if (helpCommands.find((c) => c.name === keyCommand)) {
+      return this.createHelpMessage(command);
     }
 
     return Promise.reject();
