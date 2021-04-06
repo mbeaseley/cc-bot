@@ -1,6 +1,5 @@
 import { CommandMessage } from '@typeit/discord';
 import { Message } from 'discord.js';
-import _ = require('underscore');
 import { commands } from '../data/dbdCommands';
 import {
   killer,
@@ -13,6 +12,7 @@ import {
   surviverOffering,
   surviverPerks,
 } from '../data/surviver';
+import Utility from '../utils/utility';
 
 class KillerBuild {
   killer: string | undefined;
@@ -39,21 +39,19 @@ export class Dbd {
     const killerBuild = new KillerBuild();
 
     // Killer
-    const choosenKiller: KillerItem =
-      killer[Math.floor(Math.random() * killer.length)];
+    const choosenKiller: KillerItem = Utility.random(killer);
     killerBuild.killer = choosenKiller.name;
     killerBuild.image = choosenKiller.image;
 
     // Addons
     const addons = choosenKiller.addons?.slice();
-    killerBuild.addons = _.sample(addons || [], 2);
+    killerBuild.addons = Utility.random(addons || [], 2);
 
     // Offering
-    killerBuild.offering =
-      killerOffering[Math.floor(Math.random() * killerOffering.length)];
+    killerBuild.offering = Utility.random(killerOffering);
 
     // Perks
-    killerBuild.perks = _.sample(killerPerks || [], 4);
+    killerBuild.perks = Utility.random(killerPerks, 4);
 
     return killerBuild;
   }
@@ -65,15 +63,13 @@ export class Dbd {
     const surviverBuild = new SurviverBuild();
 
     // Perks
-    surviverBuild.perks = _.sample(surviverPerks, 4);
+    surviverBuild.perks = Utility.random(surviverPerks, 4);
 
     // offering
-    surviverBuild.offering =
-      surviverOffering[Math.floor(Math.random() * surviverOffering.length)];
+    surviverBuild.offering = Utility.random(surviverOffering);
 
     // loot
-    surviverBuild.loot =
-      surviverLoot[Math.floor(Math.random() * surviverLoot.length)];
+    surviverBuild.loot = Utility.random(surviverLoot);
 
     return surviverBuild;
   }
@@ -94,28 +90,16 @@ export class Dbd {
         ? (build as KillerBuild)
         : (build as SurviverBuild);
 
-    const fields: { name: string; value: string }[] = [];
-    Object.entries(dbdBuild).forEach(([key, value]) => {
-      if (key === 'image') return;
-      const field = {
-        name: key.charAt(0).toUpperCase() + key.slice(1),
-        value: typeof value !== 'string' ? value.join('\n') : value,
-      };
-
-      fields.push(field);
-    });
-    const thumbnail: { url: string | undefined } | undefined =
-      dbdBuild instanceof KillerBuild ? { url: dbdBuild.image } : undefined;
-
+    const title = `DBD Random ${
+      build instanceof KillerBuild ? 'Killer' : 'Surviver'
+    }`;
+    const thumbnail =
+      dbdBuild instanceof KillerBuild ? dbdBuild.image : undefined;
+    const embed = Utility.createEmbedMessage(dbdBuild, title, thumbnail, [
+      'image',
+    ]);
     return command.author.send({
-      embed: {
-        title: `DBD Random ${
-          build instanceof KillerBuild ? 'Killer' : 'Surviver'
-        }`,
-        color: 10181046,
-        thumbnail,
-        fields,
-      },
+      embed,
     });
   }
 
