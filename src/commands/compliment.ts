@@ -1,10 +1,7 @@
 import { CommandMessage } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../interceptor/httpClient';
-
-interface ComplimentObject {
-  compliment: string;
-}
+import { ComplimentObject } from '../types/compliment';
 
 export class Compliment extends HttpClient {
   constructor() {

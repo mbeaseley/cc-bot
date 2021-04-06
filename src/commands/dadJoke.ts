@@ -1,11 +1,6 @@
 import { CommandMessage } from '@typeit/discord';
 import { HttpClient } from '../interceptor/httpClient';
-
-export interface JokeResponse {
-  id: string;
-  joke: string;
-  status: number;
-}
+import { JokeResponse } from '../types/dadJoke';
 
 export class DadJoke extends HttpClient {
   constructor() {
