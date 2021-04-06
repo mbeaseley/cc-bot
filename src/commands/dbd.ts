@@ -12,21 +12,8 @@ import {
   surviverOffering,
   surviverPerks,
 } from '../data/surviver';
+import { KillerBuild, SurviverBuild } from '../types/dbd';
 import Utility from '../utils/utility';
-
-class KillerBuild {
-  killer: string | undefined;
-  image: string | undefined;
-  addons: string[] | undefined = [];
-  offering: string | undefined;
-  perks: string[] | undefined = [];
-}
-
-class SurviverBuild {
-  perks: string[] | undefined = [];
-  loot: string | undefined;
-  offering: string | undefined;
-}
 
 export class Dbd {
   killerBuild: KillerBuild = new KillerBuild();
