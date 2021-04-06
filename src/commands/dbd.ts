@@ -15,14 +15,15 @@ import {
 } from '../data/surviver';
 
 class KillerBuild {
-  name: string | undefined;
+  killer: string | undefined;
+  image: string | undefined;
   addons: string[] | undefined = [];
   offering: string | undefined;
   perks: string[] | undefined = [];
 }
 
 class SurviverBuild {
-  perks: string[] | undefined;
+  perks: string[] | undefined = [];
   loot: string | undefined;
   offering: string | undefined;
 }
@@ -40,7 +41,8 @@ export class Dbd {
     // Killer
     const choosenKiller: KillerItem =
       killer[Math.floor(Math.random() * killer.length)];
-    killerBuild.name = choosenKiller.name;
+    killerBuild.killer = choosenKiller.name;
+    killerBuild.image = choosenKiller.image;
 
     // Addons
     const addons = choosenKiller.addons?.slice();
@@ -86,14 +88,46 @@ export class Dbd {
     build: KillerBuild | SurviverBuild
   ): Promise<Message | void> {
     await command.delete();
-    return command.author.send(JSON.stringify(build));
+
+    const dbdBuild =
+      build instanceof KillerBuild
+        ? (build as KillerBuild)
+        : (build as SurviverBuild);
+
+    const fields: { name: string; value: string }[] = [];
+    Object.entries(dbdBuild).forEach(([key, value]) => {
+      if (key === 'image') return;
+      const field = {
+        name: key.charAt(0).toUpperCase() + key.slice(1),
+        value: typeof value !== 'string' ? value.join('\n') : value,
+      };
+
+      fields.push(field);
+    });
+    const thumbnail: { url: string | undefined } | undefined =
+      dbdBuild instanceof KillerBuild ? { url: dbdBuild.image } : undefined;
+
+    return command.author.send({
+      embed: {
+        title: `DBD Random ${
+          build instanceof KillerBuild ? 'Killer' : 'Surviver'
+        }`,
+        color: 10181046,
+        thumbnail,
+        fields,
+      },
+    });
   }
 
   /**
    * Handles independent help info
    * @param command
    */
-  private createHelpMessage(command: CommandMessage): Promise<Message | void> {
+  private async createHelpMessage(
+    command: CommandMessage
+  ): Promise<Message | void> {
+    await command.delete();
+
     const filterCommands = commands.filter((c) =>
       c.tag.find((t) => t !== 'help')
     );

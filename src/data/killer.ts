@@ -1,6 +1,7 @@
 export class KillerItem {
   id: number | undefined;
   name: string | undefined;
+  image: string | undefined;
   addons: string[] | undefined;
 }
 
@@ -8,6 +9,8 @@ export const killer: KillerItem[] = [
   {
     id: 1,
     name: 'Trapper',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/9/9f/K01_charSelect_portrait.png',
     addons: [
       'Bloody Coil',
       'Iridescent Stone',
@@ -34,6 +37,8 @@ export const killer: KillerItem[] = [
   {
     id: 2,
     name: 'Wraith',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/0/0d/K02_charSelect_portrait.png',
     addons: [
       'The Serpent Soot',
       'The Hound Soot',
@@ -60,6 +65,8 @@ export const killer: KillerItem[] = [
   {
     id: 3,
     name: 'Hillbilly',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/a/a3/K03_charSelect_portrait.png',
     addons: [
       'Steel Toe Boots',
       'Junkyard Air Filter',
@@ -86,6 +93,8 @@ export const killer: KillerItem[] = [
   {
     id: 4,
     name: 'Nurse',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/3/31/K04_charSelect_portrait.png',
     addons: [
       'Wooden Horse',
       'White Nit Comb',
@@ -111,6 +120,8 @@ export const killer: KillerItem[] = [
   {
     id: 5,
     name: 'Shape',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/0/04/K05_charSelect_portrait.png',
     addons: [
       'Tacky Earrings',
       'Boyfriends Memo',
@@ -137,6 +148,8 @@ export const killer: KillerItem[] = [
   {
     id: 6,
     name: 'Hag',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/b/b4/K06_charSelect_portrait.png',
     addons: [
       'Rope Necklet',
       'Powered Eggshell',
@@ -163,6 +176,8 @@ export const killer: KillerItem[] = [
   {
     id: 7,
     name: 'Doctor',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/a/ad/K07_charSelect_portrait.png',
     addons: [
       'Moudly Electode',
       'Maple Knight',
@@ -189,6 +204,8 @@ export const killer: KillerItem[] = [
   {
     id: 8,
     name: 'Huntress',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/1/1a/K08_charSelect_portrait.png',
     addons: [
       'Coarse Stone',
       'Berus Toxin',
@@ -215,6 +232,8 @@ export const killer: KillerItem[] = [
   {
     id: 9,
     name: 'Cannibal',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/c/c6/K09_charSelect_portrait.png',
     addons: [
       'Vegetable Oil',
       'Spark Plug',
@@ -241,6 +260,8 @@ export const killer: KillerItem[] = [
   {
     id: 10,
     name: 'Nightmare',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/f/f7/K10_charSelect_portrait.png',
     addons: [
       'Wool Shirt',
       'Sheep Block',
@@ -267,6 +288,8 @@ export const killer: KillerItem[] = [
   {
     id: 11,
     name: 'Pig',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/c/c7/K11_charSelect_portrait.png',
     addons: [
       'Workshop Grease',
       'Shattered Syringe',
@@ -293,6 +316,8 @@ export const killer: KillerItem[] = [
   {
     id: 12,
     name: 'Clown',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/e/e1/K12_charSelect_portrait.png',
     addons: [
       'Inner Soles',
       'Robin Feather',
@@ -319,6 +344,8 @@ export const killer: KillerItem[] = [
   {
     id: 13,
     name: 'Spirit',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/b/b0/K13_charSelect_portrait.png',
     addons: [
       'Zori',
       'Shiawase Amulet',
@@ -345,6 +372,8 @@ export const killer: KillerItem[] = [
   {
     id: 14,
     name: 'Legion',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/a/af/K14_charSelect_portrait.png',
     addons: [
       'Smiley Face Pin',
       'Scratched Ruler',
@@ -371,6 +400,8 @@ export const killer: KillerItem[] = [
   {
     id: 15,
     name: 'Plague',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/6/68/K15_charSelect_portrait.png',
     addons: [
       'Prayer Tablet Fragement',
       'Olibanum Incense',
@@ -397,6 +428,8 @@ export const killer: KillerItem[] = [
   {
     id: 16,
     name: 'Ghost Face',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/b/bd/K16_charSelect_portrait.png',
     addons: [
       'Philly',
       'Walleyes Matchbook',
@@ -423,6 +456,8 @@ export const killer: KillerItem[] = [
   {
     id: 17,
     name: 'Demogorgon',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/6/6d/K17_charSelect_portrait.png',
     addons: [
       'Rotten Pumpkin',
       'BlackHeart',
@@ -449,6 +484,8 @@ export const killer: KillerItem[] = [
   {
     id: 18,
     name: 'Oni',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/c/c5/K18_charSelect_portrait.png',
     addons: [
       'Yakuyoke Talisman',
       'Rotting Rope',
@@ -475,6 +512,8 @@ export const killer: KillerItem[] = [
   {
     id: 19,
     name: 'DeathSlinger',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/8/84/K19_charSelect_portrait.png',
     addons: [
       'Spit Polish Rag',
       'Snake Oil',
@@ -501,6 +540,8 @@ export const killer: KillerItem[] = [
   {
     id: 20,
     name: 'Executioner',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/9/95/K20_charSelect_portrait.png',
     addons: [
       'Lead Ring',
       'Dead Butterfly',
@@ -527,6 +568,8 @@ export const killer: KillerItem[] = [
   {
     id: 21,
     name: 'Blight',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/0/0b/K21_charSelect_portrait.png',
     addons: [
       'Placebo Tablet',
       'Foxglove',
@@ -553,6 +596,8 @@ export const killer: KillerItem[] = [
   {
     id: 22,
     name: 'Twins',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/0/03/K22_charSelect_portrait.png',
     addons: [
       'Toy Sword',
       'Tiny Fingernail',
