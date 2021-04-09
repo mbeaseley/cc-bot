@@ -25,6 +25,7 @@ export const playerKillers: PlayerKiller[] = [
       20,
       21,
       22,
+      23,
     ],
   },
   {
@@ -46,6 +47,7 @@ export const playerKillers: PlayerKiller[] = [
       20,
       21,
       22,
+      23,
     ],
   },
   {
