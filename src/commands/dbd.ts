@@ -30,11 +30,14 @@ export class Dbd {
     const availableKillers =
       playerKillers.find((p) => p.userId === authorId)?.availableKiller ||
       defaultKillers;
-    const killers = killer.map((k) => {
-      if (availableKillers.find((ak) => ak === k.id)) {
-        return k;
-      }
-    });
+
+    const killers = killer
+      .map((k) => {
+        if (availableKillers.find((ak) => ak === k.id)) {
+          return k;
+        }
+      })
+      .filter(Boolean);
 
     const choosenKiller: KillerItem = Utility.random(killers);
     killerBuild.killer = choosenKiller.name;

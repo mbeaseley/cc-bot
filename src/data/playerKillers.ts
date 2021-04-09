@@ -48,4 +48,12 @@ export const playerKillers: PlayerKiller[] = [
       22,
     ],
   },
+  {
+    userId: '246434279331069953',
+    availableKiller: [...defaultKillers],
+  },
+  {
+    userId: '805228731383677008',
+    availableKiller: [...defaultKillers],
+  },
 ];
