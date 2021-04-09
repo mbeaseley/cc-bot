@@ -649,7 +649,6 @@ export const killer: KillerItem[] = [
       'Iridescent Photocard',
     ],
   },
-
 ];
 
 export const killerPerks: string[] = [
