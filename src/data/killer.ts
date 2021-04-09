@@ -621,6 +621,34 @@ export const killer: KillerItem[] = [
       'Iridescent Pendant',
     ],
   },
+  {
+    id: 23,
+    name: 'Trickster',
+    image:
+      'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/3/3e/K23_charSelect_portrait.png',
+    addons: [
+      'Trick Pouch',
+      'Memento Blades',
+      'Killing Part Chords',
+      'Inferno Wire',
+      'Tequila Moonrock',
+      'On Target Single',
+      'Lucky Blade',
+      'Ji-Woons Autograph',
+      'Caged Heart Shoes',
+      'Melodious Murder',
+      'Waiting For You Watch',
+      'Ripper Brace',
+      'Fizz-Spin Soda',
+      'Bloody Boa',
+      'Trick Blades',
+      'Edge of Revival Album',
+      'Diamond Cufflinks',
+      'Cut Thru U Single',
+      'Death Throes Compliation',
+      'Iridescent Photocard',
+    ],
+  },
 ];
 
 export const killerPerks: string[] = [

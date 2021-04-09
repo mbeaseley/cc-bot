@@ -7,6 +7,7 @@ import {
   killerOffering,
   killerPerks,
 } from '../data/killer';
+import { defaultKillers, playerKillers } from '../data/playerKillers';
 import {
   surviverLoot,
   surviverOffering,
@@ -22,11 +23,23 @@ export class Dbd {
   /**
    * Creates random killer build
    */
-  private createKillerBuild(): KillerBuild {
+  private createKillerBuild(authorId: string): KillerBuild {
     const killerBuild = new KillerBuild();
 
     // Killer
-    const choosenKiller: KillerItem = Utility.random(killer);
+    const availableKillers =
+      playerKillers.find((p) => p.userId === authorId)?.availableKiller ||
+      defaultKillers;
+
+    const killers = killer
+      .map((k) => {
+        if (availableKillers.find((ak) => ak === k.id)) {
+          return k;
+        }
+      })
+      .filter(Boolean);
+
+    const choosenKiller: KillerItem = Utility.random(killers);
     killerBuild.killer = choosenKiller.name;
     killerBuild.image = choosenKiller.image;
 
@@ -142,7 +155,7 @@ export class Dbd {
 
     if (kllerCommands.find((c) => c.name === keyCommand)) {
       this.killerBuild = new KillerBuild();
-      this.killerBuild = this.createKillerBuild();
+      this.killerBuild = this.createKillerBuild(command.author.id);
 
       return this.sendMessage(command, this.killerBuild);
     }
