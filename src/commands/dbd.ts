@@ -14,6 +14,7 @@ import {
   surviverPerks,
 } from '../data/surviver';
 import { KillerBuild, SurviverBuild } from '../types/dbd';
+import * as environment from '../utils/environment';
 import Utility from '../utils/utility';
 
 export class Dbd {
@@ -119,7 +120,7 @@ export class Dbd {
     const fields = filterCommands.map((c) => {
       return {
         name: `**${c.description}**`,
-        value: `\`@CC Bot dbd ${c.name}\``,
+        value: `\`@${environment.default.botName} dbd ${c.name}\``,
       };
     });
 

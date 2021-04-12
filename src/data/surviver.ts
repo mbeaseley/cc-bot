@@ -85,6 +85,9 @@ export const surviverPerks: string[] = [
   'Well Make It',
   'Were Gonna Live Forever',
   'Windows of Opportunity',
+  'Fast Track',
+  'Smash Hit',
+  'Self-Preservation',
 ];
 
 export const surviverLoot: string[] = [
@@ -137,8 +140,7 @@ export const surviverOffering: string[] = [
   'Rotten Oak',
   'Shroud of Union',
   'Vigos Shroud',
-  'Shround of Binding',
-  'Shroud of Seperation',
+  'Shroud of Binding',
   'Sacrificial Ward',
   'MacMillans Phalanx Bone',
   'The Pied Piper',
