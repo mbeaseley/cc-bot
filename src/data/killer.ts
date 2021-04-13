@@ -1,9 +1,4 @@
-export class KillerItem {
-  id: number | undefined;
-  name: string | undefined;
-  image: string | undefined;
-  addons: string[] | undefined;
-}
+import { KillerItem } from '../types/dbd';
 
 export const killer: KillerItem[] = [
   {

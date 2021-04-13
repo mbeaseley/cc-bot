@@ -1,19 +1,20 @@
 import { CommandMessage } from '@typeit/discord';
-import { Message } from 'discord.js';
+import { EmbedField, EmbedFieldData, Message } from 'discord.js';
 import { commands } from '../data/dbdCommands';
-import {
-  killer,
-  KillerItem,
-  killerOffering,
-  killerPerks,
-} from '../data/killer';
+import { killer, killerOffering, killerPerks } from '../data/killer';
 import { defaultKillers, playerKillers } from '../data/playerKillers';
 import {
   surviverLoot,
   surviverOffering,
   surviverPerks,
 } from '../data/surviver';
-import { KillerBuild, SurviverBuild } from '../types/dbd';
+import {
+  KillerBuild,
+  KillerItem,
+  SurviverBuild,
+  SurvivorAddon,
+  SurvivorLoot,
+} from '../types/dbd';
 import * as environment from '../utils/environment';
 import Utility from '../utils/utility';
 
@@ -70,7 +71,11 @@ export class Dbd {
     surviverBuild.offering = Utility.random(surviverOffering);
 
     // loot
-    surviverBuild.loot = Utility.random(surviverLoot);
+    const loot: SurvivorLoot = Utility.random(surviverLoot);
+    surviverBuild.loot = loot.name;
+
+    // Loot Addon
+    surviverBuild.lootAddons = Utility.random(loot.addons, 2);
 
     return surviverBuild;
   }
