@@ -11,6 +11,7 @@ import {
   Rules,
 } from '@typeit/discord';
 import 'dotenv/config';
+import { Message } from 'discord.js';
 import { ChoosePlayer } from './commands/choosePlayer';
 import { Compliment } from './commands/compliment';
 import { DadJoke } from './commands/dadJoke';
@@ -21,7 +22,6 @@ import { Purge } from './commands/purge';
 import { SayIt } from './commands/sayIt';
 import { isAdmin } from './guards/isAdmin';
 import * as environment from './utils/environment';
-import { Message } from 'discord.js';
 
 @Discord('<')
 @Rules(
@@ -69,9 +69,12 @@ export default class AppDiscord {
   initialize(): void {
     try {
       console.log('Bot logged in.');
-      AppDiscord.client.user?.setActivity('@CC Bot | help', {
-        type: 'LISTENING',
-      });
+      AppDiscord.client.user?.setActivity(
+        `@${environment.default.botName} | help`,
+        {
+          type: 'LISTENING',
+        }
+      );
     } catch (e) {
       console.log(e);
     }

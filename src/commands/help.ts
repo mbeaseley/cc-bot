@@ -1,4 +1,5 @@
 import { CommandInfos, CommandMessage, RuleBuilder } from '@typeit/discord';
+import * as environment from '../utils/environment';
 
 const EXCLUDE_COMMANDS = ['help', 'purge'];
 export class Help {
@@ -26,7 +27,7 @@ export class Help {
 
         return {
           name: `**${c.description}**`,
-          value: `\`@CC Bot ${c.commandName}\``,
+          value: `\`@${environment.default.botName} ${c.commandName}\``,
         };
       });
 
