@@ -3,6 +3,7 @@ import {
   Client,
   Command,
   CommandMessage,
+  CommandNotFound,
   Description,
   Discord,
   Guard,
@@ -41,6 +42,7 @@ export default class AppDiscord {
   dbd: Dbd;
 
   private errorMessage = 'I have failed you!';
+  private commandNotFoundMessage = `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`;
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
@@ -144,6 +146,12 @@ export default class AppDiscord {
     return this.help.init(command, allCommands).catch(() => {
       command.reply(this.errorMessage);
     });
+  }
+
+  @CommandNotFound()
+  commandNotFound(command: CommandMessage): Promise<Message> {
+    command.delete();
+    return command.reply(this.commandNotFoundMessage);
   }
 }
 
