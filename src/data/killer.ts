@@ -1,4 +1,4 @@
-import { KillerItem } from '../types/dbd';
+import { KillerItem, KillerOffering } from '../types/dbd';
 
 export const killer: KillerItem[] = [
   {
@@ -7,26 +7,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/9/9f/K01_charSelect_portrait.png',
     addons: [
-      'Bloody Coil',
-      'Iridescent Stone',
-      'Fastening Tools',
-      'Honing Stone',
-      'Oily Coil',
-      'Stitched Bag',
-      'Rusted Jaws',
-      'Secondary Coil',
-      'Setting Tools',
-      'Tar Bottle',
-      'Wax Brick',
-      '4 Coil Spring Kit',
-      'Logwood Dye',
-      'Serrated Jaws',
-      'Trap setters',
-      'Trapper Bag',
-      'Padded Jaws',
-      'Strong Coil Spring',
-      'Trapper GLoves',
-      'Trapper Sack',
+      {
+        name: 'Padded Jaws',
+        rarity: 'Common',
+      },
+      {
+        name: 'Strong Coil Spring',
+        rarity: 'Common',
+      },
+      {
+        name: 'Trapper Gloves',
+        rarity: 'Common',
+      },
+      {
+        name: 'Trapper Sack',
+        rarity: 'Common',
+      },
+      {
+        name: '4-Coil Spring Kit',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Logwood Dye',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Serrated Jaws',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Trap Setters',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Trapper Bag',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Rusted Jaws',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Secondary Coil',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Setting Tools',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Tar Bottle',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Wax Brick',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Fastening Tools',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Honing Stone',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Oily Coil',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Stitched Bag',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Bloody Coil',
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: 'Iridescent Stone',
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -35,26 +95,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/0/0d/K02_charSelect_portrait.png',
     addons: [
-      'The Serpent Soot',
-      'The Hound Soot',
-      'The Ghost Soot',
-      'The Beast Soot',
-      'Bone Clapper',
-      'Blink Mud',
-      'Windstorm Mud',
-      'Swift Mud',
-      'Blind Warrior Mud',
-      'Windstorm White',
-      'Swift Hunt White',
-      'ShadowDance White',
-      'Blink White',
-      'Blind Warrior White',
-      'Windstorm Blood',
-      'Swift Hunt Blood',
-      'Shadow Dance Blood',
-      'All Seeing Blood',
-      'Coxcombed Clapper',
-      'All Seeing Spirit',
+      {
+        name: `"The Beast" - Soot`,
+        rarity: 'Common',
+      },
+      {
+        name: `"The Ghost" - Soot`,
+        rarity: 'Common',
+      },
+      {
+        name: `"The Hound" - Soot`,
+        rarity: 'Common',
+      },
+      {
+        name: `"The Serpent" - Soot`,
+        rarity: 'Common',
+      },
+      {
+        name: `"Blind Warrior" - Mud`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `"Blink" - Mud`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `"Swift Hunt" - Mud`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `"Windstorm" - Mud`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Bone Clapper`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `"Blind Warrior" - White`,
+        rarity: 'Rare',
+      },
+      {
+        name: `"Blink" - White`,
+        rarity: 'Rare',
+      },
+      {
+        name: `"Shadow Dance" - White`,
+        rarity: 'Rare',
+      },
+      {
+        name: `"Swift Hunt" - White`,
+        rarity: 'Rare',
+      },
+      {
+        name: `"Windstorm" - White`,
+        rarity: 'Rare',
+      },
+      {
+        name: `"All Seeing" - Blood`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `"Shadow Dance" - Blood`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `"Swift Hunt" - Blood`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `"Windstorm" - Blood`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `"All Seeing" - Spirit`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Coxcombed Clapper`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -63,26 +183,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/a/a3/K03_charSelect_portrait.png',
     addons: [
-      'Steel Toe Boots',
-      'Junkyard Air Filter',
-      'Heavy Clutch',
-      'Speed Limiter',
-      'Dads Boots',
-      'Punctured Muffler',
-      'Off Brand Motor Oil',
-      'Death Engravings',
-      'Big Buckle',
-      'Mothers Helper',
-      'Low Kickback Chains',
-      'Leafy Mash',
-      'Doom Engravings',
-      'Black Grease',
-      'Tuned Carburettor',
-      'Spiked Boots',
-      'Pig House Gloves',
-      'LoPro Chains',
-      'Apex Muffler',
-      'Iridescent Brick',
+      {
+        name: 'Heavy Clutch',
+        rarity: 'Common',
+      },
+      {
+        name: 'Junkyard Air Filter',
+        rarity: 'Common',
+      },
+      {
+        name: 'Speed Limiter',
+        rarity: 'Common',
+      },
+      {
+        name: 'Steel Toe Boots',
+        rarity: 'Common',
+      },
+      {
+        name: 'Big Buckle',
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Dad's Boots`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Death Engravings',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Off-Brand Motor Oil',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Punctured Muffler',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Black Grease',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Doom Engravings',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Leafy Mash',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Low Kickback Chains',
+        rarity: 'Rare',
+      },
+      {
+        name: `Mother's Helpers`,
+        rarity: 'Rare',
+      },
+      {
+        name: 'Lopro Chains',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Pighouse Gloves',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Spiked Boots',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Tuned Carburetor',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Apex Muffler',
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: 'Iridescent Brick',
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -91,25 +271,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/3/31/K04_charSelect_portrait.png',
     addons: [
-      'Wooden Horse',
-      'White Nit Comb',
-      'Plaid Flannel',
-      'Metal Spoon',
-      'Pocket Watch',
-      'Dull Bracelet',
-      'Dark Cincture',
-      'Catatonic Boy Treasure',
-      'Bad Man Keepsake',
-      ' Spasmodic Breath',
-      'Heavy Panting',
-      'Fragile Wheeze',
-      ' Ataxic Respiration',
-      'Anxious Gasp',
-      'Kavanagh Last Breath',
-      'Jenner Last Breath',
-      'Campbell Last Breath',
-      'Torn Bookmark',
-      'Matchbox',
+      {
+        name: 'Metal Spoon',
+        rarity: 'Common',
+      },
+      {
+        name: 'Plaid Flannel',
+        rarity: 'Common',
+      },
+      {
+        name: 'White Nit Comb',
+        rarity: 'Common',
+      },
+      {
+        name: 'Wooden Horse',
+        rarity: 'Common',
+      },
+      {
+        name: 'Bad Man Keepsake',
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Catatonic Boy's Treasure`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Dark Cincture',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Dull Bracelet',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Pocket Watch',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Anxious Gasp',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Ataxic Respiration',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Fragile Wheeze',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Heavy Panting',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Spasmodic Breath',
+        rarity: 'Rare',
+      },
+      {
+        name: `"Bad Man's" Last Breath`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Campbell's Last Breath`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Jenner's Last Breath`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Kavanagh's Last Breath`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Matchbox`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Torn Bookmark`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -118,26 +359,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/0/04/K05_charSelect_portrait.png',
     addons: [
-      'Tacky Earrings',
-      'Boyfriends Memo',
-      'Blond Hair',
-      'Reflective Fragment',
-      'Memorial Flower',
-      'Jewellery',
-      'Hair Brush',
-      'Glass Fragment',
-      'Dead Rabbit',
-      'Mirror Shard',
-      'Judiths Journal',
-      'Jewellery Box',
-      'J.Myers Memorial',
-      'Hair Bow',
-      'Vanity Mirror',
-      'Tombstone Piece',
-      'Scratched Mirror',
-      'Lock of Hair',
-      'Judiths Tombstone',
-      'Fragrant Turf of Hair',
+      {
+        name: 'Blond Hair',
+        rarity: 'Common',
+      },
+      {
+        name: `Boyfriend's Memo`,
+        rarity: 'Common',
+      },
+      {
+        name: 'Tacky Earrings',
+        rarity: 'Common',
+      },
+      {
+        name: 'Dead Rabbit',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Glass Fragment',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Hair Brush',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Jewelry',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Memorial Flower',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Reflective Fragment',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Hair Bow',
+        rarity: 'Rare',
+      },
+      {
+        name: 'J.Myers Memorial',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Jewelry Box',
+        rarity: 'Rare',
+      },
+      {
+        name: `Judith's Journal`,
+        rarity: 'Rare',
+      },
+      {
+        name: 'Mirror Shard',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Lock Of Hair',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Scratched Mirror',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Tombstone Piece',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Vanity Mirror',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Fragrant Tuft Of Hair',
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Judith's Tombstone`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -146,26 +447,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/b/b4/K06_charSelect_portrait.png',
     addons: [
-      'Rope Necklet',
-      'Powered Eggshell',
-      'Dead Fly Mud',
-      'Bog Water',
-      'Pussy Willow Catkins',
-      'Half Eggshell',
-      'Dragonfly Wings',
-      'Cypress Necklet',
-      'Bloodied Water',
-      'Willow Wreath',
-      'Swamp Orchid Necklet',
-      ' Dried Cicada',
-      'Cracked Turtle Egg',
-      'Bloodied Mud',
-      'Scarred Hand',
-      'Rusty Shackles',
-      'Grandmas Heart',
-      'Disfigured Ear',
-      'Waterlogged Show',
-      'Mint Rag',
+      {
+        name: 'Bog Water',
+        rarity: 'Common',
+      },
+      {
+        name: 'Dead Fly Mud',
+        rarity: 'Common',
+      },
+      {
+        name: 'Powdered Eggshell',
+        rarity: 'Common',
+      },
+      {
+        name: 'Rope Necklet',
+        rarity: 'Common',
+      },
+      {
+        name: 'Bloodied Water',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Cypress Necklet',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Dragonfly Wings',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Half Eggshell',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Pussy Willow Catkins',
+        rarity: 'Uncommon',
+      },
+      {
+        name: 'Bloodied Mud',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Cracked Turtle Egg',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Dried Cicada',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Swamp Orchid Necklet',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Willow Wreath',
+        rarity: 'Rare',
+      },
+      {
+        name: 'Disfigured Ear',
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Granma's Heart`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Rusty Shackles',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Scarred Hand',
+        rarity: 'Very Rare',
+      },
+      {
+        name: 'Mint Rag',
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: 'Waterlogged Shoe',
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -174,26 +535,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/a/ad/K07_charSelect_portrait.png',
     addons: [
-      'Moudly Electode',
-      'Maple Knight',
-      'Order Class I',
-      'Calm Class I',
-      'Polished Electode',
-      'Restraint Class II',
-      'Order CLass II',
-      'Discipline Class II',
-      'Calm Class II',
-      'Scrapped Tape',
-      'Interview Tape',
-      'High Stimulus Electrode',
-      'Restraint Class III',
-      ' Discipline Class III',
-      'Restraint Carters Notes',
-      'Order Carters Notes',
-      'Discipline Carters Notes',
-      'Calm Carters Notes',
-      'Iridescent Queen',
-      'Iridescent King',
+      {
+        name: `"Calm" - Class I`,
+        rarity: 'Common',
+      },
+      {
+        name: `"Order" - Class I`,
+        rarity: 'Common',
+      },
+      {
+        name: `Maple Knight`,
+        rarity: 'Common',
+      },
+      {
+        name: `Moldy Electrode`,
+        rarity: 'Common',
+      },
+      {
+        name: `"Calm" - Class II`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `"Discipline" - Class II`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `"Order" - Class II`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `"Restraint" - Class II`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Polished Electrode`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `"Discipline" - Class III`,
+        rarity: 'Rare',
+      },
+      {
+        name: `"Restraint" - Class III`,
+        rarity: 'Rare',
+      },
+      {
+        name: `High Stimulus Electrode`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Interview Tape`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Scrapped Tape`,
+        rarity: 'Rare',
+      },
+      {
+        name: `"Calm" - Carter's Notes`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `"Discipline" - Carter's Notes`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `"Order" - Carter's Notes`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `"Restraint" - Carter's Notes`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Iridescent King`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Iridescent Queen`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -202,26 +623,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/1/1a/K08_charSelect_portrait.png',
     addons: [
-      'Coarse Stone',
-      'Berus Toxin',
-      'Bandaged Haft',
-      'Amanita Toxin',
-      'Yew Seed Brew',
-      'Shiny Pin',
-      'Oak Haft',
-      ' Manna Grass Braid',
-      'Leather Loop',
-      'Fine Stone',
-      'Deerskin Gloves',
-      'Yew Seed Concotion',
-      'Venomous Concotion',
-      'Rusty Head',
-      'Pungent Phial',
-      'Flower Babushka',
-      'Infantry Belt',
-      'Glowing Concotion',
-      'Begraimed Head',
-      ' Iridescent Head',
+      {
+        name: `Amanita Toxin`,
+        rarity: 'Common',
+      },
+      {
+        name: `Bandaged Haft`,
+        rarity: 'Common',
+      },
+      {
+        name: `Berus Toxin`,
+        rarity: 'Common',
+      },
+      {
+        name: `Coarse Stone`,
+        rarity: 'Common',
+      },
+      {
+        name: `Deerskin Gloves`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Leather Loop`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Manna Grass Braid`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Oak Haft`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Fine Stone`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Shiny Pin`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Yew Seed Brew`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Flower Babushka`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Pungent Fiale`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Rusty Head`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Venomous Concoction`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Yew Seed Concoction`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Begrimed Head`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Glowing Concoction`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Infantry Belt`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Iridescent Head`,
+        rarity: 'Utra Rare',
+      },
     ],
   },
   {
@@ -230,26 +711,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/c/c6/K09_charSelect_portrait.png',
     addons: [
-      'Vegetable Oil',
-      'Spark Plug',
-      'SPeed Limiter',
-      'Chainsaw File',
-      'Long Guide Bar',
-      'Primer Bulb',
-      'Knife Scratches',
-      'Homemade Muffler',
-      'Chilli',
-      'The Grease',
-      'The Beast Marks',
-      'Shop Lubricant',
-      'Grisly Chains',
-      'Begrimed Chains',
-      ' Rusted Chains',
-      ' Light Chassis',
-      'Depth Gauge Rake',
-      'Award Winning Chilli',
-      'Iridescent Flesh',
-      'Carburettor Tuning Guide',
+      {
+        name: `Chainsaw File`,
+        rarity: 'Common',
+      },
+      {
+        name: `Spark Plug`,
+        rarity: 'Common',
+      },
+      {
+        name: `Speed Limiter`,
+        rarity: 'Common',
+      },
+      {
+        name: `Vegetable Oil`,
+        rarity: 'Common',
+      },
+      {
+        name: `Chili`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Homemade Muffler`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Knife Scratches`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Long Guide Bar`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Primer Bulb`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Begrimed Chains`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Grisly Chain`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Shop Lubricant`,
+        rarity: 'Rare',
+      },
+      {
+        name: `The Beast's Marks`,
+        rarity: 'Rare',
+      },
+      {
+        name: `The Grease`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Award-Winning Chili`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Depth Gauge Rake`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Light Chassis`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Rusted Chain`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Carburetor Tuning Guide`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Iridescent Flesh`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -258,26 +799,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/f/f7/K10_charSelect_portrait.png',
     addons: [
-      'Wool Shirt',
-      'Sheep Block',
-      'Kids Drawing',
-      'Garden Rake',
-      'Prototype Claws',
-      'Outdoor Rope',
-      'Nancy Sketch',
-      'Green Dress',
-      'Cat Block',
-      'Unicorn Block',
-      'Paint Thinner',
-      'Nancy Masterpiece',
-      'Jump Rope',
-      'Blue Dress',
-      'Pill Bottle',
-      'Swing Chains',
-      'Class Photo',
-      'Z Block',
-      'Red Paint Brush',
-      'Black Box',
+      {
+        name: `Garden Rake`,
+        rarity: 'Common',
+      },
+      {
+        name: `Kid's Drawing`,
+        rarity: 'Common',
+      },
+      {
+        name: `Sheep Block`,
+        rarity: 'Common',
+      },
+      {
+        name: `Wool Shirt`,
+        rarity: 'Common',
+      },
+      {
+        name: `Cat Block`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Green Dress`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Nancy's Sketch`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Outdoor Rope`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Prototype Claws`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Blue Dress`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Jump Rope`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Nancy's Masterpiece`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Paint Thinner`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Unicorn Block`,
+        rarity: 'Rare',
+      },
+      {
+        name: `"Z" Block`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Class Photo`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Pill Bottle`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Swing Chains`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Black Box`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Red Paint Brush`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -286,26 +887,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/c/c7/K11_charSelect_portrait.png',
     addons: [
-      'Workshop Grease',
-      'Shattered Syringe',
-      'John Medical File',
-      'Combat Straps',
-      'Video Tape',
-      'Utility Blades',
-      'Razor Wires',
-      'Last Will',
-      'Face Mask',
-      'Slow Release Toxin',
-      'Rusty Attachments',
-      'Jigsaw Annotated Plan',
-      'Interlocking Razor',
-      'Bag of Gears',
-      'Tampered Timer',
-      'Jigsaw Sketch',
-      'Crates Of Gears',
-      'Amanda Secret',
-      'Rule Set No 2',
-      'Amanda Letter',
+      {
+        name: `Combat Straps`,
+        rarity: 'Common',
+      },
+      {
+        name: `John's Medical File`,
+        rarity: 'Common',
+      },
+      {
+        name: `Shattered Syringe`,
+        rarity: 'Common',
+      },
+      {
+        name: `Workshop Grease`,
+        rarity: 'Common',
+      },
+      {
+        name: `Face Mask`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Last Will`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Razor Wires`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Utility Blades`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Video Tape`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Bag Of Gears`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Interlocking Razor`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Jagsaw's Annotated Plan`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Rusty Attachments`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Slow-Release Toxin`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Amanda's Secret`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Crate Of Gears`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Jigsaw's Sketch`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Tampered Timer`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Amanda's Letter`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Rule Set No.2`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -314,26 +975,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/e/e1/K12_charSelect_portrait.png',
     addons: [
-      'Inner Soles',
-      'Robin Feather',
-      'Fingerless Parade Gloves',
-      'Ether 5 Vol%',
-      'Thick Cork',
-      'Stopper',
-      'Sticky Soda Bottle',
-      'Starling Feather',
-      'Solvent Jug',
-      'Kerosene Can',
-      'VHS Porn',
-      'Sulphuric Acid Vial',
-      'Flask of Bleach',
-      'Ether 10 Vol%',
-      'Bottle Of Chloroform',
-      'Garish Make-up Kit',
-      'Ether 15 Vol%',
-      'Cigar Box',
-      'Cheap Gin Bottle',
-      'Tattoos Middle Finger',
+      {
+        name: `Fingerless Parade Gloves`,
+        rarity: 'Common',
+      },
+      {
+        name: `Party Bottle`,
+        rarity: 'Common',
+      },
+      {
+        name: `Robin Feather`,
+        rarity: 'Common',
+      },
+      {
+        name: `VHS Porn`,
+        rarity: 'Common',
+      },
+      {
+        name: `Kerosene Can`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Solvent Jug`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Starling Feather`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Sticky Soda Bottle`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Thick Cork Stopper`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Bottle Of Chloroform`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Flash Of Bleach`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Smelly Inner Soles`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Spirit Of hartshorn`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Sulfuric Acid Vial`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Cheap Gin Bottle`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Cigar Box`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Ether 15 VOL%`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Garish Makeup Kit`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Redhead's Pinky Finger`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Tattoo's Middle Finger`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -342,26 +1063,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/b/b0/K13_charSelect_portrait.png',
     addons: [
-      'Zori',
-      'Shiawase Amulet',
-      'Origami Crane',
-      'Gifted Bamboo Comb',
-      'White Hair Ribbon',
-      'Rins Broken Watch',
-      'Muddy Sports Day Cap',
-      'Kaiun Talisman',
-      ' Juniper Bonasai',
-      'Rusty Flute',
-      'Katsumori Talisman',
-      'Katana Tsuba',
-      'Dirt Uwabaki',
-      'Bloody Hair Brooch',
-      'Yakuyoke Amulet',
-      'Wakizashi Saya',
-      'Prayer Beads Bracelet',
-      'Dried Cherry Blossom',
-      'Mother Daughter Ring',
-      'Fathers Glasses',
+      {
+        name: `Gifted Bamboo Comb`,
+        rarity: 'Common',
+      },
+      {
+        name: `Origami Crane`,
+        rarity: 'Common',
+      },
+      {
+        name: `Shiawase Amulet`,
+        rarity: 'Common',
+      },
+      {
+        name: `Zōri`,
+        rarity: 'Common',
+      },
+      {
+        name: `Juniper Bonsai`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Kaviun Talisman`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Muddy Sports Day Cap`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Rin's Broken Watch`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `White Hair Ribbon`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Bloody Hair Brooch`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Dirty Uwabaki`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Katana Tsuba`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Katsumori Talisman`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Rusty Flute`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Dried Cherry Blossom`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Prayer Beads Bracelet`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Wakizashi Saya`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Yakuyoke Amulet`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Father's Glasses`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Mother-Daughter Ring`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -370,26 +1151,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/a/af/K14_charSelect_portrait.png',
     addons: [
-      'Smiley Face Pin',
-      'Scratched Ruler',
-      'Mischief List',
-      'Friendship Bracelet',
-      'Never Sleep Pills',
-      'Mural Sketch',
-      'Julies Mix Tape',
-      ' Etched Ruler',
-      'Defaced Smiley Pin',
-      'The Legion Pin',
-      'Susie Mix Tape',
-      'Stolen Sketch Book',
-      'Nasty Blade',
-      ' Joey Mix Tape',
-      'Stab Wounds Study',
-      'Frank Mix Tape',
-      'Fithy Blade',
-      'Cold Dirt',
-      'Iridescent Button',
-      'Fuming Mix Tape',
+      {
+        name: `Friendship Bracelet`,
+        rarity: 'Common',
+      },
+      {
+        name: `Mischief List`,
+        rarity: 'Common',
+      },
+      {
+        name: `Scratched Ruler`,
+        rarity: 'Common',
+      },
+      {
+        name: `Smiley Face Pin`,
+        rarity: 'Common',
+      },
+      {
+        name: `Defaced Smiley Pin`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Etched Ruler`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Julie's Mix Tape`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Mural Sketch`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Never-Sleep Pills`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Joey's Mix Tape`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Nasty Blade`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Stolen Sketch Book`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Susie's Mix Tape`,
+        rarity: 'Rare',
+      },
+      {
+        name: `The Legion Pin`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Cold Dirt`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Filthy Blade`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Frank's Mix Tape`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Stab Wounds Study`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Fuming Mix Tape`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Iridescent Button`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -398,26 +1239,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/6/68/K15_charSelect_portrait.png',
     addons: [
-      'Prayer Tablet Fragement',
-      'Olibanum Incense',
-      'Limestone Seal',
-      'Healing Salve',
-      'Prophylactic Amulet',
-      'Potent Tincture',
-      'Haematite Seal',
-      'Emetic Potion',
-      'Blessed Apple',
-      'Rubbing Oil',
-      'Infected Emetic',
-      'Incensed Ointment',
-      'Exorcism Amulet',
-      'Ashen Apple',
-      'Worship Tablet',
-      ' Vile Emetic',
-      'Severed Toe',
-      'Devotees Amulet',
-      'Iridescent Seal',
-      'Black Incense',
+      {
+        name: `Healing Salve`,
+        rarity: 'Common',
+      },
+      {
+        name: `Limestone Seal`,
+        rarity: 'Common',
+      },
+      {
+        name: `Olibanum Incense`,
+        rarity: 'Common',
+      },
+      {
+        name: `Prayer Tablet Fragment`,
+        rarity: 'Common',
+      },
+      {
+        name: `Blessed Apple`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Emetic Potion`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Hematite Seal`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Potent Tincture`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Prophylactic Amulet`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Ashen Apple`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Exorcism Amulet`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Incensed Ointment`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Infected Emetic`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Rubbing Oil`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Devotee's Amulet`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Severed Toe`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Vile Emetic`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Worship Tablet`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Black Incense`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Iridescent Seal`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -426,26 +1327,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/b/bd/K16_charSelect_portrait.png',
     addons: [
-      'Philly',
-      'Walleyes Matchbook',
-      'Headlines Cuts Outs',
-      'Cheap Cologne',
-      'Telephoto Lens',
-      'Reusable Cinch Straps',
-      'Olsen Journal',
-      'Olsen Address Book',
-      'Marked Map',
-      'Olsen Wallet',
-      'Leather Knife Sheath',
-      'Lasting Perfume',
-      'Knife Belt Clip',
-      'Chewed Pen',
-      ' Victims Deatiled Routine',
-      'Night Vision Monocular',
-      'Drop Leg Knife Sheath',
-      'Drivers License',
-      'Ghost Face Caught on Tape',
-      'Outdoor Security Camera',
+      {
+        name: `Cheap Cologne`,
+        rarity: 'Common',
+      },
+      {
+        name: `Headlines Cutouts`,
+        rarity: 'Common',
+      },
+      {
+        name: `Walleyes Matchbook`,
+        rarity: 'Common',
+      },
+      {
+        name: `"Philly"`,
+        rarity: 'Common',
+      },
+      {
+        name: `Cinch Straps`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Marked Map`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Olsen's Address Book`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Olsen's Journal`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Telephoto Lens`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Chewed Pen`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Knife Belt Clip`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Lasting Perfume`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Leather Knife Sheath`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Olsen's Wallet`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Driver's License`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Drop-Leg Knife Sheath`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Night Vision Monocular`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Victim's Detailed Routine`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Outdoor Security Camera`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `"Ghost Face Caught On Tape"`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -454,26 +1415,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/6/6d/K17_charSelect_portrait.png',
     addons: [
-      'Rotten Pumpkin',
-      'BlackHeart',
-      'Rat Liver',
-      'Rat Tail',
-      'Sticky Lining',
-      'Viscous Webbing',
-      'Rotten Green Tripe',
-      'Mews Guts',
-      'Barbs Glasses',
-      'Eleven Soda',
-      'Thorny Vines',
-      'Brass Case Lighter',
-      'Violet Waxcap',
-      'Deer Lung',
-      'Lifeguard Whistle',
-      'Vermillion Webcap',
-      'Upside Down Resin',
-      ' Unknown Egg',
-      'Leprose Lichen',
-      'Red Moss',
+      {
+        name: `Black Heart`,
+        rarity: 'Common',
+      },
+      {
+        name: `Rat Liver`,
+        rarity: 'Common',
+      },
+      {
+        name: `Rat Tail`,
+        rarity: 'Common',
+      },
+      {
+        name: `Rotten Pumpkin`,
+        rarity: 'Common',
+      },
+      {
+        name: `Barb's Glasses`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Mew's Guts`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Rotten Green Tripe`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Sticky Lining`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Viscous Webbing`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Brass Case Lighter`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Deer Lung`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Eleven's Soda`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Thorny Vines`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Violet Waxcap`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Lifeguard Whistle`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Unknown Egg`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Upside Down Resin`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Vermillion Webcap`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Leprose Lichen`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Red Moss`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -482,26 +1503,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/c/c5/K18_charSelect_portrait.png',
     addons: [
-      'Yakuyoke Talisman',
-      'Rotting Rope',
-      'Cracked Sakazuki',
-      'Blackened Toenail',
-      'Polished Maedate',
-      'Ink Lion',
-      'Chipped Saihai',
-      'Childs Wooden Sword',
-      'Bloody Sash',
-      'Yamaoka Sashimono',
-      'Wooden Oni Mask',
-      'Shattered Wakizashi',
-      'Scalped Topknot',
-      'Kanai-Anzen Talisman',
-      'Tear Soaked Tenugui',
-      'Splintered Hull',
-      'Lion Fang',
-      'Akitos Crutch',
-      'Renjiros Bloody Glove',
-      'Iridescent Family Crest',
+      {
+        name: `Blackened Toenail`,
+        rarity: 'Common',
+      },
+      {
+        name: `Cracked Sakazuki`,
+        rarity: 'Common',
+      },
+      {
+        name: `Rotting Rope`,
+        rarity: 'Common',
+      },
+      {
+        name: `Yaku-Yoke Talisman`,
+        rarity: 'Common',
+      },
+      {
+        name: `Bloody Sash`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Child's Wooden Sword`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Chipped Saihai`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Ink Lion`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Polished Maedate`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Kanai-Anzen Talisman`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Scalped Topknot`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Shattered Wakizashi`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Wooden Oni Mask`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Yamaoka Sashimono`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Akito's Crutch`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Lion Fang`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Splintered Hull`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Tear Soaked Tenugui`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Iridescent Family Crest`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Renjiro's Bloody Glove`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -510,26 +1591,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/8/84/K19_charSelect_portrait.png',
     addons: [
-      'Spit Polish Rag',
-      'Snake Oil',
-      'Rickety Chain',
-      'Modified Ammo Belt',
-      'Rusted Spike',
-      'Poison Oak Leaves',
-      'Marshals Badge',
-      'Jaw Smasher',
-      'Chewing Tobacco',
-      'Wardens Keys',
-      'Wanted Poster',
-      'Tin Oil Can',
-      'Honey Locust Thorn',
-      'Bayshores Gold Tooth',
-      'Prison Chain',
-      'Gold Creek Whiskey',
-      'Bayshores Cigar',
-      'Barbed Wire',
-      'Iridescent Coin',
-      'Hellshire Iron',
+      {
+        name: `Modified Ammo Belt`,
+        rarity: 'Common',
+      },
+      {
+        name: `Rickety Chain`,
+        rarity: 'Common',
+      },
+      {
+        name: `Snake Oil`,
+        rarity: 'Common',
+      },
+      {
+        name: `Spit Polish Rag`,
+        rarity: 'Common',
+      },
+      {
+        name: `Chewing Tabacco`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Jaw Smasher`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Marshal's Badge`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Poison Oak Leaves`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Rusted Spike`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Bayshore's Gold Tooth`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Honey Locust Thorns`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Tin Oil Can`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Wanted Poster`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Warden's Keys`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Barbed Wire`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Bayshore's Cigar`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Gold Creek Whiskey`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Prison Chain`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Hellshire Iron`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Iridescent Coin`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -538,26 +1679,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/9/95/K20_charSelect_portrait.png',
     addons: [
-      'Lead Ring',
-      'Dead Butterfly',
-      'Copper Ring',
-      'Black Strap',
-      'Wax Doll',
-      'Spearhead',
-      'Leopard-Print Fabric',
-      'Forgotten Videotape',
-      'Cinderella Music Box',
-      'Valtiel Sect Photograph',
-      'Tablet of the Oppressor',
-      'Misty Day, Remains of Judgement',
-      'Mannequin Foot',
-      'Burning Man Painting',
-      'Scarlet Egg',
-      'Rust-Coloured Egg',
-      'Lost Memories Book',
-      'Crimson Ceremony Book',
-      'Obsidian Goblet',
-      'Iridescent Seal of Metatron',
+      {
+        name: `Black Strap`,
+        rarity: 'Common',
+      },
+      {
+        name: `Copper Ring`,
+        rarity: 'Common',
+      },
+      {
+        name: `Dead Butterfly`,
+        rarity: 'Common',
+      },
+      {
+        name: `Lead Ring`,
+        rarity: 'Common',
+      },
+      {
+        name: `Cinderella Music Box`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Forgotten Videotape`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Leopard-Print Fabric`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Spearhead`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Wax Doll`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Burning Man Painting`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Mannequin Foot`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Misty Day, Remains Of Judgment`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Tablet Of The Oppressor`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Valtiel Sect Photograph`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Crimson Ceremony Book`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Lost Memories Book`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Rust-Colored Egg`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Scarlet Egg`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Iridescent Seal Of Metatron`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Obsidian Goblet`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -566,26 +1767,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/0/0b/K21_charSelect_portrait.png',
     addons: [
-      'Placebo Tablet',
-      'Foxglove',
-      'Compound Seven',
-      'Chipped Monocle',
-      'Shredded Notes',
-      'Pustula Dust',
-      'Plague Bile',
-      'Canker Thorn',
-      'Blighted Rat',
-      'Umbra Salts',
-      'Rose Tonic',
-      'Compound Twenty-One',
-      'Blighted Crow',
-      'Adrenaline Vial',
-      'Vigos Journal',
-      'Summoning Stone',
-      'Soul Chemical',
-      'Alchemists Ring',
-      'Iridescent Blight Tag',
-      'Compound Thirty-Three',
+      {
+        name: `Chipped Monocle`,
+        rarity: 'Common',
+      },
+      {
+        name: `Compound Seven`,
+        rarity: 'Common',
+      },
+      {
+        name: `Foxglove`,
+        rarity: 'Common',
+      },
+      {
+        name: `Placebo Tablet`,
+        rarity: 'Common',
+      },
+      {
+        name: `Blighted Rat`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Canker Thorn`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Plague Bile`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Pustula Dust`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Shredded Notes`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Adrenaline Vial`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Blighted Crow`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Compound Twenty-One`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Rose Tonic`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Umbra Salts`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Alchemist's Ring`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Soul Chemical`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Summoning Stone`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Vigo's Journal`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Compound Thirty-Three`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Iridescent Blight Tag`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -594,26 +1855,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/0/03/K22_charSelect_portrait.png',
     addons: [
-      'Toy Sword',
-      'Tiny Fingernail',
-      'Soured Milk',
-      'Cat Figurine',
-      'Madeleines Glove',
-      'Ceremonial Candelabrum',
-      'Cats Eye',
-      'Bloody Black Hood',
-      'Baby Teeth',
-      'Weighty Rattle',
-      'Stale Biscuit',
-      'Sewer Sludge',
-      'Rusted Needle',
-      'Madeleines Scarf',
-      'Victors Soldier',
-      'Spinning Top',
-      'Forest Stew',
-      'Drop of Perfume',
-      'Silencing Cloth',
-      'Iridescent Pendant',
+      {
+        name: `Cat Figurine`,
+        rarity: 'Common',
+      },
+      {
+        name: `Soured Milk`,
+        rarity: 'Common',
+      },
+      {
+        name: `Tiny Fingernail`,
+        rarity: 'Common',
+      },
+      {
+        name: `Toy Sword`,
+        rarity: 'Common',
+      },
+      {
+        name: `Baby Teeth`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Bloody Black Hood`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Cat's Eye`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Ceremonial Candelabrum`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Madeleine's Glove`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Madeleine's Scarf`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Rusted Needle`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Sewer Sludge`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Stale Discuit`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Weighty Rattle`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Drop Of Perfume`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Forest Stew`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Spinning Top`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Victor's Soldier`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Iridescent Pendant`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Silencing Cloth`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
   {
@@ -622,26 +1943,86 @@ export const killer: KillerItem[] = [
     image:
       'https://static.wikia.nocookie.net/deadbydaylight_gamepedia_en/images/3/3e/K23_charSelect_portrait.png',
     addons: [
-      'Trick Pouch',
-      'Memento Blades',
-      'Killing Part Chords',
-      'Inferno Wire',
-      'Tequila Moonrock',
-      'On Target Single',
-      'Lucky Blade',
-      'Ji-Woons Autograph',
-      'Caged Heart Shoes',
-      'Melodious Murder',
-      'Waiting For You Watch',
-      'Ripper Brace',
-      'Fizz-Spin Soda',
-      'Bloody Boa',
-      'Trick Blades',
-      'Edge of Revival Album',
-      'Diamond Cufflinks',
-      'Cut Thru U Single',
-      'Death Throes Compliation',
-      'Iridescent Photocard',
+      {
+        name: `Inferno Wires`,
+        rarity: 'Common',
+      },
+      {
+        name: `killing Part Chords`,
+        rarity: 'Common',
+      },
+      {
+        name: `Memento Blades`,
+        rarity: 'Common',
+      },
+      {
+        name: `Trick Pouch`,
+        rarity: 'Common',
+      },
+      {
+        name: `Caged Heart Shoes`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Ji-Woon's Autograph`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Lucky Blade`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `On Target Single`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Tequila Moonrock`,
+        rarity: 'Uncommon',
+      },
+      {
+        name: `Bloody Boa`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Fizz-Spin Soda`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Melodious Murder`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Ripper Brace`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Waiting For You Watch`,
+        rarity: 'Rare',
+      },
+      {
+        name: `Cut Thru U Single`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Diamond Cufflinks`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Edge Of Revival Album`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Trick Blades`,
+        rarity: 'Very Rare',
+      },
+      {
+        name: `Death Throes Compilation`,
+        rarity: 'Ultra Rare',
+      },
+      {
+        name: `Iridescent Photocard`,
+        rarity: 'Ultra Rare',
+      },
     ],
   },
 ];
@@ -715,39 +2096,141 @@ export const killerPerks: string[] = [
   'Coup de Grâce',
 ];
 
-export const killerOffering: string[] = [
-  'Bloodied Blueprint',
-  'Torn Blueprint',
-  'Cut Coin',
-  'Scratched Coin',
-  'Clear Reagent',
-  'Faint Reagent',
-  'Hazy Reagent',
-  'Murky Reagent',
-  'Annotated Blueprint',
-  'Vigos Blueprint',
-  'Petrified Oak',
-  'Moudly Oak',
-  'Rotten Oak',
-  'Putrid Oak',
-  'Cypress Mori',
-  'Ivory Mori',
-  'Ebony Mori',
-  'MacMillans Phalanx Bone',
-  'The Pied Piper',
-  'Azarovs Key',
-  'Jigsaw Piece',
-  'Heart Locket',
-  'Yamaoka Family Crest',
-  'Charred Wedding Photograph',
-  'Damaged Photo',
-  'Strode Realty Key',
-  'Hawkins National Laboratory ID',
-  'Grandmas Cookbook',
-  'Dusty Noose',
-  'Shattered Glasses',
-  'Marys Letter',
-  'The Last Mask',
-  'Shroud of Seperation',
-  'Sacrificial Ward',
+export const killerOffering: KillerOffering[] = [
+  {
+    name: 'Annotated Blueprint',
+    rarity: 'Common',
+  },
+  {
+    name: 'Bloodied Blueprint',
+    rarity: 'Common',
+  },
+  {
+    name: 'Clear Reagent',
+    rarity: 'Common',
+  },
+  {
+    name: 'Faint Reagent',
+    rarity: 'Common',
+  },
+  {
+    name: 'Torn Blueprint',
+    rarity: 'Common',
+  },
+  {
+    name: `Vigo's Blueprint`,
+    rarity: 'Common',
+  },
+  {
+    name: 'Cypress Memento Mori',
+    rarity: 'Uncommon',
+  },
+  {
+    name: 'Hazy Reagent',
+    rarity: 'Uncommon',
+  },
+  {
+    name: 'Moldy Oak',
+    rarity: 'Uncommon',
+  },
+  {
+    name: 'Scratched Coin',
+    rarity: 'Uncommon',
+  },
+  {
+    name: 'Shroud Of Separation',
+    rarity: 'Uncommon',
+  },
+  {
+    name: `Azarov's Key`,
+    rarity: 'Rare',
+  },
+  {
+    name: 'Charred Wedding Photograph',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Damaged Photo',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Dusty Noose',
+    rarity: 'Rare',
+  },
+  {
+    name: `Grandma's Cookbook`,
+    rarity: 'Rare',
+  },
+  {
+    name: 'Hawkins National Laboratory I.D.',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Heart Locket',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Ivory Memento Mori',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Jigsaw Piece',
+    rarity: 'Rare',
+  },
+  {
+    name: `Macmillan's Phalanx Bone`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Mary's Letter`,
+    rarity: 'Rare',
+  },
+  {
+    name: 'Rotten Oak',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Sacrificial Ward',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Shattered Glasses',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Strode Realty Key',
+    rarity: 'Rare',
+  },
+  {
+    name: 'The Last Mask',
+    rarity: 'Rare',
+  },
+  {
+    name: 'The Pied Piper',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Yamaoka Family Crest',
+    rarity: 'Rare',
+  },
+  {
+    name: 'Black Ward',
+    rarity: 'Very Rare',
+  },
+  {
+    name: 'Cut Coin',
+    rarity: 'Very Rare',
+  },
+  {
+    name: 'Murky Reagent',
+    rarity: 'Very Rare',
+  },
+  {
+    name: 'Putrid Oak',
+    rarity: 'Very Rare',
+  },
+  {
+    name: 'Ebony Memento Mori',
+    rarity: 'Ultra Rare',
+  },
 ];

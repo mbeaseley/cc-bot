@@ -3,7 +3,7 @@ class PlayerKiller {
   availableKiller: number[] = [];
 }
 
-export const defaultKillers: number[] = [1, 2, 3, 4, 6, 7, 8];
+export const defaultKillers: number[] = [1, 2, 3, 4, 7, 8];
 
 export const playerKillers: PlayerKiller[] = [
   // CC
@@ -12,6 +12,7 @@ export const playerKillers: PlayerKiller[] = [
     availableKiller: [
       ...defaultKillers,
       5,
+      6,
       9,
       10,
       11,
@@ -35,6 +36,7 @@ export const playerKillers: PlayerKiller[] = [
     availableKiller: [
       ...defaultKillers,
       5,
+      6,
       9,
       10,
       11,
@@ -55,12 +57,12 @@ export const playerKillers: PlayerKiller[] = [
   // PacificViruz
   {
     userId: '246434279331069953',
-    availableKiller: [...defaultKillers, 11, 12, 15, 16, 20, 22, 23],
+    availableKiller: [...defaultKillers, 6, 11, 12, 15, 16, 20, 22, 23],
   },
   // neodragon17
   {
     userId: '805228731383677008',
-    availableKiller: [...defaultKillers, 23],
+    availableKiller: [...defaultKillers, 10, 23],
   },
   // nSev
   {
@@ -68,6 +70,7 @@ export const playerKillers: PlayerKiller[] = [
     availableKiller: [
       ...defaultKillers,
       5,
+      6,
       9,
       10,
       11,
@@ -89,5 +92,10 @@ export const playerKillers: PlayerKiller[] = [
   {
     userId: '141311284955185152',
     availableKiller: [...defaultKillers, 7, 10, 12, 17, 18, 19],
+  },
+  // Johnny_Cashira
+  {
+    userId: '175971639303995392',
+    availableKiller: [...defaultKillers, 5, 6, 9, 10, 11, 16, 17, 20],
   },
 ];

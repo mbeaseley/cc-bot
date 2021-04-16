@@ -2,6 +2,11 @@ import { EmbedField, MessageEmbed, MessageEmbedOptions } from 'discord.js';
 import _ = require('underscore');
 
 export default class Utility {
+  /**
+   * Create Field string
+   * @param value
+   * @returns
+   */
   static createFieldValue(value: any): any[] {
     return value.map((v: any) => {
       if (typeof v !== 'string' && v.rarity) {

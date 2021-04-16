@@ -1,15 +1,19 @@
+/*============
+Killer Types
+=============*/
+
 export class KillerBuild {
   killer: string | undefined;
   image: string | undefined;
-  addons: string[] | undefined;
-  offering: string | undefined;
+  addons: KillerAddon[] | undefined;
+  offering: KillerOffering[] | undefined;
   perks: string[] | undefined;
 
   constructor(
     killer?: string,
     image?: string,
-    addons?: string[],
-    offering?: string,
+    addons?: KillerAddon[],
+    offering?: KillerOffering[],
     perks?: string[]
   ) {
     this.killer = killer;
@@ -20,16 +24,37 @@ export class KillerBuild {
   }
 }
 
+export class KillerOffering {
+  name: string | undefined;
+  rarity: string | undefined;
+}
+
+export class KillerAddon {
+  name: string | undefined;
+  rarity: string | undefined;
+}
+
+export class KillerItem {
+  id: number | undefined;
+  name: string | undefined;
+  image: string | undefined;
+  addons: KillerAddon[] | undefined;
+}
+
+/*=============
+Survivor Types
+==============*/
+
 export class SurviverBuild {
-  loot: string | undefined;
+  loot: SurvivorLoot[] | undefined;
   lootAddons: SurvivorAddon[] | undefined;
-  offering: string | undefined;
+  offering: SurvivorOffering[] | undefined;
   perks: string[] | undefined;
 
   constructor(
-    loot?: string,
+    loot?: SurvivorLoot[],
     lootAddons?: SurvivorAddon[],
-    offering?: string,
+    offering?: SurvivorOffering[],
     perks?: string[]
   ) {
     this.loot = loot;
@@ -37,13 +62,6 @@ export class SurviverBuild {
     this.offering = offering;
     this.perks = perks;
   }
-}
-
-export class KillerItem {
-  id: number | undefined;
-  name: string | undefined;
-  image: string | undefined;
-  addons: string[] | undefined;
 }
 
 export class SurvivorAddon {
@@ -55,4 +73,9 @@ export class SurvivorLoot {
   name: string | undefined;
   rarity: string | undefined;
   addons: SurvivorAddon[] | [] = [];
+}
+
+export class SurvivorOffering {
+  name: string | undefined;
+  rarity: string | undefined;
 }

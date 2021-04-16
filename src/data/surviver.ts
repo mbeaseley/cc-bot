@@ -1,4 +1,4 @@
-import { SurvivorAddon, SurvivorLoot } from '../types/dbd';
+import { SurvivorAddon, SurvivorLoot, SurvivorOffering } from '../types/dbd';
 
 export const surviverPerks: string[] = [
   'Ace in the Hole',
@@ -27,16 +27,17 @@ export const surviverPerks: string[] = [
   'Dead Hard',
   'Deception',
   'Decisive Strike',
-  'Déjà Vu',
+  'Deja Vu',
   'Deliverance',
   'Desperate Measures',
-  'Detectives Hunch',
+  `Detective's Hunch`,
   'Distortion',
   'Diversion',
   'Empathy',
+  'Fast Track',
   'Fixated',
   'Flip-Flop',
-  'For the People',
+  'For The People',
   'Head On',
   'Hope',
   'Inner Strength',
@@ -47,14 +48,14 @@ export const surviverPerks: string[] = [
   'Lightweight',
   'Lithe',
   'Lucky Break',
-  'Mettle of Man',
+  'Mettle Of Man',
   'No Mither',
   'No One Left Behind',
-  'Object of Obsession',
-  'Off the Record',
+  'Object Of Obsession',
+  'Off The Record',
   'Open-Handed',
   'Pharmacy',
-  'Plunderers Instinct',
+  `Plunderer's Instinct`,
   'Poised',
   'Power Struggle',
   'Premonition',
@@ -66,8 +67,10 @@ export const surviverPerks: string[] = [
   'Saboteur',
   'Second Wind',
   'Self-Care',
+  'Self-Preservation',
   'Slippery Meat',
   'Small Game',
+  'Smash Hit',
   'Sole Survivor',
   'Solidarity',
   'Soul Guard',
@@ -78,91 +81,91 @@ export const surviverPerks: string[] = [
   'Technician',
   'Tenacity',
   'This Is Not Happening',
-  'Up the Ante',
   'Unbreakable',
+  'Up the Ante',
   'Urban Evasion',
   'Vigil',
   'Visionary',
   'Wake Up!',
-  'Well Make It',
-  'Were Gonna Live Forever',
-  'Windows of Opportunity',
-  'Fast Track',
-  'Smash Hit',
-  'Self-Preservation',
+  `We'll Make It`,
+  `We're Gonna Live Forever`,
+  'Windows Of Opportunity',
 ];
 
-const FireCracker: SurvivorAddon[] = [
-  {
-    name: 'Buckshot',
-    rarity: 'Common',
-  },
-  {
-    name: 'Medium Fuse',
-    rarity: 'Common',
-  },
-  {
-    name: 'Flash Powder',
-    rarity: 'Common',
-  },
-  {
-    name: 'Gun Powder',
-    rarity: 'Uncommon',
-  },
-  {
-    name: 'Long Fuse',
-    rarity: 'Uncommon',
-  },
-  {
-    name: 'Magnesium Powder',
-    rarity: 'Uncommon',
-  },
-  {
-    name: 'Black Powder',
-    rarity: 'Rare',
-  },
-  {
-    name: 'Large Pack',
-    rarity: 'Ultra Rare',
-  },
-];
+/**
+ * Associated on wiki but not used within the game
+ */
+// const FireCracker: SurvivorAddon[] = [
+//   {
+//     name: 'Buckshot',
+//     rarity: 'Common',
+//   },
+//   {
+//     name: 'Medium Fuse',
+//     rarity: 'Common',
+//   },
+//   {
+//     name: 'Flash Powder',
+//     rarity: 'Common',
+//   },
+//   {
+//     name: 'Gun Powder',
+//     rarity: 'Uncommon',
+//   },
+//   {
+//     name: 'Long Fuse',
+//     rarity: 'Uncommon',
+//   },
+//   {
+//     name: 'Magnesium Powder',
+//     rarity: 'Uncommon',
+//   },
+//   {
+//     name: 'Black Powder',
+//     rarity: 'Rare',
+//   },
+//   {
+//     name: 'Large Pack',
+//     rarity: 'Ultra Rare',
+//   },
+// ];
 
 const Flashlight: SurvivorAddon[] = [
   {
     name: 'Wide Lens',
-    rarity: 'Uncommon',
+    rarity: 'Common',
   },
   {
     name: 'Power Bulb',
-    rarity: 'Uncommon',
+    rarity: 'Common',
   },
   {
     name: 'Leather Grip',
-    rarity: 'Uncommon',
+    rarity: 'Common',
   },
   {
     name: 'Battery',
-    rarity: 'Uncommon',
+    rarity: 'Common',
   },
   {
     name: 'TIR Optic',
-    rarity: 'Common',
+    rarity: 'Uncommon',
   },
   {
     name: 'Rubber Grip',
-    rarity: 'Common',
+    rarity: 'Uncommon',
   },
   {
     name: 'Low Amp Filament',
-    rarity: 'Common',
+    rarity: 'Uncommon',
   },
   {
     name: 'Heavy Duty Battery',
-    rarity: 'Common',
+    rarity: 'Uncommon',
   },
   {
     name: 'Focus Lens',
-    rarity: 'Common',
+    rarity: 'Uncommon',
   },
   {
     name: 'Long Life Battery',
@@ -216,7 +219,7 @@ const key: SurvivorAddon[] = [
     rarity: 'Very Rare',
   },
   {
-    name: 'blood Amber',
+    name: 'Blood Amber',
     rarity: 'Very Rare',
   },
   {
@@ -243,7 +246,7 @@ const map: SurvivorAddon[] = [
     rarity: 'Uncommon',
   },
   {
-    name: 'Red Twins',
+    name: 'Red Twine',
     rarity: 'Uncommon',
   },
   {
@@ -314,7 +317,7 @@ const medKit: SurvivorAddon[] = [
     rarity: 'Very Rare',
   },
   {
-    name: 'Anti-Haemorrhagic Syringe',
+    name: 'Anti-Hemorrhagic Syringe',
     rarity: 'Ultra Rare',
   },
   {
@@ -357,7 +360,7 @@ const toolbox: SurvivorAddon[] = [
     rarity: 'Uncommon',
   },
   {
-    name: 'hacksaw',
+    name: 'Hacksaw',
     rarity: 'Very Rare',
   },
   {
@@ -374,17 +377,17 @@ export const surviverLoot: SurvivorLoot[] = [
   {
     name: 'Chinese FireCracker',
     rarity: 'Event',
-    addons: [...FireCracker],
+    addons: [],
   },
   {
     name: 'Winter Party Starter',
     rarity: 'Event',
-    addons: [...FireCracker],
+    addons: [],
   },
   {
     name: 'Third Yeard Party Starter',
     rarity: 'Event',
-    addons: [...FireCracker],
+    addons: [],
   },
   {
     name: 'Flashlight',
@@ -407,22 +410,22 @@ export const surviverLoot: SurvivorLoot[] = [
     addons: [...Flashlight],
   },
   {
-    name: 'Fourth Year Flashlight',
+    name: 'Anniversary Flashlight',
     rarity: 'Event',
     addons: [...Flashlight],
   },
   {
-    name: 'Broken Keys',
+    name: 'Broken Key',
     rarity: 'Rare',
     addons: [...key],
   },
   {
-    name: 'Dull Keys',
+    name: 'Dull Key',
     rarity: 'Very Rare',
     addons: [...key],
   },
   {
-    name: 'Skeleton Keys',
+    name: 'Skeleton Key',
     rarity: 'Ultra Rare',
     addons: [...key],
   },
@@ -447,27 +450,27 @@ export const surviverLoot: SurvivorLoot[] = [
     addons: [...medKit],
   },
   {
-    name: 'Emergency Med Kit',
+    name: 'Emergency Med-Kit',
     rarity: 'Rare',
     addons: [...medKit],
   },
   {
-    name: 'Ranger Med Kit',
+    name: 'Ranger Med-Kit',
     rarity: 'Very Rare',
     addons: [...medKit],
   },
   {
-    name: 'All Hallows Eve Lunchbox',
+    name: 'All Hallows` Eve Lunchbox',
     rarity: 'Event',
     addons: [...medKit],
   },
   {
-    name: 'Fourth Year Med-Kit',
+    name: 'Anniversary Med-Kit',
     rarity: 'Event',
     addons: [...medKit],
   },
   {
-    name: 'Worn Out Tools',
+    name: 'Worn-Out Tools',
     rarity: 'Common',
     addons: [...toolbox],
   },
@@ -477,7 +480,7 @@ export const surviverLoot: SurvivorLoot[] = [
     addons: [...toolbox],
   },
   {
-    name: 'Mechanic Toolbox',
+    name: `Mechanic's Toolbox`,
     rarity: 'Rare',
     addons: [...toolbox],
   },
@@ -487,12 +490,12 @@ export const surviverLoot: SurvivorLoot[] = [
     addons: [...toolbox],
   },
   {
-    name: 'Engineers Toolbox',
+    name: `Engineer's Toolbox`,
     rarity: 'Very Rare',
     addons: [...toolbox],
   },
   {
-    name: 'Alex Toolbox',
+    name: `Alex's Toolbox`,
     rarity: 'Very Rare',
     addons: [...toolbox],
   },
@@ -503,43 +506,153 @@ export const surviverLoot: SurvivorLoot[] = [
   },
 ];
 
-export const surviverOffering: string[] = [
-  'Chalk Pouch',
-  'Cream Chalk Pouch',
-  'Ivory Chalk Pouch',
-  'Salt Pouch',
-  'Black Salt Statuette',
-  'Vigos Jar of Salty Lips',
-  'Bloodied Blueprint',
-  'Torn Blueprint',
-  'Tarnished Coin',
-  'Shiny Coin',
-  'Clear Reagent',
-  'Faint Reagent',
-  'Hazy Reagent',
-  'Murky Reagent',
-  'Annotated Blueprint',
-  'Vigos Blueprint',
-  'Petrified Oak',
-  'Moudly Oak',
-  'Rotten Oak',
-  'Shroud of Union',
-  'Vigos Shroud',
-  'Shroud of Binding',
-  'Sacrificial Ward',
-  'MacMillans Phalanx Bone',
-  'The Pied Piper',
-  'Azarovs Key',
-  'Jigsaw Piece',
-  'Heart Locket',
-  'Yamaoka Family Crest',
-  'Charred Wedding Photograph',
-  'Damaged Photo',
-  'Strode Realty Key',
-  'Hawkins National Laboratory ID',
-  'Grandmas Cookbook',
-  'Dusty Noose',
-  'Shattered Glasses',
-  'Marys Letter',
-  'The Last Mask',
+export const surviverOffering: SurvivorOffering[] = [
+  {
+    name: 'Murky Reagent',
+    rarity: 'Very Rare',
+  },
+  {
+    name: 'Petrified Oak',
+    rarity: 'Very Rare',
+  },
+  {
+    name: 'Shiny Coin',
+    rarity: 'Very Rare',
+  },
+  {
+    name: 'Shroud of Binding',
+    rarity: 'Very Rare',
+  },
+  {
+    name: `Vigo's Jar Of Salty Lips`,
+    rarity: 'Very Rare',
+  },
+  {
+    name: `White Ward`,
+    rarity: 'Very Rare',
+  },
+  {
+    name: `Azarov's Key`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Black Salt Statuette`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Charred Wedding Photograph`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Damaged Photo`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Dusty Noose`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Grandma's Cookbook`,
+    rarity: 'Rare',
+  },
+  {
+    name: `hawkins National Laboratory I.D.`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Heart Locket`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Ivony Chalk Pouch`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Jigsaw Piece`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Macmillan's Phalanx Bone`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Mary's Letter`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Sacrificial Ward`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Shattered Glasses`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Strode Realty`,
+    rarity: 'Rare',
+  },
+  {
+    name: `The Last Mask`,
+    rarity: 'Rare',
+  },
+  {
+    name: `The Pied Piper`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Yamaoka Family Crest`,
+    rarity: 'Rare',
+  },
+  {
+    name: `Cream Chalk Pouch`,
+    rarity: 'Uncommon',
+  },
+  {
+    name: `Hazy Reagent`,
+    rarity: 'Uncommon',
+  },
+  {
+    name: `Salt Pouch`,
+    rarity: 'Uncommon',
+  },
+  {
+    name: `Shroud Of Union`,
+    rarity: 'Uncommon',
+  },
+  {
+    name: `Tarnished Coin`,
+    rarity: 'Uncommon',
+  },
+  {
+    name: `Vigo's Shroud`,
+    rarity: 'Uncommon',
+  },
+  {
+    name: 'Annotated Blueprint',
+    rarity: 'Common',
+  },
+  {
+    name: 'Bloodied Blueprint',
+    rarity: 'Common',
+  },
+  {
+    name: 'Chalk Pouch',
+    rarity: 'Common',
+  },
+  {
+    name: 'Clear Reagent',
+    rarity: 'Common',
+  },
+  {
+    name: 'Faint Feagent',
+    rarity: 'Common',
+  },
+  {
+    name: 'Torn Blueprint',
+    rarity: 'Common',
+  },
+  {
+    name: `Vigo's Blueprint`,
+    rarity: 'Common',
+  },
 ];
