@@ -1,5 +1,5 @@
 import { CommandMessage } from '@typeit/discord';
-import { EmbedField, EmbedFieldData, Message } from 'discord.js';
+import { Message } from 'discord.js';
 import { commands } from '../data/dbdCommands';
 import { killer, killerOffering, killerPerks } from '../data/killer';
 import { defaultKillers, playerKillers } from '../data/playerKillers';
@@ -12,7 +12,6 @@ import {
   KillerBuild,
   KillerItem,
   SurviverBuild,
-  SurvivorAddon,
   SurvivorLoot,
 } from '../types/dbd';
 import * as environment from '../utils/environment';
@@ -50,7 +49,7 @@ export class Dbd {
     killerBuild.addons = Utility.random(addons || [], 2);
 
     // Offering
-    killerBuild.offering = Utility.random(killerOffering);
+    killerBuild.offering = [Utility.random(killerOffering)];
 
     // Perks
     killerBuild.perks = Utility.random(killerPerks, 4);
@@ -68,11 +67,11 @@ export class Dbd {
     surviverBuild.perks = Utility.random(surviverPerks, 4);
 
     // offering
-    surviverBuild.offering = Utility.random(surviverOffering);
+    surviverBuild.offering = [Utility.random(surviverOffering)];
 
     // loot
     const loot: SurvivorLoot = Utility.random(surviverLoot);
-    surviverBuild.loot = loot.name;
+    surviverBuild.loot = [loot];
 
     // Loot Addon
     surviverBuild.lootAddons = Utility.random(loot.addons, 2);
@@ -146,35 +145,39 @@ export class Dbd {
    * @param command
    */
   public async init(command: CommandMessage): Promise<Message | void> {
-    const commandArray = command.content.split(' ');
-    const keyCommand = commandArray[commandArray.length - 1].toLowerCase();
+    try {
+      const commandArray = command.content.split(' ');
+      const keyCommand = commandArray[commandArray.length - 1].toLowerCase();
 
-    const kllerCommands = commands.filter((c) =>
-      c.tag.find((t) => t === 'killer')
-    );
-    const surviverCommands = commands.filter((c) =>
-      c.tag.find((t) => t === 'surviver')
-    );
-    const helpCommands = commands.filter((c) =>
-      c.tag.find((t) => t === 'help')
-    );
+      const kllerCommands = commands.filter((c) =>
+        c.tag.find((t) => t === 'killer')
+      );
+      const surviverCommands = commands.filter((c) =>
+        c.tag.find((t) => t === 'surviver')
+      );
+      const helpCommands = commands.filter((c) =>
+        c.tag.find((t) => t === 'help')
+      );
 
-    if (kllerCommands.find((c) => c.name === keyCommand)) {
-      this.killerBuild = new KillerBuild();
-      this.killerBuild = this.createKillerBuild(command.author.id);
+      if (kllerCommands.find((c) => c.name === keyCommand)) {
+        this.killerBuild = new KillerBuild();
+        this.killerBuild = this.createKillerBuild(command.author.id);
 
-      return this.sendMessage(command, this.killerBuild);
-    }
+        return this.sendMessage(command, this.killerBuild);
+      }
 
-    if (surviverCommands.find((c) => c.name === keyCommand)) {
-      this.surviverBuild = new SurviverBuild();
-      this.surviverBuild = this.createSurviverBuild();
+      if (surviverCommands.find((c) => c.name === keyCommand)) {
+        this.surviverBuild = new SurviverBuild();
+        this.surviverBuild = this.createSurviverBuild();
 
-      return this.sendMessage(command, this.surviverBuild);
-    }
+        return this.sendMessage(command, this.surviverBuild);
+      }
 
-    if (helpCommands.find((c) => c.name === keyCommand)) {
-      return this.createHelpMessage(command);
+      if (helpCommands.find((c) => c.name === keyCommand)) {
+        return this.createHelpMessage(command);
+      }
+    } catch (e) {
+      return Promise.reject();
     }
 
     return Promise.reject();

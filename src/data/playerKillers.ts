@@ -62,7 +62,7 @@ export const playerKillers: PlayerKiller[] = [
   // neodragon17
   {
     userId: '805228731383677008',
-    availableKiller: [...defaultKillers, 23],
+    availableKiller: [...defaultKillers, 10, 23],
   },
   // nSev
   {
