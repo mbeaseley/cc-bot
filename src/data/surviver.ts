@@ -361,11 +361,11 @@ const toolbox: SurvivorAddon[] = [
   },
   {
     name: 'Hacksaw',
-    rarity: 'Very Rare',
+    rarity: 'Rare',
   },
   {
     name: 'Grip Wrench',
-    rarity: 'Very Rare',
+    rarity: 'Rare',
   },
   {
     name: 'Brand New Part',
@@ -501,7 +501,7 @@ export const surviverLoot: SurvivorLoot[] = [
   },
   {
     name: 'Festive Toolbox',
-    rarity: 'Very Rare',
+    rarity: 'Event',
     addons: [...toolbox],
   },
 ];
