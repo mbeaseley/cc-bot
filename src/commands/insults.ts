@@ -1,6 +1,7 @@
-import { CommandMessage } from '@typeit/discord';
+import { Command, CommandMessage, Description } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../interceptor/httpClient';
+import { environment } from '../utils/environment';
 
 export class Insult extends HttpClient {
   constructor() {
@@ -29,7 +30,7 @@ export class Insult extends HttpClient {
   /**
    * Init
    */
-  public async init(command: CommandMessage): Promise<void> {
+  private async getResponse(command: CommandMessage): Promise<void> {
     const insult = await this.getRandomInsult();
 
     if (!insult) {
@@ -43,5 +44,19 @@ export class Insult extends HttpClient {
       : command.reply(message);
 
     return Promise.resolve();
+  }
+
+  /**
+   * @name insultInit
+   * @param command
+   * @description Display insult to author or tagged user
+   * @returns
+   */
+  @Command('insult')
+  @Description('Insult')
+  init(command: CommandMessage): Promise<void> {
+    return this.getResponse(command).catch(() => {
+      command.reply(environment.error);
+    });
   }
 }

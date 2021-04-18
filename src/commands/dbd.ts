@@ -1,4 +1,4 @@
-import { CommandMessage } from '@typeit/discord';
+import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
 import { commands } from '../data/dbdCommands';
 import { killer, killerOffering, killerPerks } from '../data/killer';
@@ -14,14 +14,12 @@ import {
   SurviverBuild,
   SurvivorLoot,
 } from '../types/dbd';
-import * as environment from '../utils/environment';
+import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
 
 export class Dbd {
   killerBuild: KillerBuild = new KillerBuild();
   surviverBuild: SurviverBuild = new SurviverBuild();
-
-  private commandNotFoundMessage = `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`;
 
   /**
    * Creates random killer build
@@ -126,7 +124,7 @@ export class Dbd {
     const fields = filterCommands.map((c) => {
       return {
         name: `**${c.description}**`,
-        value: `\`@${environment.default.botName} dbd ${c.name}\``,
+        value: `\`@${environment.botName} dbd ${c.name}\``,
       };
     });
 
@@ -146,7 +144,9 @@ export class Dbd {
    * Init
    * @param command
    */
-  public async init(command: CommandMessage): Promise<Message | void> {
+  private async handleDbdCommand(
+    command: CommandMessage
+  ): Promise<Message | void> {
     try {
       const commandArray = command.content.split(' ');
       const keyCommand = commandArray[commandArray.length - 1].toLowerCase();
@@ -179,10 +179,24 @@ export class Dbd {
         return this.createHelpMessage(command);
       } else {
         command.delete();
-        return command.reply(this.commandNotFoundMessage);
+        return command.reply(environment.commandNotFound);
       }
     } catch (e) {
       return Promise.reject();
     }
+  }
+
+  /**
+   * @name dbdInit
+   * @param command
+   * @description Custom dbd commands
+   * @returns
+   */
+  @Command('dbd')
+  @Description('Dbd (dbd help for all possible commands)')
+  dbdInit(command: CommandMessage): Promise<Message | void> {
+    return this.handleDbdCommand(command).catch(() => {
+      command.reply(environment.error);
+    });
   }
 }

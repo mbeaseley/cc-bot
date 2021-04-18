@@ -1,6 +1,7 @@
-import { CommandMessage } from '@typeit/discord';
+import { Command, CommandMessage, Description } from '@typeit/discord';
 import { HttpClient } from '../interceptor/httpClient';
 import { JokeResponse } from '../types/dadJoke';
+import { environment } from '../utils/environment';
 
 export class DadJoke extends HttpClient {
   constructor() {
@@ -20,7 +21,7 @@ export class DadJoke extends HttpClient {
   /**
    * Init
    */
-  public async init(command: CommandMessage): Promise<void> {
+  public async getReponse(command: CommandMessage): Promise<void> {
     const res = await this.getRandomJoke();
 
     if (!res?.joke) {
@@ -29,5 +30,19 @@ export class DadJoke extends HttpClient {
 
     command.reply(res.joke);
     return Promise.resolve();
+  }
+
+  /**
+   * @name jokeInit
+   * @param command
+   * @description Display joke
+   * @returns
+   */
+  @Command('joke')
+  @Description('Joke')
+  jokeInit(command: CommandMessage): Promise<void> {
+    return this.getReponse(command).catch(() => {
+      command.reply(environment.error);
+    });
   }
 }

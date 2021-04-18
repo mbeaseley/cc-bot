@@ -1,7 +1,8 @@
-import { CommandMessage } from '@typeit/discord';
+import { Command, CommandMessage, Description } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../interceptor/httpClient';
 import { ComplimentObject } from '../types/compliment';
+import { environment } from '../utils/environment';
 
 export class Compliment extends HttpClient {
   constructor() {
@@ -30,7 +31,7 @@ export class Compliment extends HttpClient {
   /**
    * Init
    */
-  public async init(command: CommandMessage): Promise<void> {
+  public async getResponse(command: CommandMessage): Promise<void> {
     const complimentObj = await this.getRandomCompliment();
 
     if (!complimentObj?.compliment) {
@@ -44,5 +45,19 @@ export class Compliment extends HttpClient {
       : command.reply(message);
 
     return Promise.resolve();
+  }
+
+  /**
+   * @name complimentInit
+   * @param command
+   * @description Display compliment to author or tagged user
+   * @returns
+   */
+  @Command('compliment')
+  @Description('Compliment')
+  init(command: CommandMessage): Promise<void> {
+    return this.getResponse(command).catch(() => {
+      command.reply(environment.error);
+    });
   }
 }
