@@ -98,4 +98,8 @@ export const playerKillers: PlayerKiller[] = [
     userId: '175971639303995392',
     availableKiller: [...defaultKillers, 5, 6, 9, 10, 11, 16, 17, 20],
   },
+  {
+    userId: '606959040656048165',
+    availableKiller: [...defaultKillers, 7, 11],
+  },
 ];

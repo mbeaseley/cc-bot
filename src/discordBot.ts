@@ -1,8 +1,9 @@
-import * as fs from 'fs';
 import {
+  ArgsOf,
   Client,
   Command,
   CommandMessage,
+  CommandNotFound,
   Description,
   Discord,
   Guard,
@@ -11,7 +12,8 @@ import {
   Rules,
 } from '@typeit/discord';
 import 'dotenv/config';
-import { Message } from 'discord.js';
+import * as chalk from 'chalk';
+import { Message, MessageReaction, User } from 'discord.js';
 import { ChoosePlayer } from './commands/choosePlayer';
 import { Compliment } from './commands/compliment';
 import { DadJoke } from './commands/dadJoke';
@@ -21,7 +23,10 @@ import { Insult } from './commands/insults';
 import { Purge } from './commands/purge';
 import { SayIt } from './commands/sayIt';
 import { isAdmin } from './guards/isAdmin';
+import { Main } from './main';
+import { Logger } from './services/logger.service';
 import * as environment from './utils/environment';
+import { env } from 'node:process';
 
 @Discord('<')
 @Rules(
@@ -29,8 +34,7 @@ import * as environment from './utils/environment';
     `${environment.default.botId}> ` || `${environment.default.botId}>`
   )
 )
-export default class AppDiscord {
-  private static client: Client;
+export class DiscordBot {
   choosePlayer: ChoosePlayer;
   dadJoke: DadJoke;
   insults: Insult;
@@ -39,8 +43,10 @@ export default class AppDiscord {
   sayIt: SayIt;
   purge: Purge;
   dbd: Dbd;
+  logger = Logger.prototype.getInstance();
 
   private errorMessage = 'I have failed you!';
+  private commandNotFoundMessage = `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`;
 
   constructor() {
     this.choosePlayer = new ChoosePlayer();
@@ -53,33 +59,43 @@ export default class AppDiscord {
     this.dbd = new Dbd();
   }
 
-  static get Client(): Client {
-    return this.client;
-  }
-
-  static async start(): Promise<void> {
-    const __dirname = fs.realpathSync('.');
-    const token = environment.default.token;
-    AppDiscord.client = new Client();
-
-    AppDiscord.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
-  }
-
+  /**
+   * @name initialize
+   * @description When bot has logged in output bot is ready.
+   */
   @On('ready')
   initialize(): void {
-    try {
-      console.log('Bot logged in.');
-      AppDiscord.client.user?.setActivity(
-        `@${environment.default.botName} | help`,
-        {
-          type: 'LISTENING',
-        }
-      );
-    } catch (e) {
-      console.log(e);
-    }
+    this.logger.info('info check');
+    this.logger.warn('warning check');
+    this.logger.error('error check');
+
+    Main.Client.user?.setActivity(`@${environment.default.botName} | help`, {
+      type: 'LISTENING',
+    });
+
+    this.logger.info(chalk.bold('BOT READY'));
+
+    Main.Client.on('messageReactionAdd', (reaction, user) => {
+      console.log(reaction.emoji, user);
+    });
   }
 
+  /**
+   * @name error
+   * @param error
+   * @description When client has a discord error log it here.
+   */
+  @On('error')
+  error([error]: ArgsOf<'error'>): void {
+    this.logger.error(`${chalk.bold('BOT ERROR')}: ${error}`);
+  }
+
+  /**
+   * @name playerInit
+   * @param command
+   * @description Command to choose player from voice channel
+   * @returns
+   */
   @Command('playerchoice')
   @Description('Chooses Player')
   playerInit(command: CommandMessage): Promise<void> {
@@ -88,6 +104,12 @@ export default class AppDiscord {
     });
   }
 
+  /**
+   * @name jokeInit
+   * @param command
+   * @description Display joke
+   * @returns
+   */
   @Command('joke')
   @Description('Joke')
   jokeInit(command: CommandMessage): Promise<void> {
@@ -96,6 +118,12 @@ export default class AppDiscord {
     });
   }
 
+  /**
+   * @name insultInit
+   * @param command
+   * @description Display insult to author or tagged user
+   * @returns
+   */
   @Command('insult')
   @Description('Insult')
   insultInit(command: CommandMessage): Promise<void> {
@@ -104,6 +132,12 @@ export default class AppDiscord {
     });
   }
 
+  /**
+   * @name complimentInit
+   * @param command
+   * @description Display compliment to author or tagged user
+   * @returns
+   */
   @Command('compliment')
   @Description('Compliment')
   complimentInit(command: CommandMessage): Promise<void> {
@@ -112,6 +146,12 @@ export default class AppDiscord {
     });
   }
 
+  /**
+   * @name sayItInit
+   * @param command
+   * @description Display either compliment or insult to author or tagged user
+   * @returns
+   */
   @Command('sayIt')
   @Description('Say It')
   sayItInit(command: CommandMessage): Promise<void> {
@@ -120,6 +160,12 @@ export default class AppDiscord {
     });
   }
 
+  /**
+   * @name purgeInit
+   * @param command
+   * @description Delete messages in bulk (Admins only)
+   * @returns
+   */
   @Command('purge')
   @Description('Purge a maximum of 100 messages')
   @Guard(isAdmin)
@@ -129,6 +175,12 @@ export default class AppDiscord {
     });
   }
 
+  /**
+   * @name dbdInit
+   * @param command
+   * @description Custom dbd commands
+   * @returns
+   */
   @Command('dbd')
   @Description('Dbd (dbd help for all possible commands)')
   dbdInit(command: CommandMessage): Promise<Message | void> {
@@ -137,6 +189,12 @@ export default class AppDiscord {
     });
   }
 
+  /**
+   * @name helpInit
+   * @param command
+   * @description Display possible commands
+   * @returns
+   */
   @Command('help')
   helpInit(command: CommandMessage): Promise<void> {
     const allCommands = Client.getCommands();
@@ -145,6 +203,20 @@ export default class AppDiscord {
       command.reply(this.errorMessage);
     });
   }
-}
 
-AppDiscord.start();
+  /**
+   * @name commandNotFound
+   * @param command
+   * @description When an unrecognized is used
+   * @returns
+   */
+  @CommandNotFound()
+  commandNotFound(command: CommandMessage): Promise<Message | void> {
+    if (command.content.indexOf(environment.default.botId) > -1) {
+      command.delete();
+      return command.reply(this.commandNotFoundMessage);
+    }
+
+    return Promise.resolve();
+  }
+}

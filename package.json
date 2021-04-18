@@ -8,7 +8,7 @@
     "postinstall": "npm run tsc",
     "prestart": "npm run tsc",
     "start": "node ./build/",
-    "start:dev": "ts-node-dev src/index.ts",
+    "start:dev": "ts-node-dev src/main.ts",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "npm:clear": "rm -rf $PWD/node_modules && rm $PWD/package-lock.json && npm cache verify && npm install"
@@ -23,6 +23,8 @@
     "@types/underscore": "^1.11.0",
     "@types/ws": "^7.4.0",
     "axios": "^0.21.1",
+    "chalk": "^4.1.0",
+    "dayjs": "^1.10.4",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "nodemon": "^2.0.7",

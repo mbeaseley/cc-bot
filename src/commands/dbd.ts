@@ -21,6 +21,8 @@ export class Dbd {
   killerBuild: KillerBuild = new KillerBuild();
   surviverBuild: SurviverBuild = new SurviverBuild();
 
+  private commandNotFoundMessage = `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`;
+
   /**
    * Creates random killer build
    */
@@ -175,11 +177,12 @@ export class Dbd {
 
       if (helpCommands.find((c) => c.name === keyCommand)) {
         return this.createHelpMessage(command);
+      } else {
+        command.delete();
+        return command.reply(this.commandNotFoundMessage);
       }
     } catch (e) {
       return Promise.reject();
     }
-
-    return Promise.reject();
   }
 }
