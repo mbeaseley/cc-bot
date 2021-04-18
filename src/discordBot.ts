@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import {
   ArgsOf,
   Client,
@@ -14,7 +13,7 @@ import {
 } from '@typeit/discord';
 import 'dotenv/config';
 import * as chalk from 'chalk';
-import { Message } from 'discord.js';
+import { Message, MessageReaction, User } from 'discord.js';
 import { ChoosePlayer } from './commands/choosePlayer';
 import { Compliment } from './commands/compliment';
 import { DadJoke } from './commands/dadJoke';
@@ -24,8 +23,10 @@ import { Insult } from './commands/insults';
 import { Purge } from './commands/purge';
 import { SayIt } from './commands/sayIt';
 import { isAdmin } from './guards/isAdmin';
+import { Main } from './main';
 import { Logger } from './services/logger.service';
 import * as environment from './utils/environment';
+import { env } from 'node:process';
 
 @Discord('<')
 @Rules(
@@ -33,8 +34,7 @@ import * as environment from './utils/environment';
     `${environment.default.botId}> ` || `${environment.default.botId}>`
   )
 )
-export default class AppDiscord {
-  private static client: Client;
+export class DiscordBot {
   choosePlayer: ChoosePlayer;
   dadJoke: DadJoke;
   insults: Insult;
@@ -59,33 +59,6 @@ export default class AppDiscord {
     this.dbd = new Dbd();
   }
 
-  static get Client(): Client {
-    return this.client;
-  }
-
-  /**
-   * @name start
-   * @description Starts up discord bot
-   */
-  static async start(): Promise<void> {
-    const __dirname = fs.realpathSync('.');
-    const token = environment.default.token;
-    AppDiscord.client = new Client({
-      classes: [`${__dirname}/*.ts`, `${__dirname}/*.js`],
-      silent: true,
-      variablesChar: '',
-    });
-
-    AppDiscord.client.login(token, `${__dirname}/*.ts`, `${__dirname}/*.js`);
-    AppDiscord.client.user?.setPresence({
-      activity: {
-        name: `@${environment.default.botName} | help`,
-        type: 'LISTENING',
-      },
-      status: 'online',
-    });
-  }
-
   /**
    * @name initialize
    * @description When bot has logged in output bot is ready.
@@ -95,7 +68,16 @@ export default class AppDiscord {
     this.logger.info('info check');
     this.logger.warn('warning check');
     this.logger.error('error check');
+
+    Main.Client.user?.setActivity(`@${environment.default.botName} | help`, {
+      type: 'LISTENING',
+    });
+
     this.logger.info(chalk.bold('BOT READY'));
+
+    Main.Client.on('messageReactionAdd', (reaction, user) => {
+      console.log(reaction.emoji, user);
+    });
   }
 
   /**
@@ -230,9 +212,11 @@ export default class AppDiscord {
    */
   @CommandNotFound()
   commandNotFound(command: CommandMessage): Promise<Message | void> {
-    command.delete();
-    return command.reply(this.commandNotFoundMessage);
+    if (command.content.indexOf(environment.default.botId) > -1) {
+      command.delete();
+      return command.reply(this.commandNotFoundMessage);
+    }
+
+    return Promise.resolve();
   }
 }
-
-AppDiscord.start();
