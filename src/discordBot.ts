@@ -26,7 +26,6 @@ import { isAdmin } from './guards/isAdmin';
 import { Main } from './main';
 import { Logger } from './services/logger.service';
 import * as environment from './utils/environment';
-import { env } from 'node:process';
 
 @Discord('<')
 @Rules(
