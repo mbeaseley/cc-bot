@@ -1,14 +1,10 @@
 import { Client, Discord, Rule, Rules } from '@typeit/discord';
 import 'dotenv/config';
 import { DiscordBot } from './discordBot';
-import * as environment from './utils/environment';
+import { environment } from './utils/environment';
 
 @Discord('<')
-@Rules(
-  Rule().fromString(
-    `${environment.default.botId}> ` || `${environment.default.botId}>`
-  )
-)
+@Rules(Rule().fromString(`${environment.botId}> ` || `${environment.botId}>`))
 export class Main {
   private static _client: Client;
 
@@ -21,7 +17,7 @@ export class Main {
    * @description Starts up discord bot
    */
   static async start(): Promise<void> {
-    const token = environment.default.token;
+    const token = environment.token;
     Main._client = new Client({
       classes: [DiscordBot],
       silent: true,

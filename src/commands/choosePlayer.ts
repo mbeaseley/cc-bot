@@ -1,5 +1,6 @@
-import { CommandMessage } from '@typeit/discord';
+import { Command, CommandMessage, Description } from '@typeit/discord';
 import { GuildChannel, User } from 'discord.js';
+import { environment } from '../utils/environment';
 
 export class ChoosePlayer {
   private errorMessage = 'I have failed you!';
@@ -52,7 +53,7 @@ export class ChoosePlayer {
    * Init for player choice
    * @param command
    */
-  public init(command: CommandMessage): Promise<void> {
+  public getResponse(command: CommandMessage): Promise<void> {
     try {
       const channel = this.findUserChannel(command);
       const users = this.getUsers(channel);
@@ -66,5 +67,19 @@ export class ChoosePlayer {
     } catch (e) {
       return Promise.reject();
     }
+  }
+
+  /**
+   * @name playerInit
+   * @param command
+   * @description Command to choose player from voice channel
+   * @returns
+   */
+  @Command('playerchoice')
+  @Description('Chooses Player')
+  init(command: CommandMessage): Promise<void> {
+    return this.getResponse(command).catch(() => {
+      command.reply(environment.error);
+    });
   }
 }

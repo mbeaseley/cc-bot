@@ -1,4 +1,5 @@
-import { CommandMessage } from '@typeit/discord';
+import { Command, CommandMessage, Description } from '@typeit/discord';
+import { environment } from '../utils/environment';
 import { Compliment } from './compliment';
 import { Insult } from './insults';
 
@@ -15,7 +16,7 @@ export class SayIt {
    * Init
    * @param command
    */
-  public init(command: CommandMessage): Promise<void> {
+  private getResponse(command: CommandMessage): Promise<void> {
     const index = Math.round(Math.random());
 
     const promise = index
@@ -23,5 +24,19 @@ export class SayIt {
       : this.insult.init(command);
 
     return promise;
+  }
+
+  /**
+   * @name sayItInit
+   * @param command
+   * @description Display either compliment or insult to author or tagged user
+   * @returns
+   */
+  @Command('sayIt')
+  @Description('Say It')
+  init(command: CommandMessage): Promise<void> {
+    return this.getResponse(command).catch(() => {
+      command.reply(environment.error);
+    });
   }
 }

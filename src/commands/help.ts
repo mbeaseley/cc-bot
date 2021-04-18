@@ -1,12 +1,18 @@
-import { CommandInfos, CommandMessage, RuleBuilder } from '@typeit/discord';
-import * as environment from '../utils/environment';
+import {
+  Client,
+  Command,
+  CommandInfos,
+  CommandMessage,
+  RuleBuilder,
+} from '@typeit/discord';
+import { environment } from '../utils/environment';
 
 const EXCLUDE_COMMANDS = ['help', 'purge'];
 export class Help {
   /**
    * Init
    */
-  public async init(
+  private async createHelpStatus(
     command: CommandMessage,
     allCommands: CommandInfos<any, RuleBuilder>[]
   ): Promise<void> {
@@ -27,7 +33,7 @@ export class Help {
 
         return {
           name: `**${c.description}**`,
-          value: `\`@${environment.default.botName} ${c.commandName}\``,
+          value: `\`@${environment.botName} ${c.commandName}\``,
         };
       });
 
@@ -42,5 +48,20 @@ export class Help {
       },
     });
     return Promise.resolve();
+  }
+
+  /**
+   * @name helpInit
+   * @param command
+   * @description Display possible commands
+   * @returns
+   */
+  @Command('help')
+  helpInit(command: CommandMessage): Promise<void> {
+    const allCommands = Client.getCommands();
+
+    return this.createHelpStatus(command, allCommands).catch(() => {
+      command.reply(environment.error);
+    });
   }
 }

@@ -1,5 +1,7 @@
-import { CommandMessage } from '@typeit/discord';
+import { Command, CommandMessage, Description, Guard } from '@typeit/discord';
 import { TextChannel } from 'discord.js';
+import { isAdmin } from '../guards/isAdmin';
+import { environment } from '../utils/environment';
 
 export class Purge {
   private getPurgeCount(command: string): number {
@@ -12,7 +14,7 @@ export class Purge {
    * Init
    * @param command
    */
-  public async init(command: CommandMessage): Promise<void> {
+  private async purge(command: CommandMessage): Promise<void> {
     const purgeCount = this.getPurgeCount(command.content);
 
     try {
@@ -28,5 +30,20 @@ export class Purge {
     } catch (e) {
       return Promise.reject();
     }
+  }
+
+  /**
+   * @name purgeInit
+   * @param command
+   * @description Delete messages in bulk (Admins only)
+   * @returns
+   */
+  @Command('purge')
+  @Description('Purge a maximum of 100 messages')
+  @Guard(isAdmin)
+  purgeInit(command: CommandMessage): Promise<void> {
+    return this.purge(command).catch(() => {
+      command.reply(environment.error);
+    });
   }
 }
