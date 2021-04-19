@@ -6,7 +6,12 @@ import { Main } from './main';
 import { Logger } from './services/logger.service';
 import { environment } from './utils/environment';
 
-@Discord('<', { import: [Path.join(__dirname, 'commands', '*.ts')] })
+@Discord('<', {
+  import: [
+    Path.join(__dirname, 'commands', '*.ts'),
+    Path.join(__dirname, 'commands', '*.js'),
+  ],
+})
 @Rules(Rule().fromString(`${environment.botId}> ` || `${environment.botId}>`))
 export class DiscordBot {
   logger = Logger.prototype.getInstance();
