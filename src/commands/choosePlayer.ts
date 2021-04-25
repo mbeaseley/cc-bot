@@ -1,9 +1,28 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { GuildChannel, User } from 'discord.js';
+import { Client, GuildChannel, User } from 'discord.js';
 import { environment } from '../utils/environment';
 
 export class ChoosePlayer {
   private currentUser: User | undefined;
+
+  /**
+   * Get random user that doesn't match previous
+   * @param users
+   */
+  private getRandomUser(users: (User | undefined)[]): string {
+    const u = users.filter((u) => u !== undefined);
+    const previousUser = this.currentUser;
+
+    if (users.length === 1) {
+      return users[0]?.username as string;
+    }
+
+    while (this.currentUser?.id === previousUser?.id) {
+      this.currentUser = u[Math.floor(Math.random() * u.length)] as User;
+    }
+
+    return this.currentUser?.username ?? environment.error;
+  }
 
   /**
    * Get Author of command
@@ -31,8 +50,11 @@ export class ChoosePlayer {
    * Get unique username from channel
    * @param channel
    */
-  getUsers(channel: GuildChannel | undefined): (User | undefined)[] {
-    const users = channel?.members?.map((m) => {
+  getUsers(
+    channel: GuildChannel | undefined,
+    excludeUsers: string[]
+  ): (User | undefined)[] {
+    let users = channel?.members?.map((m) => {
       if (!m.user?.bot) {
         return m.user;
       }
@@ -42,19 +64,27 @@ export class ChoosePlayer {
       return [];
     }
 
-    return users
-      .filter((v, i, s) => v?.id && s.indexOf(v) === i).filter(u => u?.id !== undefined);
+    users = users.filter((v, i, s) => v?.id && s.indexOf(v) === i);
+
+    excludeUsers.forEach((e) => {
+      const index = users?.findIndex((u) => u?.id === e);
+      if (index) {
+        users?.splice(index, 1);
+      }
+    });
+
+    return users;
   }
 
-  private getRandomUser(users: (User | undefined)[]): string {
-    const u = users.filter(u => u !== undefined);
-    const previousUser = this.currentUser;
+  /**
+   * Get exclude user id list
+   * @param command
+   */
+  private getExcludeUsers(command: CommandMessage): string[] {
+    const commandContent = command?.content.split(' ');
+    commandContent.splice(0, 2);
 
-    while (this.currentUser?.id === previousUser?.id) {
-      this.currentUser = u[Math.floor(Math.random() * u.length)] as User;
-    }
-
-    return this.currentUser?.username ?? environment.error;
+    return commandContent.map((c) => c.replace(/^[0-9]*$/, ''));
   }
 
   /**
@@ -64,7 +94,8 @@ export class ChoosePlayer {
   public getResponse(command: CommandMessage): Promise<void> {
     try {
       const channel = this.findUserChannel(command);
-      const users = this.getUsers(channel);
+      const excludeUsers = this.getExcludeUsers(command);
+      const users = this.getUsers(channel, excludeUsers);
 
       if (!users.length) {
         return Promise.reject();
