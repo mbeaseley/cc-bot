@@ -3,7 +3,7 @@ import { GuildChannel, User } from 'discord.js';
 import { environment } from '../utils/environment';
 
 export class ChoosePlayer {
-  private errorMessage = 'I have failed you!';
+  private currentUser: User | undefined;
 
   /**
    * Get Author of command
@@ -31,7 +31,7 @@ export class ChoosePlayer {
    * Get unique username from channel
    * @param channel
    */
-  getUsers(channel: GuildChannel | undefined): string[] {
+  getUsers(channel: GuildChannel | undefined): (User | undefined)[] {
     const users = channel?.members?.map((m) => {
       if (!m.user?.bot) {
         return m.user;
@@ -43,10 +43,18 @@ export class ChoosePlayer {
     }
 
     return users
-      .filter((v, i, s) => v?.id && s.indexOf(v) === i)
-      .map((u) => {
-        return u?.username as string;
-      });
+      .filter((v, i, s) => v?.id && s.indexOf(v) === i).filter(u => u?.id !== undefined);
+  }
+
+  private getRandomUser(users: (User | undefined)[]): string {
+    const u = users.filter(u => u !== undefined);
+    const previousUser = this.currentUser;
+
+    while (this.currentUser?.id === previousUser?.id) {
+      this.currentUser = u[Math.floor(Math.random() * u.length)] as User;
+    }
+
+    return this.currentUser?.username ?? environment.error;
   }
 
   /**
@@ -58,9 +66,11 @@ export class ChoosePlayer {
       const channel = this.findUserChannel(command);
       const users = this.getUsers(channel);
 
-      const content = !users?.length
-        ? this.errorMessage
-        : users[Math.floor(Math.random() * users.length)];
+      if (!users.length) {
+        return Promise.reject();
+      }
+
+      const content = this.getRandomUser(users);
 
       command.reply(content);
       return Promise.resolve();
