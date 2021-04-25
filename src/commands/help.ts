@@ -64,7 +64,7 @@ export class Help {
   @Command('help')
   helpInit(command: CommandMessage): Promise<void> {
     const allCommands = Client.getCommands();
-
+    command.delete();
     return this.createHelpStatus(command, allCommands).catch(() => {
       command.reply(environment.error);
     });
