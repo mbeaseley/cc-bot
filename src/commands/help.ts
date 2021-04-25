@@ -19,6 +19,11 @@ export class Help {
     const fields = allCommands
       .filter((c) => !EXCLUDE_COMMANDS.find((name) => name === c.commandName))
       .map((c) => {
+        if (c.commandName === 'playerchoice') {
+          c.commandName =
+            'playerchoice @user(optional)\nExclude users example: @user @user (add after command name)';
+        }
+
         if (c.commandName === 'insult') {
           c.commandName = 'insult @user(optional)';
         }
