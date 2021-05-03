@@ -17,10 +17,11 @@ import Utility from './utils/utility';
 @Rules(Rule().fromString(`${environment.botId}> ` || `${environment.botId}>`))
 export class DiscordBot {
   reactionRoles: ReactionRoles;
-  logger = Logger.prototype.getInstance();
+  logger: Logger;
 
   constructor() {
     this.reactionRoles = new ReactionRoles();
+    this.logger = new Logger();
   }
 
   /**

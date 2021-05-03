@@ -1,8 +1,16 @@
+import * as chalk from 'chalk';
 import { MessageReaction, PartialUser, User } from 'discord.js';
 import { reactionRoles } from '../data/roles';
+import { Logger } from '../services/logger.service';
 import Utility from '../utils/utility';
 
 export class ReactionRoles {
+  logger: Logger;
+
+  constructor() {
+    this.logger = new Logger();
+  }
+
   /**
    * Base of adding guild roles through emoji
    * @param action
@@ -39,14 +47,18 @@ export class ReactionRoles {
     );
 
     if (!role?.id) {
-      console.error(`Role not found for '${reaction.emoji.name}'`);
+      this.logger.error(
+        `${chalk.bold('BOT ERROR')}: Role not found for '${
+          reaction.emoji.name
+        }'`
+      );
       return Promise.reject();
     }
 
     try {
       (await member).roles[action](role.id);
     } catch (e) {
-      console.error('Error adding role', e);
+      this.logger.error(`${chalk.bold('BOT ERROR')}: 'Error adding role' ${e}`);
       return Promise.reject();
     }
 
