@@ -8,3 +8,4 @@ coverage
 package-lock.json
 bot.json
 .env
+.env.*

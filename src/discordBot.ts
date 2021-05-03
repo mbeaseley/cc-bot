@@ -1,6 +1,5 @@
 import * as Path from 'path';
 import { ArgsOf, Discord, On, Rule, Rules } from '@typeit/discord';
-import 'dotenv/config';
 import * as chalk from 'chalk';
 import { Main } from './main';
 import { Logger } from './services/logger.service';

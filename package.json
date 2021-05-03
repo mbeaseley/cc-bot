@@ -8,7 +8,7 @@
     "postinstall": "npm run tsc",
     "prestart": "npm run tsc",
     "start": "node ./build/main.js",
-    "start:dev": "ts-node-dev src/main.ts",
+    "start:dev": "TS_NODE_DEV=development ts-node-dev src/main.ts",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "npm:clear": "rm -rf $PWD/node_modules && rm $PWD/package-lock.json && npm cache verify && npm install"

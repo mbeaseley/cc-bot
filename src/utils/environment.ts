@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config({ path: `.env.${process.env.TS_NODE_DEV}` });
+
 interface EnvironmentObject {
   token: string;
   botId: string;
