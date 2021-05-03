@@ -6,6 +6,7 @@ interface EnvironmentObject {
   botId: string;
   botName: string;
   admins: string[] | never[];
+  server: string;
   error: string;
   commandNotFound: string;
 }
@@ -15,6 +16,7 @@ export const environment = {
   botId: process.env.BOTID ?? '',
   botName: process.env.BOTNAME ?? '',
   admins: JSON.parse(process.env.ADMINS || ''),
+  server: process.env.SERVER,
   error: 'I have failed you!',
   commandNotFound: `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`,
 } as EnvironmentObject;
