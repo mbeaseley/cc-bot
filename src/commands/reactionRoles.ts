@@ -18,7 +18,7 @@ export class ReactionRoles {
    * @param user
    * @returns void
    */
-  async reactionRolesInit(
+  async init(
     action: 'add' | 'remove',
     reaction: MessageReaction,
     user: User | PartialUser

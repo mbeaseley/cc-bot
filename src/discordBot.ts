@@ -44,13 +44,13 @@ export class DiscordBot {
 
     Main.Client.on('messageReactionAdd', (reaction, user) =>
       this.reactionRoles
-        .reactionRolesInit('add', reaction, user)
+        .init('add', reaction, user)
         .catch(() => reaction?.message?.reply(environment.error))
     );
 
     Main.Client.on('messageReactionRemove', (reaction, user) =>
       this.reactionRoles
-        .reactionRolesInit('remove', reaction, user)
+        .init('remove', reaction, user)
         .catch(() => reaction?.message?.reply(environment.error))
     );
 
