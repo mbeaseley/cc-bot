@@ -1,6 +1,13 @@
 import * as chalk from 'chalk';
-import { MessageReaction, PartialUser, User } from 'discord.js';
-import { reactionRoles } from '../data/roles';
+import {
+  GuildMember,
+  Message,
+  MessageReaction,
+  PartialUser,
+  Role,
+  User,
+} from 'discord.js';
+import { reactionActions, reactionRoles } from '../data/roles';
 import { Logger } from '../services/logger.service';
 import Utility from '../utils/utility';
 
@@ -9,6 +16,65 @@ export class ReactionRoles {
 
   constructor() {
     this.logger = new Logger();
+  }
+
+  /**
+   * Add/remove user roles
+   * @param action
+   * @param reaction
+   * @param member
+   * @param role
+   * @returns void
+   */
+  async addOrRemoveRole(
+    action: 'add' | 'remove',
+    reaction: MessageReaction,
+    member: Promise<GuildMember>,
+    role: Role | undefined
+  ): Promise<void> {
+    if (!role?.id) {
+      this.logger.error(
+        `${chalk.bold('BOT ERROR')}: Role not found for '${
+          reaction.emoji.name
+        }'`
+      );
+      return Promise.reject();
+    }
+
+    try {
+      (await member).roles[action](role.id);
+    } catch (e) {
+      this.logger.error(`${chalk.bold('BOT ERROR')}: 'Error adding role' ${e}`);
+      return Promise.reject();
+    }
+  }
+
+  /**
+   * Handle additional actions
+   * @param reaction
+   * @param action
+   * @returns void
+   */
+  async handleAction(
+    reaction: MessageReaction,
+    action: any
+  ): Promise<void | Message> {
+    try {
+      if (action === 'delete') {
+        return reaction.message.delete();
+      }
+
+      this.logger.error(
+        `${chalk.bold('BOT ERROR')}: Action not found for '${
+          reaction.emoji.name
+        }'`
+      );
+    } catch (e) {
+      this.logger.error(
+        `${chalk.bold('BOT ERROR')}: 'Error doing action' ${e}`
+      );
+      return Promise.reject();
+    }
   }
 
   /**
@@ -22,7 +88,7 @@ export class ReactionRoles {
     action: 'add' | 'remove',
     reaction: MessageReaction,
     user: User | PartialUser
-  ): Promise<void> {
+  ): Promise<void | Message> {
     if (user.bot) {
       return Promise.reject();
     }
@@ -46,20 +112,12 @@ export class ReactionRoles {
       (r) => r.name === reactionRoles[reaction.emoji.name]
     );
 
-    if (!role?.id) {
-      this.logger.error(
-        `${chalk.bold('BOT ERROR')}: Role not found for '${
-          reaction.emoji.name
-        }'`
-      );
-      return Promise.reject();
+    if (role) {
+      return this.addOrRemoveRole(action, reaction, member, role);
     }
 
-    try {
-      (await member).roles[action](role.id);
-    } catch (e) {
-      this.logger.error(`${chalk.bold('BOT ERROR')}: 'Error adding role' ${e}`);
-      return Promise.reject();
+    if (reactionActions[reaction.emoji.name] && action === 'add') {
+      return this.handleAction(reaction, reactionActions[reaction.emoji.name]);
     }
 
     return Promise.resolve();
