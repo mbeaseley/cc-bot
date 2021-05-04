@@ -10,6 +10,7 @@ import {
 import { reactionActions, reactionRoles } from '../data/roles';
 import { Logger } from '../services/logger.service';
 import Utility from '../utils/utility';
+import { environment } from '../utils/environment';
 
 export class ReactionRoles {
   logger: Logger;
@@ -112,11 +113,12 @@ export class ReactionRoles {
       (r) => r.name === reactionRoles[reaction.emoji.name]
     );
 
-    if (role) {
+    if (role && reaction.message.author.bot) {
       return this.addOrRemoveRole(action, reaction, member, role);
     }
 
-    if (reactionActions[reaction.emoji.name] && action === 'add') {
+    const u = environment.admins.find((a) => a === user.id);
+    if (reactionActions[reaction.emoji.name] && action === 'add' && u) {
       return this.handleAction(reaction, reactionActions[reaction.emoji.name]);
     }
 
