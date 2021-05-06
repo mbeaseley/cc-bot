@@ -1,5 +1,12 @@
-import { EmbedField, MessageEmbed, MessageEmbedOptions } from 'discord.js';
+import {
+  EmbedField,
+  Guild,
+  GuildManager,
+  MessageEmbed,
+  MessageEmbedOptions,
+} from 'discord.js';
 import _ = require('underscore');
+import { environment } from './environment';
 
 export default class Utility {
   /**
@@ -74,5 +81,9 @@ export default class Utility {
     }
 
     return array[Math.floor(Math.random() * array.length)];
+  }
+
+  static getGuild(guilds: GuildManager): Guild | undefined {
+    return guilds.cache.find((g) => g.id === environment.server);
   }
 }

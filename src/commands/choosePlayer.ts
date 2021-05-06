@@ -98,7 +98,7 @@ export class ChoosePlayer {
       const users = this.getUsers(channel, excludeUsers);
 
       if (!users.length) {
-        return Promise.reject();
+        return Promise.reject('Please join a voicechat to use this command!');
       }
 
       const content = this.getRandomUser(users);
@@ -119,8 +119,8 @@ export class ChoosePlayer {
   @Command('playerchoice')
   @Description('Chooses Player')
   init(command: CommandMessage): Promise<void> {
-    return this.getResponse(command).catch(() => {
-      command.reply(environment.error);
+    return this.getResponse(command).catch((e: string) => {
+      command.reply(e ? e : environment.error);
     });
   }
 }
