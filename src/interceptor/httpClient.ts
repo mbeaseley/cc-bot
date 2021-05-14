@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 declare module 'axios' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface AxiosResponse<T = any> extends Promise<T> {}
 }
 

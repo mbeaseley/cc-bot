@@ -9,8 +9,8 @@ import {
 } from 'discord.js';
 import { reactionActions, reactionRoles } from '../data/roles';
 import { Logger } from '../services/logger.service';
-import Utility from '../utils/utility';
 import { environment } from '../utils/environment';
+import Utility from '../utils/utility';
 
 export class ReactionRoles {
   logger: Logger;
@@ -58,7 +58,7 @@ export class ReactionRoles {
    */
   async handleAction(
     reaction: MessageReaction,
-    action: any
+    action: string
   ): Promise<void | Message> {
     try {
       if (action === 'delete') {

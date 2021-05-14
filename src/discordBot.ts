@@ -43,15 +43,11 @@ export class DiscordBot {
     this.preFetchAllMessages(guild);
 
     Main.Client.on('messageReactionAdd', (reaction, user) =>
-      this.reactionRoles
-        .init('add', reaction, user)
-        .catch(() => reaction?.message?.reply(environment.error))
+      this.reactionRoles.init('add', reaction, user).catch(() => {})
     );
 
     Main.Client.on('messageReactionRemove', (reaction, user) =>
-      this.reactionRoles
-        .init('remove', reaction, user)
-        .catch(() => reaction?.message?.reply(environment.error))
+      this.reactionRoles.init('remove', reaction, user).catch(() => {})
     );
 
     this.logger.info(chalk.bold('BOT READY'));
