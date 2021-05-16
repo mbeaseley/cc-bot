@@ -7,7 +7,7 @@ import {
 } from '@typeit/discord';
 import { environment } from '../utils/environment';
 
-const EXCLUDE_COMMANDS = ['help', 'purge'];
+const EXCLUDE_COMMANDS = ['help', 'purge', 'question'];
 export class Help {
   /**
    * Init

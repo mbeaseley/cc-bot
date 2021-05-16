@@ -44,7 +44,7 @@ export class ReactionRoles {
 
     try {
       (await member).roles[action](role.id);
-    } catch (e) {
+    } catch (e: unknown) {
       this.logger.error(`${chalk.bold('BOT ERROR')}: 'Error adding role' ${e}`);
       return Promise.reject();
     }
@@ -70,7 +70,7 @@ export class ReactionRoles {
           reaction.emoji.name
         }'`
       );
-    } catch (e) {
+    } catch (e: unknown) {
       this.logger.error(
         `${chalk.bold('BOT ERROR')}: 'Error doing action' ${e}`
       );
@@ -97,7 +97,7 @@ export class ReactionRoles {
     if (reaction.partial) {
       try {
         await reaction.fetch();
-      } catch (e) {
+      } catch (e: unknown) {
         return Promise.reject(e);
       }
     }
