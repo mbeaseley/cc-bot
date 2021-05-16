@@ -4,7 +4,7 @@
   "description": "A general discord bot with multiple functionalities",
   "main": "dist/index.js",
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "tsc && copyfiles src/assets/images/*.png build/assets/images",
     "postinstall": "npm run tsc",
     "prestart": "npm run tsc",
     "start": "node ./build/main.js",
@@ -25,6 +25,7 @@
     "axios": "^0.21.1",
     "canvas": "^2.7.0",
     "chalk": "^4.1.0",
+    "copyfiles": "^2.4.1",
     "dayjs": "^1.10.4",
     "discord.js": "^12.5.1",
     "dotenv": "^9.0.2",
