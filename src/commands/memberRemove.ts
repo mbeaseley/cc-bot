@@ -4,13 +4,14 @@ import {
   PartialGuildMember,
   TextChannel,
 } from 'discord.js';
+import { environment } from '../utils/environment';
 
 export class MemberRemove {
   async init(
     member: GuildMember | PartialGuildMember
   ): Promise<Message | void> {
     const { guild } = member;
-    let channel = guild.channels.cache.get('838575359724224596');
+    let channel = guild.channels.cache.get(environment.memberRemove);
 
     if (!channel) {
       return Promise.resolve();

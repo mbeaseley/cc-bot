@@ -7,6 +7,7 @@ import {
 } from 'discord.js';
 import * as Canvas from 'canvas';
 import path = require('path');
+import { environment } from '../utils/environment';
 
 export class MemberAdd {
   color: string = '#ffffff';
@@ -112,7 +113,7 @@ export class MemberAdd {
       }
     }
     const { guild } = member;
-    let channel = guild.channels.cache.get('838575359724224596');
+    let channel = guild.channels.cache.get(environment.memberAdd);
 
     if (!channel) {
       return Promise.resolve();

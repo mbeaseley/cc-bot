@@ -8,6 +8,8 @@ interface EnvironmentObject {
   server: string;
   error: string;
   commandNotFound: string;
+  memberAdd: string;
+  memberRemove: string;
 }
 
 export const environment = {
@@ -18,4 +20,6 @@ export const environment = {
   server: process.env.SERVER,
   error: 'I have failed you!',
   commandNotFound: `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`,
+  memberAdd: process.env.MEMBERADD ?? '',
+  memberRemove: process.env.MEMBERREMOVE ?? '',
 } as EnvironmentObject;
