@@ -23,6 +23,7 @@
     "@types/underscore": "^1.11.0",
     "@types/ws": "^7.4.4",
     "axios": "^0.21.1",
+    "canvas": "^2.7.0",
     "chalk": "^4.1.0",
     "dayjs": "^1.10.4",
     "discord.js": "^12.5.1",
