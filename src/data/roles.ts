@@ -6,7 +6,6 @@ export const reactionRoles: Reaction = {
   '🤖': 'Bot',
   yes: 'Member',
   live: 'Streamers',
-  DumbDumbs: 'DumbDumbs',
   callofduty: 'Call of Duty',
   dbd: 'Dead By Daylight',
   person_rowing_boat: 'Sailors',

@@ -10,6 +10,9 @@ interface EnvironmentObject {
   commandNotFound: string;
   memberAdd: string;
   memberRemove: string;
+  emojiAcceptRules: {
+    name: string;
+  };
 }
 
 export const environment = {
@@ -22,4 +25,7 @@ export const environment = {
   commandNotFound: `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`,
   memberAdd: process.env.MEMBERADD ?? '',
   memberRemove: process.env.MEMBERREMOVE ?? '',
+  emojiAcceptRules: {
+    name: process.env.EMOJIACCEPTEDNAME,
+  },
 } as EnvironmentObject;
