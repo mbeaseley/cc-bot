@@ -11,6 +11,7 @@ import path = require('path');
 export class MemberAdd {
   color: string = '#ffffff';
   strokeColor: string = '#74037b';
+  font: string = 'sans-serif';
 
   /**
    * Apply styled text
@@ -23,7 +24,7 @@ export class MemberAdd {
     let fontSize = 70;
 
     do {
-      context.font = `${(fontSize -= 10)}px sans-serif`;
+      context.font = `${(fontSize -= 10)}px ${this.font}`;
     } while (context.measureText(text).width > canvas.width - 300);
 
     return context.font;
@@ -35,7 +36,8 @@ export class MemberAdd {
    * @returns Canvas
    */
   async createCanvas(
-    member: GuildMember | PartialGuildMember
+    member: GuildMember | PartialGuildMember,
+    memberCount: number
   ): Promise<Canvas.Canvas | void> {
     const canvas = Canvas.createCanvas(700, 250);
     const context = canvas.getContext('2d');
@@ -48,7 +50,8 @@ export class MemberAdd {
     context.strokeStyle = this.strokeColor;
     context.strokeRect(0, 0, canvas.width, canvas.height);
 
-    context.font = '28px sans-serif';
+    // Welcome
+    context.font = `28px ${this.font}`;
     context.fillStyle = this.color;
     context.fillText(
       'Welcome to the server,',
@@ -56,12 +59,22 @@ export class MemberAdd {
       canvas.height / 3.5
     );
 
+    // Member Name
     context.font = this.applyText(canvas, `${member.displayName}!`);
     context.fillStyle = this.color;
     context.fillText(
       `${member.displayName}!`,
       canvas.width / 2.5,
       canvas.height / 1.8
+    );
+
+    // Member Count
+    context.font = `20px ${this.font}`;
+    context.fillStyle = this.color;
+    context.fillText(
+      `member #${memberCount}`,
+      canvas.width / 2.5,
+      canvas.height / 1.4
     );
 
     context.beginPath();
@@ -110,7 +123,12 @@ export class MemberAdd {
     ) {
       return Promise.resolve();
     }
-    const canvas = (await this.createCanvas(member)) as Canvas.Canvas;
+
+    const memberCount = guild.members.cache.filter((m) => !m.user?.bot);
+    const canvas = (await this.createCanvas(
+      member,
+      memberCount.size
+    )) as Canvas.Canvas;
 
     if (!canvas) {
       return Promise.resolve();
