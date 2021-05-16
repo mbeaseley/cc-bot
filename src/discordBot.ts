@@ -8,6 +8,7 @@ import { Logger } from './services/logger.service';
 import { environment } from './utils/environment';
 import Utility from './utils/utility';
 import { MemberAdd } from './commands/memberAdd';
+import { MemberRemove } from './commands/memberRemove';
 
 @Discord('<', {
   import: [
@@ -20,11 +21,13 @@ export class DiscordBot {
   reactionRoles: ReactionRoles;
   logger: Logger;
   memberAdd: MemberAdd;
+  memberRemove: MemberRemove;
 
   constructor() {
     this.reactionRoles = new ReactionRoles();
     this.logger = new Logger();
     this.memberAdd = new MemberAdd();
+    this.memberRemove = new MemberRemove();
   }
 
   /**
@@ -53,8 +56,10 @@ export class DiscordBot {
       this.reactionRoles.init('remove', reaction, user).catch(() => {})
     );
 
-    Main.Client.on('guildMemberAdd', (member) =>
-      this.memberAdd.memberAddInit(member)
+    Main.Client.on('guildMemberAdd', (member) => this.memberAdd.init(member));
+
+    Main.Client.on('guildMemberRemove', (member) =>
+      this.memberRemove.init(member)
     );
 
     this.logger.info(chalk.bold('BOT READY'));

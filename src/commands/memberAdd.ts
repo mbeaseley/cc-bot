@@ -101,7 +101,7 @@ export class MemberAdd {
    * @param member
    * @returns
    */
-  async memberAddInit(
+  async init(
     member: GuildMember | PartialGuildMember
   ): Promise<Message | void> {
     if (member.partial) {
