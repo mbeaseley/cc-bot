@@ -4,7 +4,7 @@
   "description": "A general discord bot with multiple functionalities",
   "main": "dist/index.js",
   "scripts": {
-    "tsc": "tsc && copyfiles src/assets/images/*.png build/assets/images",
+    "tsc": "tsc && copyfiles -u 1 ./src/assets/images/*.png build",
     "postinstall": "npm run tsc",
     "prestart": "npm run tsc",
     "start": "node ./build/main.js",
