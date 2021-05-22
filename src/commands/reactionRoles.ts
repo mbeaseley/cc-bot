@@ -1,3 +1,4 @@
+import { Client } from '@typeit/discord';
 import * as chalk from 'chalk';
 import {
   GuildMember,
@@ -27,7 +28,7 @@ export class ReactionRoles {
    * @param role
    * @returns void
    */
-  async addOrRemoveRole(
+  private async addOrRemoveRole(
     action: 'add' | 'remove',
     reaction: MessageReaction,
     member: Promise<GuildMember>,
@@ -56,7 +57,7 @@ export class ReactionRoles {
    * @param action
    * @returns void
    */
-  async handleAction(
+  private async handleAction(
     reaction: MessageReaction,
     action: string
   ): Promise<void | Message> {
@@ -85,7 +86,7 @@ export class ReactionRoles {
    * @param user
    * @returns void
    */
-  async init(
+  private async handleReactionAction(
     action: 'add' | 'remove',
     reaction: MessageReaction,
     user: User | PartialUser
@@ -123,5 +124,18 @@ export class ReactionRoles {
     }
 
     return Promise.resolve();
+  }
+
+  /**
+   * Init for
+   * @param client
+   */
+  public init(client: Client): void {
+    client.on('messageReactionAdd', (reaction, user) =>
+      this.handleReactionAction('add', reaction, user).catch(() => {})
+    );
+    client.on('messageReactionRemove', (reaction, user) =>
+      this.handleReactionAction('remove', reaction, user).catch(() => {})
+    );
   }
 }

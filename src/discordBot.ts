@@ -18,14 +18,14 @@ import { MemberRemove } from './commands/memberRemove';
 })
 @Rules(Rule().fromString(`${environment.botId}> ` || `${environment.botId}>`))
 export class DiscordBot {
-  reactionRoles: ReactionRoles;
   logger: Logger;
+  reactionRoles: ReactionRoles;
   memberAdd: MemberAdd;
   memberRemove: MemberRemove;
 
   constructor() {
-    this.reactionRoles = new ReactionRoles();
     this.logger = new Logger();
+    this.reactionRoles = new ReactionRoles();
     this.memberAdd = new MemberAdd();
     this.memberRemove = new MemberRemove();
   }
@@ -48,19 +48,9 @@ export class DiscordBot {
     const guild = Utility.getGuild(Main.Client.guilds);
     this.preFetchAllMessages(guild);
 
-    Main.Client.on('messageReactionAdd', (reaction, user) =>
-      this.reactionRoles.init('add', reaction, user).catch(() => {})
-    );
-
-    Main.Client.on('messageReactionRemove', (reaction, user) =>
-      this.reactionRoles.init('remove', reaction, user).catch(() => {})
-    );
-
-    Main.Client.on('guildMemberAdd', (member) => this.memberAdd.init(member));
-
-    Main.Client.on('guildMemberRemove', (member) =>
-      this.memberRemove.init(member)
-    );
+    this.memberAdd.init(Main.Client);
+    this.memberRemove.init(Main.Client);
+    this.reactionRoles.init(Main.Client);
 
     this.logger.info(chalk.bold('BOT READY'));
   }
