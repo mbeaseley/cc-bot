@@ -127,7 +127,7 @@ export class ReactionRoles {
   }
 
   /**
-   * Init for
+   * Init for reaction add and removal
    * @param client
    */
   public init(client: Client): void {
