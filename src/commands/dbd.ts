@@ -1,7 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
 import { commands } from '../data/dbdCommands';
-import { killer, killerOffering, killerPerks } from '../data/killer';
+// import { killer, killerOffering, killerPerks } from '../data/killer';
 import { defaultKillers, playerKillers } from '../data/playerKillers';
 import {
   surviverLoot,
@@ -16,15 +16,21 @@ import {
 } from '../types/dbd';
 import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
+import { DBDService } from '../services/dbd.service';
 
 export class Dbd {
+  dbdService: DBDService;
   killerBuild: KillerBuild = new KillerBuild();
   surviverBuild: SurviverBuild = new SurviverBuild();
+
+  constructor() {
+    this.dbdService = new DBDService();
+  }
 
   /**
    * Creates random killer build
    */
-  private createKillerBuild(authorId: string): KillerBuild {
+  private async createKillerBuild(authorId: string): Promise<KillerBuild> {
     const killerBuild = new KillerBuild();
 
     // Killer
@@ -32,7 +38,8 @@ export class Dbd {
       playerKillers.find((p) => p.userId === authorId)?.availableKiller ||
       defaultKillers;
 
-    const killers = killer
+    const allKillers = await this.dbdService.getKillers();
+    const killers = allKillers
       .map((k) => {
         if (availableKillers.find((ak) => ak === k.id)) {
           return k;
@@ -49,12 +56,14 @@ export class Dbd {
     killerBuild.addons = Utility.random(addons || [], 2);
 
     // Offering
+    const killerOffering = await this.dbdService.getKillerOfferings();
     killerBuild.offering = [Utility.random(killerOffering)];
 
     // Perks
+    const killerPerks = await this.dbdService.getKillerPerks();
     killerBuild.perks = Utility.random(killerPerks, 4);
 
-    return killerBuild;
+    return Promise.resolve(killerBuild);
   }
 
   /**
@@ -163,7 +172,7 @@ export class Dbd {
 
       if (kllerCommands.find((c) => c.name === keyCommand)) {
         this.killerBuild = new KillerBuild();
-        this.killerBuild = this.createKillerBuild(command.author.id);
+        this.killerBuild = await this.createKillerBuild(command.author.id);
 
         return this.sendMessage(command, this.killerBuild);
       }

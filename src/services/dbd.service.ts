@@ -1,3 +1,4 @@
+import { KillerItem, KillerOffering } from 'src/types/dbd';
 import { DBDModelService } from '../models/dbd-model.service';
 
 export class DBDService {
@@ -10,24 +11,21 @@ export class DBDService {
   /**
    * Fetch Killers
    */
-  public async getKillers(): Promise<void> {
-    const response = await this.dbdModelService.getKillers();
-    console.log(response);
+  public async getKillers(): Promise<KillerItem[]> {
+    return this.dbdModelService.getKillers();
   }
 
   /**
    * Fetch Killer Perks
    */
-  public async getKillerPerks(): Promise<void> {
-    const response = await this.dbdModelService.getKillerPerks();
-    console.log(response);
+  public async getKillerPerks(): Promise<string[]> {
+    return this.dbdModelService.getKillerPerks();
   }
 
   /**
    * Fetch Killer Offerings
    */
-  public async getKillerOfferings(): Promise<void> {
-    const response = await this.dbdModelService.getKillerOfferings();
-    console.log(response);
+  public async getKillerOfferings(): Promise<KillerOffering[]> {
+    return this.dbdModelService.getKillerOfferings();
   }
 }
