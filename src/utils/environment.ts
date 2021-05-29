@@ -13,6 +13,8 @@ interface EnvironmentObject {
   emojiAcceptRules: {
     name: string;
   };
+  dbUsername: string;
+  dbPassword: string;
 }
 
 export const environment = {
@@ -28,4 +30,6 @@ export const environment = {
   emojiAcceptRules: {
     name: process.env.EMOJIACCEPTEDNAME,
   },
+  dbUsername: process.env.DBUSERNAME,
+  dbPassword: process.env.DBPASSWORD,
 } as EnvironmentObject;
