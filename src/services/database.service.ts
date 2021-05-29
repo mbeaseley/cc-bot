@@ -12,10 +12,16 @@ export class DatabaseService {
     this.logger = new Logger();
   }
 
+  /**
+   * Get Client
+   */
   private get Client(): MongoClient | undefined {
     return this._client;
   }
 
+  /**
+   * Set Client
+   */
   private set Client(client: MongoClient | undefined) {
     this._client = client;
   }
@@ -26,7 +32,7 @@ export class DatabaseService {
    * @param dbName
    * @param collectionName
    */
-  public async getCollection<T extends DatabaseName>(
+  private async getCollection<T extends DatabaseName>(
     dbName: DatabaseName,
     collectionName: Databases[T]
   ): Promise<any[]> {
@@ -53,7 +59,7 @@ export class DatabaseService {
       await this.Client.close();
     }
 
-    return dbResponse;
+    return Promise.resolve(dbResponse);
   }
 
   /**
