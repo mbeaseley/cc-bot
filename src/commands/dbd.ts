@@ -76,7 +76,6 @@ export class Dbd {
     // Loot Addon
     surviverBuild.lootAddons = Utility.random(surviverBuild.loot[0]?.addons, 2);
 
-    console.log(surviverBuild);
     return Promise.resolve(surviverBuild);
   }
 
@@ -183,7 +182,6 @@ export class Dbd {
         return command.reply(environment.commandNotFound);
       }
     } catch (e: unknown) {
-      console.log(e);
       return Promise.reject();
     }
   }
