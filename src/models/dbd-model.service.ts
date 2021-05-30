@@ -4,6 +4,7 @@ import {
   KillerAddon,
   KillerItem,
   KillerOffering,
+  PlayerKiller,
   SurvivorAddon,
   SurvivorLoot,
   SurvivorOffering,
@@ -17,9 +18,58 @@ export class DBDModelService {
   private _survivorPerks: string[] | undefined;
   private _survivorLoot: SurvivorLoot[] | undefined;
   private _survivorOffering: SurvivorOffering[] | undefined;
+  private _playerKillers: PlayerKiller[] | undefined;
 
   constructor() {
     this.databaseService = new DatabaseService();
+  }
+
+  /**
+   * ==================================
+   * Fetch Player Available Killers
+   * ==================================
+   */
+
+  /**
+   * Get Player Killers
+   */
+  private get playerKillers() {
+    return this._playerKillers ?? [];
+  }
+
+  /**
+   * Set Player Killers
+   */
+  private set playerKillers(value: PlayerKiller[]) {
+    this._playerKillers = value;
+  }
+
+  /**
+   * Format player killers into PlayerKiller type
+   * @param res
+   * @returns PlayerKiller[]
+   */
+  private fromPlayerKillerPayload(
+    res: { user_id: string; available_killers: number[] }[]
+  ): PlayerKiller[] {
+    return res.map((r) => new PlayerKiller(r.user_id, r.available_killers));
+  }
+
+  /**
+   * Get Player Killers
+   * @returns PlayerKiller[]
+   */
+  public async getPlayerKillers(): Promise<PlayerKiller[]> {
+    if (this.playerKillers.length) {
+      return Promise.resolve(this.playerKillers);
+    }
+
+    const res = await this.databaseService.connect(
+      'dbd',
+      DBDCollections.playerKillers
+    );
+    this.playerKillers = this.fromPlayerKillerPayload(res);
+    return Promise.resolve(this.playerKillers);
   }
 
   /**

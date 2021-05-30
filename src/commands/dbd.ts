@@ -1,11 +1,12 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
 import { commands } from '../data/dbdCommands';
-import { defaultKillers, playerKillers } from '../data/playerKillers';
 import { KillerBuild, KillerItem, SurviverBuild } from '../types/dbd';
 import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
 import { DBDService } from '../services/dbd.service';
+
+const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 
 export class Dbd {
   dbdService: DBDService;
@@ -23,9 +24,10 @@ export class Dbd {
     const killerBuild = new KillerBuild();
 
     // Killer
+    const playerKillers = await this.dbdService.getPlayerKillers();
     const availableKillers =
       playerKillers.find((p) => p.userId === authorId)?.availableKiller ||
-      defaultKillers;
+      DEFAULTKILLERS;
 
     const allKillers = await this.dbdService.getKillers();
     const killers = allKillers

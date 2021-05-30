@@ -2,6 +2,7 @@ import { DBDModelService } from '../models/dbd-model.service';
 import {
   KillerItem,
   KillerOffering,
+  PlayerKiller,
   SurvivorLoot,
   SurvivorOffering,
 } from '../types/dbd';
@@ -11,6 +12,14 @@ export class DBDService {
 
   constructor() {
     this.dbdModelService = new DBDModelService();
+  }
+
+  /**
+   * Fetch Player Killers
+   * @returns PlayerKiller[]
+   */
+  public async getPlayerKillers(): Promise<PlayerKiller[]> {
+    return this.dbdModelService.getPlayerKillers();
   }
 
   /**

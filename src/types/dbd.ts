@@ -1,4 +1,17 @@
 /*============
+Player Available killers
+=============*/
+export class PlayerKiller {
+  userId: string | undefined;
+  availableKiller: number[];
+
+  constructor(userId?: string, availableKillers?: number[]) {
+    this.userId = userId;
+    this.availableKiller = availableKillers ?? [];
+  }
+}
+
+/*============
 Killer Types
 =============*/
 
