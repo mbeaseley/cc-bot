@@ -27,11 +27,21 @@ export class KillerBuild {
 export class KillerOffering {
   name: string | undefined;
   rarity: string | undefined;
+
+  constructor(name?: string, rarity?: string) {
+    this.name = name;
+    this.rarity = rarity;
+  }
 }
 
 export class KillerAddon {
   name: string | undefined;
   rarity: string | undefined;
+
+  constructor(name?: string, rarity?: string) {
+    this.name = name;
+    this.rarity = rarity;
+  }
 }
 
 export class KillerItem {
@@ -39,6 +49,12 @@ export class KillerItem {
   name: string | undefined;
   image: string | undefined;
   addons: KillerAddon[] | undefined;
+
+  constructor(id?: number, name?: string, image?: string) {
+    this.id = id;
+    this.name = name;
+    this.image = image;
+  }
 }
 
 /*=============
@@ -67,15 +83,30 @@ export class SurviverBuild {
 export class SurvivorAddon {
   name: string | undefined;
   rarity: string | undefined;
+
+  constructor(name?: string, rarity?: string) {
+    this.name = name;
+    this.rarity = rarity;
+  }
 }
 
 export class SurvivorLoot {
   name: string | undefined;
   rarity: string | undefined;
   addons: SurvivorAddon[] | [] = [];
+
+  constructor(name?: string, rarity?: string) {
+    this.name = name;
+    this.rarity = rarity;
+  }
 }
 
 export class SurvivorOffering {
   name: string | undefined;
   rarity: string | undefined;
+
+  constructor(name?: string, rarity?: string) {
+    this.name = name;
+    this.rarity = rarity;
+  }
 }

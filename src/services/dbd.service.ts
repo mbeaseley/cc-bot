@@ -1,5 +1,10 @@
-import { KillerItem, KillerOffering } from 'src/types/dbd';
 import { DBDModelService } from '../models/dbd-model.service';
+import {
+  KillerItem,
+  KillerOffering,
+  SurvivorLoot,
+  SurvivorOffering,
+} from '../types/dbd';
 
 export class DBDService {
   private dbdModelService: DBDModelService;
@@ -10,6 +15,7 @@ export class DBDService {
 
   /**
    * Fetch Killers
+   * @returns KillerItem[]
    */
   public async getKillers(): Promise<KillerItem[]> {
     return this.dbdModelService.getKillers();
@@ -17,6 +23,7 @@ export class DBDService {
 
   /**
    * Fetch Killer Perks
+   * @returns string[]
    */
   public async getKillerPerks(): Promise<string[]> {
     return this.dbdModelService.getKillerPerks();
@@ -24,8 +31,33 @@ export class DBDService {
 
   /**
    * Fetch Killer Offerings
+   * @returns KillerOffering[]
    */
   public async getKillerOfferings(): Promise<KillerOffering[]> {
     return this.dbdModelService.getKillerOfferings();
+  }
+
+  /**
+   * Fetch Survivor Perks
+   * @returns string[]
+   */
+  public async getSurvivorPerks(): Promise<string[]> {
+    return this.dbdModelService.getSurvivorPerks();
+  }
+
+  /**
+   * Fetch Survivor Loot
+   * @returns SurvivorLoot[]
+   */
+  public async getSurvivorLoot(): Promise<SurvivorLoot[]> {
+    return this.dbdModelService.getSurvivorLoot();
+  }
+
+  /**
+   * Fetch Survivor Offerings
+   * @returns SurvivorOffering[]
+   */
+  public async getSurvivorOfferings(): Promise<SurvivorOffering[]> {
+    return this.dbdModelService.getSurvivorOfferings();
   }
 }

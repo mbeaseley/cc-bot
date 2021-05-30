@@ -1,19 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
 import { commands } from '../data/dbdCommands';
-// import { killer, killerOffering, killerPerks } from '../data/killer';
 import { defaultKillers, playerKillers } from '../data/playerKillers';
-import {
-  surviverLoot,
-  surviverOffering,
-  surviverPerks,
-} from '../data/surviver';
-import {
-  KillerBuild,
-  KillerItem,
-  SurviverBuild,
-  SurvivorLoot,
-} from '../types/dbd';
+import { KillerBuild, KillerItem, SurviverBuild } from '../types/dbd';
 import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
 import { DBDService } from '../services/dbd.service';
@@ -47,7 +36,7 @@ export class Dbd {
       })
       .filter(Boolean);
 
-    const choosenKiller: KillerItem = Utility.random(killers);
+    const choosenKiller = Utility.random(killers) as KillerItem;
     killerBuild.killer = choosenKiller.name;
     killerBuild.image = choosenKiller.image;
 
@@ -69,23 +58,26 @@ export class Dbd {
   /**
    * Creates random surviver build
    */
-  private createSurviverBuild(): SurviverBuild {
+  private async createSurviverBuild(): Promise<SurviverBuild> {
     const surviverBuild = new SurviverBuild();
 
     // Perks
-    surviverBuild.perks = Utility.random(surviverPerks, 4);
+    const perks = await this.dbdService.getSurvivorPerks();
+    surviverBuild.perks = Utility.random(perks, 4);
 
     // offering
-    surviverBuild.offering = [Utility.random(surviverOffering)];
+    const offerings = await this.dbdService.getSurvivorOfferings();
+    surviverBuild.offering = [Utility.random(offerings)];
 
     // loot
-    const loot: SurvivorLoot = Utility.random(surviverLoot);
-    surviverBuild.loot = [loot];
+    const loot = await this.dbdService.getSurvivorLoot();
+    surviverBuild.loot = [Utility.random(loot)];
 
     // Loot Addon
-    surviverBuild.lootAddons = Utility.random(loot.addons, 2);
+    surviverBuild.lootAddons = Utility.random(surviverBuild.loot[0]?.addons, 2);
 
-    return surviverBuild;
+    console.log(surviverBuild);
+    return Promise.resolve(surviverBuild);
   }
 
   /**
@@ -179,7 +171,7 @@ export class Dbd {
 
       if (surviverCommands.find((c) => c.name === keyCommand)) {
         this.surviverBuild = new SurviverBuild();
-        this.surviverBuild = this.createSurviverBuild();
+        this.surviverBuild = await this.createSurviverBuild();
 
         return this.sendMessage(command, this.surviverBuild);
       }
@@ -190,7 +182,8 @@ export class Dbd {
         command.delete();
         return command.reply(environment.commandNotFound);
       }
-    } catch (e) {
+    } catch (e: unknown) {
+      console.log(e);
       return Promise.reject();
     }
   }
