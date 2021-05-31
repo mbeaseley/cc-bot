@@ -83,7 +83,22 @@ export default class Utility {
     return array[Math.floor(Math.random() * array.length)];
   }
 
+  /**
+   * Get guild
+   * @param guilds
+   * @returns Guild
+   */
   static getGuild(guilds: GuildManager): Guild | undefined {
     return guilds.cache.find((g) => g.id === environment.server);
+  }
+
+  /**
+   * Checks if every substrings is within copy
+   * @param subStrings
+   * @param copy
+   * @returns boolean
+   */
+  static checkStatementForStrings(subStrings: string[], copy: string): boolean {
+    return subStrings.every((s) => copy.indexOf(s) > -1);
   }
 }

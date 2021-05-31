@@ -1,12 +1,18 @@
 import { Command, CommandMessage, Description, Guard } from '@typeit/discord';
 import { isAdmin } from '../guards/isAdmin';
 import { environment } from '../utils/environment';
-import { rules } from '../data/rules';
+import { RulesService } from '../services/rules.service';
 
 const QUESTION_TYPES = ['rules'];
 
 export class ReactionQuestions {
-  handleQuestion(command: CommandMessage): Promise<void> {
+  private rulesService: RulesService;
+
+  constructor() {
+    this.rulesService = new RulesService();
+  }
+
+  private async handleQuestion(command: CommandMessage): Promise<void> {
     const commandArray = command.content.split(' ');
     const keyCommand = commandArray[commandArray.length - 1].toLowerCase();
 
@@ -17,8 +23,9 @@ export class ReactionQuestions {
         (e) => e.name === environment.emojiAcceptRules.name
       );
 
-      const rulesMessage = rules(e).map((r, i) => {
-        return rules(e)?.length !== i ? (r += `\n`) : r;
+      const rules = await this.rulesService.getServerRules(e);
+      const rulesMessage = rules.map((r, i) => {
+        return rules.length !== i ? (r.content += `\n`) : r;
       });
 
       return command.channel.send(rulesMessage).then((message) => {
