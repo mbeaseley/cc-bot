@@ -12,14 +12,32 @@ export class RulesModelService {
     this.databaseService = new DatabaseService();
   }
 
+  /**
+   * ==================================
+   * Fetch Server Rules
+   * ==================================
+   */
+
+  /**
+   * Get Server Rules
+   */
   private get serverRules() {
     return this._serverRules ?? [];
   }
 
+  /**
+   * Set Server Rules
+   */
   private set serverRules(value: RuleItem[]) {
     this._serverRules = value;
   }
 
+  /**
+   * Format rule items into type
+   * @param res
+   * @param acceptEmoji
+   * @returns RuleItem[]
+   */
   private fromServerPayload(
     res: { content: string; type: string }[],
     acceptEmoji: GuildEmoji | undefined
@@ -47,7 +65,6 @@ export class RulesModelService {
             `emoji_${k}`,
             acceptEmoji[k as keyof typeof acceptEmoji] as string
           );
-          console.log(rule.content, `emoji_${k}`);
         });
       }
 
@@ -55,6 +72,11 @@ export class RulesModelService {
     });
   }
 
+  /**
+   * Fetch Server rules from database
+   * @param acceptEmoji
+   * @returns RuleItem[]
+   */
   public async getServerRules(
     acceptEmoji: GuildEmoji | undefined
   ): Promise<RuleItem[]> {
