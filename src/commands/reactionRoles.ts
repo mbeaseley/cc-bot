@@ -9,7 +9,6 @@ import {
   User,
 } from 'discord.js';
 import { ReactionService } from '../services/reaction.service';
-import { reactionActions } from '../data/roles';
 import { Logger } from '../services/logger.service';
 import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
