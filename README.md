@@ -10,6 +10,7 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
+[![CodeFactor][codefactor-shield]][codefactor-url]
 [![license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -92,6 +93,8 @@ Project Link: [https://github.com/mbeaseley/cc-bot](https://github.com/mbeaseley
 [stars-url]: https://github.com/mbeaseley/cc-bot/stargazers
 [issues-shield]: https://img.shields.io/github/issues/mbeaseley/cc-bot.svg?style=for-the-badge
 [issues-url]: https://github.com/mbeaseley/cc-bot/issues
+[codefactor-shield]: https://www.codefactor.io/repository/github/mbeaseley/cc-bot/badge?style=for-the-badge
+[codefactor-url]: https://www.codefactor.io/repository/github/mbeaseley/cc-bot
 [license-shield]: https://img.shields.io/github/license/mbeaseley/cc-bot.svg?style=for-the-badge
 [license-url]: https://github.com/mbeaseley/cc-bot/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
