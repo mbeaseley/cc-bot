@@ -26,6 +26,7 @@ export class UrbanDictionary {
 
     return new MessageEmbed()
       .setTitle(`${formattedPhrase} Definition`)
+      .setColor(1079)
       .setURL(entry.permalink)
       .setThumbnail('https://i.imgur.com/LmyPRai.png')
       .setDescription(`${entry.definition}\nFor example: ${entry.example}`)
