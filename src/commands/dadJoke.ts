@@ -28,6 +28,7 @@ export class DadJoke extends HttpClient {
       return Promise.reject();
     }
 
+    command.delete();
     command.reply(res.joke);
     return Promise.resolve();
   }
