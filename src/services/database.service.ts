@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb';
 import * as chalk from 'chalk';
 import { Logger } from './logger.service';
 import { environment } from '../utils/environment';
-import { DatabaseName, Databases } from 'src/types/database';
+import { DatabaseName, Databases } from '../types/database';
 
 export class DatabaseService {
   private _client: MongoClient | undefined;

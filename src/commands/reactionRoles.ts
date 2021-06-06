@@ -12,7 +12,7 @@ import { ReactionService } from '../services/reaction.service';
 import { Logger } from '../services/logger.service';
 import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
-import { Reaction } from 'src/types/reaction';
+import { Reaction } from '../types/reaction';
 
 export class ReactionRoles {
   private reactionService: ReactionService;
