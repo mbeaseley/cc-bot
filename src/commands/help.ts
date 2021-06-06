@@ -21,19 +21,23 @@ export class Help {
       .map((c) => {
         if (c.commandName === 'playerchoice') {
           c.commandName =
-            'playerchoice @user(optional)\nExclude users example: @user @user (add after command name)';
+            'playerchoice <...@user(optional)>\nExclude users example: @user @user (add after command name)';
         }
 
         if (c.commandName === 'insult') {
-          c.commandName = 'insult @user(optional)';
+          c.commandName = 'insult <@user(optional)>';
         }
 
         if (c.commandName === 'compliment') {
-          c.commandName = 'compliment @user(optional)';
+          c.commandName = 'compliment <@user(optional)>';
         }
 
         if (c.commandName === 'sayIt') {
-          c.commandName = 'sayIt @user(optional)';
+          c.commandName = 'sayIt <@user(optional)>';
+        }
+
+        if (c.commandName === 'urban') {
+          c.commandName = 'urban <word>';
         }
 
         return {
