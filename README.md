@@ -11,8 +11,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-
-<!-- [![MIT License][license-shield]][license-url] -->
+[![license-shield]][license-url]
 
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -87,15 +86,15 @@ Project Link: [https://github.com/mbeaseley/cc-bot](https://github.com/mbeaseley
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/mbeaseley/cc-bot.svg?style=for-the-badge
 [contributors-url]: https://github.com/mbeaseley/cc-bot/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/mbeaseley/cc-bot.svg?style=for-the-badge
 [forks-url]: https://github.com/mbeaseley/cc-bot/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/mbeaseley/cc-bot.svg?style=for-the-badge
 [stars-url]: https://github.com/mbeaseley/cc-bot/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/mbeaseley/cc-bot.svg?style=for-the-badge
 [issues-url]: https://github.com/mbeaseley/cc-bot/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo/blob/master/LICENSE.txt
+[license-shield]: https://img.shields.io/github/license/mbeaseley/cc-bot.svg?style=for-the-badge
+[license-url]: https://github.com/mbeaseley/cc-bot/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/michael-beaseley
