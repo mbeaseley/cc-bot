@@ -1,3 +1,4 @@
+import { Client } from '@typeit/discord';
 import {
   GuildMember,
   Message,
@@ -36,7 +37,7 @@ export class MemberAdd {
    * @param member
    * @returns Canvas
    */
-  async createCanvas(
+  private async createCanvas(
     member: GuildMember | PartialGuildMember,
     memberCount: number
   ): Promise<Canvas.Canvas | void> {
@@ -102,7 +103,7 @@ export class MemberAdd {
    * @param member
    * @returns
    */
-  async init(
+  private async handleMessage(
     member: GuildMember | PartialGuildMember
   ): Promise<Message | void> {
     if (member.partial) {
@@ -113,8 +114,8 @@ export class MemberAdd {
       }
     }
     const { guild } = member;
-    let channel = guild.channels.cache.get(environment.memberAdd);
 
+    let channel = guild.channels?.cache.get(`${environment.memberAdd}`);
     if (!channel) {
       return Promise.resolve();
     }
@@ -141,5 +142,13 @@ export class MemberAdd {
     );
 
     return channel.send(`Welcome to the server, ${member}!`, attachment);
+  }
+
+  /**
+   * Init for member added
+   * @param client
+   */
+  public init(client: Client): void {
+    client.on('guildMemberAdd', (member) => this.handleMessage(member));
   }
 }

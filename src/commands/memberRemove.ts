@@ -1,3 +1,4 @@
+import { Client } from '@typeit/discord';
 import {
   GuildMember,
   Message,
@@ -7,7 +8,7 @@ import {
 import { environment } from '../utils/environment';
 
 export class MemberRemove {
-  async init(
+  private async handleRemoval(
     member: GuildMember | PartialGuildMember
   ): Promise<Message | void> {
     const { guild } = member;
@@ -30,5 +31,13 @@ export class MemberRemove {
     return channel.send(
       `:wave: **${member.user?.username}** has left this server!`
     );
+  }
+
+  /**
+   * Init for member added
+   * @param client
+   */
+  public init(client: Client): void {
+    client.on('guildMemberRemove', (member) => this.handleRemoval(member));
   }
 }

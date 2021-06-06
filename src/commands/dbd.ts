@@ -1,38 +1,36 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
 import { commands } from '../data/dbdCommands';
-import { killer, killerOffering, killerPerks } from '../data/killer';
-import { defaultKillers, playerKillers } from '../data/playerKillers';
-import {
-  surviverLoot,
-  surviverOffering,
-  surviverPerks,
-} from '../data/surviver';
-import {
-  KillerBuild,
-  KillerItem,
-  SurviverBuild,
-  SurvivorLoot,
-} from '../types/dbd';
+import { KillerBuild, KillerItem, SurviverBuild } from '../types/dbd';
 import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
+import { DBDService } from '../services/dbd.service';
+
+const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 
 export class Dbd {
+  dbdService: DBDService;
   killerBuild: KillerBuild = new KillerBuild();
   surviverBuild: SurviverBuild = new SurviverBuild();
+
+  constructor() {
+    this.dbdService = new DBDService();
+  }
 
   /**
    * Creates random killer build
    */
-  private createKillerBuild(authorId: string): KillerBuild {
+  private async createKillerBuild(authorId: string): Promise<KillerBuild> {
     const killerBuild = new KillerBuild();
 
     // Killer
+    const playerKillers = await this.dbdService.getPlayerKillers();
     const availableKillers =
       playerKillers.find((p) => p.userId === authorId)?.availableKiller ||
-      defaultKillers;
+      DEFAULTKILLERS;
 
-    const killers = killer
+    const allKillers = await this.dbdService.getKillers();
+    const killers = allKillers
       .map((k) => {
         if (availableKillers.find((ak) => ak === k.id)) {
           return k;
@@ -40,7 +38,7 @@ export class Dbd {
       })
       .filter(Boolean);
 
-    const choosenKiller: KillerItem = Utility.random(killers);
+    const choosenKiller = Utility.random(killers) as KillerItem;
     killerBuild.killer = choosenKiller.name;
     killerBuild.image = choosenKiller.image;
 
@@ -49,34 +47,38 @@ export class Dbd {
     killerBuild.addons = Utility.random(addons || [], 2);
 
     // Offering
+    const killerOffering = await this.dbdService.getKillerOfferings();
     killerBuild.offering = [Utility.random(killerOffering)];
 
     // Perks
+    const killerPerks = await this.dbdService.getKillerPerks();
     killerBuild.perks = Utility.random(killerPerks, 4);
 
-    return killerBuild;
+    return Promise.resolve(killerBuild);
   }
 
   /**
    * Creates random surviver build
    */
-  private createSurviverBuild(): SurviverBuild {
+  private async createSurviverBuild(): Promise<SurviverBuild> {
     const surviverBuild = new SurviverBuild();
 
     // Perks
-    surviverBuild.perks = Utility.random(surviverPerks, 4);
+    const perks = await this.dbdService.getSurvivorPerks();
+    surviverBuild.perks = Utility.random(perks, 4);
 
     // offering
-    surviverBuild.offering = [Utility.random(surviverOffering)];
+    const offerings = await this.dbdService.getSurvivorOfferings();
+    surviverBuild.offering = [Utility.random(offerings)];
 
     // loot
-    const loot: SurvivorLoot = Utility.random(surviverLoot);
-    surviverBuild.loot = [loot];
+    const loot = await this.dbdService.getSurvivorLoot();
+    surviverBuild.loot = [Utility.random(loot)];
 
     // Loot Addon
-    surviverBuild.lootAddons = Utility.random(loot.addons, 2);
+    surviverBuild.lootAddons = Utility.random(surviverBuild.loot[0]?.addons, 2);
 
-    return surviverBuild;
+    return Promise.resolve(surviverBuild);
   }
 
   /**
@@ -163,14 +165,14 @@ export class Dbd {
 
       if (kllerCommands.find((c) => c.name === keyCommand)) {
         this.killerBuild = new KillerBuild();
-        this.killerBuild = this.createKillerBuild(command.author.id);
+        this.killerBuild = await this.createKillerBuild(command.author.id);
 
         return this.sendMessage(command, this.killerBuild);
       }
 
       if (surviverCommands.find((c) => c.name === keyCommand)) {
         this.surviverBuild = new SurviverBuild();
-        this.surviverBuild = this.createSurviverBuild();
+        this.surviverBuild = await this.createSurviverBuild();
 
         return this.sendMessage(command, this.surviverBuild);
       }
@@ -181,7 +183,7 @@ export class Dbd {
         command.delete();
         return command.reply(environment.commandNotFound);
       }
-    } catch (e) {
+    } catch (e: unknown) {
       return Promise.reject();
     }
   }

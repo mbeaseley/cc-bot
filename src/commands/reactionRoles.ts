@@ -1,3 +1,4 @@
+import { Client } from '@typeit/discord';
 import * as chalk from 'chalk';
 import {
   GuildMember,
@@ -7,16 +8,39 @@ import {
   Role,
   User,
 } from 'discord.js';
-import { reactionActions, reactionRoles } from '../data/roles';
+import { ReactionService } from '../services/reaction.service';
 import { Logger } from '../services/logger.service';
 import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
+import { Reaction } from '../types/reaction';
 
 export class ReactionRoles {
+  private reactionService: ReactionService;
   logger: Logger;
 
   constructor() {
+    this.reactionService = new ReactionService();
     this.logger = new Logger();
+  }
+
+  /**
+   * Get choosen role or action
+   * @param reactions
+   * @param emojiName
+   * @returns string
+   */
+  private getChoosenRoleOrAction(
+    reactions: Reaction[],
+    emojiName: string
+  ): string {
+    let choosenReaction = '';
+    reactions.forEach((r) => {
+      if (r[emojiName]) {
+        choosenReaction = r[emojiName];
+      }
+    });
+
+    return choosenReaction;
   }
 
   /**
@@ -27,10 +51,10 @@ export class ReactionRoles {
    * @param role
    * @returns void
    */
-  async addOrRemoveRole(
+  private async addOrRemoveRole(
     action: 'add' | 'remove',
     reaction: MessageReaction,
-    member: Promise<GuildMember>,
+    member: GuildMember,
     role: Role | undefined
   ): Promise<void> {
     if (!role?.id) {
@@ -43,7 +67,7 @@ export class ReactionRoles {
     }
 
     try {
-      (await member).roles[action](role.id);
+      await member.roles[action](role.id);
     } catch (e: unknown) {
       this.logger.error(`${chalk.bold('BOT ERROR')}: 'Error adding role' ${e}`);
       return Promise.reject();
@@ -56,7 +80,7 @@ export class ReactionRoles {
    * @param action
    * @returns void
    */
-  async handleAction(
+  private async handleAction(
     reaction: MessageReaction,
     action: string
   ): Promise<void | Message> {
@@ -85,7 +109,7 @@ export class ReactionRoles {
    * @param user
    * @returns void
    */
-  async init(
+  private async handleReactionAction(
     action: 'add' | 'remove',
     reaction: MessageReaction,
     user: User | PartialUser
@@ -108,20 +132,41 @@ export class ReactionRoles {
       return Promise.reject();
     }
 
-    const member = guild.members.fetch(user.id);
-    const role = guild.roles.cache.find(
-      (r) => r.name === reactionRoles[reaction.emoji.name]
+    const reactionRoles = await this.reactionService.getReactionRoles();
+    const member = await guild.members.fetch(user.id);
+    const choosenRole = this.getChoosenRoleOrAction(
+      reactionRoles,
+      reaction.emoji.name
     );
+    const role = guild.roles.cache.find((r) => r.name === choosenRole);
 
     if (role && reaction.message.author.bot) {
       return this.addOrRemoveRole(action, reaction, member, role);
     }
 
     const u = environment.admins.find((a) => a === user.id);
-    if (reactionActions[reaction.emoji.name] && action === 'add' && u) {
-      return this.handleAction(reaction, reactionActions[reaction.emoji.name]);
+    const reactionActions = await this.reactionService.getReactionActions();
+    const choosenAction = this.getChoosenRoleOrAction(
+      reactionActions,
+      reaction.emoji.name
+    );
+    if (choosenAction && action === 'add' && u) {
+      return this.handleAction(reaction, choosenAction);
     }
 
     return Promise.resolve();
+  }
+
+  /**
+   * Init for reaction add and removal
+   * @param client
+   */
+  public init(client: Client): void {
+    client.on('messageReactionAdd', (reaction, user) =>
+      this.handleReactionAction('add', reaction, user).catch(() => {})
+    );
+    client.on('messageReactionRemove', (reaction, user) =>
+      this.handleReactionAction('remove', reaction, user).catch(() => {})
+    );
   }
 }
