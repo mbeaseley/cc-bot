@@ -40,6 +40,7 @@ export class Compliment extends HttpClient {
 
     const message = this.createMessage(command, complimentObj.compliment);
 
+    command.delete();
     message.startsWith('<')
       ? command.channel.send(message)
       : command.reply(message);
