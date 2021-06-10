@@ -42,20 +42,21 @@ export class Poll {
   }
 
   /**
-   * Create Poll
-   * @name init
+   * Create Poll Object
+   * @name createPollingObject
    * @param command
    */
-  @Command('poll')
-  @Description('Create a poll for users to answer (max 26 options)')
-  async init(command: CommandMessage): Promise<Message | void> {
+  async createPollingObject(command: CommandMessage): Promise<Message | void> {
     const commandString = command.content.split('poll ').pop();
     const pollArray = commandString
       ?.split(' ')
       .map((a) => a.replace(/[^a-zA-Z0-9? ]/g, ''));
 
     if (!pollArray?.length) {
-      return Promise.resolve();
+      this.logger.error(
+        `${chalk.bold('BOT ERROR')}: incorrect formatting used on command`
+      );
+      return Promise.reject();
     }
 
     if (command.deletable) {
@@ -68,6 +69,14 @@ export class Poll {
       poll.answers.forEach((a, i) => {
         message.react(selectionEmojis[`${this.alphabet[i]}`]);
       });
+    });
+  }
+
+  @Command('poll')
+  @Description('Create a poll for users to answer (max 26 options)')
+  init(command: CommandMessage): Promise<Message | void> {
+    return this.createPollingObject(command).catch(() => {
+      command.reply(environment.error);
     });
   }
 }

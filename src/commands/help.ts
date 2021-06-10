@@ -40,6 +40,10 @@ export class Help {
           c.commandName = 'urban <word>';
         }
 
+        if (c.commandName === 'poll') {
+          c.commandName = 'poll [question] [answer1] [answer2] ...';
+        }
+
         return {
           name: `**${c.description}**`,
           value: `\`@${environment.botName} ${c.commandName}\``,

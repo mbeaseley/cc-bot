@@ -132,8 +132,6 @@ export class ReactionRoles {
       return Promise.reject();
     }
 
-    console.log(reaction.emoji);
-
     const reactionRoles = await this.reactionService.getReactionRoles();
     const member = await guild.members.fetch(user.id);
     const choosenRole = this.getChoosenRoleOrAction(
