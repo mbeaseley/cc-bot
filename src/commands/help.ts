@@ -44,6 +44,10 @@ export class Help {
           c.commandName = 'poll [question] [answer1] [answer2] ...';
         }
 
+        if (c.commandName === 'weather') {
+          c.commandName = 'weather <area>';
+        }
+
         return {
           name: `**${c.description}**`,
           value: `\`@${environment.botName} ${c.commandName}\``,
