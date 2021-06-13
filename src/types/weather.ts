@@ -16,7 +16,7 @@ export class WeatherObject {
   snow: RateDetails | undefined;
   timeOfDate: dayjs.Dayjs | undefined;
   area: AreaDetails | undefined;
-  timezone: number | undefined;
+  timezone: string | undefined;
   name: string | undefined;
 }
 

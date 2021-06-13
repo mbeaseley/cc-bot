@@ -6,7 +6,7 @@ import {
   ApiResponseObject,
   WeatherItem,
 } from '../types/weather';
-import * as dayjs from 'dayjs';
+import dayjs = require('dayjs');
 
 export class WeatherModelService extends HttpClient {
   /**
@@ -69,7 +69,8 @@ export class WeatherModelService extends HttpClient {
       sunrise: dayjs(res.sys?.sunrise * 1e3),
       sunset: dayjs(res.sys?.sunset * 1e3),
     };
-    w.timezone = res.timezone;
+    const plusMinus = res.timezone / 3600 > 0 ? '+' : '';
+    w.timezone = `UTC${plusMinus}${res.timezone / 3600}`;
     w.id = res.id;
     w.name = res.name;
     return w;
@@ -91,6 +92,7 @@ export class WeatherModelService extends HttpClient {
         params: {
           appid: environment.weatherAppId,
           q: location,
+          units: 'metric',
         },
       }
     );

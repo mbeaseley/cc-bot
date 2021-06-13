@@ -101,4 +101,13 @@ export default class Utility {
   static checkStatementForStrings(subStrings: string[], copy: string): boolean {
     return subStrings.every((s) => copy.indexOf(s) > -1);
   }
+
+  /**
+   * Captalise first letter in phrase
+   * @param value
+   * @returns string
+   */
+  static captaliseFirstLetter(value: string): string {
+    return value[0].toUpperCase() + value.slice(1);
+  }
 }
