@@ -16,6 +16,8 @@ interface EnvironmentObject {
   dbUsername: string;
   dbPassword: string;
   weatherAppId: string;
+  twitchClientId: string;
+  twitchSecret: string;
 }
 
 export const environment = {
@@ -34,4 +36,6 @@ export const environment = {
   dbUsername: process.env.DBUSERNAME,
   dbPassword: process.env.DBPASSWORD,
   weatherAppId: process.env.WEATHERAPPID,
+  twitchClientId: process.env.TWITCHCLIENTID,
+  twitchSecret: process.env.TWITCHSECRET,
 } as EnvironmentObject;
