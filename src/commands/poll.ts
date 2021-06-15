@@ -49,8 +49,8 @@ export class Poll {
   async createPollingObject(command: CommandMessage): Promise<Message | void> {
     const commandString = command.content.split('poll ').pop();
     const pollArray = commandString
-      ?.split(' ')
-      .map((a) => a.replace(/[^a-zA-Z0-9? ]/g, ''));
+      ?.split(/[\[\]']+/g)
+      .filter((e) => e.trim() != '');
 
     if (!pollArray?.length) {
       this.logger.error(

@@ -4,6 +4,7 @@ import { ClientUser, Message, MessageEmbed } from 'discord.js';
 import { WeatherObject } from '../types/weather';
 import { WeatherService } from '../services/weather.service';
 import Utility from '../utils/utility';
+import { windDirections } from '../data/weather';
 
 export class Weather {
   private weatherService: WeatherService;
@@ -22,67 +23,10 @@ export class Weather {
       return '';
     }
 
-    if (windDegree >= 11.25 && windDegree <= 33.74) {
-      return 'North Northeast';
-    }
-
-    if (windDegree >= 33.75 && windDegree <= 56.24) {
-      return 'Northeast';
-    }
-
-    if (windDegree >= 56.25 && windDegree <= 78.74) {
-      return 'East Northeast';
-    }
-
-    if (windDegree >= 78.75 && windDegree <= 101.24) {
-      return 'East';
-    }
-
-    if (windDegree >= 101.25 && windDegree <= 123.74) {
-      return 'East Southeast';
-    }
-
-    if (windDegree >= 123.75 && windDegree <= 146.24) {
-      return 'Southeast';
-    }
-
-    if (windDegree >= 146.25 && windDegree <= 168.74) {
-      return 'South Southeast';
-    }
-
-    if (windDegree >= 168.75 && windDegree <= 191.24) {
-      return 'South';
-    }
-
-    if (windDegree >= 191.25 && windDegree <= 213.74) {
-      return 'South SouthWest';
-    }
-
-    if (windDegree >= 213.75 && windDegree <= 236.24) {
-      return 'SouthWest';
-    }
-
-    if (windDegree >= 236.25 && windDegree <= 258.74) {
-      return 'West SouthWest';
-    }
-
-    if (windDegree >= 258.75 && windDegree <= 281.24) {
-      return 'West';
-    }
-
-    if (windDegree >= 281.25 && windDegree <= 303.74) {
-      return 'West Northwest';
-    }
-
-    if (windDegree >= 303.75 && windDegree <= 326.24) {
-      return 'Northwest';
-    }
-
-    if (windDegree >= 326.25 && windDegree <= 348.74) {
-      return 'Northwest';
-    }
-
-    return 'North';
+    return (
+      windDirections.find((w) => windDegree >= w.min && windDegree <= w.max)
+        ?.name ?? 'North'
+    );
   }
 
   /**
@@ -158,7 +102,7 @@ export class Weather {
 
     const weather = await this.weatherService.getCurrentWeather(location);
     const message = this.createMessage(weather, command.client.user);
-
+    await command.delete();
     return command.channel.send(message);
   }
 

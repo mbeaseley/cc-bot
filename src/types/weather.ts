@@ -71,6 +71,12 @@ export interface AreaDetails {
   sunset: dayjs.Dayjs;
 }
 
+export interface WindDirection {
+  name: string;
+  min: number;
+  max: number;
+}
+
 /**=============================
   API RESPONSE OBJECT
 ===============================*/
