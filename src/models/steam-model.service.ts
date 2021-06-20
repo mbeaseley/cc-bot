@@ -5,9 +5,12 @@ import {
   ApiLocationResponseObject,
   ApiPlayerSummaryResponseObject,
   ApiVanityUserResponseObject,
+  ApiUserBanResponseObject,
   PlayerSummary,
   SteamLocation,
   VanityUser,
+  UserBans,
+  playerStatus,
 } from '../types/steam';
 import dayjs = require('dayjs');
 
@@ -88,11 +91,13 @@ export class SteamModelService extends HttpClient {
       p.profileState = player.profilestate;
       p.name = player.personaname;
       p.commentPermission = player.commentpermission;
-      p.ProfileUrl = player.profileurl;
-      p.avatar = [player.avatar, player.avatarmedium, player.avatarfull];
+      p.profileUrl = player.profileurl;
+      p.avatar = player.avatar;
+      p.avatarMedium = player.avatarmedium;
+      p.avatarFull = player.avatarfull;
       p.avatarHash = player.avatarhash;
       p.lastLogOff = dayjs(player.lastlogoff * 1e3);
-      p.nameState = player.personastate;
+      p.nameState = playerStatus[+player.personastate];
       p.realName = player.realname;
       p.PrimaryClanId = player.primaryclanid;
       p.timeCreated = dayjs(player.timecreated * 1e3);
@@ -176,5 +181,44 @@ export class SteamModelService extends HttpClient {
       locations.find((l) => l.cityId === playerSummary.cityId) || undefined;
 
     return Promise.resolve(playerSummary);
+  }
+
+  /**
+   * ==================================
+   * Fetch User Bans
+   * ==================================
+   */
+
+  /**
+   * Format into correct type
+   * @param res
+   * @returns UserBans
+   */
+  private fromUserBansPayload(res: ApiUserBanResponseObject): UserBans {
+    const u = new UserBans();
+
+    if (res.players.length > 0) {
+      u.steamId = res.players[0].SteamId;
+      u.communityBanned = res.players[0].CommunityBanned;
+      u.vacBanned = res.players[0].VACBanned;
+      u.numberOfVACBans = res.players[0].NumberOfVACBans;
+      u.daysSinceLastBan = res.players[0].DaysSinceLastBan;
+      u.numberOfGameBans = res.players[0].NumberOfGameBans;
+      u.economyBan = res.players[0].EconomyBan;
+    }
+
+    return u;
+  }
+
+  /**
+   * Get Steam User Bans
+   * @param steamId
+   */
+  public async getUserBans(steamId: string): Promise<UserBans> {
+    const res = (await this.getResponse('GetPlayerBans/v1/', {
+      key: environment.steamApiKey,
+      steamids: steamId,
+    })) as ApiUserBanResponseObject;
+    return this.fromUserBansPayload(res);
   }
 }

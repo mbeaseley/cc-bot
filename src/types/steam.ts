@@ -19,17 +19,30 @@ export interface ApiVanityUserResponseObject {
   Player Summary Objects
 ===============================*/
 
+export const playerStatus = [
+  'Offline',
+  'Online',
+  'Busy',
+  'Away',
+  'Snooze',
+  'Looking to trade',
+  'Looking to play',
+  'Unknown',
+];
+
 export class PlayerSummary {
   steamId: string | undefined;
   communityVisibilityState: number | undefined;
   profileState: number | undefined;
   name: string | undefined;
   commentPermission: number | undefined;
-  ProfileUrl: string | undefined;
-  avatar: string[] | undefined;
+  profileUrl: string | undefined;
+  avatar: string = '';
+  avatarMedium: string = '';
+  avatarFull: string = '';
   avatarHash: string | undefined;
   lastLogOff: dayjs.Dayjs | undefined;
-  nameState: number | undefined;
+  nameState: string = playerStatus[7];
   realName: string | undefined;
   PrimaryClanId: string | undefined;
   timeCreated: dayjs.Dayjs | undefined;
@@ -68,7 +81,7 @@ export interface ApiPlayerSummaryResponseObject {
 
 /**=============================
   Location Objects
-  ===============================*/
+===============================*/
 
 export class SteamLocation {
   countryCode: string;
@@ -94,4 +107,30 @@ export interface ApiLocationResponseObject {
   statecode: string;
   cityid: number;
   cityname: string;
+}
+
+/**=============================
+  User Bans Objects
+===============================*/
+
+export class UserBans {
+  steamId: string | undefined;
+  communityBanned: boolean = false;
+  vacBanned: boolean = false;
+  numberOfVACBans: number = 0;
+  daysSinceLastBan: number = 0;
+  numberOfGameBans: number = 0;
+  economyBan: string | undefined;
+}
+
+export interface ApiUserBanResponseObject {
+  players: {
+    SteamId: string;
+    CommunityBanned: boolean;
+    VACBanned: boolean;
+    NumberOfVACBans: number;
+    DaysSinceLastBan: number;
+    NumberOfGameBans: number;
+    EconomyBan: string;
+  }[];
 }

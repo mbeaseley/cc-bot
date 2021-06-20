@@ -48,6 +48,14 @@ export class Help {
           c.commandName = 'weather <area>';
         }
 
+        if (c.commandName === 'twitch') {
+          c.commandName = 'twitch <username>';
+        }
+
+        if (c.commandName === 'steam') {
+          c.commandName = 'steam <vanity url name>';
+        }
+
         return {
           name: `**${c.description}**`,
           value: `\`@${environment.botName} ${c.commandName}\``,

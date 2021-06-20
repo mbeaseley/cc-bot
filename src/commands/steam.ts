@@ -1,7 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 import { SteamService } from '../services/steam.service';
 import { Logger } from '../services/logger.service';
+import { PlayerSummary, UserBans } from '../types/steam';
 
 export class Steam {
   private logger: Logger;
@@ -12,9 +13,43 @@ export class Steam {
     this.steamService = new SteamService();
   }
 
+  /**
+   * Create Embed Message
+   * @param playerSummary
+   * @param userBans
+   * @returns MessageEmbed
+   */
+  private createMessage(
+    playerSummary: PlayerSummary,
+    userBans: UserBans
+  ): MessageEmbed {
+    return new MessageEmbed()
+      .setColor(0x0099ff)
+      .setAuthor(`Steam Services}`, 'playerSummary?.avatarFull')
+      .setTitle(playerSummary.name)
+      .setURL(playerSummary?.profileUrl || '')
+      .setThumbnail(playerSummary.avatarFull)
+      .setDescription(
+        `**Real Name:** ${playerSummary.realName}\n**Status:** ${
+          playerSummary.nameState
+        }\n**Location:** ${playerSummary.location?.cityName}, ${
+          playerSummary.location?.countryCode
+        }\n**Account Created:** ${playerSummary.timeCreated?.format(
+          'DD/MM/YYYY'
+        )}\n**Bans:** Vac: ${userBans.numberOfVACBans}, Game: ${
+          userBans.numberOfGameBans
+        }\n**Link:** [Link to profile](${playerSummary.profileUrl})`
+      )
+      .setTimestamp();
+  }
+
+  /**
+   * Fetch and create message of steam user profile
+   * @param command
+   */
   @Command('steam')
-  @Description('')
-  async init(command: CommandMessage): Promise<any> {
+  @Description('Check and share your profile with friends on steam')
+  async init(command: CommandMessage): Promise<void | Message> {
     const commandArray = command.content.split(' ');
     commandArray.splice(0, 2);
     const vanityUrl = commandArray.join(' ');
@@ -31,8 +66,11 @@ export class Steam {
       const playerSummary = await this.steamService.getPlayerSummary(
         user.steamId
       );
-      console.log(playerSummary);
+      const userBans = await this.steamService.getUserBans(user.steamId);
+      const message = this.createMessage(playerSummary, userBans);
+
       await command.delete();
+      return command.channel.send(message);
     } catch (e: any) {
       this.logger.error(`Command: 'steam' has error: ${e.message}.`);
     }

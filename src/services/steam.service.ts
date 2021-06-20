@@ -1,5 +1,5 @@
 import { SteamModelService } from '../models/steam-model.service';
-import { PlayerSummary, VanityUser } from '../types/steam';
+import { PlayerSummary, UserBans, VanityUser } from '../types/steam';
 
 export class SteamService {
   private steamModelService: SteamModelService;
@@ -25,5 +25,14 @@ export class SteamService {
   public async getPlayerSummary(steamId: string): Promise<PlayerSummary> {
     const ps = await this.steamModelService.getPlayerSummary(steamId);
     return this.steamModelService.getPlayerLocation(ps);
+  }
+
+  /**
+   * Get User Bans
+   * @param steamId
+   * @returns UserBans
+   */
+  public async getUserBans(steamId: string): Promise<UserBans> {
+    return this.steamModelService.getUserBans(steamId);
   }
 }
