@@ -18,6 +18,7 @@ interface EnvironmentObject {
   weatherAppId: string;
   twitchClientId: string;
   twitchSecret: string;
+  steamApiKey: string;
 }
 
 export const environment = {
@@ -38,4 +39,5 @@ export const environment = {
   weatherAppId: process.env.WEATHERAPPID,
   twitchClientId: process.env.TWITCHCLIENTID,
   twitchSecret: process.env.TWITCHSECRET,
+  steamApiKey: process.env.STEAMAPIKEY,
 } as EnvironmentObject;

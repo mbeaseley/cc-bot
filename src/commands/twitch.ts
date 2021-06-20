@@ -1,5 +1,5 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 import { Logger } from '../services/logger.service';
 import { TwitchService } from '../services/twitch.service';
 
@@ -13,8 +13,8 @@ export class Twitch {
   }
 
   @Command('twitch')
-  @Description('')
-  async init(command: CommandMessage): Promise<any> {
+  @Description('Find your favourites streamers')
+  async init(command: CommandMessage): Promise<void | Message> {
     const commandArray = command.content.split(' ');
     commandArray.splice(0, 2);
     const username = commandArray.join(' ');
