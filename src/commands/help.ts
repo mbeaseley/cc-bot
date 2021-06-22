@@ -56,6 +56,10 @@ export class Help {
           c.commandName = 'steam <vanity url name>';
         }
 
+        if (c.commandName === 'instagram') {
+          c.commandName = 'instagram <username>';
+        }
+
         return {
           name: `**${c.description}**`,
           value: `\`@${environment.botName} ${c.commandName}\``,
