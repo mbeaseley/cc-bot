@@ -73,6 +73,7 @@ export class Steam {
       return command.channel.send(message);
     } catch (e: any) {
       this.logger.error(`Command: 'steam' has error: ${e.message}.`);
+      return command.delete();
     }
   }
 }

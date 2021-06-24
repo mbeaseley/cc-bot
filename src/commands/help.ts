@@ -60,6 +60,14 @@ export class Help {
           c.commandName = 'instagram <username>';
         }
 
+        if (c.commandName === 'minecraft') {
+          c.commandName = 'minecraft <ip>:<port(optional)>';
+        }
+
+        if (c.commandName === 'set minecraft') {
+          c.commandName = 'set minecraft <ip>:<port(optional)>';
+        }
+
         return {
           name: `**${c.description}**`,
           value: `\`@${environment.botName} ${c.commandName}\``,
