@@ -1,10 +1,10 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
-import { commands } from '../data/dbdCommands';
-import { KillerBuild, KillerItem, SurviverBuild } from '../types/dbd';
-import { environment } from '../utils/environment';
-import Utility from '../utils/utility';
-import { DBDService } from '../services/dbd.service';
+import { commands } from '../../data/dbdCommands';
+import { KillerBuild, KillerItem, SurviverBuild } from '../../types/dbd';
+import { environment } from '../../utils/environment';
+import Utility from '../../utils/utility';
+import { DBDService } from '../../services/dbd.service';
 
 const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 

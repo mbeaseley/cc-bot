@@ -1,7 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import * as urban from 'urban-dictionary';
-import { environment } from '../utils/environment';
-import { Logger } from '../services/logger.service';
+import { environment } from '../../utils/environment';
+import { Logger } from '../../services/logger.service';
 import * as chalk from 'chalk';
 import { Message, MessageEmbed } from 'discord.js';
 

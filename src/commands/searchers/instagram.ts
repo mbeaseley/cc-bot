@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message, MessageEmbed } from 'discord.js';
-import { InstaUser } from '../types/instagram';
-import { InstagramService } from '../services/instagram.service';
-import { Logger } from '../services/logger.service';
+import { InstaUser } from '../../types/instagram';
+import { InstagramService } from '../../services/instagram.service';
+import { Logger } from '../../services/logger.service';
 
 export class Instagram {
   private logger: Logger;

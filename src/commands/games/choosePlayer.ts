@@ -1,6 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { GuildChannel, User } from 'discord.js';
-import { environment } from '../utils/environment';
+import { environment } from '../../utils/environment';
 
 export class ChoosePlayer {
   private currentUser: User | undefined;
