@@ -1,19 +1,19 @@
 import * as Path from 'path';
 import { ArgsOf, Discord, On, Rule, Rules } from '@typeit/discord';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { Guild } from 'discord.js';
-import { ReactionRoles } from './commands/reactionRoles';
+import { ReactionRoles } from './commands/misc/reactionRoles';
 import { Main } from './main';
 import { Logger } from './services/logger.service';
 import { environment } from './utils/environment';
 import Utility from './utils/utility';
-import { MemberAdd } from './commands/memberAdd';
-import { MemberRemove } from './commands/memberRemove';
+import { MemberAdd } from './commands/misc/memberAdd';
+import { MemberRemove } from './commands/misc/memberRemove';
 
 @Discord('<', {
   import: [
-    Path.join(__dirname, 'commands', '*.ts'),
-    Path.join(__dirname, 'commands', '*.js'),
+    Path.join(__dirname, 'commands/**', '*.ts'),
+    Path.join(__dirname, 'commands/**', '*.js'),
   ],
 })
 @Rules(Rule().fromString(`${environment.botId}> ` || `${environment.botId}>`))

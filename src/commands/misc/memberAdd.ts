@@ -8,7 +8,7 @@ import {
 } from 'discord.js';
 import * as Canvas from 'canvas';
 import path = require('path');
-import { environment } from '../utils/environment';
+import { environment } from '../../utils/environment';
 
 export class MemberAdd {
   color: string = '#ffffff';

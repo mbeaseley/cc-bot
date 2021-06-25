@@ -5,7 +5,7 @@ import {
   CommandMessage,
   RuleBuilder,
 } from '@typeit/discord';
-import { environment } from '../utils/environment';
+import { environment } from '../../utils/environment';
 
 const EXCLUDE_COMMANDS = ['help', 'purge', 'question'];
 export class Help {

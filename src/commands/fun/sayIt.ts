@@ -1,5 +1,5 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { environment } from '../utils/environment';
+import { environment } from '../../utils/environment';
 import { Compliment } from './compliment';
 import { Insult } from './insults';
 

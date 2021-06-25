@@ -20,7 +20,6 @@
   "dependencies": {
     "@typeit/discord": "^4.0.10",
     "@types/mongodb": "^3.6.18",
-    "@types/node": "^15.12.4",
     "@types/underscore": "^1.11.2",
     "@types/urban-dictionary": "^3.0.0",
     "@types/ws": "^7.4.5",
@@ -41,6 +40,11 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.4",
+    "@types/mongodb": "^3.6.18",
+    "@types/underscore": "^1.11.2",
+    "@types/urban-dictionary": "^3.0.0",
+    "@types/ws": "^7.4.5",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "eslint": "^7.29.0",

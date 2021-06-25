@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message, MessageEmbed } from 'discord.js';
-import { SteamService } from '../services/steam.service';
-import { Logger } from '../services/logger.service';
-import { PlayerSummary, UserBans } from '../types/steam';
+import { SteamService } from '../../services/steam.service';
+import { Logger } from '../../services/logger.service';
+import { PlayerSummary, UserBans } from '../../types/steam';
 
 export class Steam {
   private logger: Logger;
