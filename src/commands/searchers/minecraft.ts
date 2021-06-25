@@ -59,12 +59,9 @@ export class Minecraft {
       commandArray.splice(0, 2);
       const urlSplit = commandArray[0]?.split(':');
       let newMcUrl: McUrl = new McUrl();
-
-      if (this.mcUrl.domain) {
-        newMcUrl = this.mcUrl.domain
-          ? this.mcUrl
-          : new McUrl(urlSplit[0], +urlSplit[1] || undefined);
-      }
+      newMcUrl = this.mcUrl.domain
+        ? this.mcUrl
+        : new McUrl(urlSplit[0], +urlSplit[1] || undefined);
 
       if (!newMcUrl.domain) {
         await command.delete();
