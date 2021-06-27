@@ -1,8 +1,10 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
+import { Message } from 'discord.js';
 import { HttpClient } from '../../interceptor/httpClient';
 import { ComplimentObject } from '../../types/compliment';
 import { environment } from '../../utils/environment';
+import Utility from '../../utils/utility';
 
 export class Compliment extends HttpClient {
   constructor() {
@@ -19,19 +21,27 @@ export class Compliment extends HttpClient {
       },
     });
 
-  private createMessage = (command: CommandMessage, insult: string): string => {
-    const commandArray = command.content.split(' ');
-    const string = commandArray[commandArray.length - 1];
+  /**
+   * Create message
+   * @param command
+   * @param message
+   */
+  private createMessage = (
+    command: CommandMessage,
+    message: string
+  ): string => {
+    const commandArray = Utility.getOptionFromCommand(command.content, 2);
+    const string = commandArray?.[commandArray.length - 1];
 
-    return string.startsWith('<') && string.endsWith('>')
-      ? string.concat(', ', insult)
-      : insult;
+    return string?.startsWith('<') && string?.endsWith('>')
+      ? string.concat(', ', message)
+      : message;
   };
 
   /**
    * Init
    */
-  public async getResponse(command: CommandMessage): Promise<void> {
+  private async getResponse(command: CommandMessage): Promise<Message> {
     const complimentObj = await this.getRandomCompliment();
 
     if (!complimentObj?.compliment) {
@@ -40,12 +50,10 @@ export class Compliment extends HttpClient {
 
     const message = this.createMessage(command, complimentObj.compliment);
 
-    command.delete();
-    message.startsWith('<')
+    await command.delete();
+    return message.startsWith('<')
       ? command.channel.send(message)
       : command.reply(message);
-
-    return Promise.resolve();
   }
 
   /**
@@ -55,10 +63,10 @@ export class Compliment extends HttpClient {
    * @returns
    */
   @Command('compliment')
-  @Description('Compliment')
-  init(command: CommandMessage): Promise<void> {
+  @Description('Send a nice compliment to yourself or a friend')
+  async init(command: CommandMessage): Promise<Message> {
     return this.getResponse(command).catch(() => {
-      command.reply(environment.error);
+      return command.reply(environment.error);
     });
   }
 }

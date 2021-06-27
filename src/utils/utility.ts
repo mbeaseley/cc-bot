@@ -1,9 +1,11 @@
+import { CommandMessage } from '@typeit/discord';
 import {
   EmbedField,
   Guild,
   GuildManager,
   MessageEmbed,
   MessageEmbedOptions,
+  User,
 } from 'discord.js';
 import _ = require('underscore');
 import { environment } from './environment';
@@ -109,5 +111,41 @@ export default class Utility {
    */
   static captaliseFirstLetter(value: string): string {
     return value[0].toUpperCase() + value.slice(1);
+  }
+
+  /**
+   * Get string option from command message
+   * @param command
+   * @param indexToRemove
+   * @param joinCharacter
+   * @returns string | string[]
+   */
+  static getOptionFromCommand(
+    command: string,
+    indexToRemove: number,
+    joinCharacter?: string
+  ): string[] | string {
+    const array = command.split(' ');
+    array.splice(0, indexToRemove);
+    return joinCharacter ? array.join(joinCharacter) : array;
+  }
+
+  /**
+   * Gets author
+   * @param command
+   * @returns User
+   */
+  static getAuthor(command: CommandMessage): User {
+    return command.author;
+  }
+
+  /**
+   * Checks if user is admin
+   * @param command
+   * @returns boolean
+   */
+  static isAdmin(command: CommandMessage): boolean {
+    const id = this.getAuthor(command)?.id as string;
+    return !!environment.admins.find((a) => a === id);
   }
 }

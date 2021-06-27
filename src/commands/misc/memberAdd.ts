@@ -21,7 +21,7 @@ export class MemberAdd {
    * @param text
    * @returns font string
    */
-  applyText(canvas: Canvas.Canvas, text: string): string {
+  private applyText(canvas: Canvas.Canvas, text: string): string {
     const context = canvas.getContext('2d');
     let fontSize = 70;
 

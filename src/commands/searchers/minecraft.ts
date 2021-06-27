@@ -4,6 +4,7 @@ import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse'
 import { McUrl } from '../../types/minecraft';
 import { Logger } from '../../services/logger.service';
 import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
+import Utility from '../../utils/utility';
 
 export class Minecraft {
   private logger: Logger;
@@ -13,14 +14,25 @@ export class Minecraft {
     this.logger = new Logger();
   }
 
+  /**
+   * Get Minecraft domain/ip and port
+   */
   private get mcUrl() {
     return this._mcUrl ?? new McUrl();
   }
 
+  /**
+   * Set Minecraft domain/ip and port
+   */
   private set mcUrl(value: McUrl) {
     this._mcUrl = value;
   }
 
+  /**
+   * Create Message
+   * @param status
+   * @param mcUrl
+   */
   private createMessage(status: StatusResponse, mcUrl: McUrl): MessageEmbed {
     let imageStream: Buffer = Buffer.from('');
 
@@ -51,17 +63,24 @@ export class Minecraft {
       );
   }
 
+  /**
+   * Ping minecraft server
+   * @param command
+   */
   @Command('minecraft')
   @Description('Ping a minecraft server for information')
   async init(command: CommandMessage): Promise<Message | void> {
     try {
-      const commandArray = command.content.split(' ');
-      commandArray.splice(0, 2);
+      const commandArray = Utility.getOptionFromCommand(command.content, 2);
       const urlSplit = commandArray[0]?.split(':');
       let newMcUrl: McUrl = new McUrl();
       newMcUrl = this.mcUrl.domain
         ? this.mcUrl
         : new McUrl(urlSplit[0], +urlSplit[1] || undefined);
+
+      const fetchingMsg = await command.channel.send(
+        `⏳ Fetching ${newMcUrl.domain}:${newMcUrl.port} server info...`
+      );
 
       if (!newMcUrl.domain) {
         await command.delete();
@@ -77,27 +96,43 @@ export class Minecraft {
         newMcUrl.port = 25565;
       }
 
-      const res = await status(newMcUrl.domain, { port: newMcUrl.port });
-      const message = this.createMessage(res, newMcUrl);
+      const res = await status(newMcUrl.domain, { port: newMcUrl.port }).catch(
+        () => {
+          return undefined;
+        }
+      );
+
       await command.delete();
+      await fetchingMsg.delete();
+
+      if (!res) {
+        return command.channel
+          .send(`**This server doesn't exist**`)
+          .then((m) => m.delete({ timeout: 5000 }));
+      }
+
+      const message = this.createMessage(res, newMcUrl);
       return command.channel.send(message);
     } catch (e) {
       await command.delete();
       this.logger.error(`Command: 'minecraft' has error: ${e.message}.`);
       return command.channel
         .send(
-          `An error has occured. If this error keeps occurring, please contact support.`
+          `An error has occured. Most likely you haven't set your ip/domain and port correctly. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }
   }
 
+  /**
+   * Set Minecraft server
+   * @param command
+   */
   @Command('set minecraft')
   @Description('Set default IP and Port for server')
   async setDefaultInit(command: CommandMessage): Promise<Message | void> {
     try {
-      const commandArray = command.content.split(' ');
-      commandArray.splice(0, 3);
+      const commandArray = Utility.getOptionFromCommand(command.content, 3);
       const urlSplit = commandArray[0].split(':');
 
       if (!urlSplit.length) {

@@ -1,4 +1,5 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Message } from 'discord.js';
 import { environment } from '../../utils/environment';
 import { Compliment } from './compliment';
 import { Insult } from './insults';
@@ -16,7 +17,7 @@ export class SayIt {
    * Init
    * @param command
    */
-  private getResponse(command: CommandMessage): Promise<void> {
+  private getResponse(command: CommandMessage): Promise<Message | void> {
     const index = Math.round(Math.random());
 
     const promise = index
@@ -30,11 +31,10 @@ export class SayIt {
    * @name sayItInit
    * @param command
    * @description Display either compliment or insult to author or tagged user
-   * @returns
    */
   @Command('sayIt')
-  @Description('Say It')
-  init(command: CommandMessage): Promise<void> {
+  @Description('Flip a coin for a insult or compliment')
+  async init(command: CommandMessage): Promise<Message | void> {
     return this.getResponse(command).catch(() => {
       command.reply(environment.error);
     });

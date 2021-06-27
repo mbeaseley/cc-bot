@@ -1,6 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { GuildChannel, User } from 'discord.js';
+import { GuildChannel, Message, User } from 'discord.js';
 import { environment } from '../../utils/environment';
+import Utility from '../../utils/utility';
 
 export class ChoosePlayer {
   private currentUser: User | undefined;
@@ -24,20 +25,12 @@ export class ChoosePlayer {
     return this.currentUser?.username ?? environment.error;
   }
 
-  /**
-   * Get Author of command
-   * @param command
-   */
-  getAuthor(command: CommandMessage): User {
-    return command?.author;
-  }
-
-  findUserChannel(command: CommandMessage): GuildChannel | undefined {
+  private findUserChannel(command: CommandMessage): GuildChannel | undefined {
     const voiceChannels = command?.guild?.channels?.cache?.filter(
       (c) => c.type === 'voice'
     );
 
-    const author = this.getAuthor(command);
+    const author = Utility.getAuthor(command);
 
     const channel = voiceChannels?.find(
       (c) => !!c.members.find((m) => m.id === author.id)
@@ -50,7 +43,7 @@ export class ChoosePlayer {
    * Get unique username from channel
    * @param channel
    */
-  getUsers(
+  private getUsers(
     channel: GuildChannel | undefined,
     excludeUsers: string[]
   ): (User | undefined)[] {
@@ -81,9 +74,10 @@ export class ChoosePlayer {
    * @param command
    */
   private getExcludeUsers(command: CommandMessage): string[] {
-    const commandContent = command?.content.split(' ');
-    commandContent.splice(0, 2);
-
+    const commandContent = Utility.getOptionFromCommand(
+      command.content,
+      2
+    ) as string[];
     return commandContent.map((c) => c.replace(/^[0-9]*$/, ''));
   }
 
@@ -91,7 +85,7 @@ export class ChoosePlayer {
    * Init for player choice
    * @param command
    */
-  public getResponse(command: CommandMessage): Promise<void> {
+  private getResponse(command: CommandMessage): Promise<Message> {
     try {
       const channel = this.findUserChannel(command);
       const excludeUsers = this.getExcludeUsers(command);
@@ -103,8 +97,7 @@ export class ChoosePlayer {
 
       const content = this.getRandomUser(users);
 
-      command.reply(content);
-      return Promise.resolve();
+      return command.reply(content);
     } catch (e) {
       return Promise.reject();
     }
@@ -117,10 +110,10 @@ export class ChoosePlayer {
    * @returns
    */
   @Command('playerchoice')
-  @Description('Chooses Player')
-  init(command: CommandMessage): Promise<void> {
+  @Description('Chooses Player in voice chat')
+  async init(command: CommandMessage): Promise<Message> {
     return this.getResponse(command).catch((e: string) => {
-      command.reply(e ? e : environment.error);
+      return command.reply(e ? e : environment.error);
     });
   }
 }
