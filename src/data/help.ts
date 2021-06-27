@@ -1,6 +1,6 @@
 import { CommandItem } from '../types/help';
 
-export const commandTypes = ['fun, games, admin, searchers'];
+export const commandTypes = ['fun', 'games', 'admin', 'searchers'];
 
 export const commandOverrides: CommandItem[] = [
   {

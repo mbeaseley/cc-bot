@@ -118,7 +118,7 @@ export class Minecraft {
       this.logger.error(`Command: 'minecraft' has error: ${e.message}.`);
       return command.channel
         .send(
-          `An error has occured. If this error keeps occurring, please contact support.`
+          `An error has occured. Most likely you haven't set your ip/domain and port correctly. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }

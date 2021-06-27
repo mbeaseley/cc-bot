@@ -115,7 +115,7 @@ export class Help {
       ' '
     ) as CommandType;
 
-    if (!(type in commandTypes)) {
+    if (type && !commandTypes.find((c) => c === type)) {
       await command.delete();
       return command.channel
         .send(
