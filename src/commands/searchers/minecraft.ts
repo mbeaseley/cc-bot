@@ -13,14 +13,25 @@ export class Minecraft {
     this.logger = new Logger();
   }
 
+  /**
+   * Get Minecraft domain/ip and port
+   */
   private get mcUrl() {
     return this._mcUrl ?? new McUrl();
   }
 
+  /**
+   * Set Minecraft domain/ip and port
+   */
   private set mcUrl(value: McUrl) {
     this._mcUrl = value;
   }
 
+  /**
+   * Create Message
+   * @param status
+   * @param mcUrl
+   */
   private createMessage(status: StatusResponse, mcUrl: McUrl): MessageEmbed {
     let imageStream: Buffer = Buffer.from('');
 
@@ -51,6 +62,10 @@ export class Minecraft {
       );
   }
 
+  /**
+   * Ping minecraft server
+   * @param command
+   */
   @Command('minecraft')
   @Description('Ping a minecraft server for information')
   async init(command: CommandMessage): Promise<Message | void> {
@@ -92,6 +107,10 @@ export class Minecraft {
     }
   }
 
+  /**
+   * Set Minecraft server
+   * @param command
+   */
   @Command('set minecraft')
   @Description('Set default IP and Port for server')
   async setDefaultInit(command: CommandMessage): Promise<Message | void> {

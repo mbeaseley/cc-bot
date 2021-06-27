@@ -1,29 +1,26 @@
 export interface CommandItem {
   name: string;
-  description: string;
+  description?: string;
   fullCommand: string;
   type: 'fun' | 'games' | 'admin' | 'searchers';
 }
 
 export const adminCommands = ['help', 'purge', 'question'];
 
-export const commands: CommandItem[] = [
+export const commandOverrides: CommandItem[] = [
   {
     name: 'playerchoice',
-    description: 'Chooses Player',
     fullCommand:
       'playerchoice <...@user(optional)>\nExclude users example: @user @user (add after command name)',
     type: 'games',
   },
   {
     name: 'dbd',
-    description: 'Dbd (dbd help for all possible commands)',
     fullCommand: 'dbd',
     type: 'games',
   },
   {
     name: 'insult',
-    description: 'Send a fun insult to yourself or a friend',
     fullCommand: 'insult <@user(optional)>',
     type: 'fun',
   },
@@ -41,7 +38,6 @@ export const commands: CommandItem[] = [
   },
   {
     name: 'poll',
-    description: 'Get your questions answered!',
     fullCommand: 'poll [question] [answer1] [answer2] ...',
     type: 'fun',
   },

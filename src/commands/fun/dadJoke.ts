@@ -40,7 +40,7 @@ export class DadJoke extends HttpClient {
    * @returns
    */
   @Command('joke')
-  @Description('Joke')
+  @Description('Make your friends laugh with a dad joke')
   jokeInit(command: CommandMessage): Promise<void> {
     return this.getReponse(command).catch(() => {
       command.reply(environment.error);

@@ -55,7 +55,7 @@ export class Compliment extends HttpClient {
    * @returns
    */
   @Command('compliment')
-  @Description('Compliment')
+  @Description('Send a nice compliment to yourself or a friend')
   init(command: CommandMessage): Promise<void> {
     return this.getResponse(command).catch(() => {
       command.reply(environment.error);

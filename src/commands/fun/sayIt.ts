@@ -33,7 +33,7 @@ export class SayIt {
    * @returns
    */
   @Command('sayIt')
-  @Description('Say It')
+  @Description('flip a coin for a insult or compliment')
   init(command: CommandMessage): Promise<void> {
     return this.getResponse(command).catch(() => {
       command.reply(environment.error);

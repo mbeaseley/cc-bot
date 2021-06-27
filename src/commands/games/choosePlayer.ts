@@ -117,7 +117,7 @@ export class ChoosePlayer {
    * @returns
    */
   @Command('playerchoice')
-  @Description('Chooses Player')
+  @Description('Chooses Player in voice chat')
   init(command: CommandMessage): Promise<void> {
     return this.getResponse(command).catch((e: string) => {
       command.reply(e ? e : environment.error);

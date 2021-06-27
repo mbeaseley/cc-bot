@@ -73,7 +73,7 @@ export class Poll {
   }
 
   @Command('poll')
-  @Description('Create a poll for users to answer (max 26 options)')
+  @Description('Create a poll for friends to answer (max 26 options)')
   init(command: CommandMessage): Promise<Message | void> {
     return this.createPollingObject(command).catch(() => {
       command.reply(environment.error);

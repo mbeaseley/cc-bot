@@ -6,13 +6,9 @@ import {
   RuleBuilder,
 } from '@typeit/discord';
 import { environment } from '../../utils/environment';
-import { commands, adminCommands } from '../../data/help';
+import { commandOverrides, adminCommands } from '../../data/help';
 
 export class Help {
-  consolelog(): void {
-    console.log('DONE DEAL!');
-  }
-
   /**
    * Init
    */
@@ -23,12 +19,12 @@ export class Help {
     const fields = allCommands
       .filter((c) => !adminCommands.find((name) => name === c.commandName))
       .map((c) => {
-        const item = commands.find((cd) => cd.name === c.commandName);
+        const item = commandOverrides.find((cd) => cd.name === c.commandName);
         c.commandName = item ? item.fullCommand : c.commandName;
 
         return {
           name: `**${c.description}**`,
-          value: `\`@${environment.botName} ${c.commandName}\`[help](https://www.bbc.co.uk/)`,
+          value: `\`@${environment.botName} ${c.commandName}\``,
         };
       });
 
@@ -54,6 +50,7 @@ export class Help {
   @Command('help')
   helpInit(command: CommandMessage): Promise<void> {
     const allCommands = Client.getCommands();
+    console.log(allCommands);
     command.delete();
     return this.createHelpStatus(command, allCommands).catch(() => {
       command.reply(environment.error);

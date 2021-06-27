@@ -18,6 +18,11 @@ export class Insult extends HttpClient {
       },
     });
 
+  /**
+   * Create message
+   * @param command
+   * @param insult
+   */
   createMessage = (command: CommandMessage, insult: string): string => {
     const commandArray = command.content.split(' ');
     const string = commandArray[commandArray.length - 1];
@@ -54,7 +59,7 @@ export class Insult extends HttpClient {
    * @returns
    */
   @Command('insult')
-  @Description('Insult')
+  @Description('Send a fun insult to yourself or a friend')
   init(command: CommandMessage): Promise<void> {
     return this.getResponse(command).catch(() => {
       command.reply(environment.error);
