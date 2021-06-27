@@ -1,5 +1,5 @@
-import * as chalk from 'chalk';
-import * as dayjs from 'dayjs';
+import chalk from 'chalk';
+import dayjs from 'dayjs';
 
 export class Logger {
   private static logger: Logger;

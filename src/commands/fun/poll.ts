@@ -1,13 +1,12 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Logger } from '../services/logger.service';
+import { Logger } from '../../services/logger.service';
 import * as chalk from 'chalk';
-import { environment } from '../utils/environment';
-import { PollQuestion, selectionEmojis } from '../types/poll';
+import { environment } from '../../utils/environment';
+import { PollQuestion, selectionEmojis } from '../../types/poll';
 import { ClientUser, EmbedField, Message, MessageEmbed } from 'discord.js';
 
 export class Poll {
   private logger: Logger;
-  private baseEmoji: string = 'regional_indicator_';
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
   constructor() {
     this.logger = new Logger();
@@ -46,11 +45,13 @@ export class Poll {
    * @name createPollingObject
    * @param command
    */
-  async createPollingObject(command: CommandMessage): Promise<Message | void> {
+  private async createPollingObject(
+    command: CommandMessage
+  ): Promise<Message | void> {
     const commandString = command.content.split('poll ').pop();
     const pollArray = commandString
-      ?.split(' ')
-      .map((a) => a.replace(/[^a-zA-Z0-9? ]/g, ''));
+      ?.split(/[\[\]']+/g)
+      .filter((e) => e.trim() != '');
 
     if (!pollArray?.length) {
       this.logger.error(
@@ -73,10 +74,10 @@ export class Poll {
   }
 
   @Command('poll')
-  @Description('Create a poll for users to answer (max 26 options)')
-  init(command: CommandMessage): Promise<Message | void> {
+  @Description('Create a poll for friends to answer (max 26 options)')
+  async init(command: CommandMessage): Promise<Message | void> {
     return this.createPollingObject(command).catch(() => {
-      command.reply(environment.error);
+      return command.reply(environment.error);
     });
   }
 }

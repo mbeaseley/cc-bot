@@ -8,7 +8,7 @@ import {
 } from 'discord.js';
 import * as Canvas from 'canvas';
 import path = require('path');
-import { environment } from '../utils/environment';
+import { environment } from '../../utils/environment';
 
 export class MemberAdd {
   color: string = '#ffffff';
@@ -21,7 +21,7 @@ export class MemberAdd {
    * @param text
    * @returns font string
    */
-  applyText(canvas: Canvas.Canvas, text: string): string {
+  private applyText(canvas: Canvas.Canvas, text: string): string {
     const context = canvas.getContext('2d');
     let fontSize = 70;
 

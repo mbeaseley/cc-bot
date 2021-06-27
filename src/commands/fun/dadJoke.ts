@@ -1,7 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { HttpClient } from '../interceptor/httpClient';
-import { JokeResponse } from '../types/dadJoke';
-import { environment } from '../utils/environment';
+import { Message } from 'discord.js';
+import { HttpClient } from '../../interceptor/httpClient';
+import { JokeResponse } from '../../types/dadJoke';
+import { environment } from '../../utils/environment';
 
 export class DadJoke extends HttpClient {
   constructor() {
@@ -21,16 +22,15 @@ export class DadJoke extends HttpClient {
   /**
    * Init
    */
-  public async getReponse(command: CommandMessage): Promise<void> {
+  private async getReponse(command: CommandMessage): Promise<Message> {
     const res = await this.getRandomJoke();
 
     if (!res?.joke) {
       return Promise.reject();
     }
 
-    command.delete();
-    command.reply(res.joke);
-    return Promise.resolve();
+    await command.delete();
+    return command.reply(res.joke);
   }
 
   /**
@@ -40,10 +40,10 @@ export class DadJoke extends HttpClient {
    * @returns
    */
   @Command('joke')
-  @Description('Joke')
-  jokeInit(command: CommandMessage): Promise<void> {
+  @Description('Make your friends laugh with a dad joke')
+  async jokeInit(command: CommandMessage): Promise<Message> {
     return this.getReponse(command).catch(() => {
-      command.reply(environment.error);
+      return command.reply(environment.error);
     });
   }
 }

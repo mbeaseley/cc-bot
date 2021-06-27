@@ -1,10 +1,10 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
-import { commands } from '../data/dbdCommands';
-import { KillerBuild, KillerItem, SurviverBuild } from '../types/dbd';
-import { environment } from '../utils/environment';
-import Utility from '../utils/utility';
-import { DBDService } from '../services/dbd.service';
+import { commands } from '../../data/dbdCommands';
+import { KillerBuild, KillerItem, SurviverBuild } from '../../types/dbd';
+import { environment } from '../../utils/environment';
+import Utility from '../../utils/utility';
+import { DBDService } from '../../services/dbd.service';
 
 const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 
@@ -150,8 +150,8 @@ export class Dbd {
     command: CommandMessage
   ): Promise<Message | void> {
     try {
-      const commandArray = command.content.split(' ');
-      const keyCommand = commandArray[commandArray.length - 1].toLowerCase();
+      const commandArray = Utility.getOptionFromCommand(command.content, 2);
+      const keyCommand = commandArray?.[commandArray.length - 1].toLowerCase();
 
       const kllerCommands = commands.filter((c) =>
         c.tag.find((t) => t === 'killer')
@@ -180,7 +180,7 @@ export class Dbd {
       if (helpCommands.find((c) => c.name === keyCommand)) {
         return this.createHelpMessage(command);
       } else {
-        command.delete();
+        await command.delete();
         return command.reply(environment.commandNotFound);
       }
     } catch (e: unknown) {
@@ -196,9 +196,9 @@ export class Dbd {
    */
   @Command('dbd')
   @Description('Dbd (dbd help for all possible commands)')
-  dbdInit(command: CommandMessage): Promise<Message | void> {
+  async dbdInit(command: CommandMessage): Promise<Message | void> {
     return this.handleDbdCommand(command).catch(() => {
-      command.reply(environment.error);
+      return command.reply(environment.error);
     });
   }
 }
