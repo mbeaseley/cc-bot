@@ -78,6 +78,10 @@ export class Minecraft {
         ? this.mcUrl
         : new McUrl(urlSplit[0], +urlSplit[1] || undefined);
 
+      const fetchingMsg = await command.channel.send(
+        `⏳ Fetching ${newMcUrl.domain}:${newMcUrl.port} server info...`
+      );
+
       if (!newMcUrl.domain) {
         await command.delete();
         this.logger.error(
@@ -92,9 +96,22 @@ export class Minecraft {
         newMcUrl.port = 25565;
       }
 
-      const res = await status(newMcUrl.domain, { port: newMcUrl.port });
-      const message = this.createMessage(res, newMcUrl);
+      const res = await status(newMcUrl.domain, { port: newMcUrl.port }).catch(
+        () => {
+          return undefined;
+        }
+      );
+
       await command.delete();
+      await fetchingMsg.delete();
+
+      if (!res) {
+        return command.channel
+          .send(`**This server doesn't exist**`)
+          .then((m) => m.delete({ timeout: 5000 }));
+      }
+
+      const message = this.createMessage(res, newMcUrl);
       return command.channel.send(message);
     } catch (e) {
       await command.delete();
