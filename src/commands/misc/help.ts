@@ -6,9 +6,10 @@ import {
   RuleBuilder,
 } from '@typeit/discord';
 import { environment } from '../../utils/environment';
-import { commandOverrides, CommandType } from '../../data/help';
+import { commandOverrides, commandTypes } from '../../data/help';
 import Utility from '../../utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
+import { CommandType } from '../../types/help';
 
 export class Help {
   /**
@@ -31,7 +32,7 @@ export class Help {
   }
 
   /**
-   * Init
+   * Create help status message
    */
   private async createHelpStatus(
     command: CommandMessage,
@@ -81,6 +82,10 @@ export class Help {
     }
   }
 
+  /**
+   * Fetch Commands
+   * @param type
+   */
   fetchCommands(type?: CommandType): CommandInfos<any, RuleBuilder>[] {
     const commands = Client.getCommands();
 
@@ -109,6 +114,15 @@ export class Help {
       2,
       ' '
     ) as CommandType;
+
+    if (!(type in commandTypes)) {
+      await command.delete();
+      return command.channel
+        .send(
+          `**This command grouping does not exist! Please use just help to see valid groupings.**`
+        )
+        .then((m) => m.delete({ timeout: 5000 }));
+    }
 
     if (!Utility.isAdmin(command)) {
       await command.delete();

@@ -25,20 +25,12 @@ export class ChoosePlayer {
     return this.currentUser?.username ?? environment.error;
   }
 
-  /**
-   * Get Author of command
-   * @param command
-   */
-  private getAuthor(command: CommandMessage): User {
-    return command?.author;
-  }
-
   private findUserChannel(command: CommandMessage): GuildChannel | undefined {
     const voiceChannels = command?.guild?.channels?.cache?.filter(
       (c) => c.type === 'voice'
     );
 
-    const author = this.getAuthor(command);
+    const author = Utility.getAuthor(command);
 
     const channel = voiceChannels?.find(
       (c) => !!c.members.find((m) => m.id === author.id)

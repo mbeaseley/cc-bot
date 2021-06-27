@@ -1,12 +1,6 @@
-export type CommandType = 'fun' | 'games' | 'admin' | 'searchers';
-export interface CommandItem {
-  name: string;
-  description?: string;
-  fullCommand: string;
-  type: CommandType;
-}
+import { CommandItem } from '../types/help';
 
-export const adminCommands = ['purge', 'question'];
+export const commandTypes = ['fun, games, admin, searchers'];
 
 export const commandOverrides: CommandItem[] = [
   {
