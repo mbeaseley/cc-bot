@@ -1,8 +1,9 @@
+export type CommandType = 'fun' | 'games' | 'admin' | 'searchers';
 export interface CommandItem {
   name: string;
   description?: string;
   fullCommand: string;
-  type: 'fun' | 'games' | 'admin' | 'searchers';
+  type: CommandType;
 }
 
 export const adminCommands = ['purge', 'question'];
@@ -26,13 +27,11 @@ export const commandOverrides: CommandItem[] = [
   },
   {
     name: 'compliment',
-    description: 'Send a nice compliment to yourself or a friend',
     fullCommand: 'compliment <@user(optional)>',
     type: 'fun',
   },
   {
-    name: 'sayit',
-    description: 'flip a coin for a insult or compliment',
+    name: 'sayIt',
     fullCommand: 'sayIt <@user(optional)>',
     type: 'fun',
   },
@@ -66,26 +65,32 @@ export const commandOverrides: CommandItem[] = [
   },
   {
     name: 'steam',
-    description: 'Check and share your profile with friends on steam',
     fullCommand: 'steam <vanity url name>',
     type: 'searchers',
   },
   {
     name: 'instagram',
-    description: 'Find someone you know on Instagram',
     fullCommand: 'instagram <username>',
     type: 'searchers',
   },
   {
     name: 'minecraft',
-    description: 'Ping a minecraft server for information',
     fullCommand: 'minecraft <ip(optional)>:<port(optional)>',
     type: 'searchers',
   },
   {
     name: 'set minecraft',
-    description: 'Set default IP and Port for server',
     fullCommand: 'set minecraft <ip>:<port(optional)>',
     type: 'searchers',
+  },
+  {
+    name: 'question',
+    fullCommand: `question <type>\nCurrent types: 'rules'`,
+    type: 'admin',
+  },
+  {
+    name: 'purge',
+    fullCommand: 'purge <count>',
+    type: 'admin',
   },
 ];

@@ -1,9 +1,11 @@
+import { CommandMessage } from '@typeit/discord';
 import {
   EmbedField,
   Guild,
   GuildManager,
   MessageEmbed,
   MessageEmbedOptions,
+  User,
 } from 'discord.js';
 import _ = require('underscore');
 import { environment } from './environment';
@@ -126,5 +128,24 @@ export default class Utility {
     const array = command.split(' ');
     array.splice(0, indexToRemove);
     return joinCharacter ? array.join(joinCharacter) : array;
+  }
+
+  /**
+   * Gets author
+   * @param command
+   * @returns User
+   */
+  static getAuthor(command: CommandMessage): User {
+    return command.author;
+  }
+
+  /**
+   * Checks if user is admin
+   * @param command
+   * @returns boolean
+   */
+  static isAdmin(command: CommandMessage): boolean {
+    const id = this.getAuthor(command)?.id as string;
+    return !!environment.admins.find((a) => a === id);
   }
 }

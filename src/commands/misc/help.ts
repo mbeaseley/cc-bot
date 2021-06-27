@@ -6,47 +6,94 @@ import {
   RuleBuilder,
 } from '@typeit/discord';
 import { environment } from '../../utils/environment';
-import { commandOverrides, adminCommands } from '../../data/help';
+import { commandOverrides, CommandType } from '../../data/help';
+import Utility from '../../utils/utility';
+import { Message, MessageEmbed } from 'discord.js';
 
 export class Help {
+  /**
+   * Create base message
+   * @param command
+   * @returns MessageEmbed
+   */
+  private createBaseMessage(
+    command: CommandMessage,
+    type?: CommandType
+  ): MessageEmbed {
+    const t = type ? ` ${Utility.captaliseFirstLetter(type)}` : '';
+    return new MessageEmbed()
+      .setColor(10181046)
+      .setAuthor(
+        `${command?.client?.user?.username}${t} Plugin Commands`,
+        command?.client?.user?.displayAvatarURL()
+      )
+      .setThumbnail('https://i.imgur.com/6CKmCtO.png');
+  }
+
   /**
    * Init
    */
   private async createHelpStatus(
     command: CommandMessage,
-    allCommands: CommandInfos<any, RuleBuilder>[]
-  ): Promise<void> {
-    const fields = allCommands
-      .filter((c) => !adminCommands.find((name) => name === c.commandName))
-      .map((c) => {
+    allCommands: CommandInfos<any, RuleBuilder>[],
+    type?: CommandType
+  ): Promise<Message | void> {
+    if (type) {
+      const fields = allCommands.map((c) => {
         const item = commandOverrides.find((cd) => cd.name === c.commandName);
         c.commandName = item ? item.fullCommand : c.commandName;
-
         return {
           name: `**${c.description}**`,
           value: `\`@${environment.botName} ${c.commandName}\``,
         };
       });
 
-    command.channel.send({
-      embed: {
-        color: 10181046,
-        author: {
-          name: `${command?.client?.user?.username} Plugin Commands`,
-          icon_url: command?.client?.user?.displayAvatarURL(),
+      const message = this.createBaseMessage(command, type);
+      message.addFields([...fields]);
+
+      await command.delete();
+      return command.channel.send(message);
+    } else {
+      const message = this.createBaseMessage(command);
+      message.addFields([
+        {
+          name: `Fun`,
+          value: `\`@${command?.client?.user?.username} help fun\``,
         },
-        fields,
-      },
-    });
-    return Promise.resolve();
+        {
+          name: `Games`,
+          value: `\`@${command?.client?.user?.username} help games\``,
+        },
+        {
+          name: `Searchers`,
+          value: `\`@${command?.client?.user?.username} help searchers\``,
+        },
+      ]);
+
+      if (Utility.isAdmin(command)) {
+        message.addField(
+          'Admin',
+          `\`@${command?.client?.user?.username} help admin\``
+        );
+      }
+      await command.delete();
+      return command.channel.send(message);
+    }
   }
 
-  fetchCommands(
-    type: 'fun' | 'games' | 'admin' | 'searchers'
-  ): CommandInfos<any, RuleBuilder>[] {
+  fetchCommands(type?: CommandType): CommandInfos<any, RuleBuilder>[] {
     const commands = Client.getCommands();
 
-    return commands;
+    if (type) {
+      const commandNames = commandOverrides
+        .filter((c) => c.type === type)
+        .map((c) => c.name);
+      return commands.filter(
+        (c) => commandNames.indexOf(c.commandName as string) > -1
+      );
+    }
+
+    return commands.filter((c) => c.commandName !== 'help');
   }
 
   /**
@@ -56,13 +103,22 @@ export class Help {
    * @returns
    */
   @Command('help')
-  helpInit(command: CommandMessage): Promise<void> {
-    const commandArray = command.content.split(' ');
-    commandArray.splice(0, 2);
+  async helpInit(command: CommandMessage): Promise<Message | void> {
+    const type = Utility.getOptionFromCommand(
+      command.content,
+      2,
+      ' '
+    ) as CommandType;
 
-    const allCommands = Client.getCommands();
-    command.delete();
-    return this.createHelpStatus(command, allCommands).catch(() => {
+    if (!Utility.isAdmin(command)) {
+      await command.delete();
+      return command.channel
+        .send(`**You don't have the permissions for this**`)
+        .then((m) => m.delete({ timeout: 5000 }));
+    }
+
+    const allCommands = this.fetchCommands(type);
+    return this.createHelpStatus(command, allCommands, type).catch(() => {
       command.reply(environment.error);
     });
   }

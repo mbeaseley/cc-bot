@@ -33,7 +33,7 @@ export class SayIt {
    * @description Display either compliment or insult to author or tagged user
    */
   @Command('sayIt')
-  @Description('flip a coin for a insult or compliment')
+  @Description('Flip a coin for a insult or compliment')
   async init(command: CommandMessage): Promise<Message | void> {
     return this.getResponse(command).catch(() => {
       command.reply(environment.error);
