@@ -5,12 +5,15 @@ import { WeatherObject } from '../../types/weather';
 import { WeatherService } from '../../services/weather.service';
 import Utility from '../../utils/utility';
 import { windDirections } from '../../data/weather';
+import { Logger } from '../../services/logger.service';
 
 export class Weather {
+  private logger: Logger;
   private weatherService: WeatherService;
 
   constructor() {
     this.weatherService = new WeatherService();
+    this.logger = new Logger();
   }
 
   /**
@@ -96,14 +99,26 @@ export class Weather {
    * @param command
    */
   private async getResponse(command: CommandMessage): Promise<Message | void> {
-    const commandArray = command.content.split(' ');
-    commandArray.splice(0, 2).join(' ');
-    const location = commandArray.join(' ');
+    try {
+      const location = Utility.getOptionFromCommand(
+        command.content,
+        2,
+        ' '
+      ) as string;
 
-    const weather = await this.weatherService.getCurrentWeather(location);
-    const message = this.createMessage(weather, command.client.user);
-    await command.delete();
-    return command.channel.send(message);
+      const weather = await this.weatherService.getCurrentWeather(location);
+      const message = this.createMessage(weather, command.client.user);
+      await command.delete();
+      return command.channel.send(message);
+    } catch (e) {
+      await command.delete();
+      this.logger.error(`Command: 'weather' has error: ${e.message}.`);
+      return command.channel
+        .send(
+          `An error has occured. If this error keeps occurring, please contact support.`
+        )
+        .then((m) => m.delete({ timeout: 5000 }));
+    }
   }
 
   /**

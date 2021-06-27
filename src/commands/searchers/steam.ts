@@ -3,6 +3,7 @@ import { Message, MessageEmbed } from 'discord.js';
 import { SteamService } from '../../services/steam.service';
 import { Logger } from '../../services/logger.service';
 import { PlayerSummary, UserBans } from '../../types/steam';
+import Utility from '../../utils/utility';
 
 export class Steam {
   private logger: Logger;
@@ -50,9 +51,11 @@ export class Steam {
   @Command('steam')
   @Description('Check and share your profile with friends on steam')
   async init(command: CommandMessage): Promise<void | Message> {
-    const commandArray = command.content.split(' ');
-    commandArray.splice(0, 2);
-    const vanityUrl = commandArray.join(' ');
+    const vanityUrl = Utility.getOptionFromCommand(
+      command.content,
+      2,
+      ' '
+    ) as string;
 
     try {
       const user = await this.steamService.getVanityUser(vanityUrl);

@@ -3,6 +3,7 @@ import { Message, MessageEmbed } from 'discord.js';
 import { InstaUser } from '../../types/instagram';
 import { InstagramService } from '../../services/instagram.service';
 import { Logger } from '../../services/logger.service';
+import Utility from '../../utils/utility';
 
 export class Instagram {
   private logger: Logger;
@@ -41,9 +42,11 @@ export class Instagram {
   @Command('instagram')
   @Description('Find someone you know on Instagram')
   async init(command: CommandMessage): Promise<void | Message> {
-    const commandArray = command.content.split(' ');
-    commandArray.splice(0, 2);
-    const username = commandArray.join(' ');
+    const username = Utility.getOptionFromCommand(
+      command.content,
+      2,
+      ' '
+    ) as string;
 
     try {
       const instaUser = await this.instagramService.getInstaUser(username);

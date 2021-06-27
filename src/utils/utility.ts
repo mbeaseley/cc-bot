@@ -110,4 +110,21 @@ export default class Utility {
   static captaliseFirstLetter(value: string): string {
     return value[0].toUpperCase() + value.slice(1);
   }
+
+  /**
+   * Get string option from command message
+   * @param command
+   * @param indexToRemove
+   * @param joinCharacter
+   * @returns string | string[]
+   */
+  static getOptionFromCommand(
+    command: string,
+    indexToRemove: number,
+    joinCharacter?: string
+  ): string[] | string {
+    const array = command.split(' ');
+    array.splice(0, indexToRemove);
+    return joinCharacter ? array.join(joinCharacter) : array;
+  }
 }

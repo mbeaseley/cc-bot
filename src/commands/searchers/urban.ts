@@ -4,6 +4,7 @@ import { environment } from '../../utils/environment';
 import { Logger } from '../../services/logger.service';
 import * as chalk from 'chalk';
 import { Message, MessageEmbed } from 'discord.js';
+import Utility from '../../utils/utility';
 
 export class UrbanDictionary {
   private logger: Logger;
@@ -41,9 +42,11 @@ export class UrbanDictionary {
   @Command('urban')
   @Description('Get urban definition of word')
   getDefinition(command: CommandMessage): Promise<Message> | void {
-    const commandArray = command.content.split(' ');
-    commandArray.splice(0, 2);
-    const phrase = commandArray.join(' ');
+    const phrase = Utility.getOptionFromCommand(
+      command.content,
+      2,
+      ' '
+    ) as string;
 
     if (!phrase) {
       if (command.deletable) command.delete();

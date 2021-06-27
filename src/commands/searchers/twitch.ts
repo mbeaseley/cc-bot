@@ -2,6 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message, MessageEmbed } from 'discord.js';
 import { Logger } from '../../services/logger.service';
 import { TwitchService } from '../../services/twitch.service';
+import Utility from '../../utils/utility';
 
 export class Twitch {
   private logger: Logger;
@@ -15,9 +16,11 @@ export class Twitch {
   @Command('twitch')
   @Description('Find your favourites streamers')
   async init(command: CommandMessage): Promise<void | Message> {
-    const commandArray = command.content.split(' ');
-    commandArray.splice(0, 2);
-    const username = commandArray.join(' ');
+    const username = Utility.getOptionFromCommand(
+      command.content,
+      2,
+      ' '
+    ) as string;
 
     try {
       const user = await this.twitchService.getUser(username);

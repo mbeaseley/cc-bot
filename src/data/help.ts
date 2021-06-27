@@ -5,7 +5,7 @@ export interface CommandItem {
   type: 'fun' | 'games' | 'admin' | 'searchers';
 }
 
-export const adminCommands = ['help', 'purge', 'question'];
+export const adminCommands = ['purge', 'question'];
 
 export const commandOverrides: CommandItem[] = [
   {
@@ -39,6 +39,11 @@ export const commandOverrides: CommandItem[] = [
   {
     name: 'poll',
     fullCommand: 'poll [question] [answer1] [answer2] ...',
+    type: 'fun',
+  },
+  {
+    name: 'joke',
+    fullCommand: 'joke',
     type: 'fun',
   },
   {

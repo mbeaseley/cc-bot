@@ -4,6 +4,7 @@ import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse'
 import { McUrl } from '../../types/minecraft';
 import { Logger } from '../../services/logger.service';
 import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
+import Utility from '../../utils/utility';
 
 export class Minecraft {
   private logger: Logger;
@@ -70,8 +71,7 @@ export class Minecraft {
   @Description('Ping a minecraft server for information')
   async init(command: CommandMessage): Promise<Message | void> {
     try {
-      const commandArray = command.content.split(' ');
-      commandArray.splice(0, 2);
+      const commandArray = Utility.getOptionFromCommand(command.content, 2);
       const urlSplit = commandArray[0]?.split(':');
       let newMcUrl: McUrl = new McUrl();
       newMcUrl = this.mcUrl.domain
@@ -115,8 +115,7 @@ export class Minecraft {
   @Description('Set default IP and Port for server')
   async setDefaultInit(command: CommandMessage): Promise<Message | void> {
     try {
-      const commandArray = command.content.split(' ');
-      commandArray.splice(0, 3);
+      const commandArray = Utility.getOptionFromCommand(command.content, 3);
       const urlSplit = commandArray[0].split(':');
 
       if (!urlSplit.length) {

@@ -1,7 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
+import { Message } from 'discord.js';
 import { HttpClient } from '../../interceptor/httpClient';
 import { environment } from '../../utils/environment';
+import Utility from '../../utils/utility';
 
 export class Insult extends HttpClient {
   constructor() {
@@ -11,7 +13,7 @@ export class Insult extends HttpClient {
   /**
    * Get random joke
    */
-  getRandomInsult = (): Promise<AxiosResponse<string>> =>
+  private getRandomInsult = (): Promise<AxiosResponse<string>> =>
     this.instance.get<string>('', {
       headers: {
         Accept: 'application/json',
@@ -23,11 +25,11 @@ export class Insult extends HttpClient {
    * @param command
    * @param insult
    */
-  createMessage = (command: CommandMessage, insult: string): string => {
-    const commandArray = command.content.split(' ');
-    const string = commandArray[commandArray.length - 1];
+  private createMessage = (command: CommandMessage, insult: string): string => {
+    const commandArray = Utility.getOptionFromCommand(command.content, 2);
+    const string = commandArray?.[commandArray.length - 1];
 
-    return string.startsWith('<') && string.endsWith('>')
+    return string?.startsWith('<') && string?.endsWith('>')
       ? string.concat(', ', insult)
       : insult;
   };
@@ -35,7 +37,7 @@ export class Insult extends HttpClient {
   /**
    * Init
    */
-  private async getResponse(command: CommandMessage): Promise<void> {
+  private async getResponse(command: CommandMessage): Promise<Message> {
     const insult = await this.getRandomInsult();
 
     if (!insult) {
@@ -44,12 +46,10 @@ export class Insult extends HttpClient {
 
     const message = this.createMessage(command, insult);
 
-    command.delete();
-    message.startsWith('<')
+    await command.delete();
+    return message.startsWith('<')
       ? command.channel.send(message)
       : command.reply(message);
-
-    return Promise.resolve();
   }
 
   /**
@@ -60,9 +60,9 @@ export class Insult extends HttpClient {
    */
   @Command('insult')
   @Description('Send a fun insult to yourself or a friend')
-  init(command: CommandMessage): Promise<void> {
+  init(command: CommandMessage): Promise<Message> {
     return this.getResponse(command).catch(() => {
-      command.reply(environment.error);
+      return command.reply(environment.error);
     });
   }
 }

@@ -41,6 +41,14 @@ export class Help {
     return Promise.resolve();
   }
 
+  fetchCommands(
+    type: 'fun' | 'games' | 'admin' | 'searchers'
+  ): CommandInfos<any, RuleBuilder>[] {
+    const commands = Client.getCommands();
+
+    return commands;
+  }
+
   /**
    * @name helpInit
    * @param command
@@ -49,8 +57,10 @@ export class Help {
    */
   @Command('help')
   helpInit(command: CommandMessage): Promise<void> {
+    const commandArray = command.content.split(' ');
+    commandArray.splice(0, 2);
+
     const allCommands = Client.getCommands();
-    console.log(allCommands);
     command.delete();
     return this.createHelpStatus(command, allCommands).catch(() => {
       command.reply(environment.error);
