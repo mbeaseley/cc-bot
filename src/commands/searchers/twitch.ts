@@ -38,7 +38,7 @@ export class Twitch {
             user.description || `This user doesn't have a biography.`,
             true
           )
-          .addField(`Total Views: `, user.viewCount || `N/A`, true)
+          .addField(`Total Views: `, user.viewCount || `~`, true)
           .addField(`Followers: `, followers.total, true);
 
         if (stream?.id) {
@@ -60,7 +60,7 @@ export class Twitch {
         return command.channel.send('**Twitch user not found.**');
       }
     } catch (e: any) {
-      command.delete();
+      await command.delete();
       this.logger.error(`Command: 'twitch' has error: ${e.message}.`);
       return command.channel
         .send(

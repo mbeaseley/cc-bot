@@ -1,5 +1,5 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Message } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 import { commands } from '../../data/dbdCommands';
 import { KillerBuild, KillerItem, SurviverBuild } from '../../types/dbd';
 import { environment } from '../../utils/environment';
@@ -130,16 +130,16 @@ export class Dbd {
       };
     });
 
-    return command.channel.send({
-      embed: {
-        color: 10181046,
-        author: {
-          name: `${command?.client?.user?.username} DBD Plugin Commands`,
-          icon_url: command?.client?.user?.displayAvatarURL(),
-        },
-        fields,
-      },
-    });
+    const message = new MessageEmbed()
+      .setColor(10181046)
+      .setAuthor(
+        `${command?.client?.user?.username} DBD Plugin Commands`,
+        command?.client?.user?.displayAvatarURL()
+      )
+      .setThumbnail(environment.botThumbnail || '')
+      .addFields([...fields]);
+
+    return command.channel.send(message);
   }
 
   /**

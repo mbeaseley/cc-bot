@@ -28,7 +28,7 @@ export class Help {
         `${command?.client?.user?.username}${t} Plugin Commands`,
         command?.client?.user?.displayAvatarURL()
       )
-      .setThumbnail('https://i.imgur.com/6CKmCtO.png');
+      .setThumbnail(environment.botThumbnail);
   }
 
   /**
