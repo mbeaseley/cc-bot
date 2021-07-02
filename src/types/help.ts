@@ -1,8 +1,9 @@
-export type CommandType = 'fun' | 'games' | 'admin' | 'searchers';
+export type CommandType = 'fun' | 'games' | 'admin' | 'searchers' | 'music';
 
 export interface CommandItem {
   name: string;
   description?: string;
   fullCommand: string;
-  type: CommandType;
+  type?: CommandType;
+  restrict?: boolean;
 }

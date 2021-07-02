@@ -6,9 +6,13 @@ import {
   RuleBuilder,
 } from '@typeit/discord';
 import { environment } from '../../utils/environment';
-import { commandOverrides, commandTypes } from '../../data/help';
+import {
+  commandOverrides,
+  commandTypes,
+  commandHelpTypes,
+} from '../../data/help';
 import Utility from '../../utils/utility';
-import { Message, MessageEmbed } from 'discord.js';
+import { EmbedFieldData, Message, MessageEmbed } from 'discord.js';
 import { CommandType } from '../../types/help';
 
 export class Help {
@@ -56,27 +60,25 @@ export class Help {
       return command.channel.send(message);
     } else {
       const message = this.createBaseMessage(command);
-      message.addFields([
-        {
-          name: `Fun`,
-          value: `\`@${command?.client?.user?.username} help fun\``,
-        },
-        {
-          name: `Games`,
-          value: `\`@${command?.client?.user?.username} help games\``,
-        },
-        {
-          name: `Searchers`,
-          value: `\`@${command?.client?.user?.username} help searchers\``,
-        },
-      ]);
+      let fields: EmbedFieldData[] = commandHelpTypes.map((c) => {
+        const fullCommand = c.fullCommand.replace(
+          '{botName}',
+          command?.client?.user?.username || ''
+        );
 
-      if (Utility.isAdmin(command)) {
-        message.addField(
-          'Admin',
-          `\`@${command?.client?.user?.username} help admin\``
+        return {
+          name: c.name,
+          value: `\`${fullCommand}\``,
+        };
+      });
+      const restrictedCommand = commandHelpTypes.filter((c) => c.restrict);
+      if (!Utility.isAdmin(command)) {
+        fields = fields.filter((c) =>
+          restrictedCommand.find((r) => r.name === c.name)
         );
       }
+
+      message.addFields([...fields]);
       await command.delete();
       return command.channel.send(message);
     }
