@@ -53,7 +53,7 @@ export class UrbanDictionary {
       return command.reply('Try again, please add word to define!');
     }
 
-    urban.define(phrase, (err, entries) => {
+    return urban.define(phrase, async (err, entries) => {
       if (err) {
         if (command.deletable) command.delete();
         this.logger.error(`${chalk.bold('BOT ERROR')}: ${err.message}`);
@@ -61,7 +61,7 @@ export class UrbanDictionary {
       }
 
       const embed = this.createMessage(phrase, entries[0]);
-      command.delete();
+      await command.delete();
       return command.channel.send(embed);
     });
   }
