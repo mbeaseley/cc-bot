@@ -130,8 +130,6 @@ export class Dbd {
       };
     });
 
-    console.log(environment.botThumbnail);
-
     const message = new MessageEmbed()
       .setColor(10181046)
       .setAuthor(
@@ -141,7 +139,6 @@ export class Dbd {
       .setThumbnail(environment.botThumbnail || '')
       .addFields([...fields]);
 
-    console.log(message);
     return command.channel.send(message);
   }
 
