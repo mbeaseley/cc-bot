@@ -4,6 +4,7 @@ interface EnvironmentObject {
   token: string;
   botId: string;
   botName: string;
+  botThumbnail: string;
   admins: string[] | never[];
   server: string;
   error: string;
@@ -25,6 +26,7 @@ export const environment = {
   token: process.env.TOKEN ?? '',
   botId: process.env.BOTID ?? '',
   botName: process.env.BOTNAME ?? '',
+  botThumbnail: process.env.botThumbnail ?? '',
   admins: JSON.parse(process.env.ADMINS || ''),
   server: process.env.SERVER,
   error: 'I have failed you!',

@@ -55,7 +55,7 @@ export class Minecraft {
       .addField('Server Version: ', status.version)
       .addField(
         'Description: ',
-        status.description?.descriptionText.replace(/§[a-zA-Z0-9]/g, '')
+        status.description?.descriptionText.replace(/§[a-zA-Z0-9]/g, '') || '~'
       )
       .addField(
         'Online Players: ',
