@@ -31,14 +31,14 @@ export class Steam {
       .setURL(playerSummary?.profileUrl || '')
       .setThumbnail(playerSummary.avatarFull)
       .setDescription(
-        `**Real Name:** ${playerSummary.realName}\n**Status:** ${
-          playerSummary.nameState
-        }\n**Location:** ${playerSummary.location?.cityName}, ${
+        `**Real Name:** ${playerSummary.realName || '~'}\n**Status:** ${
+          playerSummary.nameState || '~'
+        }\n**Location:** ${playerSummary.location?.cityName || '~'}, ${
           playerSummary.location?.countryCode
-        }\n**Account Created:** ${playerSummary.timeCreated?.format(
-          'DD/MM/YYYY'
-        )}\n**Bans:** Vac: ${userBans.numberOfVACBans}, Game: ${
-          userBans.numberOfGameBans
+        }\n**Account Created:** ${
+          playerSummary.timeCreated?.format('DD/MM/YYYY') || '~'
+        }\n**Bans:** Vac: ${userBans.numberOfVACBans || '~'}, Game: ${
+          userBans.numberOfGameBans || '~'
         }\n**Link:** [Link to profile](${playerSummary.profileUrl})`
       )
       .setTimestamp();
@@ -75,8 +75,13 @@ export class Steam {
       await command.delete();
       return command.channel.send(message);
     } catch (e: any) {
+      await command.delete();
       this.logger.error(`Command: 'steam' has error: ${e.message}.`);
-      return command.delete();
+      return command.channel
+        .send(
+          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+        )
+        .then((m) => m.delete({ timeout: 5000 }));
     }
   }
 }

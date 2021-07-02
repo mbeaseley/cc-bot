@@ -24,12 +24,12 @@ export class Instagram {
       .setTitle(u.fullName)
       .setURL(`https://instagram.com/${u.username}`)
       .setThumbnail(u.profileImage ?? '')
-      .addField(`Username:`, u.username)
-      .addField(`Full Name: `, u.fullName)
-      .addField(`Biography: `, u.biography)
-      .addField(`Posts:`, u.posts, true)
-      .addField(`Followers: `, u.followers, true)
-      .addField(`Following: `, u.following, true)
+      .addField(`Username:`, u.username || '~')
+      .addField(`Full Name: `, u.fullName || '~')
+      .addField(`Biography: `, u.biography || '~')
+      .addField(`Posts:`, u.posts || '~', true)
+      .addField(`Followers: `, u.followers || '~', true)
+      .addField(`Following: `, u.following || '~', true)
       .addField(`Private Account: `, u.private ? 'Yes 🔐' : 'No 🔓', true)
       .addField(`Verified Account: `, u.verified ? 'Yes ✅' : 'No ❌', true);
   }
@@ -61,6 +61,7 @@ export class Instagram {
       await command.delete();
       return command.channel.send(message);
     } catch (e) {
+      await command.delete();
       this.logger.error(`Command: 'instagram' has error: ${e.message}.`);
       return command.channel
         .send(
