@@ -116,4 +116,9 @@ export const commandOverrides: CommandItem[] = [
     fullCommand: 'join',
     type: 'music',
   },
+  {
+    name: 'dc',
+    fullCommand: 'dc',
+    type: 'music',
+  },
 ];
