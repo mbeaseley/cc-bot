@@ -9,6 +9,12 @@ export class Join {
     this.logger = new Logger();
   }
 
+  /**
+   * Create Message
+   * @param member
+   * @param moved
+   * @returns MessageEmbed
+   */
   private createMessage(member: GuildMember, moved: boolean): MessageEmbed {
     const d = moved
       ? '**I have successfully moved to another voice channel.**'
@@ -18,6 +24,11 @@ export class Join {
       .setDescription(d);
   }
 
+  /**
+   * Join Init
+   * @param command
+   * @returns Promise<Message | void>
+   */
   @Command('join')
   @Description('Join voice channel')
   async init(command: CommandMessage): Promise<Message | void> {
