@@ -45,7 +45,7 @@ export class MemberAdd {
     const context = canvas.getContext('2d');
 
     const background = await Canvas.loadImage(
-      path.join(__dirname, '../assets/images/welcome-background.png')
+      path.join(__dirname, '../../assets/images/welcome-background.png')
     );
     context.drawImage(background, 0, 0, canvas.width, canvas.height);
 
