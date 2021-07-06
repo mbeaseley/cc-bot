@@ -1,6 +1,29 @@
 import { CommandItem } from '../types/help';
 
-export const commandTypes = ['fun', 'games', 'admin', 'searchers'];
+export const commandHelpTypes: CommandItem[] = [
+  {
+    name: 'Fun',
+    fullCommand: '@{botName} help fun',
+  },
+  {
+    name: 'Games',
+    fullCommand: '@{botName} help games',
+  },
+  {
+    name: 'Searchers',
+    fullCommand: '@{botName} help searchers',
+  },
+  {
+    name: 'Music',
+    fullCommand: '@{botName} help music',
+    restrict: true,
+  },
+  {
+    name: 'Admin',
+    fullCommand: '@{botName} help admin',
+    restrict: true,
+  },
+];
 
 export const commandOverrides: CommandItem[] = [
   {
@@ -86,5 +109,20 @@ export const commandOverrides: CommandItem[] = [
     name: 'purge',
     fullCommand: 'purge <count>',
     type: 'admin',
+  },
+  {
+    name: 'welcome',
+    fullCommand: 'welcome <@username1> <@username2(optional)>...',
+    type: 'admin',
+  },
+  {
+    name: 'join',
+    fullCommand: 'join',
+    type: 'music',
+  },
+  {
+    name: 'dc',
+    fullCommand: 'dc',
+    type: 'music',
   },
 ];

@@ -6,10 +6,10 @@ import {
   RuleBuilder,
 } from '@typeit/discord';
 import { environment } from '../../utils/environment';
-import { commandOverrides, commandTypes } from '../../data/help';
+import { commandOverrides, commandHelpTypes } from '../../data/help';
 import Utility from '../../utils/utility';
-import { Message, MessageEmbed } from 'discord.js';
-import { CommandType } from '../../types/help';
+import { EmbedFieldData, Message, MessageEmbed } from 'discord.js';
+import { CommandItem, CommandType } from '../../types/help';
 
 export class Help {
   /**
@@ -19,9 +19,9 @@ export class Help {
    */
   private createBaseMessage(
     command: CommandMessage,
-    type?: CommandType
+    type?: CommandItem
   ): MessageEmbed {
-    const t = type ? ` ${Utility.captaliseFirstLetter(type)}` : '';
+    const t = type ? ` ${type.name}` : '';
     return new MessageEmbed()
       .setColor(10181046)
       .setAuthor(
@@ -37,7 +37,7 @@ export class Help {
   private async createHelpStatus(
     command: CommandMessage,
     allCommands: CommandInfos<any, RuleBuilder>[],
-    type?: CommandType
+    type?: CommandItem
   ): Promise<Message | void> {
     if (type) {
       const fields = allCommands.map((c) => {
@@ -56,27 +56,25 @@ export class Help {
       return command.channel.send(message);
     } else {
       const message = this.createBaseMessage(command);
-      message.addFields([
-        {
-          name: `Fun`,
-          value: `\`@${command?.client?.user?.username} help fun\``,
-        },
-        {
-          name: `Games`,
-          value: `\`@${command?.client?.user?.username} help games\``,
-        },
-        {
-          name: `Searchers`,
-          value: `\`@${command?.client?.user?.username} help searchers\``,
-        },
-      ]);
+      let fields: EmbedFieldData[] = commandHelpTypes.map((c) => {
+        const fullCommand = c.fullCommand.replace(
+          '{botName}',
+          command?.client?.user?.username || ''
+        );
 
-      if (Utility.isAdmin(command)) {
-        message.addField(
-          'Admin',
-          `\`@${command?.client?.user?.username} help admin\``
+        return {
+          name: c.name,
+          value: `\`${fullCommand}\``,
+        };
+      });
+
+      if (!Utility.isAdmin(command)) {
+        fields = fields.filter(
+          (c) => !commandHelpTypes.find((r) => r.name === c.name)?.restrict
         );
       }
+
+      message.addFields([...fields]);
       await command.delete();
       return command.channel.send(message);
     }
@@ -86,12 +84,12 @@ export class Help {
    * Fetch Commands
    * @param type
    */
-  fetchCommands(type?: CommandType): CommandInfos<any, RuleBuilder>[] {
+  fetchCommands(type?: CommandItem): CommandInfos<any, RuleBuilder>[] {
     const commands = Client.getCommands();
 
     if (type) {
       const commandNames = commandOverrides
-        .filter((c) => c.type === type)
+        .filter((c) => c.type === type.name.toLowerCase())
         .map((c) => c.name);
       return commands.filter(
         (c) => commandNames.indexOf(c.commandName as string) > -1
@@ -109,13 +107,14 @@ export class Help {
    */
   @Command('help')
   async helpInit(command: CommandMessage): Promise<Message | void> {
-    const type = Utility.getOptionFromCommand(
-      command.content,
-      2,
-      ' '
-    ) as CommandType;
+    const type = (
+      Utility.getOptionFromCommand(command.content, 2, ' ') as CommandType
+    ).toLowerCase();
 
-    if (type && !commandTypes.find((c) => c === type)) {
+    const commandGroup = commandHelpTypes.find(
+      (c) => c.name.toLowerCase() === type
+    );
+    if (type && !commandGroup) {
       await command.delete();
       return command.channel
         .send(
@@ -124,16 +123,18 @@ export class Help {
         .then((m) => m.delete({ timeout: 5000 }));
     }
 
-    if (!Utility.isAdmin(command)) {
+    if (!Utility.isAdmin(command) && commandGroup?.restrict) {
       await command.delete();
       return command.channel
         .send(`**You don't have the permissions for this**`)
         .then((m) => m.delete({ timeout: 5000 }));
     }
 
-    const allCommands = this.fetchCommands(type);
-    return this.createHelpStatus(command, allCommands, type).catch(() => {
-      command.reply(environment.error);
-    });
+    const allCommands = this.fetchCommands(commandGroup);
+    return this.createHelpStatus(command, allCommands, commandGroup).catch(
+      () => {
+        command.reply(environment.error);
+      }
+    );
   }
 }
