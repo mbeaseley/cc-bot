@@ -1,7 +1,5 @@
 import { CommandItem } from '../types/help';
 
-export const commandTypes = ['fun', 'games', 'admin', 'searchers', 'music'];
-
 export const commandHelpTypes: CommandItem[] = [
   {
     name: 'Fun',
@@ -18,6 +16,7 @@ export const commandHelpTypes: CommandItem[] = [
   {
     name: 'Music',
     fullCommand: '@{botName} help music',
+    restrict: true,
   },
   {
     name: 'Admin',
@@ -109,6 +108,11 @@ export const commandOverrides: CommandItem[] = [
   {
     name: 'purge',
     fullCommand: 'purge <count>',
+    type: 'admin',
+  },
+  {
+    name: 'welcome',
+    fullCommand: 'welcome <@username1> <@username2(optional)>...',
     type: 'admin',
   },
   {

@@ -1,4 +1,10 @@
-import { Client } from '@typeit/discord';
+import {
+  Client,
+  Command,
+  CommandMessage,
+  Description,
+  Guard,
+} from '@typeit/discord';
 import {
   GuildMember,
   Message,
@@ -9,11 +15,18 @@ import {
 import * as Canvas from 'canvas';
 import path = require('path');
 import { environment } from '../../utils/environment';
-
+import { isAdmin } from '../../guards/isAdmin';
+import Utility from '../../utils/utility';
+import { Logger } from '../../services/logger.service';
 export class MemberAdd {
-  color: string = '#ffffff';
-  strokeColor: string = '#74037b';
-  font: string = 'sans-serif';
+  private color: string = '#ffffff';
+  private strokeColor: string = '#74037b';
+  private font: string = 'sans-serif';
+  private logger: Logger;
+
+  constructor() {
+    this.logger = new Logger();
+  }
 
   /**
    * Apply styled text
@@ -150,5 +163,46 @@ export class MemberAdd {
    */
   public init(client: Client): void {
     client.on('guildMemberAdd', (member) => this.handleMessage(member));
+  }
+
+  /**
+   * Allow manually adding welcome message to new members
+   * @param command
+   * @returns
+   */
+  @Command('welcome')
+  @Guard(isAdmin)
+  @Description('Manually welcome new member')
+  async initialWelcome(command: CommandMessage): Promise<Message | void> {
+    try {
+      await command.delete();
+      const userStrings = Utility.getOptionFromCommand(
+        command.content,
+        2
+      ) as string[];
+      const users = userStrings.map((u) => u.replace(/[^0-9]/g, ''));
+
+      if (!users) {
+        return command.channel
+          .send(`**No members added to command**`)
+          .then((m) => m.delete({ timeout: 5000 }));
+      }
+
+      return users.forEach(async (u) => {
+        const m = await command.guild?.members.fetch(u);
+        if (!m) {
+          return command.channel.send(`**Member does not exist**`);
+        }
+        return this.handleMessage(m);
+      });
+    } catch (e: any) {
+      await command.delete();
+      this.logger.error(`Command: 'welcome' has error: ${e.message}.`);
+      return command.channel
+        .send(
+          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+        )
+        .then((m) => m.delete({ timeout: 5000 }));
+    }
   }
 }
