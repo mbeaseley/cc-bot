@@ -13,6 +13,10 @@ export class Advice {
     this.adviceService = new AdviceService();
   }
 
+  /**
+   * Display friendly advice
+   * @param command
+   */
   @Command('advice')
   @Description('Get some friendly advice')
   async init(command: CommandMessage): Promise<Message> {
