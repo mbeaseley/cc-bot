@@ -1,7 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
-import { Logger } from '../../services/logger.service';
 import { AdviceService } from '../../services/advice.service';
+import { Logger } from '../../services/logger.service';
 import Utility from '../../utils/utility';
 
 export class Advice {
