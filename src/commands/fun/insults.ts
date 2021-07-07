@@ -46,7 +46,7 @@ export class Insult extends HttpClient {
 
     const message = this.createMessage(command, insult);
 
-    await command.delete();
+    if (command.deletable) await command.delete();
     return message.startsWith('<')
       ? command.channel.send(message)
       : command.reply(message);

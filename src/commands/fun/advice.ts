@@ -21,7 +21,7 @@ export class Advice {
   @Description('Send some friendly advice to yourself or a friend')
   async init(command: CommandMessage): Promise<Message> {
     try {
-      await command.delete();
+      if (command.deletable) await command.delete();
 
       const user = Utility.getOptionFromCommand(command.content, 2)?.[0];
       const givenAdvice = await this.adviceService.getAdvice();
@@ -38,7 +38,7 @@ export class Advice {
         return command.reply(givenAdvice.advice);
       }
     } catch (e: unknown) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'advice' has error: ${(e as Error).message}.`
       );
