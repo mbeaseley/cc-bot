@@ -28,13 +28,13 @@ export class coinFlip {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send(`**Flipping coin! :coin:**`);
-      (await msg).delete({ timeout: 2000 });
+      const msg = command.channel.send(`**:hourglass: Flipping coin!**`);
+      (await msg).delete({ timeout: 1000 });
 
       const result = this.flipCoin();
       return setTimeout(() => {
         return command.channel.send(`**${result} :coin:**`);
-      }, 2000);
+      }, 1000);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
