@@ -1,5 +1,5 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message } from 'discord.js';
 import { Logger } from '../../services/logger.service';
 import { AdviceService } from '../../services/advice.service';
 import Utility from '../../utils/utility';
