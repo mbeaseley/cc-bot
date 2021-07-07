@@ -27,8 +27,8 @@ export class Purge {
         .catch(() => Promise.reject());
 
       return Promise.resolve();
-    } catch (e) {
-      return Promise.reject();
+    } catch (e: unknown) {
+      return Promise.reject(e);
     }
   }
 

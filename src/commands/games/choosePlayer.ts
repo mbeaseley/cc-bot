@@ -48,9 +48,7 @@ export class ChoosePlayer {
     excludeUsers: string[]
   ): (User | undefined)[] {
     let users = channel?.members?.map((m) => {
-      if (!m.user?.bot) {
-        return m.user;
-      }
+      return !m.user?.bot ? m.user : undefined;
     });
 
     if (!users?.length) {

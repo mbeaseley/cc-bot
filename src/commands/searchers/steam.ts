@@ -74,12 +74,14 @@ export class Steam {
 
       await command.delete();
       return command.channel.send(message);
-    } catch (e: any) {
+    } catch (e: unknown) {
       await command.delete();
-      this.logger.error(`Command: 'steam' has error: ${e.message}.`);
+      this.logger.error(`Command: 'steam' has error: ${(e as Error).message}.`);
       return command.channel
         .send(
-          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }
