@@ -110,9 +110,11 @@ export class Weather {
       const message = this.createMessage(weather, command.client.user);
       await command.delete();
       return command.channel.send(message);
-    } catch (e) {
+    } catch (e: unknown) {
       await command.delete();
-      this.logger.error(`Command: 'weather' has error: ${e.message}.`);
+      this.logger.error(
+        `Command: 'weather' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
           `An error has occured. If this error keeps occurring, please contact support.`

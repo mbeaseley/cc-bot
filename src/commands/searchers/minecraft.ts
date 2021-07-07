@@ -113,9 +113,11 @@ export class Minecraft {
 
       const message = this.createMessage(res, newMcUrl);
       return command.channel.send(message);
-    } catch (e) {
+    } catch (e: unknown) {
       await command.delete();
-      this.logger.error(`Command: 'minecraft' has error: ${e.message}.`);
+      this.logger.error(
+        `Command: 'minecraft' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
           `An error has occured. Most likely you haven't set your ip/domain and port correctly. If this error keeps occurring, please contact support.`
@@ -150,12 +152,16 @@ export class Minecraft {
       return command.channel
         .send(`**Minecraft service domain/ip and port have been set!**`)
         .then((m) => m.delete({ timeout: 5000 }));
-    } catch (e) {
+    } catch (e: unknown) {
       await command.delete();
-      this.logger.error(`Command: 'minecraft' has error: ${e.message}.`);
+      this.logger.error(
+        `Command: 'minecraft' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
-          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }
