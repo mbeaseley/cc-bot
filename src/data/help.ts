@@ -63,6 +63,11 @@ export const commandOverrides: CommandItem[] = [
     type: 'fun',
   },
   {
+    name: 'advice',
+    fullCommand: 'advice <@user(optional)>',
+    type: 'fun',
+  },
+  {
     name: 'urban',
     description: 'Get urban definition of word',
     fullCommand: 'urban <word>',

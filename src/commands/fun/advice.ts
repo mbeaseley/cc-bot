@@ -18,7 +18,7 @@ export class Advice {
    * @param command
    */
   @Command('advice')
-  @Description('Get some friendly advice')
+  @Description('Send some friendly advice to yourself or a friend')
   async init(command: CommandMessage): Promise<Message> {
     try {
       await command.delete();
