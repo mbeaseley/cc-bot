@@ -1,5 +1,11 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { GuildChannel, Message, User } from 'discord.js';
+import {
+  GuildChannel,
+  GuildMember,
+  Message,
+  MessageEmbed,
+  User,
+} from 'discord.js';
 import { environment } from '../../utils/environment';
 import Utility from '../../utils/utility';
 
@@ -80,11 +86,24 @@ export class ChoosePlayer {
   }
 
   /**
+   * Create message
+   * @param content
+   * @returns
+   */
+  private createMessage(content: string, member: GuildMember): MessageEmbed {
+    return new MessageEmbed()
+      .setColor(member.displayHexColor)
+      .setDescription(`**I have chosen ${content}!**`);
+  }
+
+  /**
    * Init for player choice
    * @param command
    */
-  private getResponse(command: CommandMessage): Promise<Message> {
+  private async getResponse(command: CommandMessage): Promise<Message> {
     try {
+      if (command.deletable) await command.delete();
+
       const channel = this.findUserChannel(command);
       const excludeUsers = this.getExcludeUsers(command);
       const users = this.getUsers(channel, excludeUsers);
@@ -94,9 +113,12 @@ export class ChoosePlayer {
       }
 
       const content = this.getRandomUser(users);
-
-      return command.reply(content);
-    } catch (e) {
+      const message = this.createMessage(
+        content,
+        command.member as GuildMember
+      );
+      return command.channel.send(message);
+    } catch (e: unknown) {
       return Promise.reject();
     }
   }

@@ -29,7 +29,7 @@ export class DadJoke extends HttpClient {
       return Promise.reject();
     }
 
-    await command.delete();
+    if (command.deletable) await command.delete();
     return command.reply(res.joke);
   }
 

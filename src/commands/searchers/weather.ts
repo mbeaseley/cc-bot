@@ -108,10 +108,10 @@ export class Weather {
 
       const weather = await this.weatherService.getCurrentWeather(location);
       const message = this.createMessage(weather, command.client.user);
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(message);
     } catch (e: unknown) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'weather' has error: ${(e as Error).message}.`
       );

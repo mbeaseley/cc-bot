@@ -53,14 +53,14 @@ export class Twitch {
                 .replace('{height}', `${1080}`)}`
             );
         }
-        await command.delete();
+        if (command.deletable) await command.delete();
         return command.channel.send(message);
       } else {
-        await command.delete();
+        if (command.deletable) await command.delete();
         return command.channel.send('**Twitch user not found.**');
       }
     } catch (e: unknown) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'twitch' has error: ${(e as Error).message}.`
       );

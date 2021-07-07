@@ -72,10 +72,10 @@ export class Steam {
       const userBans = await this.steamService.getUserBans(user.steamId);
       const message = this.createMessage(playerSummary, userBans);
 
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(message);
     } catch (e: unknown) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       this.logger.error(`Command: 'steam' has error: ${(e as Error).message}.`);
       return command.channel
         .send(
