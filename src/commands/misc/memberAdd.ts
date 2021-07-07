@@ -175,7 +175,7 @@ export class MemberAdd {
   @Description('Manually welcome new member')
   async initialWelcome(command: CommandMessage): Promise<Message | void> {
     try {
-      await command.delete();
+      if (command.deletable) await command.delete();
       const userStrings = Utility.getOptionFromCommand(
         command.content,
         2
@@ -196,7 +196,7 @@ export class MemberAdd {
         return this.handleMessage(m);
       });
     } catch (e: unknown) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'welcome' has error: ${(e as Error).message}.`
       );

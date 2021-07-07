@@ -58,10 +58,10 @@ export class Instagram {
       }
 
       const message = this.createMessage(instaUser);
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(message);
     } catch (e: unknown) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'instagram' has error: ${(e as Error).message}.`
       );

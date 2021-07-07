@@ -33,7 +33,7 @@ export class Disconnect {
   @Description('Disconnect from voice channel')
   async init(command: CommandMessage): Promise<Message> {
     try {
-      await command.delete();
+      if (command.deletable) await command.delete();
 
       const botActive = command.guild?.me?.voice.channel;
       if (!botActive) {
@@ -51,7 +51,7 @@ export class Disconnect {
       );
       return command.channel.send(message);
     } catch (e: unknown) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       this.logger.error(`Command: 'join' has error: ${(e as Error).message}.`);
       return command.channel
         .send(

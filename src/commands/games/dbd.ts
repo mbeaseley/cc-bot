@@ -88,7 +88,7 @@ export class Dbd {
     command: CommandMessage,
     build: KillerBuild | SurviverBuild
   ): Promise<Message | void> {
-    await command.delete();
+    if (command.deletable) await command.delete();
 
     const dbdBuild =
       build instanceof KillerBuild
@@ -115,7 +115,7 @@ export class Dbd {
   private async createHelpMessage(
     command: CommandMessage
   ): Promise<Message | void> {
-    await command.delete();
+    if (command.deletable) await command.delete();
 
     const filterCommands = commands.filter((c) =>
       c.tag.find((t) => t !== 'help')
@@ -178,7 +178,7 @@ export class Dbd {
       if (helpCommands.find((c) => c.name === keyCommand)) {
         return this.createHelpMessage(command);
       } else {
-        await command.delete();
+        if (command.deletable) await command.delete();
         return command.reply(environment.commandNotFound);
       }
     } catch (e: unknown) {

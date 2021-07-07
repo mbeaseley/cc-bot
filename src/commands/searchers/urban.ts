@@ -61,7 +61,7 @@ export class UrbanDictionary {
       }
 
       const embed = this.createMessage(phrase, entries[0]);
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(embed);
     });
   }
