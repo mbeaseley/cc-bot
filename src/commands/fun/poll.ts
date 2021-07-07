@@ -67,7 +67,7 @@ export class Poll {
     const poll = new PollQuestion(pollArray[0], pollArray.slice(1));
     const embed = this.createMessage(poll, command.client.user);
     return command.channel.send(embed).then(async (message) => {
-      poll.answers.forEach((a, i) => {
+      poll.answers.forEach((_, i) => {
         message.react(selectionEmojis[`${this.alphabet[i]}`]);
       });
     });

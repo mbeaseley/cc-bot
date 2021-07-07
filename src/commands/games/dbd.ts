@@ -32,9 +32,7 @@ export class Dbd {
     const allKillers = await this.dbdService.getKillers();
     const killers = allKillers
       .map((k) => {
-        if (availableKillers.find((ak) => ak === k.id)) {
-          return k;
-        }
+        return availableKillers.find((ak) => ak === k.id) ? k : undefined;
       })
       .filter(Boolean);
 
