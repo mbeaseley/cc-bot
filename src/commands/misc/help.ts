@@ -5,7 +5,7 @@ import {
   CommandMessage,
   RuleBuilder,
 } from '@typeit/discord';
-import { commandOverrides, commandHelpTypes } from 'Data/help';
+import { commandHelpTypes, commandOverrides } from 'Data/help';
 import { CommandItem, CommandType } from 'Types/help';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';

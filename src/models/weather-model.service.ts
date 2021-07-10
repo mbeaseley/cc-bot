@@ -1,5 +1,5 @@
 import { HttpClient } from 'Interceptor/httpClient';
-import { WeatherObject, ApiResponseObject, WeatherItem } from 'Types/weather';
+import { ApiResponseObject, WeatherItem, WeatherObject } from 'Types/weather';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');

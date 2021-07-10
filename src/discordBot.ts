@@ -1,3 +1,4 @@
+import * as Path from 'path';
 import { ArgsOf, Discord, On, Rule, Rules } from '@typeit/discord';
 import { MemberAdd } from 'Commands/misc/memberAdd';
 import { MemberRemove } from 'Commands/misc/memberRemove';
@@ -8,7 +9,6 @@ import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import chalk from 'chalk';
 import { Guild } from 'discord.js';
-import * as Path from 'path';
 
 @Discord('<', {
   import: [
