@@ -1,6 +1,6 @@
-import { GuildEmoji } from 'discord.js';
 import { RulesModelService } from 'Models/rules-model.service';
 import { RuleItem } from 'Types/question';
+import { GuildEmoji } from 'discord.js';
 
 export class RulesService {
   private rulesModelService: RulesModelService;

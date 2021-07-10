@@ -5,6 +5,10 @@ import {
   Description,
   Guard,
 } from '@typeit/discord';
+import { isAdmin } from 'Guards/isAdmin';
+import { Logger } from 'Services/logger.service';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import * as Canvas from 'canvas';
 import {
   GuildMember,
@@ -14,10 +18,6 @@ import {
   TextChannel,
 } from 'discord.js';
 import path = require('path');
-import { isAdmin } from 'Guards/isAdmin';
-import { Logger } from 'Services/logger.service';
-import { environment } from 'Utils/environment';
-import Utility from 'Utils/utility';
 
 export class MemberAdd {
   private color = '#ffffff';

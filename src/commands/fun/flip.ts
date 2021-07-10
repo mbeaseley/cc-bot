@@ -1,6 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Message } from 'discord.js';
 import { Logger } from 'Services/logger.service';
+import { Message } from 'discord.js';
 
 export class coinFlip {
   private logger: Logger;

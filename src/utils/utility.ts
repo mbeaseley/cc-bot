@@ -1,4 +1,5 @@
 import { CommandMessage } from '@typeit/discord';
+import { environment } from 'Utils/environment';
 import {
   EmbedField,
   Guild,
@@ -8,7 +9,6 @@ import {
   User,
 } from 'discord.js';
 import _ = require('underscore');
-import { environment } from 'Utils/environment';
 
 export default class Utility {
   /**

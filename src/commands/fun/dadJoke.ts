@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Message } from 'discord.js';
 import { HttpClient } from 'Interceptor/httpClient';
 import { JokeResponse } from 'Types/dadJoke';
 import { environment } from 'Utils/environment';
+import { Message } from 'discord.js';
 
 export class DadJoke extends HttpClient {
   constructor() {

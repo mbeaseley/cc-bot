@@ -1,10 +1,10 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { AxiosResponse } from 'axios';
-import { Message } from 'discord.js';
 import { HttpClient } from 'Interceptor/httpClient';
 import { ComplimentObject } from 'Types/compliment';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
+import { AxiosResponse } from 'axios';
+import { Message } from 'discord.js';
 
 export class Compliment extends HttpClient {
   constructor() {

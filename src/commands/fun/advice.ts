@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Message } from 'discord.js';
 import { AdviceService } from 'Services/advice.service';
 import { Logger } from 'Services/logger.service';
 import Utility from 'Utils/utility';
+import { Message } from 'discord.js';
 
 export class Advice {
   private logger: Logger;

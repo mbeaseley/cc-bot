@@ -1,7 +1,7 @@
 import { Command, CommandMessage, Description, Guard } from '@typeit/discord';
-import { TextChannel } from 'discord.js';
 import { isAdmin } from 'Guards/isAdmin';
 import { environment } from 'Utils/environment';
+import { TextChannel } from 'discord.js';
 
 export class Purge {
   private getPurgeCount(command: string): number {

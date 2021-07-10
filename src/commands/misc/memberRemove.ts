@@ -1,13 +1,18 @@
 import { Client } from '@typeit/discord';
+import { environment } from 'Utils/environment';
 import {
   GuildMember,
   Message,
   PartialGuildMember,
   TextChannel,
 } from 'discord.js';
-import { environment } from 'Utils/environment';
 
 export class MemberRemove {
+  /**
+   * Handle leaving member
+   * @param member
+   * @returns Promise<Message>
+   */
   private async handleRemoval(
     member: GuildMember | PartialGuildMember
   ): Promise<Message | void> {

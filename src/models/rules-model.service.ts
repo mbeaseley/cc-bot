@@ -1,8 +1,8 @@
-import { GuildEmoji } from 'discord.js';
 import { DatabaseService } from 'Services/database.service';
 import { RulesCollection } from 'Types/database';
 import { RuleItem, RuleType } from 'Types/question';
 import Utility from 'Utils/utility';
+import { GuildEmoji } from 'discord.js';
 
 export class RulesModelService {
   private databaseService: DatabaseService;
