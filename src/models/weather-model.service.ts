@@ -1,6 +1,6 @@
-import { HttpClient } from '../interceptor/httpClient';
+import { HttpClient } from 'Interceptor/httpClient';
 import { AxiosResponse } from 'axios';
-import { environment } from '../utils/environment';
+import { environment } from 'Utils/environment';
 import {
   WeatherObject,
   ApiResponseObject,

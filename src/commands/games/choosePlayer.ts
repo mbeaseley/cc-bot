@@ -6,8 +6,8 @@ import {
   MessageEmbed,
   User,
 } from 'discord.js';
-import { environment } from '../../utils/environment';
-import Utility from '../../utils/utility';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 
 export class ChoosePlayer {
   private currentUser: User | undefined;

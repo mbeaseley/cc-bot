@@ -1,5 +1,5 @@
-import { TwitchModelService } from '../models/twitch-model.service';
-import { User, Stream, Followers } from '../types/twitch';
+import { TwitchModelService } from 'Models/twitch-model.service';
+import { User, Stream, Followers } from 'Types/twitch';
 
 export class TwitchService {
   private twitchModelService: TwitchModelService;

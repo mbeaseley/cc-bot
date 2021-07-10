@@ -1,6 +1,6 @@
 import { CommandMessage, CommandNotFound } from '@typeit/discord';
 import { Message } from 'discord.js';
-import { environment } from '../../utils/environment';
+import { environment } from 'Utils/environment';
 
 export class NotFoundCommand {
   /**

@@ -1,4 +1,4 @@
-import { CommandItem } from '../types/help';
+import { CommandItem } from 'Types/help';
 
 export const commandHelpTypes: CommandItem[] = [
   {

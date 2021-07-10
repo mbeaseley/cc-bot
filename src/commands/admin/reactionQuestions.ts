@@ -1,7 +1,7 @@
 import { Command, CommandMessage, Description, Guard } from '@typeit/discord';
-import { isAdmin } from '../../guards/isAdmin';
-import { environment } from '../../utils/environment';
-import { RulesService } from '../../services/rules.service';
+import { isAdmin } from 'Guards/isAdmin';
+import { environment } from 'Utils/environment';
+import { RulesService } from 'Services/rules.service';
 
 const QUESTION_TYPES = ['rules'];
 

@@ -1,6 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { GuildMember, Message, MessageEmbed } from 'discord.js';
-import { Logger } from '../../services/logger.service';
+import { Logger } from 'Services/logger.service';
 
 export class Disconnect {
   private logger: Logger;

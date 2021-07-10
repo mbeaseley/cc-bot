@@ -1,10 +1,10 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import * as urban from 'urban-dictionary';
-import { environment } from '../../utils/environment';
-import { Logger } from '../../services/logger.service';
+import { environment } from 'Utils/environment';
+import { Logger } from 'Services/logger.service';
 import * as chalk from 'chalk';
 import { Message, MessageEmbed } from 'discord.js';
-import Utility from '../../utils/utility';
+import Utility from 'Utils/utility';
 
 export class UrbanDictionary {
   private logger: Logger;

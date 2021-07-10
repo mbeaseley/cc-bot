@@ -14,14 +14,14 @@ import {
 } from 'discord.js';
 import * as Canvas from 'canvas';
 import path = require('path');
-import { environment } from '../../utils/environment';
-import { isAdmin } from '../../guards/isAdmin';
-import Utility from '../../utils/utility';
-import { Logger } from '../../services/logger.service';
+import { environment } from 'Utils/environment';
+import { isAdmin } from 'Guards/isAdmin';
+import Utility from 'Utils/utility';
+import { Logger } from 'Services/logger.service';
 export class MemberAdd {
-  private color: string = '#ffffff';
+  private color = '#ffffff';
   private strokeColor: string = '#74037b';
-  private font: string = 'sans-serif';
+  private font = 'sans-serif';
   private logger: Logger;
 
   constructor() {

@@ -5,7 +5,7 @@ import {
   PartialGuildMember,
   TextChannel,
 } from 'discord.js';
-import { environment } from '../../utils/environment';
+import { environment } from 'Utils/environment';
 
 export class MemberRemove {
   private async handleRemoval(

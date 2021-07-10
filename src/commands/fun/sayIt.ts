@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Message } from 'discord.js';
-import { environment } from '../../utils/environment';
-import { Compliment } from './compliment';
-import { Insult } from './insults';
+import { environment } from 'Utils/environment';
+import { Compliment } from 'Commands/fun/compliment';
+import { Insult } from 'Commands/fun/insults';
 
 export class SayIt {
   insult: Insult;

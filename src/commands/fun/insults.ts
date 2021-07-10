@@ -1,9 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { AxiosResponse } from 'axios';
 import { Message } from 'discord.js';
-import { HttpClient } from '../../interceptor/httpClient';
-import { environment } from '../../utils/environment';
-import Utility from '../../utils/utility';
+import { HttpClient } from 'Interceptor/httpClient';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 
 export class Insult extends HttpClient {
   constructor() {

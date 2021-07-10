@@ -1,5 +1,5 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Logger } from '../../services/logger.service';
+import { Logger } from 'Services/logger.service';
 import { Message } from 'discord.js';
 
 export class coinFlip {
