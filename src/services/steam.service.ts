@@ -1,5 +1,5 @@
-import { SteamModelService } from '../models/steam-model.service';
-import { PlayerSummary, UserBans, VanityUser } from '../types/steam';
+import { SteamModelService } from 'Models/steam-model.service';
+import { PlayerSummary, UserBans, VanityUser } from 'Types/steam';
 
 export class SteamService {
   private steamModelService: SteamModelService;

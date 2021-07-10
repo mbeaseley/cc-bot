@@ -1,6 +1,4 @@
-import { HttpClient } from '../interceptor/httpClient';
-import { AxiosResponse } from 'axios';
-import { environment } from '../utils/environment';
+import { HttpClient } from 'Interceptor/httpClient';
 import {
   Token,
   ApiTokenResponseObject,
@@ -10,7 +8,9 @@ import {
   ApiStreamResponseObject,
   Followers,
   ApiFollowersResponseObject,
-} from '../types/twitch';
+} from 'Types/twitch';
+import { environment } from 'Utils/environment';
+import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');
 
 export class TwitchModelService extends HttpClient {

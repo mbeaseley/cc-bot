@@ -5,11 +5,11 @@ import {
   CommandMessage,
   RuleBuilder,
 } from '@typeit/discord';
-import { environment } from '../../utils/environment';
-import { commandOverrides, commandHelpTypes } from '../../data/help';
-import Utility from '../../utils/utility';
+import { commandHelpTypes, commandOverrides } from 'Data/help';
+import { CommandItem, CommandType } from 'Types/help';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import { EmbedFieldData, Message, MessageEmbed } from 'discord.js';
-import { CommandItem, CommandType } from '../../types/help';
 
 export class Help {
   /**

@@ -1,14 +1,14 @@
 import * as Path from 'path';
 import { ArgsOf, Discord, On, Rule, Rules } from '@typeit/discord';
+import { MemberAdd } from 'Commands/misc/memberAdd';
+import { MemberRemove } from 'Commands/misc/memberRemove';
+import { ReactionRoles } from 'Commands/misc/reactionRoles';
+import { Main } from 'Root/main';
+import { Logger } from 'Services/logger.service';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import chalk from 'chalk';
 import { Guild } from 'discord.js';
-import { ReactionRoles } from './commands/misc/reactionRoles';
-import { Main } from './main';
-import { Logger } from './services/logger.service';
-import { environment } from './utils/environment';
-import Utility from './utils/utility';
-import { MemberAdd } from './commands/misc/memberAdd';
-import { MemberRemove } from './commands/misc/memberRemove';
 
 @Discord('<', {
   import: [

@@ -1,6 +1,6 @@
-import { HttpClient } from '../interceptor/httpClient';
+import { HttpClient } from 'Interceptor/httpClient';
+import { ApiInstaUserResponse, InstaUser } from 'Types/instagram';
 import { AxiosResponse } from 'axios';
-import { ApiInstaUserResponse, InstaUser } from '../types/instagram';
 
 export class InstagramModelService extends HttpClient {
   /**

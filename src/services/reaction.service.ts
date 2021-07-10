@@ -1,5 +1,5 @@
-import { ReactionModelService } from '../models/reaction-model.service';
-import { Reaction } from '../types/reaction';
+import { ReactionModelService } from 'Models/reaction-model.service';
+import { Reaction } from 'Types/reaction';
 
 export class ReactionService {
   private reactionModelService: ReactionModelService;

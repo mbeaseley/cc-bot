@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Logger } from '../../services/logger.service';
+import { Logger } from 'Services/logger.service';
+import { PollQuestion, selectionEmojis } from 'Types/poll';
+import { environment } from 'Utils/environment';
 import * as chalk from 'chalk';
-import { environment } from '../../utils/environment';
-import { PollQuestion, selectionEmojis } from '../../types/poll';
 import { ClientUser, EmbedField, Message, MessageEmbed } from 'discord.js';
 
 export class Poll {

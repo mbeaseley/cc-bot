@@ -1,4 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import {
   GuildChannel,
   GuildMember,
@@ -6,8 +8,6 @@ import {
   MessageEmbed,
   User,
 } from 'discord.js';
-import { environment } from '../../utils/environment';
-import Utility from '../../utils/utility';
 
 export class ChoosePlayer {
   private currentUser: User | undefined;

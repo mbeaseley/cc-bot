@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
+import { TwitchService } from 'Services/twitch.service';
+import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
-import { Logger } from '../../services/logger.service';
-import { TwitchService } from '../../services/twitch.service';
-import Utility from '../../utils/utility';
 
 export class Twitch {
   private logger: Logger;

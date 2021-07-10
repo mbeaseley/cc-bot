@@ -1,5 +1,5 @@
-import { InstagramModelService } from '../models/instagram-model.service';
-import { InstaUser } from '../types/instagram';
+import { InstagramModelService } from 'Models/instagram-model.service';
+import { InstaUser } from 'Types/instagram';
 
 export class InstagramService {
   private instagramModelService: InstagramModelService;
