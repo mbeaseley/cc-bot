@@ -5,6 +5,11 @@ import {
   Description,
   Guard,
 } from '@typeit/discord';
+import { isAdmin } from 'Guards/isAdmin';
+import { Logger } from 'Services/logger.service';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
+import * as Canvas from 'canvas';
 import {
   GuildMember,
   Message,
@@ -12,16 +17,12 @@ import {
   PartialGuildMember,
   TextChannel,
 } from 'discord.js';
-import * as Canvas from 'canvas';
 import path = require('path');
-import { environment } from '../../utils/environment';
-import { isAdmin } from '../../guards/isAdmin';
-import Utility from '../../utils/utility';
-import { Logger } from '../../services/logger.service';
+
 export class MemberAdd {
-  private color: string = '#ffffff';
-  private strokeColor: string = '#74037b';
-  private font: string = 'sans-serif';
+  private color = '#ffffff';
+  private strokeColor = '#74037b';
+  private font = 'sans-serif';
   private logger: Logger;
 
   constructor() {
@@ -175,7 +176,7 @@ export class MemberAdd {
   @Description('Manually welcome new member')
   async initialWelcome(command: CommandMessage): Promise<Message | void> {
     try {
-      await command.delete();
+      if (command.deletable) await command.delete();
       const userStrings = Utility.getOptionFromCommand(
         command.content,
         2
@@ -195,12 +196,16 @@ export class MemberAdd {
         }
         return this.handleMessage(m);
       });
-    } catch (e: any) {
-      await command.delete();
-      this.logger.error(`Command: 'welcome' has error: ${e.message}.`);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'welcome' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
-          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }

@@ -1,9 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
+import { SteamService } from 'Services/steam.service';
+import { PlayerSummary, UserBans } from 'Types/steam';
+import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
-import { SteamService } from '../../services/steam.service';
-import { Logger } from '../../services/logger.service';
-import { PlayerSummary, UserBans } from '../../types/steam';
-import Utility from '../../utils/utility';
 
 export class Steam {
   private logger: Logger;
@@ -72,14 +72,16 @@ export class Steam {
       const userBans = await this.steamService.getUserBans(user.steamId);
       const message = this.createMessage(playerSummary, userBans);
 
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(message);
-    } catch (e: any) {
-      await command.delete();
-      this.logger.error(`Command: 'steam' has error: ${e.message}.`);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(`Command: 'steam' has error: ${(e as Error).message}.`);
       return command.channel
         .send(
-          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }

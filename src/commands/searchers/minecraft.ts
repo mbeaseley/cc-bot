@@ -1,10 +1,10 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
+import { McUrl } from 'Types/minecraft';
+import Utility from 'Utils/utility';
+import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
 import { status } from 'minecraft-server-util';
 import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
-import { McUrl } from '../../types/minecraft';
-import { Logger } from '../../services/logger.service';
-import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
-import Utility from '../../utils/utility';
 
 export class Minecraft {
   private logger: Logger;
@@ -83,7 +83,7 @@ export class Minecraft {
       );
 
       if (!newMcUrl.domain) {
-        await command.delete();
+        if (command.deletable) await command.delete();
         this.logger.error(
           `Command: 'minecraft' has error: domain and port not defined.`
         );
@@ -102,7 +102,7 @@ export class Minecraft {
         }
       );
 
-      await command.delete();
+      if (command.deletable) await command.delete();
       await fetchingMsg.delete();
 
       if (!res) {
@@ -113,9 +113,11 @@ export class Minecraft {
 
       const message = this.createMessage(res, newMcUrl);
       return command.channel.send(message);
-    } catch (e) {
-      await command.delete();
-      this.logger.error(`Command: 'minecraft' has error: ${e.message}.`);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'minecraft' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
           `An error has occured. Most likely you haven't set your ip/domain and port correctly. If this error keeps occurring, please contact support.`
@@ -136,7 +138,7 @@ export class Minecraft {
       const urlSplit = commandArray[0].split(':');
 
       if (!urlSplit.length) {
-        await command.delete();
+        if (command.deletable) await command.delete();
         this.logger.error(
           `Command: 'minecraft set' has error: domain and port not defined.`
         );
@@ -146,16 +148,20 @@ export class Minecraft {
       }
 
       this.mcUrl = new McUrl(urlSplit[0], +urlSplit[1]);
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel
         .send(`**Minecraft service domain/ip and port have been set!**`)
         .then((m) => m.delete({ timeout: 5000 }));
-    } catch (e) {
-      await command.delete();
-      this.logger.error(`Command: 'minecraft' has error: ${e.message}.`);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'minecraft' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
-          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }

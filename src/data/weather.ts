@@ -1,4 +1,4 @@
-import { WindDirection } from '../types/weather';
+import { WindDirection } from 'Types/weather';
 
 export const windDirections: WindDirection[] = [
   { name: 'North Northeast', min: 11.25, max: 33.74 },

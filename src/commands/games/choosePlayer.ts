@@ -1,7 +1,13 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { GuildChannel, Message, User } from 'discord.js';
-import { environment } from '../../utils/environment';
-import Utility from '../../utils/utility';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
+import {
+  GuildChannel,
+  GuildMember,
+  Message,
+  MessageEmbed,
+  User,
+} from 'discord.js';
 
 export class ChoosePlayer {
   private currentUser: User | undefined;
@@ -48,9 +54,7 @@ export class ChoosePlayer {
     excludeUsers: string[]
   ): (User | undefined)[] {
     let users = channel?.members?.map((m) => {
-      if (!m.user?.bot) {
-        return m.user;
-      }
+      return !m.user?.bot ? m.user : undefined;
     });
 
     if (!users?.length) {
@@ -82,11 +86,24 @@ export class ChoosePlayer {
   }
 
   /**
+   * Create message
+   * @param content
+   * @returns
+   */
+  private createMessage(content: string, member: GuildMember): MessageEmbed {
+    return new MessageEmbed()
+      .setColor(member.displayHexColor)
+      .setDescription(`**I have chosen ${content}!**`);
+  }
+
+  /**
    * Init for player choice
    * @param command
    */
-  private getResponse(command: CommandMessage): Promise<Message> {
+  private async getResponse(command: CommandMessage): Promise<Message> {
     try {
+      if (command.deletable) await command.delete();
+
       const channel = this.findUserChannel(command);
       const excludeUsers = this.getExcludeUsers(command);
       const users = this.getUsers(channel, excludeUsers);
@@ -96,9 +113,12 @@ export class ChoosePlayer {
       }
 
       const content = this.getRandomUser(users);
-
-      return command.reply(content);
-    } catch (e) {
+      const message = this.createMessage(
+        content,
+        command.member as GuildMember
+      );
+      return command.channel.send(message);
+    } catch (e: unknown) {
       return Promise.reject();
     }
   }

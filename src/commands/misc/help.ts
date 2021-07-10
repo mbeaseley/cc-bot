@@ -5,11 +5,11 @@ import {
   CommandMessage,
   RuleBuilder,
 } from '@typeit/discord';
-import { environment } from '../../utils/environment';
-import { commandOverrides, commandHelpTypes } from '../../data/help';
-import Utility from '../../utils/utility';
+import { commandHelpTypes, commandOverrides } from 'Data/help';
+import { CommandItem, CommandType } from 'Types/help';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import { EmbedFieldData, Message, MessageEmbed } from 'discord.js';
-import { CommandItem, CommandType } from '../../types/help';
 
 export class Help {
   /**
@@ -52,7 +52,7 @@ export class Help {
       const message = this.createBaseMessage(command, type);
       message.addFields([...fields]);
 
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(message);
     } else {
       const message = this.createBaseMessage(command);
@@ -75,7 +75,7 @@ export class Help {
       }
 
       message.addFields([...fields]);
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(message);
     }
   }
@@ -115,7 +115,7 @@ export class Help {
       (c) => c.name.toLowerCase() === type
     );
     if (type && !commandGroup) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel
         .send(
           `**This command grouping does not exist! Please use just help to see valid groupings.**`
@@ -124,7 +124,7 @@ export class Help {
     }
 
     if (!Utility.isAdmin(command) && commandGroup?.restrict) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel
         .send(`**You don't have the permissions for this**`)
         .then((m) => m.delete({ timeout: 5000 }));

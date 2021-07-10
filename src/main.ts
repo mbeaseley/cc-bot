@@ -1,7 +1,7 @@
 import { Client, Discord, Rule, Rules } from '@typeit/discord';
 import 'dotenv/config';
-import { DiscordBot } from './discordBot';
-import { environment } from './utils/environment';
+import { DiscordBot } from 'Root/discordBot';
+import { environment } from 'Utils/environment';
 
 @Discord('<')
 @Rules(Rule().fromString(`${environment.botId}> ` || `${environment.botId}>`))

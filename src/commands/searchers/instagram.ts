@@ -1,9 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { InstagramService } from 'Services/instagram.service';
+import { Logger } from 'Services/logger.service';
+import { InstaUser } from 'Types/instagram';
+import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
-import { InstaUser } from '../../types/instagram';
-import { InstagramService } from '../../services/instagram.service';
-import { Logger } from '../../services/logger.service';
-import Utility from '../../utils/utility';
 
 export class Instagram {
   private logger: Logger;
@@ -58,14 +58,18 @@ export class Instagram {
       }
 
       const message = this.createMessage(instaUser);
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(message);
-    } catch (e) {
-      await command.delete();
-      this.logger.error(`Command: 'instagram' has error: ${e.message}.`);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'instagram' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
-          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }

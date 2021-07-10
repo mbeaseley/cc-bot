@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Logger } from '../../services/logger.service';
+import { Logger } from 'Services/logger.service';
+import { PollQuestion, selectionEmojis } from 'Types/poll';
+import { environment } from 'Utils/environment';
 import * as chalk from 'chalk';
-import { environment } from '../../utils/environment';
-import { PollQuestion, selectionEmojis } from '../../types/poll';
 import { ClientUser, EmbedField, Message, MessageEmbed } from 'discord.js';
 
 export class Poll {
@@ -67,7 +67,7 @@ export class Poll {
     const poll = new PollQuestion(pollArray[0], pollArray.slice(1));
     const embed = this.createMessage(poll, command.client.user);
     return command.channel.send(embed).then(async (message) => {
-      poll.answers.forEach((a, i) => {
+      poll.answers.forEach((_, i) => {
         message.react(selectionEmojis[`${this.alphabet[i]}`]);
       });
     });

@@ -1,11 +1,11 @@
-import { DBDModelService } from '../models/dbd-model.service';
+import { DBDModelService } from 'Models/dbd-model.service';
 import {
   KillerItem,
   KillerOffering,
   PlayerKiller,
   SurvivorLoot,
   SurvivorOffering,
-} from '../types/dbd';
+} from 'Types/dbd';
 
 export class DBDService {
   private dbdModelService: DBDModelService;

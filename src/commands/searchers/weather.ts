@@ -1,11 +1,11 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { environment } from '../../utils/environment';
+import { windDirections } from 'Data/weather';
+import { Logger } from 'Services/logger.service';
+import { WeatherService } from 'Services/weather.service';
+import { WeatherObject } from 'Types/weather';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import { ClientUser, Message, MessageEmbed } from 'discord.js';
-import { WeatherObject } from '../../types/weather';
-import { WeatherService } from '../../services/weather.service';
-import Utility from '../../utils/utility';
-import { windDirections } from '../../data/weather';
-import { Logger } from '../../services/logger.service';
 
 export class Weather {
   private logger: Logger;
@@ -108,11 +108,13 @@ export class Weather {
 
       const weather = await this.weatherService.getCurrentWeather(location);
       const message = this.createMessage(weather, command.client.user);
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(message);
-    } catch (e) {
-      await command.delete();
-      this.logger.error(`Command: 'weather' has error: ${e.message}.`);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'weather' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
           `An error has occured. If this error keeps occurring, please contact support.`

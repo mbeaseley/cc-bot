@@ -1,4 +1,9 @@
 import { Client } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
+import { ReactionService } from 'Services/reaction.service';
+import { Reaction } from 'Types/reaction';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import * as chalk from 'chalk';
 import {
   GuildMember,
@@ -8,11 +13,6 @@ import {
   Role,
   User,
 } from 'discord.js';
-import { ReactionService } from '../../services/reaction.service';
-import { Logger } from '../../services/logger.service';
-import { environment } from '../../utils/environment';
-import Utility from '../../utils/utility';
-import { Reaction } from '../../types/reaction';
 
 export class ReactionRoles {
   private reactionService: ReactionService;

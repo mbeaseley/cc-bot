@@ -1,10 +1,10 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import * as urban from 'urban-dictionary';
-import { environment } from '../../utils/environment';
-import { Logger } from '../../services/logger.service';
+import { Logger } from 'Services/logger.service';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import * as chalk from 'chalk';
 import { Message, MessageEmbed } from 'discord.js';
-import Utility from '../../utils/utility';
+import * as urban from 'urban-dictionary';
 
 export class UrbanDictionary {
   private logger: Logger;
@@ -61,7 +61,7 @@ export class UrbanDictionary {
       }
 
       const embed = this.createMessage(phrase, entries[0]);
-      await command.delete();
+      if (command.deletable) await command.delete();
       return command.channel.send(embed);
     });
   }

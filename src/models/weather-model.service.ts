@@ -1,11 +1,7 @@
-import { HttpClient } from '../interceptor/httpClient';
+import { HttpClient } from 'Interceptor/httpClient';
+import { ApiResponseObject, WeatherItem, WeatherObject } from 'Types/weather';
+import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
-import { environment } from '../utils/environment';
-import {
-  WeatherObject,
-  ApiResponseObject,
-  WeatherItem,
-} from '../types/weather';
 import dayjs = require('dayjs');
 
 export class WeatherModelService extends HttpClient {

@@ -1,4 +1,4 @@
-import { CommandItem } from '../types/help';
+import { CommandItem } from 'Types/help';
 
 export const commandHelpTypes: CommandItem[] = [
   {
@@ -60,6 +60,16 @@ export const commandOverrides: CommandItem[] = [
   {
     name: 'joke',
     fullCommand: 'joke',
+    type: 'fun',
+  },
+  {
+    name: 'advice',
+    fullCommand: 'advice <@user(optional)>',
+    type: 'fun',
+  },
+  {
+    name: 'flip',
+    fullCommand: 'flip',
     type: 'fun',
   },
   {

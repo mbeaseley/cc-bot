@@ -1,9 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { HttpClient } from 'Interceptor/httpClient';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import { AxiosResponse } from 'axios';
 import { Message } from 'discord.js';
-import { HttpClient } from '../../interceptor/httpClient';
-import { environment } from '../../utils/environment';
-import Utility from '../../utils/utility';
 
 export class Insult extends HttpClient {
   constructor() {
@@ -46,7 +46,7 @@ export class Insult extends HttpClient {
 
     const message = this.createMessage(command, insult);
 
-    await command.delete();
+    if (command.deletable) await command.delete();
     return message.startsWith('<')
       ? command.channel.send(message)
       : command.reply(message);

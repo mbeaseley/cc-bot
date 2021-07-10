@@ -1,6 +1,6 @@
 import { CommandMessage, CommandNotFound } from '@typeit/discord';
+import { environment } from 'Utils/environment';
 import { Message } from 'discord.js';
-import { environment } from '../../utils/environment';
 
 export class NotFoundCommand {
   /**
@@ -10,9 +10,9 @@ export class NotFoundCommand {
    * @returns
    */
   @CommandNotFound()
-  commandNotFound(command: CommandMessage): Promise<Message | void> {
+  async commandNotFound(command: CommandMessage): Promise<Message | void> {
     if (command.content.indexOf(environment.botId) > -1) {
-      command.delete();
+      if (command.deletable) await command.delete();
       return command.reply(environment.commandNotFound);
     }
 

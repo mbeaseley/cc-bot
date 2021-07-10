@@ -1,10 +1,10 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { commands } from 'Data/dbdCommands';
+import { DBDService } from 'Services/dbd.service';
+import { KillerBuild, KillerItem, SurviverBuild } from 'Types/dbd';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
-import { commands } from '../../data/dbdCommands';
-import { KillerBuild, KillerItem, SurviverBuild } from '../../types/dbd';
-import { environment } from '../../utils/environment';
-import Utility from '../../utils/utility';
-import { DBDService } from '../../services/dbd.service';
 
 const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 
@@ -32,9 +32,7 @@ export class Dbd {
     const allKillers = await this.dbdService.getKillers();
     const killers = allKillers
       .map((k) => {
-        if (availableKillers.find((ak) => ak === k.id)) {
-          return k;
-        }
+        return availableKillers.find((ak) => ak === k.id) ? k : undefined;
       })
       .filter(Boolean);
 
@@ -90,7 +88,7 @@ export class Dbd {
     command: CommandMessage,
     build: KillerBuild | SurviverBuild
   ): Promise<Message | void> {
-    await command.delete();
+    if (command.deletable) await command.delete();
 
     const dbdBuild =
       build instanceof KillerBuild
@@ -117,7 +115,7 @@ export class Dbd {
   private async createHelpMessage(
     command: CommandMessage
   ): Promise<Message | void> {
-    await command.delete();
+    if (command.deletable) await command.delete();
 
     const filterCommands = commands.filter((c) =>
       c.tag.find((t) => t !== 'help')
@@ -180,7 +178,7 @@ export class Dbd {
       if (helpCommands.find((c) => c.name === keyCommand)) {
         return this.createHelpMessage(command);
       } else {
-        await command.delete();
+        if (command.deletable) await command.delete();
         return command.reply(environment.commandNotFound);
       }
     } catch (e: unknown) {

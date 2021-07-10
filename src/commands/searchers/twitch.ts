@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
+import { TwitchService } from 'Services/twitch.service';
+import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
-import { Logger } from '../../services/logger.service';
-import { TwitchService } from '../../services/twitch.service';
-import Utility from '../../utils/utility';
 
 export class Twitch {
   private logger: Logger;
@@ -53,18 +53,22 @@ export class Twitch {
                 .replace('{height}', `${1080}`)}`
             );
         }
-        await command.delete();
+        if (command.deletable) await command.delete();
         return command.channel.send(message);
       } else {
-        await command.delete();
+        if (command.deletable) await command.delete();
         return command.channel.send('**Twitch user not found.**');
       }
-    } catch (e: any) {
-      await command.delete();
-      this.logger.error(`Command: 'twitch' has error: ${e.message}.`);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'twitch' has error: ${(e as Error).message}.`
+      );
       return command.channel
         .send(
-          `The following error has occurred: ${e.message}. If this error keeps occurring, please contact support.`
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }
