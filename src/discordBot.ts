@@ -2,13 +2,13 @@ import * as Path from 'path';
 import { ArgsOf, Discord, On, Rule, Rules } from '@typeit/discord';
 import chalk from 'chalk';
 import { Guild } from 'discord.js';
-import { ReactionRoles } from './commands/misc/reactionRoles';
-import { Main } from './main';
-import { Logger } from './services/logger.service';
-import { environment } from './utils/environment';
-import Utility from './utils/utility';
-import { MemberAdd } from './commands/misc/memberAdd';
-import { MemberRemove } from './commands/misc/memberRemove';
+import { ReactionRoles } from '@commands/misc/reactionRoles';
+import { Main } from '@root/main';
+import { Logger } from '@services/logger.service';
+import { environment } from '@utils/environment';
+import Utility from '@utils/utility';
+import { MemberAdd } from '@commands/misc/memberAdd';
+import { MemberRemove } from '@commands/misc/memberRemove';
 
 @Discord('<', {
   import: [
