@@ -1,11 +1,11 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { environment } from 'Utils/environment';
 import { ClientUser, Message, MessageEmbed } from 'discord.js';
-import { WeatherObject } from 'Types/weather';
-import { WeatherService } from 'Services/weather.service';
-import Utility from 'Utils/utility';
 import { windDirections } from 'Data/weather';
 import { Logger } from 'Services/logger.service';
+import { WeatherService } from 'Services/weather.service';
+import { WeatherObject } from 'Types/weather';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 
 export class Weather {
   private logger: Logger;

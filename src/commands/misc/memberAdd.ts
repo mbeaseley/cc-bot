@@ -5,6 +5,7 @@ import {
   Description,
   Guard,
 } from '@typeit/discord';
+import * as Canvas from 'canvas';
 import {
   GuildMember,
   Message,
@@ -12,15 +13,15 @@ import {
   PartialGuildMember,
   TextChannel,
 } from 'discord.js';
-import * as Canvas from 'canvas';
 import path = require('path');
-import { environment } from 'Utils/environment';
 import { isAdmin } from 'Guards/isAdmin';
-import Utility from 'Utils/utility';
 import { Logger } from 'Services/logger.service';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
+
 export class MemberAdd {
   private color = '#ffffff';
-  private strokeColor: string = '#74037b';
+  private strokeColor = '#74037b';
   private font = 'sans-serif';
   private logger: Logger;
 

@@ -8,7 +8,7 @@ import {
   User,
 } from 'discord.js';
 import _ = require('underscore');
-import { environment } from './environment';
+import { environment } from 'Utils/environment';
 
 export default class Utility {
   /**

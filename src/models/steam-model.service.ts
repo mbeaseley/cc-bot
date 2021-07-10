@@ -1,6 +1,5 @@
-import { HttpClient } from 'Interceptor/httpClient';
 import { AxiosResponse } from 'axios';
-import { environment } from 'Utils/environment';
+import { HttpClient } from 'Interceptor/httpClient';
 import {
   ApiLocationResponseObject,
   ApiPlayerSummaryResponseObject,
@@ -11,7 +10,8 @@ import {
   VanityUser,
   UserBans,
   playerStatus,
-} from '../types/steam';
+} from 'Types/steam';
+import { environment } from 'Utils/environment';
 import dayjs = require('dayjs');
 
 export class SteamModelService extends HttpClient {

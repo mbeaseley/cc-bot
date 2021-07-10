@@ -8,11 +8,11 @@ import {
   Role,
   User,
 } from 'discord.js';
-import { ReactionService } from 'Services/reaction.service';
 import { Logger } from 'Services/logger.service';
+import { ReactionService } from 'Services/reaction.service';
+import { Reaction } from 'Types/reaction';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
-import { Reaction } from 'Types/reaction';
 
 export class ReactionRoles {
   private reactionService: ReactionService;

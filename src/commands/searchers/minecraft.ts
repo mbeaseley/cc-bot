@@ -1,9 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
 import { status } from 'minecraft-server-util';
 import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
-import { McUrl } from 'Types/minecraft';
 import { Logger } from 'Services/logger.service';
-import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
+import { McUrl } from 'Types/minecraft';
 import Utility from 'Utils/utility';
 
 export class Minecraft {
