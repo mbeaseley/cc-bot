@@ -45,7 +45,7 @@ export class Compliment extends HttpClient {
     const complimentObj = await this.getRandomCompliment();
 
     if (!complimentObj?.compliment) {
-      return Promise.reject();
+      return Promise.reject('**No compliment was from!**');
     }
 
     const message = this.createMessage(command, complimentObj.compliment);
@@ -64,9 +64,11 @@ export class Compliment extends HttpClient {
    */
   @Command('compliment')
   @Description('Send a nice compliment to yourself or a friend')
-  async init(command: CommandMessage): Promise<Message> {
-    return this.getResponse(command).catch(() => {
-      return command.reply(environment.error);
-    });
+  async init(command: CommandMessage): Promise<Message | void> {
+    return this.getResponse(command)
+      .catch(() => {
+        return command.reply(environment.error);
+      })
+      .then((m) => m.delete({ timeout: 5000 }));
   }
 }
