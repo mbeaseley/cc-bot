@@ -4,11 +4,11 @@ import {
   ApiPlayerSummaryResponseObject,
   ApiUserBanResponseObject,
   ApiVanityUserResponseObject,
+  playerStatus,
   PlayerSummary,
   SteamLocation,
-  VanityUser,
   UserBans,
-  playerStatus,
+  VanityUser,
 } from 'Types/steam';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
