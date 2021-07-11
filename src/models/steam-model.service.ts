@@ -2,8 +2,8 @@ import { HttpClient } from 'Interceptor/httpClient';
 import {
   ApiLocationResponseObject,
   ApiPlayerSummaryResponseObject,
-  ApiVanityUserResponseObject,
   ApiUserBanResponseObject,
+  ApiVanityUserResponseObject,
   PlayerSummary,
   SteamLocation,
   VanityUser,

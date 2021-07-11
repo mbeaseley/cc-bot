@@ -23,8 +23,11 @@ export class Advice {
     try {
       if (command.deletable) await command.delete();
 
+      const msg = command.channel.send('**:hourglass: Fetching Advice...**');
+
       const user = Utility.getOptionFromCommand(command.content, 2)?.[0];
       const givenAdvice = await this.adviceService.getAdvice();
+      await (await msg).delete();
 
       if (!givenAdvice?.advice) {
         return command.channel

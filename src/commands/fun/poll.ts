@@ -50,7 +50,7 @@ export class Poll {
   ): Promise<Message | void> {
     const commandString = command.content.split('poll ').pop();
     const pollArray = commandString
-      ?.split(/[\[\]']+/g)
+      ?.split(/[[\]']+/g)
       .filter((e) => e.trim() != '');
 
     if (!pollArray?.length) {
