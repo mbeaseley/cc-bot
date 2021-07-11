@@ -1,25 +1,17 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { HttpClient } from 'Interceptor/httpClient';
-import { ComplimentObject } from 'Types/compliment';
-import { environment } from 'Utils/environment';
+import { ComplimentService } from 'Services/compliment.service';
+import { Logger } from 'Services/logger.service';
 import Utility from 'Utils/utility';
-import { AxiosResponse } from 'axios';
 import { Message } from 'discord.js';
 
-export class Compliment extends HttpClient {
-  constructor() {
-    super('https://complimentr.com/api');
-  }
+export class Compliment {
+  private complimentService: ComplimentService;
+  private logger: Logger;
 
-  /**
-   * Get random joke
-   */
-  private getRandomCompliment = (): Promise<AxiosResponse<ComplimentObject>> =>
-    this.instance.get<ComplimentObject>('', {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
+  constructor() {
+    this.complimentService = new ComplimentService();
+    this.logger = new Logger();
+  }
 
   /**
    * Create message
@@ -39,24 +31,6 @@ export class Compliment extends HttpClient {
   };
 
   /**
-   * Init
-   */
-  private async getResponse(command: CommandMessage): Promise<Message> {
-    const complimentObj = await this.getRandomCompliment();
-
-    if (!complimentObj?.compliment) {
-      return Promise.reject('**No compliment was from!**');
-    }
-
-    const message = this.createMessage(command, complimentObj.compliment);
-
-    if (command.deletable) await command.delete();
-    return message.startsWith('<')
-      ? command.channel.send(message)
-      : command.reply(message);
-  }
-
-  /**
    * @name complimentInit
    * @param command
    * @description Display compliment to author or tagged user
@@ -65,10 +39,36 @@ export class Compliment extends HttpClient {
   @Command('compliment')
   @Description('Send a nice compliment to yourself or a friend')
   async init(command: CommandMessage): Promise<Message | void> {
-    return this.getResponse(command)
-      .catch(() => {
-        return command.reply(environment.error);
-      })
-      .then((m) => m.delete({ timeout: 5000 }));
+    try {
+      const msg = command.channel.send(
+        '**:hourglass: Fetching Compliment...**'
+      );
+
+      const res = await this.complimentService.getCompliment();
+      await (await msg).delete();
+      if (!res?.compliment) {
+        return command.channel
+          .send('**No compliment was from!**')
+          .then((m) => m.delete({ timeout: 5000 }));
+      }
+
+      const message = this.createMessage(command, res.compliment);
+
+      if (command.deletable) await command.delete();
+      return message.startsWith('<')
+        ? command.channel.send(message)
+        : command.reply(message);
+    } catch (e: unknown) {
+      this.logger.error(
+        `Command: 'compliment' has error: ${(e as Error).message}.`
+      );
+      return command.channel
+        .send(
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
+        )
+        .then((m) => m.delete({ timeout: 5000 }));
+    }
   }
 }
