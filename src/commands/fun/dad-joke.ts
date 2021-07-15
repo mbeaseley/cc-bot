@@ -1,15 +1,15 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { ComplimentService } from 'Services/compliment.service';
+import { DadJokeService } from 'Services/dad-joke.service';
 import { Logger } from 'Services/logger.service';
 import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
-export class Compliment {
-  private complimentService: ComplimentService;
+export class DadJoke {
+  private dadJokeService: DadJokeService;
   private logger: Logger;
 
   constructor() {
-    this.complimentService = new ComplimentService();
+    this.dadJokeService = new DadJokeService();
     this.logger = new Logger();
   }
 
@@ -31,39 +31,36 @@ export class Compliment {
   };
 
   /**
-   * @name complimentInit
+   * @name jokeInit
    * @param command
-   * @description Display compliment to author or tagged user
+   * @description Display joke
    * @returns
    */
-  @Command('compliment')
-  @Description('Send a nice compliment to yourself or a friend')
-  async init(command: CommandMessage): Promise<Message | void> {
+  @Command('joke')
+  @Description('Make your friends laugh with a dad joke')
+  async init(command: CommandMessage): Promise<Message> {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send(
-        '**:hourglass: Fetching Compliment...**'
-      );
+      const msg = command.channel.send('**:hourglass: Fetching Joke...**');
 
-      const res = await this.complimentService.getCompliment();
+      const res = await this.dadJokeService.getJoke();
       await (await msg).delete();
-      if (!res?.compliment) {
+
+      if (!res?.joke) {
         return command.channel
-          .send('**No compliment was found!**')
+          .send('**No joke was found!**')
           .then((m) => m.delete({ timeout: 5000 }));
       }
 
-      const message = this.createMessage(command, res.compliment);
+      const message = this.createMessage(command, res.joke);
 
       return message.startsWith('<')
         ? command.channel.send(message)
         : command.reply(message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(
-        `Command: 'compliment' has error: ${(e as Error).message}.`
-      );
+      this.logger.error(`Command: 'joke' has error: ${(e as Error).message}.`);
       return command.channel
         .send(
           `The following error has occurred: ${
