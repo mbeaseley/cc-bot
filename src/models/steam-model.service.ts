@@ -2,13 +2,13 @@ import { HttpClient } from 'Interceptor/httpClient';
 import {
   ApiLocationResponseObject,
   ApiPlayerSummaryResponseObject,
-  ApiVanityUserResponseObject,
   ApiUserBanResponseObject,
+  ApiVanityUserResponseObject,
+  playerStatus,
   PlayerSummary,
   SteamLocation,
-  VanityUser,
   UserBans,
-  playerStatus,
+  VanityUser,
 } from 'Types/steam';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';

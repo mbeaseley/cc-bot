@@ -163,10 +163,25 @@ export class ReactionRoles {
    */
   public init(client: Client): void {
     client.on('messageReactionAdd', (reaction, user) =>
-      this.handleReactionAction('add', reaction, user).catch(() => {})
+      this.handleReactionAction('add', reaction, user).catch((e: unknown) => {
+        this.logger.error(
+          `${chalk.bold('BOT ERROR')}: 'Error adding role' ${
+            (e as Error).message
+          }`
+        );
+      })
     );
+
     client.on('messageReactionRemove', (reaction, user) =>
-      this.handleReactionAction('remove', reaction, user).catch(() => {})
+      this.handleReactionAction('remove', reaction, user).catch(
+        (e: unknown) => {
+          this.logger.error(
+            `${chalk.bold('BOT ERROR')}: 'Error removing role' ${
+              (e as Error).message
+            }`
+          );
+        }
+      )
     );
   }
 }
