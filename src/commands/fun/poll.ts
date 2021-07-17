@@ -1,7 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
-import { environment } from 'Utils/environment';
 import * as chalk from 'chalk';
 import { ClientUser, EmbedField, Message, MessageEmbed } from 'discord.js';
 
@@ -48,6 +47,8 @@ export class Poll {
   private async createPollingObject(
     command: CommandMessage
   ): Promise<Message | void> {
+    if (command.deletable) command.delete();
+
     const commandString = command.content.split('poll ').pop();
     const pollArray = commandString
       ?.split(/[[\]']+/g)
@@ -58,10 +59,6 @@ export class Poll {
         `${chalk.bold('BOT ERROR')}: incorrect formatting used on command`
       );
       return Promise.reject();
-    }
-
-    if (command.deletable) {
-      command.delete();
     }
 
     const poll = new PollQuestion(pollArray[0], pollArray.slice(1));
@@ -76,8 +73,18 @@ export class Poll {
   @Command('poll')
   @Description('Create a poll for friends to answer (max 26 options)')
   async init(command: CommandMessage): Promise<Message | void> {
-    return this.createPollingObject(command).catch(() => {
-      return command.reply(environment.error);
-    });
+    try {
+      return this.createPollingObject(command);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(`Command: 'poll' has error: ${(e as Error).message}.`);
+      return command.channel
+        .send(
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
+        )
+        .then((m) => m.delete({ timeout: 5000 }));
+    }
   }
 }
