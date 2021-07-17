@@ -3,7 +3,6 @@ import { windDirections } from 'Data/weather';
 import { Logger } from 'Services/logger.service';
 import { WeatherService } from 'Services/weather.service';
 import { WeatherObject } from 'Types/weather';
-import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import { ClientUser, Message, MessageEmbed } from 'discord.js';
 
@@ -95,21 +94,35 @@ export class Weather {
   };
 
   /**
-   * Get weather for location and responds with message to channel
+   * Weather Init
    * @param command
    */
-  private async getResponse(command: CommandMessage): Promise<Message | void> {
+  @Command('weather')
+  @Description('Get the weather of your area')
+  async init(command: CommandMessage): Promise<Message | void> {
     try {
+      if (command.deletable) await command.delete();
+
+      const msg = command.channel.send('**:hourglass: Fetching weather...**');
+
       const location = Utility.getOptionFromCommand(
         command.content,
         2,
         ' '
       ) as string;
 
-      const weather = await this.weatherService.getCurrentWeather(location);
-      const message = this.createMessage(weather, command.client.user);
-      if (command.deletable) await command.delete();
-      return command.channel.send(message);
+      if (!location) {
+        await (await msg).delete();
+        return command.channel
+          .send(`**Please add location to query**`)
+          .then((m) => m.delete({ timeout: 5000 }));
+      } else {
+        const weather = await this.weatherService.getCurrentWeather(location);
+        await (await msg).delete();
+
+        const message = this.createMessage(weather, command.client.user);
+        return command.channel.send(message);
+      }
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
@@ -121,17 +134,5 @@ export class Weather {
         )
         .then((m) => m.delete({ timeout: 5000 }));
     }
-  }
-
-  /**
-   * Weather Init
-   * @param command
-   */
-  @Command('weather')
-  @Description('Get the weather of your area')
-  init(command: CommandMessage): Promise<Message | void> {
-    return this.getResponse(command).catch(() => {
-      command.reply(environment.error);
-    });
   }
 }

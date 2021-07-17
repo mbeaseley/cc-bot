@@ -42,14 +42,19 @@ export class Instagram {
   @Command('instagram')
   @Description('Find someone you know on Instagram')
   async init(command: CommandMessage): Promise<void | Message> {
-    const username = Utility.getOptionFromCommand(
-      command.content,
-      2,
-      ' '
-    ) as string;
-
     try {
+      if (command.deletable) await command.delete();
+
+      const msg = command.channel.send('**:hourglass: Fetching account...**');
+
+      const username = Utility.getOptionFromCommand(
+        command.content,
+        2,
+        ' '
+      ) as string;
+
       const instaUser = await this.instagramService.getInstaUser(username);
+      await (await msg).delete();
 
       if (!instaUser?.username) {
         return command.channel
@@ -58,7 +63,6 @@ export class Instagram {
       }
 
       const message = this.createMessage(instaUser);
-      if (command.deletable) await command.delete();
       return command.channel.send(message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();

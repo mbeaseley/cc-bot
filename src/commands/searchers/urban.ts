@@ -1,8 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
-import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { Message, MessageEmbed } from 'discord.js';
 import * as urban from 'urban-dictionary';
 
@@ -41,28 +40,45 @@ export class UrbanDictionary {
    */
   @Command('urban')
   @Description('Get urban definition of word')
-  getDefinition(command: CommandMessage): Promise<Message> | void {
-    const phrase = Utility.getOptionFromCommand(
-      command.content,
-      2,
-      ' '
-    ) as string;
+  async getDefinition(command: CommandMessage): Promise<Message | void> {
+    try {
+      if (command.deletable) await command.delete();
 
-    if (!phrase) {
-      if (command.deletable) command.delete();
-      return command.reply('Try again, please add word to define!');
-    }
+      const phrase = Utility.getOptionFromCommand(
+        command.content,
+        2,
+        ' '
+      ) as string;
 
-    return urban.define(phrase, async (err, entries) => {
-      if (err) {
-        if (command.deletable) command.delete();
-        this.logger.error(`${chalk.bold('BOT ERROR')}: ${err.message}`);
-        return command.channel.send(environment.error);
+      if (!phrase) {
+        return command.channel
+          .send('**Try again, please add word to define!**')
+          .then((m) => m.delete({ timeout: 5000 }));
       }
 
-      const embed = this.createMessage(phrase, entries[0]);
+      return urban.define(phrase, async (err, entries) => {
+        if (err) {
+          this.logger.error(`${chalk.bold('BOT ERROR')}: ${err.message}`);
+          return command.channel
+            .send('**Invalid word, please try a different word!**')
+            .then((m) => m.delete({ timeout: 5000 }));
+        }
+
+        const embed = this.createMessage(phrase, entries[0]);
+        return command.channel.send(embed);
+      });
+    } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      return command.channel.send(embed);
-    });
+      this.logger.error(
+        `${chalk.bold("Command: 'urban' has error")}: ${(e as Error).message}.`
+      );
+      return command.channel
+        .send(
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
+        )
+        .then((m) => m.delete({ timeout: 5000 }));
+    }
   }
 }
