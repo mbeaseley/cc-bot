@@ -1,4 +1,5 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import {
@@ -11,6 +12,11 @@ import {
 
 export class ChoosePlayer {
   private currentUser: User | undefined;
+  private logger: Logger;
+
+  constructor() {
+    this.logger = new Logger();
+  }
 
   /**
    * Get random user that doesn't match previous
@@ -97,19 +103,28 @@ export class ChoosePlayer {
   }
 
   /**
-   * Init for player choice
+   * @name playerInit
    * @param command
+   * @description Command to choose player from voice channel
+   * @returns
    */
-  private async getResponse(command: CommandMessage): Promise<Message> {
+  @Command('playerchoice')
+  @Description('Chooses Player in voice chat')
+  async init(command: CommandMessage): Promise<Message> {
     try {
       if (command.deletable) await command.delete();
+
+      const msg = command.channel.send('**:hourglass: Choosing player...**');
 
       const channel = this.findUserChannel(command);
       const excludeUsers = this.getExcludeUsers(command);
       const users = this.getUsers(channel, excludeUsers);
+      await (await msg).delete();
 
       if (!users.length) {
-        return Promise.reject('Please join a voicechat to use this command!');
+        return command.channel
+          .send('**Please join a voicechat to use this command!**')
+          .then((m) => m.delete({ timeout: 5000 }));
       }
 
       const content = this.getRandomUser(users);
@@ -119,21 +134,17 @@ export class ChoosePlayer {
       );
       return command.channel.send(message);
     } catch (e: unknown) {
-      return Promise.reject();
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'playerchoice' has error: ${(e as Error).message}.`
+      );
+      return command.channel
+        .send(
+          `The following error has occurred: ${
+            (e as Error).message
+          }. If this error keeps occurring, please contact support.`
+        )
+        .then((m) => m.delete({ timeout: 5000 }));
     }
-  }
-
-  /**
-   * @name playerInit
-   * @param command
-   * @description Command to choose player from voice channel
-   * @returns
-   */
-  @Command('playerchoice')
-  @Description('Chooses Player in voice chat')
-  async init(command: CommandMessage): Promise<Message> {
-    return this.getResponse(command).catch((e: string) => {
-      return command.reply(e ? e : environment.error);
-    });
   }
 }
