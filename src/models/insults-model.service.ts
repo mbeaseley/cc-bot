@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
 import { HttpClient } from 'Interceptor/httpClient';
+import { AxiosResponse } from 'axios';
 
 export class InsultsModelService extends HttpClient {
   constructor() {

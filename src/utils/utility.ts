@@ -164,7 +164,7 @@ export default class Utility {
     type: 'channel' | 'reply' | 'author' = 'channel',
     deleteDelay?: number
   ): Promise<Message> {
-    let msg =
+    const msg =
       type === 'channel'
         ? command.channel.send(content)
         : type === 'author'

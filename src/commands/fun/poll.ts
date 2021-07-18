@@ -1,10 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
+import Utility from 'Utils/utility';
 import * as chalk from 'chalk';
 import { ClientUser, EmbedField, Message, MessageEmbed } from 'discord.js';
-import Utility from 'Root/utils/utility';
-
 export class Poll {
   private logger: Logger;
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
