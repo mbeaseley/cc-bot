@@ -39,15 +39,21 @@ export class Insult {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send('**:hourglass: Fetching Insult...**');
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Fetching Insult...**'
+      );
 
       const res = await this.insultsService.getInsult();
-      await (await msg).delete();
+      await msg.delete();
 
       if (!res) {
-        return command.channel
-          .send('**No insult was found!**')
-          .then((m) => m.delete({ timeout: 5000 }));
+        return Utility.sendMessage(
+          command,
+          '**No insult was found!**',
+          'channel',
+          5000
+        );
       }
 
       const message = this.createMessage(command, res);
@@ -59,13 +65,14 @@ export class Insult {
       this.logger.error(
         `Command: 'insult' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

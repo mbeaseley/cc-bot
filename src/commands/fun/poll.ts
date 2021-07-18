@@ -3,10 +3,12 @@ import { Logger } from 'Services/logger.service';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
 import * as chalk from 'chalk';
 import { ClientUser, EmbedField, Message, MessageEmbed } from 'discord.js';
+import Utility from 'Root/utils/utility';
 
 export class Poll {
   private logger: Logger;
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
+
   constructor() {
     this.logger = new Logger();
   }
@@ -58,7 +60,12 @@ export class Poll {
       this.logger.error(
         `${chalk.bold('BOT ERROR')}: incorrect formatting used on command`
       );
-      return Promise.reject();
+      return Utility.sendMessage(
+        command,
+        '**Please use correct formatting**',
+        'channel',
+        5000
+      );
     }
 
     const poll = new PollQuestion(pollArray[0], pollArray.slice(1));
@@ -78,13 +85,14 @@ export class Poll {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(`Command: 'poll' has error: ${(e as Error).message}.`);
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

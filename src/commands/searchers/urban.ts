@@ -51,34 +51,41 @@ export class UrbanDictionary {
       ) as string;
 
       if (!phrase) {
-        return command.channel
-          .send('**Try again, please add word to define!**')
-          .then((m) => m.delete({ timeout: 5000 }));
+        return Utility.sendMessage(
+          command,
+          '**Try again, please add word to define!**',
+          'channel',
+          5000
+        );
       }
 
       return urban.define(phrase, async (err, entries) => {
         if (err) {
           this.logger.error(`${chalk.bold('BOT ERROR')}: ${err.message}`);
-          return command.channel
-            .send('**Invalid word, please try a different word!**')
-            .then((m) => m.delete({ timeout: 5000 }));
+          return Utility.sendMessage(
+            command,
+            '**Invalid word, please try a different word!**',
+            'channel',
+            5000
+          );
         }
 
         const embed = this.createMessage(phrase, entries[0]);
-        return command.channel.send(embed);
+        return Utility.sendMessage(command, embed);
       });
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `${chalk.bold("Command: 'urban' has error")}: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

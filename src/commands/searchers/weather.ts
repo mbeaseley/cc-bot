@@ -103,7 +103,10 @@ export class Weather {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send('**:hourglass: Fetching weather...**');
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Fetching weather...**'
+      );
 
       const location = Utility.getOptionFromCommand(
         command.content,
@@ -112,27 +115,33 @@ export class Weather {
       ) as string;
 
       if (!location) {
-        await (await msg).delete();
-        return command.channel
-          .send(`**Please add location to query**`)
-          .then((m) => m.delete({ timeout: 5000 }));
+        await msg.delete();
+        return Utility.sendMessage(
+          command,
+          `**Please add location to query**`,
+          'channel',
+          5000
+        );
       } else {
         const weather = await this.weatherService.getCurrentWeather(location);
-        await (await msg).delete();
+        await msg.delete();
 
         const message = this.createMessage(weather, command.client.user);
-        return command.channel.send(message);
+        return Utility.sendMessage(command, message);
       }
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'weather' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `An error has occured. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

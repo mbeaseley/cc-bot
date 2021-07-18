@@ -114,17 +114,23 @@ export class ChoosePlayer {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send('**:hourglass: Choosing player...**');
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Choosing player...**'
+      );
 
       const channel = this.findUserChannel(command);
       const excludeUsers = this.getExcludeUsers(command);
       const users = this.getUsers(channel, excludeUsers);
-      await (await msg).delete();
+      await msg.delete();
 
       if (!users.length) {
-        return command.channel
-          .send('**Please join a voicechat to use this command!**')
-          .then((m) => m.delete({ timeout: 5000 }));
+        return Utility.sendMessage(
+          command,
+          '**Please join a voicechat to use this command!**',
+          'channel',
+          5000
+        );
       }
 
       const content = this.getRandomUser(users);
@@ -132,19 +138,20 @@ export class ChoosePlayer {
         content,
         command.member as GuildMember
       );
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'playerchoice' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

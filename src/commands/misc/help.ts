@@ -53,7 +53,7 @@ export class Help {
       message.addFields([...fields]);
 
       if (command.deletable) await command.delete();
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     } else {
       const message = this.createBaseMessage(command);
       let fields: EmbedFieldData[] = commandHelpTypes.map((c) => {
@@ -76,7 +76,7 @@ export class Help {
 
       message.addFields([...fields]);
       if (command.deletable) await command.delete();
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     }
   }
 

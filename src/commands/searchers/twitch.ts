@@ -60,7 +60,10 @@ export class Twitch {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send('**:hourglass: Fetching account...**');
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Fetching account...**'
+      );
 
       const username = Utility.getOptionFromCommand(
         command.content,
@@ -72,26 +75,27 @@ export class Twitch {
       if (user?.id) {
         const stream = await this.twitchService.getStreams(username);
         const followers = await this.twitchService.getFollowersById(user.id);
-        await (await msg).delete();
+        await msg.delete();
         const message = this.createMessage(user, followers, stream);
 
-        return command.channel.send(message);
+        return Utility.sendMessage(command, message);
       } else {
-        await (await msg).delete();
-        return command.channel.send('**Twitch user not found.**');
+        await msg.delete();
+        return Utility.sendMessage(command, '**Twitch user not found.**');
       }
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'twitch' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

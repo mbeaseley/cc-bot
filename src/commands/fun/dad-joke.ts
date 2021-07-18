@@ -42,32 +42,39 @@ export class DadJoke {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send('**:hourglass: Fetching Joke...**');
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Fetching Joke...**'
+      );
 
       const res = await this.dadJokeService.getJoke();
-      await (await msg).delete();
+      await msg.delete();
 
       if (!res?.joke) {
-        return command.channel
-          .send('**No joke was found!**')
-          .then((m) => m.delete({ timeout: 5000 }));
+        return Utility.sendMessage(
+          command,
+          '**No joke was found!**',
+          'channel',
+          5000
+        );
       }
 
       const message = this.createMessage(command, res.joke);
 
       return message.startsWith('<')
-        ? command.channel.send(message)
-        : command.reply(message);
+        ? Utility.sendMessage(command, message)
+        : Utility.sendMessage(command, message, 'reply');
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(`Command: 'joke' has error: ${(e as Error).message}.`);
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

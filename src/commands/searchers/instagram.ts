@@ -45,7 +45,9 @@ export class Instagram {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send('**:hourglass: Fetching account...**');
+      const msg = await command.channel.send(
+        '**:hourglass: Fetching account...**'
+      );
 
       const username = Utility.getOptionFromCommand(
         command.content,
@@ -54,28 +56,32 @@ export class Instagram {
       ) as string;
 
       const instaUser = await this.instagramService.getInstaUser(username);
-      await (await msg).delete();
+      await msg.delete();
 
       if (!instaUser?.username) {
-        return command.channel
-          .send('**This username was unable to be found.**')
-          .then((m) => m.delete({ timeout: 10000 }));
+        return Utility.sendMessage(
+          command,
+          '**This username was unable to be found.**',
+          'channel',
+          5000
+        );
       }
 
       const message = this.createMessage(instaUser);
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'instagram' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

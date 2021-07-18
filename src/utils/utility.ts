@@ -4,6 +4,7 @@ import {
   EmbedField,
   Guild,
   GuildManager,
+  Message,
   MessageEmbed,
   MessageEmbedOptions,
   User,
@@ -147,5 +148,31 @@ export default class Utility {
   static isAdmin(command: CommandMessage): boolean {
     const id = this.getAuthor(command)?.id as string;
     return !!environment.admins.find((a) => a === id);
+  }
+
+  /**
+   * Sends command message response
+   * @param command
+   * @param content
+   * @param type
+   * @param deleteDelay
+   * @returns Promise<Message>
+   */
+  static sendMessage(
+    command: CommandMessage,
+    content: string | MessageEmbed,
+    type: 'channel' | 'reply' | 'author' = 'channel',
+    deleteDelay?: number
+  ): Promise<Message> {
+    let msg =
+      type === 'channel'
+        ? command.channel.send(content)
+        : type === 'author'
+        ? command.author.send(content)
+        : command.reply(content);
+
+    return deleteDelay
+      ? msg.then((m) => m.delete({ timeout: deleteDelay }))
+      : msg;
   }
 }

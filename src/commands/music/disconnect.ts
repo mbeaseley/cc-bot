@@ -1,6 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { GuildMember, Message, MessageEmbed } from 'discord.js';
+import Utility from 'Root/utils/utility';
 
 export class Disconnect {
   private logger: Logger;
@@ -41,7 +42,7 @@ export class Disconnect {
           command.member as GuildMember,
           '**I cannot leave a voice channel that I am not in!**'
         );
-        return command.channel.send(message);
+        return Utility.sendMessage(command, message, 'channel', 5000);
       }
 
       botActive.leave();
@@ -49,17 +50,18 @@ export class Disconnect {
         command.member as GuildMember,
         '**I have left the voice channel.**'
       );
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(`Command: 'join' has error: ${(e as Error).message}.`);
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }
