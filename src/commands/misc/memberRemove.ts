@@ -17,7 +17,7 @@ export class MemberRemove {
     member: GuildMember | PartialGuildMember
   ): Promise<Message | void> {
     const { guild } = member;
-    let channel = guild.channels.cache.get(environment.memberRemove);
+    const channel = guild.channels.cache.get(environment.memberRemove);
 
     if (!channel) {
       return Promise.resolve();

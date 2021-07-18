@@ -1,5 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
+import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
 export class coinFlip {
@@ -28,25 +29,29 @@ export class coinFlip {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = command.channel.send(`**:hourglass: Flipping coin!**`);
-      (await msg).delete({ timeout: 1000 });
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Flipping coin!**'
+      );
+      await msg.delete({ timeout: 1000 });
 
       const result = this.flipCoin();
       return setTimeout(() => {
-        return command.channel.send(`**${result} :coin:**`);
+        return Utility.sendMessage(command, `**${result} :coin:**`);
       }, 1000);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'advice' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

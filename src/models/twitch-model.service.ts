@@ -1,13 +1,13 @@
 import { HttpClient } from 'Interceptor/httpClient';
 import {
-  Token,
-  ApiTokenResponseObject,
-  User,
-  ApiUserResponseObject,
-  Stream,
-  ApiStreamResponseObject,
-  Followers,
   ApiFollowersResponseObject,
+  ApiStreamResponseObject,
+  ApiTokenResponseObject,
+  ApiUserResponseObject,
+  Followers,
+  Stream,
+  Token,
+  User,
 } from 'Types/twitch';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';

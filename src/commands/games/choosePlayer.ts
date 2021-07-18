@@ -1,4 +1,5 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import {
@@ -11,6 +12,11 @@ import {
 
 export class ChoosePlayer {
   private currentUser: User | undefined;
+  private logger: Logger;
+
+  constructor() {
+    this.logger = new Logger();
+  }
 
   /**
    * Get random user that doesn't match previous
@@ -97,33 +103,6 @@ export class ChoosePlayer {
   }
 
   /**
-   * Init for player choice
-   * @param command
-   */
-  private async getResponse(command: CommandMessage): Promise<Message> {
-    try {
-      if (command.deletable) await command.delete();
-
-      const channel = this.findUserChannel(command);
-      const excludeUsers = this.getExcludeUsers(command);
-      const users = this.getUsers(channel, excludeUsers);
-
-      if (!users.length) {
-        return Promise.reject('Please join a voicechat to use this command!');
-      }
-
-      const content = this.getRandomUser(users);
-      const message = this.createMessage(
-        content,
-        command.member as GuildMember
-      );
-      return command.channel.send(message);
-    } catch (e: unknown) {
-      return Promise.reject();
-    }
-  }
-
-  /**
    * @name playerInit
    * @param command
    * @description Command to choose player from voice channel
@@ -132,8 +111,47 @@ export class ChoosePlayer {
   @Command('playerchoice')
   @Description('Chooses Player in voice chat')
   async init(command: CommandMessage): Promise<Message> {
-    return this.getResponse(command).catch((e: string) => {
-      return command.reply(e ? e : environment.error);
-    });
+    try {
+      if (command.deletable) await command.delete();
+
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Choosing player...**'
+      );
+
+      const channel = this.findUserChannel(command);
+      const excludeUsers = this.getExcludeUsers(command);
+      const users = this.getUsers(channel, excludeUsers);
+      await msg.delete();
+
+      if (!users.length) {
+        return Utility.sendMessage(
+          command,
+          '**Please join a voicechat to use this command!**',
+          'channel',
+          5000
+        );
+      }
+
+      const content = this.getRandomUser(users);
+      const message = this.createMessage(
+        content,
+        command.member as GuildMember
+      );
+      return Utility.sendMessage(command, message);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'playerchoice' has error: ${(e as Error).message}.`
+      );
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
+    }
   }
 }

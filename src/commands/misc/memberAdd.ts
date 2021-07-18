@@ -1,3 +1,4 @@
+import path = require('path');
 import {
   Client,
   Command,
@@ -17,7 +18,6 @@ import {
   PartialGuildMember,
   TextChannel,
 } from 'discord.js';
-import path = require('path');
 
 export class MemberAdd {
   private color = '#ffffff';
@@ -129,7 +129,7 @@ export class MemberAdd {
     }
     const { guild } = member;
 
-    let channel = guild.channels?.cache.get(`${environment.memberAdd}`);
+    const channel = guild.channels?.cache.get(`${environment.memberAdd}`);
     if (!channel) {
       return Promise.resolve();
     }

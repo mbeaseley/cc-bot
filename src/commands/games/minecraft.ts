@@ -78,7 +78,8 @@ export class Minecraft {
         ? this.mcUrl
         : new McUrl(urlSplit[0], +urlSplit[1] || undefined);
 
-      const fetchingMsg = await command.channel.send(
+      const fetchingMsg = await Utility.sendMessage(
+        command,
         `⏳ Fetching ${newMcUrl.domain}:${newMcUrl.port} server info...`
       );
 
@@ -87,9 +88,12 @@ export class Minecraft {
         this.logger.error(
           `Command: 'minecraft' has error: domain and port not defined.`
         );
-        return command.channel
-          .send('**Incorrect format** Please check help for correct format!')
-          .then((m) => m.delete({ timeout: 5000 }));
+        return Utility.sendMessage(
+          command,
+          '**Incorrect format** Please check help for correct format!',
+          'channel',
+          5000
+        );
       }
 
       if (!newMcUrl.port) {
@@ -106,23 +110,27 @@ export class Minecraft {
       await fetchingMsg.delete();
 
       if (!res) {
-        return command.channel
-          .send(`**This server doesn't exist**`)
-          .then((m) => m.delete({ timeout: 5000 }));
+        return Utility.sendMessage(
+          command,
+          `**This server doesn't exist**`,
+          'channel',
+          5000
+        );
       }
 
       const message = this.createMessage(res, newMcUrl);
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'minecraft' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `An error has occured. Most likely you haven't set your ip/domain and port correctly. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `An error has occured. Most likely you haven't set your ip/domain and port correctly. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 
@@ -142,28 +150,35 @@ export class Minecraft {
         this.logger.error(
           `Command: 'minecraft set' has error: domain and port not defined.`
         );
-        return command.channel
-          .send('**Incorrect format** Please check help for correct format!')
-          .then((m) => m.delete({ timeout: 5000 }));
+        return Utility.sendMessage(
+          command,
+          '**Incorrect format** Please check help for correct format!',
+          'channel',
+          5000
+        );
       }
 
       this.mcUrl = new McUrl(urlSplit[0], +urlSplit[1]);
       if (command.deletable) await command.delete();
-      return command.channel
-        .send(`**Minecraft service domain/ip and port have been set!**`)
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        '**Minecraft service domain/ip and port have been set!**',
+        'channel',
+        5000
+      );
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'minecraft' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

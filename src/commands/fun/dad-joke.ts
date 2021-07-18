@@ -1,15 +1,15 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { ComplimentService } from 'Services/compliment.service';
+import { DadJokeService } from 'Services/dad-joke.service';
 import { Logger } from 'Services/logger.service';
 import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
-export class Compliment {
-  private complimentService: ComplimentService;
+export class DadJoke {
+  private dadJokeService: DadJokeService;
   private logger: Logger;
 
   constructor() {
-    this.complimentService = new ComplimentService();
+    this.dadJokeService = new DadJokeService();
     this.logger = new Logger();
   }
 
@@ -31,44 +31,42 @@ export class Compliment {
   };
 
   /**
-   * @name complimentInit
+   * @name jokeInit
    * @param command
-   * @description Display compliment to author or tagged user
+   * @description Display joke
    * @returns
    */
-  @Command('compliment')
-  @Description('Send a nice compliment to yourself or a friend')
-  async init(command: CommandMessage): Promise<Message | void> {
+  @Command('joke')
+  @Description('Make your friends laugh with a dad joke')
+  async init(command: CommandMessage): Promise<Message> {
     try {
       if (command.deletable) await command.delete();
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching Compliment...**'
+        '**:hourglass: Fetching Joke...**'
       );
 
-      const res = await this.complimentService.getCompliment();
+      const res = await this.dadJokeService.getJoke();
       await msg.delete();
 
-      if (!res?.compliment) {
+      if (!res?.joke) {
         return Utility.sendMessage(
           command,
-          '**No compliment was found!**',
+          '**No joke was found!**',
           'channel',
           5000
         );
       }
 
-      const message = this.createMessage(command, res.compliment);
+      const message = this.createMessage(command, res.joke);
 
       return message.startsWith('<')
         ? Utility.sendMessage(command, message)
         : Utility.sendMessage(command, message, 'reply');
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(
-        `Command: 'compliment' has error: ${(e as Error).message}.`
-      );
+      this.logger.error(`Command: 'joke' has error: ${(e as Error).message}.`);
       return Utility.sendMessage(
         command,
         `The following error has occurred: ${
