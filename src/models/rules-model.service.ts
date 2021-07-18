@@ -84,10 +84,7 @@ export class RulesModelService {
       return Promise.resolve(this.serverRules);
     }
 
-    const res = await this.databaseService.connect(
-      'rules',
-      RulesCollection.server
-    );
+    const res = await this.databaseService.get('rules', RulesCollection.server);
     this.serverRules = this.fromServerPayload(res, acceptEmoji);
     return this.serverRules;
   }

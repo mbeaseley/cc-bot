@@ -2,7 +2,7 @@ import { Logger } from 'Services/logger.service';
 import { DatabaseName, Databases } from 'Types/database';
 import { environment } from 'Utils/environment';
 import * as chalk from 'chalk';
-import { MongoClient } from 'mongodb';
+import { InsertWriteOpResult, MongoClient } from 'mongodb';
 
 export class DatabaseService {
   private _client: MongoClient | undefined;
@@ -27,6 +27,30 @@ export class DatabaseService {
   }
 
   /**
+   * ==================================
+   * Connect to database
+   * ==================================
+   */
+
+  /**
+   * Set connection uri and options
+   * @returns MongoClient
+   */
+  private setConnection(): MongoClient {
+    const uri = `mongodb+srv://${environment.dbUsername}:${environment.dbPassword}@cluster0.6ubpu.mongodb.net/test?retryWrites=true&w=majority`;
+    return new MongoClient(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  }
+
+  /**
+   * ==================================
+   * Get
+   * ==================================
+   */
+
+  /**
    * Get named collection from named database
    * @param client
    * @param dbName
@@ -41,36 +65,76 @@ export class DatabaseService {
   }
 
   /**
-   *  Connects to Mongodb
+   * Get collection data
+   * @param dbName
+   * @param collectionName
    */
-  async connect<T extends DatabaseName>(
+  public async get<T extends DatabaseName>(
     dbName: DatabaseName,
     collectionName: Databases[T]
   ): Promise<any[]> {
-    let dbResponse: any[] = [];
+    let res: any[] = [];
     this.Client = this.setConnection();
 
     try {
       await this.Client.connect();
-      dbResponse = await this.getCollection(dbName, collectionName);
+      res = await this.getCollection(dbName, collectionName);
     } catch (e: unknown) {
       this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {
       await this.Client.close();
+      return res;
     }
-
-    return Promise.resolve(dbResponse);
   }
 
   /**
-   * Set connection uri and options
-   * @returns MongoClient
+   * ==================================
+   * Create
+   * ==================================
    */
-  setConnection(): MongoClient {
-    const uri = `mongodb+srv://${environment.dbUsername}:${environment.dbPassword}@cluster0.6ubpu.mongodb.net/test?retryWrites=true&w=majority`;
-    return new MongoClient(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+
+  /**
+   * Create and insert document
+   * @param dbName
+   * @param collectionName
+   * @param document
+   */
+  private async createDocument<T extends DatabaseName>(
+    dbName: DatabaseName,
+    collectionName: Databases[T],
+    document: Object
+  ): Promise<InsertWriteOpResult<any> | undefined> {
+    const db = this.Client?.db(dbName);
+    return db?.collection(collectionName).insert(document);
   }
+
+  /**
+   * Create document in collection
+   * @param dbName
+   * @param collectionName
+   * @param document
+   */
+  public async create<T extends DatabaseName>(
+    dbName: DatabaseName,
+    collectionName: Databases[T],
+    document: Object
+  ): Promise<void> {
+    this.Client = this.setConnection();
+
+    try {
+      await this.Client.connect();
+      await this.createDocument(dbName, collectionName, document);
+    } catch (e: unknown) {
+      this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
+    } finally {
+      await this.Client.close();
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * ==================================
+   * Update
+   * ==================================
+   */
 }
