@@ -2,7 +2,11 @@ import { Logger } from 'Services/logger.service';
 import { DatabaseName, Databases } from 'Types/database';
 import { environment } from 'Utils/environment';
 import * as chalk from 'chalk';
-import { InsertWriteOpResult, MongoClient } from 'mongodb';
+import {
+  InsertOneWriteOpResult,
+  MongoClient,
+  UpdateWriteOpResult,
+} from 'mongodb';
 
 export class DatabaseService {
   private _client: MongoClient | undefined;
@@ -103,9 +107,9 @@ export class DatabaseService {
     dbName: DatabaseName,
     collectionName: Databases[T],
     document: Object
-  ): Promise<InsertWriteOpResult<any> | undefined> {
+  ): Promise<InsertOneWriteOpResult<any> | undefined> {
     const db = this.Client?.db(dbName);
-    return db?.collection(collectionName).insert(document);
+    return db?.collection(collectionName).insertOne(document);
   }
 
   /**
@@ -137,4 +141,43 @@ export class DatabaseService {
    * Update
    * ==================================
    */
+  private async updateDocument<T extends DatabaseName>(
+    dbName: DatabaseName,
+    collectionName: Databases[T],
+    existDocument: Object,
+    document: Object
+  ): Promise<UpdateWriteOpResult | undefined> {
+    const db = this.Client?.db(dbName);
+    return db
+      ?.collection(collectionName)
+      .updateOne(existDocument, { $set: document });
+  }
+
+  /**
+   * Get collection data
+   * @param dbName
+   * @param collectionName
+   */
+  public async update<T extends DatabaseName>(
+    dbName: DatabaseName,
+    collectionName: Databases[T],
+    existDocument: Object,
+    document: Object
+  ): Promise<void> {
+    this.Client = this.setConnection();
+
+    try {
+      await this.Client.connect();
+      await this.updateDocument(
+        dbName,
+        collectionName,
+        existDocument,
+        document
+      );
+    } catch (e: unknown) {
+      this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
+    } finally {
+      return this.Client.close();
+    }
+  }
 }
