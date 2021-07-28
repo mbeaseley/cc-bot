@@ -11,3 +11,9 @@ export class McUrl {
     this.port = port ? port : undefined;
   }
 }
+
+export interface McServerDetail {
+  guildId: string;
+  domain: string;
+  port: string;
+}

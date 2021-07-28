@@ -2,6 +2,7 @@ export type Databases = {
   dbd: DBDCollections;
   emojis: EmojisCollections;
   rules: RulesCollection;
+  servers: ServersCollection;
 };
 
 export enum DBDCollections {
@@ -21,6 +22,10 @@ export enum EmojisCollections {
 
 export enum RulesCollection {
   server = 'server',
+}
+
+export enum ServersCollection {
+  minecraft = 'minecraft',
 }
 
 export type DatabaseName = keyof Databases;
