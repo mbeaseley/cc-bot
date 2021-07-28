@@ -132,7 +132,7 @@ export class DatabaseService {
       this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {
       await this.Client.close();
-      return Promise.resolve();
+      return Promise.resolve(undefined);
     }
   }
 
@@ -177,7 +177,9 @@ export class DatabaseService {
     } catch (e: unknown) {
       this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {
-      return this.Client.close();
+      await this.Client.close();
     }
+
+    return Promise.resolve(undefined);
   }
 }

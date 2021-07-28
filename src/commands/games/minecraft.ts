@@ -103,7 +103,7 @@ export class Minecraft {
     try {
       const commandArray = Utility.getOptionFromCommand(command.content, 2);
       const urlSplit = commandArray[0]?.split(':');
-      let newMcUrl: McUrl = await this.setMinecraftUrl(
+      const newMcUrl: McUrl = await this.setMinecraftUrl(
         command.guild?.id || '',
         urlSplit
       );
