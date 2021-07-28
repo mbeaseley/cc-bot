@@ -1,24 +1,17 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
-import { HttpClient } from 'Interceptor/httpClient';
-import { environment } from 'Utils/environment';
+import { InsultsService } from 'Services/insults.service';
+import { Logger } from 'Services/logger.service';
 import Utility from 'Utils/utility';
-import { AxiosResponse } from 'axios';
 import { Message } from 'discord.js';
 
-export class Insult extends HttpClient {
-  constructor() {
-    super('https://insult.mattbas.org/api/insult');
-  }
+export class Insult {
+  private insultsService: InsultsService;
+  private logger: Logger;
 
-  /**
-   * Get random joke
-   */
-  private getRandomInsult = (): Promise<AxiosResponse<string>> =>
-    this.instance.get<string>('', {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
+  constructor() {
+    this.insultsService = new InsultsService();
+    this.logger = new Logger();
+  }
 
   /**
    * Create message
@@ -35,24 +28,6 @@ export class Insult extends HttpClient {
   };
 
   /**
-   * Init
-   */
-  private async getResponse(command: CommandMessage): Promise<Message> {
-    const insult = await this.getRandomInsult();
-
-    if (!insult) {
-      return Promise.reject();
-    }
-
-    const message = this.createMessage(command, insult);
-
-    if (command.deletable) await command.delete();
-    return message.startsWith('<')
-      ? command.channel.send(message)
-      : command.reply(message);
-  }
-
-  /**
    * @name insultInit
    * @param command
    * @description Display insult to author or tagged user
@@ -60,9 +35,44 @@ export class Insult extends HttpClient {
    */
   @Command('insult')
   @Description('Send a fun insult to yourself or a friend')
-  init(command: CommandMessage): Promise<Message> {
-    return this.getResponse(command).catch(() => {
-      return command.reply(environment.error);
-    });
+  async init(command: CommandMessage): Promise<Message> {
+    try {
+      if (command.deletable) await command.delete();
+
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Fetching Insult...**'
+      );
+
+      const res = await this.insultsService.getInsult();
+      await msg.delete();
+
+      if (!res) {
+        return Utility.sendMessage(
+          command,
+          '**No insult was found!**',
+          'channel',
+          5000
+        );
+      }
+
+      const message = this.createMessage(command, res);
+      return message.startsWith('<')
+        ? command.channel.send(message)
+        : command.reply(message);
+    } catch (e: unknown) {
+      if (command.deletable) await command.delete();
+      this.logger.error(
+        `Command: 'insult' has error: ${(e as Error).message}.`
+      );
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
+    }
   }
 }

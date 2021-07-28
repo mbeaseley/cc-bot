@@ -37,12 +37,12 @@ export class PlayerSummary {
   name: string | undefined;
   commentPermission: number | undefined;
   profileUrl: string | undefined;
-  avatar: string = '';
-  avatarMedium: string = '';
-  avatarFull: string = '';
+  avatar = '';
+  avatarMedium = '';
+  avatarFull = '';
   avatarHash: string | undefined;
   lastLogOff: dayjs.Dayjs | undefined;
-  nameState: string = playerStatus[7];
+  nameState = playerStatus[7];
   realName: string | undefined;
   PrimaryClanId: string | undefined;
   timeCreated: dayjs.Dayjs | undefined;
@@ -115,11 +115,11 @@ export interface ApiLocationResponseObject {
 
 export class UserBans {
   steamId: string | undefined;
-  communityBanned: boolean = false;
-  vacBanned: boolean = false;
-  numberOfVACBans: number = 0;
-  daysSinceLastBan: number = 0;
-  numberOfGameBans: number = 0;
+  communityBanned = false;
+  vacBanned = false;
+  numberOfVACBans = 0;
+  daysSinceLastBan = 0;
+  numberOfGameBans = 0;
   economyBan: string | undefined;
 }
 

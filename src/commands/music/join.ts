@@ -1,5 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
+import Utility from 'Utils/utility';
 import { GuildMember, Message, MessageEmbed } from 'discord.js';
 
 export class Join {
@@ -33,11 +34,12 @@ export class Join {
   @Description('Join voice channel')
   async init(command: CommandMessage): Promise<Message | void> {
     try {
-      await command.delete();
+      if (command.deletable) await command.delete();
 
       //Checks if user is in voice channel
       if (!command.member?.voice.channel) {
-        return command.channel.send(
+        return Utility.sendMessage(
+          command,
           '**You are not in a voice channel that I can join.**'
         );
       }
@@ -50,9 +52,12 @@ export class Join {
         bot &&
         !memberVoice.channel?.permissionsFor(bot)?.has('MANAGE_CHANNELS')
       ) {
-        return command.channel
-          .send('**The voice channel is full**')
-          .then((m) => m.delete({ timeout: 10000 }));
+        return Utility.sendMessage(
+          command,
+          '**The voice channel is full**',
+          'channel',
+          10000
+        );
       }
 
       const botActive = !!bot?.voice.channel;
@@ -60,17 +65,18 @@ export class Join {
       await bot?.voice.setSelfDeaf(true);
 
       const message = this.createMessage(command.member, botActive);
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     } catch (e: unknown) {
-      await command.delete();
+      if (command.deletable) await command.delete();
       this.logger.error(`Command: 'join' has error: ${(e as Error).message}.`);
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

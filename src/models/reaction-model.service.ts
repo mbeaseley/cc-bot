@@ -53,7 +53,7 @@ export class ReactionModelService {
       return Promise.resolve(this.reactionRoles);
     }
 
-    const res = await this.databaseService.connect(
+    const res = await this.databaseService.get(
       'emojis',
       EmojisCollections.roles
     );
@@ -103,7 +103,7 @@ export class ReactionModelService {
       return Promise.resolve(this.reactionActions);
     }
 
-    const res = await this.databaseService.connect(
+    const res = await this.databaseService.get(
       'emojis',
       EmojisCollections.actions
     );

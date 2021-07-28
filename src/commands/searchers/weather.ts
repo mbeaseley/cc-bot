@@ -3,7 +3,6 @@ import { windDirections } from 'Data/weather';
 import { Logger } from 'Services/logger.service';
 import { WeatherService } from 'Services/weather.service';
 import { WeatherObject } from 'Types/weather';
-import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import { ClientUser, Message, MessageEmbed } from 'discord.js';
 
@@ -95,43 +94,54 @@ export class Weather {
   };
 
   /**
-   * Get weather for location and responds with message to channel
+   * Weather Init
    * @param command
    */
-  private async getResponse(command: CommandMessage): Promise<Message | void> {
+  @Command('weather')
+  @Description('Get the weather of your area')
+  async init(command: CommandMessage): Promise<Message | void> {
     try {
+      if (command.deletable) await command.delete();
+
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Fetching weather...**'
+      );
+
       const location = Utility.getOptionFromCommand(
         command.content,
         2,
         ' '
       ) as string;
 
-      const weather = await this.weatherService.getCurrentWeather(location);
-      const message = this.createMessage(weather, command.client.user);
-      if (command.deletable) await command.delete();
-      return command.channel.send(message);
+      if (!location) {
+        await msg.delete();
+        return Utility.sendMessage(
+          command,
+          `**Please add location to query**`,
+          'channel',
+          5000
+        );
+      } else {
+        const weather = await this.weatherService.getCurrentWeather(location);
+        await msg.delete();
+
+        const message = this.createMessage(weather, command.client.user);
+        return Utility.sendMessage(command, message);
+      }
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'weather' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `An error has occured. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
-  }
-
-  /**
-   * Weather Init
-   * @param command
-   */
-  @Command('weather')
-  @Description('Get the weather of your area')
-  init(command: CommandMessage): Promise<Message | void> {
-    return this.getResponse(command).catch(() => {
-      command.reply(environment.error);
-    });
   }
 }

@@ -42,36 +42,46 @@ export class Instagram {
   @Command('instagram')
   @Description('Find someone you know on Instagram')
   async init(command: CommandMessage): Promise<void | Message> {
-    const username = Utility.getOptionFromCommand(
-      command.content,
-      2,
-      ' '
-    ) as string;
-
     try {
+      if (command.deletable) await command.delete();
+
+      const msg = await command.channel.send(
+        '**:hourglass: Fetching account...**'
+      );
+
+      const username = Utility.getOptionFromCommand(
+        command.content,
+        2,
+        ' '
+      ) as string;
+
       const instaUser = await this.instagramService.getInstaUser(username);
+      await msg.delete();
 
       if (!instaUser?.username) {
-        return command.channel
-          .send('**This username was unable to be found.**')
-          .then((m) => m.delete({ timeout: 10000 }));
+        return Utility.sendMessage(
+          command,
+          '**This username was unable to be found.**',
+          'channel',
+          5000
+        );
       }
 
       const message = this.createMessage(instaUser);
-      if (command.deletable) await command.delete();
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
         `Command: 'instagram' has error: ${(e as Error).message}.`
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

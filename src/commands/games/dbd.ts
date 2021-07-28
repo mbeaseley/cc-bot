@@ -137,7 +137,7 @@ export class Dbd {
       .setThumbnail(environment.botThumbnail || '')
       .addFields([...fields]);
 
-    return command.channel.send(message);
+    return Utility.sendMessage(command, message);
   }
 
   /**
@@ -179,7 +179,7 @@ export class Dbd {
         return this.createHelpMessage(command);
       } else {
         if (command.deletable) await command.delete();
-        return command.reply(environment.commandNotFound);
+        return Utility.sendMessage(command, environment.commandNotFound);
       }
     } catch (e: unknown) {
       return Promise.reject();

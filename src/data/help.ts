@@ -59,7 +59,7 @@ export const commandOverrides: CommandItem[] = [
   },
   {
     name: 'joke',
-    fullCommand: 'joke',
+    fullCommand: 'joke <@user(optional)>',
     type: 'fun',
   },
   {
@@ -103,12 +103,12 @@ export const commandOverrides: CommandItem[] = [
   {
     name: 'minecraft',
     fullCommand: 'minecraft <ip(optional)>:<port(optional)>',
-    type: 'searchers',
+    type: 'games',
   },
   {
     name: 'set minecraft',
     fullCommand: 'set minecraft <ip>:<port(optional)>',
-    type: 'searchers',
+    type: 'games',
   },
   {
     name: 'question',

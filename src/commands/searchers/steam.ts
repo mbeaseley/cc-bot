@@ -26,7 +26,7 @@ export class Steam {
   ): MessageEmbed {
     return new MessageEmbed()
       .setColor(0x0099ff)
-      .setAuthor(`Steam Services}`, 'playerSummary?.avatarFull')
+      .setAuthor(`Steam Services`, playerSummary?.avatarFull)
       .setTitle(playerSummary.name)
       .setURL(playerSummary?.profileUrl || '')
       .setThumbnail(playerSummary.avatarFull)
@@ -51,18 +51,29 @@ export class Steam {
   @Command('steam')
   @Description('Check and share your profile with friends on steam')
   async init(command: CommandMessage): Promise<void | Message> {
-    const vanityUrl = Utility.getOptionFromCommand(
-      command.content,
-      2,
-      ' '
-    ) as string;
-
     try {
+      if (command.deletable) await command.delete();
+
+      const msg = await Utility.sendMessage(
+        command,
+        '**:hourglass: Fetching account...**'
+      );
+
+      const vanityUrl = Utility.getOptionFromCommand(
+        command.content,
+        2,
+        ' '
+      ) as string;
+
       const user = await this.steamService.getVanityUser(vanityUrl);
+      await msg.delete();
 
       if (!user?.steamId) {
-        return command.channel.send(
-          '**This username was unable to be found.**'
+        return Utility.sendMessage(
+          command,
+          '**This username was unable to be found.**',
+          'channel',
+          5000
         );
       }
 
@@ -73,17 +84,18 @@ export class Steam {
       const message = this.createMessage(playerSummary, userBans);
 
       if (command.deletable) await command.delete();
-      return command.channel.send(message);
+      return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(`Command: 'steam' has error: ${(e as Error).message}.`);
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        `The following error has occurred: ${
+          (e as Error).message
+        }. If this error keeps occurring, please contact support.`,
+        'channel',
+        5000
+      );
     }
   }
 }

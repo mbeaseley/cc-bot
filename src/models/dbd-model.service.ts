@@ -64,7 +64,7 @@ export class DBDModelService {
       return Promise.resolve(this.playerKillers);
     }
 
-    const res = await this.databaseService.connect(
+    const res = await this.databaseService.get(
       'dbd',
       DBDCollections.playerKillers
     );
@@ -121,10 +121,7 @@ export class DBDModelService {
       return Promise.resolve(this.killers);
     }
 
-    const res = await this.databaseService.connect(
-      'dbd',
-      DBDCollections.killers
-    );
+    const res = await this.databaseService.get('dbd', DBDCollections.killers);
     this.killers = this.fromKillersPayload(res);
     return Promise.resolve(this.killers);
   }
@@ -167,7 +164,7 @@ export class DBDModelService {
       return Promise.resolve(this.killerPerks);
     }
 
-    const res = await this.databaseService.connect(
+    const res = await this.databaseService.get(
       'dbd',
       DBDCollections.killerPerks
     );
@@ -215,7 +212,7 @@ export class DBDModelService {
       return Promise.resolve(this.killerOfferings);
     }
 
-    const res = await this.databaseService.connect(
+    const res = await this.databaseService.get(
       'dbd',
       DBDCollections.killerOfferings
     );
@@ -261,7 +258,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorPerks);
     }
 
-    const res = await this.databaseService.connect(
+    const res = await this.databaseService.get(
       'dbd',
       DBDCollections.survivorPerks
     );
@@ -317,7 +314,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorLoot);
     }
 
-    const res = await this.databaseService.connect(
+    const res = await this.databaseService.get(
       'dbd',
       DBDCollections.survivorLoots
     );
@@ -365,7 +362,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorOfferings);
     }
 
-    const res = await this.databaseService.connect(
+    const res = await this.databaseService.get(
       'dbd',
       DBDCollections.survivorOfferings
     );

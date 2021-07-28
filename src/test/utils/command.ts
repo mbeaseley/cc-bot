@@ -1,5 +1,5 @@
 import { Client, CommandMessage } from '@typeit/discord';
-import { Guild, MessageFlags, User } from 'discord.js';
+import { Guild, MessageFlags } from 'discord.js';
 
 export const command = (
   name: string,
