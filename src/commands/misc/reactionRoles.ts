@@ -16,7 +16,7 @@ import {
 
 export class ReactionRoles {
   private reactionService: ReactionService;
-  logger: Logger;
+  private logger: Logger;
 
   constructor() {
     this.reactionService = new ReactionService();
@@ -138,6 +138,14 @@ export class ReactionRoles {
       reactionRoles,
       reaction.emoji.name
     );
+
+    if (
+      action === 'remove' &&
+      reaction.emoji.name === environment.emojiAcceptRules.name
+    ) {
+      return Promise.resolve();
+    }
+
     const role = guild.roles.cache.find((r) => r.name === choosenRole);
 
     if (role && reaction.message.author.bot) {
