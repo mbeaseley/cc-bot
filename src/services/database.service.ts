@@ -178,8 +178,7 @@ export class DatabaseService {
       this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {
       await this.Client.close();
+      return Promise.resolve(undefined);
     }
-
-    return Promise.resolve(undefined);
   }
 }
