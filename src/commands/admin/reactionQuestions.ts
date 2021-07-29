@@ -66,7 +66,7 @@ export class ReactionQuestions {
         return '';
       }
       const r = Utility.findRole(command?.guild?.roles, role?.[ge.name]);
-      return gr(ge, r?.id);
+      return gr(ge, r);
     });
 
     const message = new MessageEmbed()
