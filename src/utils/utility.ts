@@ -3,10 +3,14 @@ import { environment } from 'Utils/environment';
 import {
   EmbedField,
   Guild,
+  GuildEmoji,
+  GuildEmojiManager,
   GuildManager,
   Message,
   MessageEmbed,
   MessageEmbedOptions,
+  Role,
+  RoleManager,
   User,
 } from 'discord.js';
 import _ = require('underscore');
@@ -174,5 +178,31 @@ export default class Utility {
     return deleteDelay
       ? msg.then((m) => m.delete({ timeout: deleteDelay }))
       : msg;
+  }
+
+  /**
+   * Find emoji
+   * @param guildEmojiManager
+   * @param emojiName
+   * @returns GuildEmoji | undefined
+   */
+  static findEmoji(
+    guildEmojiManager: GuildEmojiManager,
+    emojiName: string
+  ): GuildEmoji | undefined {
+    return guildEmojiManager.cache.find((e) => e.name === emojiName);
+  }
+
+  /**
+   * Find role
+   * @param roleManager
+   * @param roleName
+   * @returns Role | undefined
+   */
+  static findRole(
+    roleManager: RoleManager | undefined,
+    roleName: string | undefined
+  ): Role | undefined {
+    return roleManager?.cache.find((r) => r.name === roleName);
   }
 }

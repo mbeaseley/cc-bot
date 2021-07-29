@@ -112,7 +112,7 @@ export const commandOverrides: CommandItem[] = [
   },
   {
     name: 'question',
-    fullCommand: `question <type>\nCurrent types: 'rules'`,
+    fullCommand: `question <type>\nCurrent types: 'rules', 'game roles'`,
     type: 'admin',
   },
   {
