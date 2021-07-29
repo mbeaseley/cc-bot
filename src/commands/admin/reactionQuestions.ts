@@ -1,11 +1,11 @@
 import { Command, CommandMessage, Description, Guard } from '@typeit/discord';
-import { GuildEmoji, Message, MessageEmbed } from 'discord.js';
 import { isAdmin } from 'Guards/isAdmin';
 import { ReactionService } from 'Root/services/reaction.service';
 import { Logger } from 'Services/logger.service';
 import { RulesService } from 'Services/rules.service';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
+import { GuildEmoji, Message, MessageEmbed } from 'discord.js';
 
 const QUESTION_TYPES = ['rules', 'game roles'];
 
@@ -46,7 +46,7 @@ export class ReactionQuestions {
    */
   private async createGameRolesMessage(command: CommandMessage): Promise<any> {
     const reactionRoles = await this.reactionService.getReactionRoles('game');
-    let reactionNames: string[] = [];
+    const reactionNames: string[] = [];
 
     const guildEmojis = reactionRoles
       .map((r) => {
