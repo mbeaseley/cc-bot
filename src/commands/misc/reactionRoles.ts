@@ -4,7 +4,7 @@ import { ReactionService } from 'Services/reaction.service';
 import { Reaction } from 'Types/reaction';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import {
   GuildMember,
   Message,
@@ -115,7 +115,7 @@ export class ReactionRoles {
     user: User | PartialUser
   ): Promise<void | Message> {
     if (user.bot) {
-      return Promise.reject();
+      return Promise.resolve();
     }
 
     if (reaction.partial) {
@@ -129,7 +129,7 @@ export class ReactionRoles {
     const guild = Utility.getGuild(reaction.client.guilds);
 
     if (!guild?.id) {
-      return Promise.reject();
+      return Promise.resolve();
     }
 
     const reactionRoles = await this.reactionService.getReactionRoles();

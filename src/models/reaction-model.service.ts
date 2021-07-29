@@ -37,10 +37,10 @@ export class ReactionModelService {
    * @returns Reaction[]
    */
   private fromReactionRolesPayload(
-    res: { emoji_name: string; role_name: string }[]
+    res: { emoji_name: string; role_name: string; type: string }[]
   ): Reaction[] {
     return res.map((r) => {
-      return { [r.emoji_name]: r.role_name } as Reaction;
+      return { [r.emoji_name]: r.role_name, type: r.type } as Reaction;
     });
   }
 
