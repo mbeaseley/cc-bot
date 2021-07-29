@@ -5,7 +5,7 @@ import { Logger } from 'Services/logger.service';
 import { RulesService } from 'Services/rules.service';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
-import { GuildEmoji, Message, MessageEmbed } from 'discord.js';
+import { GuildEmoji, Message, MessageEmbed, Role } from 'discord.js';
 
 const QUESTION_TYPES = ['rules', 'game roles'];
 
@@ -56,15 +56,16 @@ export class ReactionQuestions {
       })
       .filter((g) => g?.name) as GuildEmoji[];
 
-    const gr = (emoji: GuildEmoji, roleId: string | undefined) =>
-      `*Click the <:${emoji.name}:${emoji.id}> emoji to join <@&${roleId}> group.*\n`;
+    const gr = (emoji: GuildEmoji, role: Role | undefined) =>
+      `\n*Click the <:${emoji.name}:${emoji.id}> emoji to join ${
+        role?.mentionable ? '<@&' + role?.id + '>' : role?.name
+      } group*`;
     const games = guildEmojis.map((ge) => {
       const role = reactionRoles.find((r) => r[ge.name] !== undefined);
       if (!role?.[ge.name] && !command?.guild?.roles) {
         return '';
       }
       const r = Utility.findRole(command?.guild?.roles, role?.[ge.name]);
-      console.log(r);
       return gr(ge, r?.id);
     });
 
@@ -75,7 +76,7 @@ export class ReactionQuestions {
       )
       .setColor(3093237)
       .setDescription(
-        `**Choose the game groups that you want to join. \nThis will notify you when somone is searching for people to play with\nor ever @mention the group yourself:**\n\n${games}`
+        `**Choose the game groups that you want to join. \nThis will notify you when somone is searching for people to play with\nor even @mention the group yourself:**\n\n${games}`
       );
 
     return command.channel
