@@ -4,7 +4,7 @@ import { ReactionService } from 'Services/reaction.service';
 import { Reaction } from 'Types/reaction';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import {
   GuildMember,
   Message,
@@ -16,7 +16,7 @@ import {
 
 export class ReactionRoles {
   private reactionService: ReactionService;
-  logger: Logger;
+  private logger: Logger;
 
   constructor() {
     this.reactionService = new ReactionService();
@@ -115,7 +115,7 @@ export class ReactionRoles {
     user: User | PartialUser
   ): Promise<void | Message> {
     if (user.bot) {
-      return Promise.reject();
+      return Promise.resolve();
     }
 
     if (reaction.partial) {
@@ -129,7 +129,7 @@ export class ReactionRoles {
     const guild = Utility.getGuild(reaction.client.guilds);
 
     if (!guild?.id) {
-      return Promise.reject();
+      return Promise.resolve();
     }
 
     const reactionRoles = await this.reactionService.getReactionRoles();
@@ -138,6 +138,14 @@ export class ReactionRoles {
       reactionRoles,
       reaction.emoji.name
     );
+
+    if (
+      action === 'remove' &&
+      reaction.emoji.name === environment.emojiAcceptRules.name
+    ) {
+      return Promise.resolve();
+    }
+
     const role = guild.roles.cache.find((r) => r.name === choosenRole);
 
     if (role && reaction.message.author.bot) {
