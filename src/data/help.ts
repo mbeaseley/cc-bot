@@ -19,6 +19,10 @@ export const commandHelpTypes: CommandItem[] = [
     restrict: true,
   },
   {
+    name: 'Image',
+    fullCommand: '@{botName} help image',
+  },
+  {
     name: 'Admin',
     fullCommand: '@{botName} help admin',
     restrict: true,
@@ -139,5 +143,15 @@ export const commandOverrides: CommandItem[] = [
     name: 'meme',
     fullCommand: 'meme',
     type: 'fun',
+  },
+  {
+    name: 'cat',
+    fullCommand: 'cat',
+    type: 'image',
+  },
+  {
+    name: 'dog',
+    fullCommand: 'dog',
+    type: 'image',
   },
 ];
