@@ -135,4 +135,9 @@ export const commandOverrides: CommandItem[] = [
     fullCommand: 'dc',
     type: 'music',
   },
+  {
+    name: 'meme',
+    fullCommand: 'meme',
+    type: 'fun',
+  },
 ];
