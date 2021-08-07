@@ -1,9 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
+import { MemeService } from 'Services/meme.service';
+import { MemeItem } from 'Types/meme';
+import Utility from 'Utils/utility';
 import { ClientUser, Message, MessageEmbed } from 'discord.js';
-import { Logger } from 'Root/services/logger.service';
-import { MemeService } from 'Root/services/meme.service';
-import { MemeItem } from 'Root/types/meme';
-import Utility from 'Root/utils/utility';
 
 export class Meme {
   private memeService: MemeService;
