@@ -1,13 +1,13 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 import {
   GuildChannel,
   GuildChannelManager,
   GuildMember,
   MessageEmbed,
 } from 'discord.js';
-import { environment } from 'Root/utils/environment';
-import Utility from 'Root/utils/utility';
-import { Logger } from 'Services/logger.service';
 
 export class BeamUp {
   private logger: Logger;
