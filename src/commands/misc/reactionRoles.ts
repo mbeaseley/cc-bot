@@ -1,7 +1,8 @@
 import { Client } from '@typeit/discord';
+import { BeamUp } from 'Commands/misc/beam-up';
 import { Logger } from 'Services/logger.service';
 import { ReactionService } from 'Services/reaction.service';
-import { Reaction } from 'Types/reaction';
+import { Reaction, ReactionActions } from 'Types/reaction';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import chalk from 'chalk';
@@ -17,10 +18,12 @@ import {
 export class ReactionRoles {
   private reactionService: ReactionService;
   private logger: Logger;
+  private beamUp: BeamUp;
 
   constructor() {
     this.reactionService = new ReactionService();
     this.logger = new Logger();
+    this.beamUp = new BeamUp();
   }
 
   /**
@@ -82,11 +85,15 @@ export class ReactionRoles {
    */
   private async handleAction(
     reaction: MessageReaction,
-    action: string
-  ): Promise<void | Message> {
+    action: ReactionActions
+  ): Promise<void | Message | GuildMember> {
     try {
       if (action === 'delete') {
         return reaction.message.delete();
+      }
+
+      if (action === 'beam_up' && BeamUp.voiceChannel?.id) {
+        return this.beamUp.moveMemberToChannel();
       }
 
       this.logger.error(
@@ -113,7 +120,7 @@ export class ReactionRoles {
     action: 'add' | 'remove',
     reaction: MessageReaction,
     user: User | PartialUser
-  ): Promise<void | Message> {
+  ): Promise<void | Message | GuildMember> {
     if (user.bot) {
       return Promise.resolve();
     }
@@ -157,7 +164,7 @@ export class ReactionRoles {
     const choosenAction = this.getChoosenRoleOrAction(
       reactionActions,
       reaction.emoji.name
-    );
+    ) as ReactionActions;
     if (choosenAction && action === 'add' && u) {
       return this.handleAction(reaction, choosenAction);
     }

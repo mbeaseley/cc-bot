@@ -4,7 +4,8 @@ export type CommandType =
   | 'admin'
   | 'searchers'
   | 'music'
-  | 'image';
+  | 'image'
+  | 'other';
 
 export interface CommandItem {
   name: string;

@@ -27,6 +27,10 @@ export const commandHelpTypes: CommandItem[] = [
     fullCommand: '@{botName} help admin',
     restrict: true,
   },
+  {
+    name: 'Other',
+    fullCommand: '@{botName} help other',
+  },
 ];
 
 export const commandOverrides: CommandItem[] = [
@@ -153,5 +157,11 @@ export const commandOverrides: CommandItem[] = [
     name: 'dog',
     fullCommand: 'dog',
     type: 'image',
+  },
+  {
+    name: 'beam up',
+    fullCommand:
+      'beam up\n(Before entering command, you must be in a voice channel!)',
+    type: 'other',
   },
 ];
