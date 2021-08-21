@@ -19,9 +19,17 @@ export const commandHelpTypes: CommandItem[] = [
     restrict: true,
   },
   {
+    name: 'Image',
+    fullCommand: '@{botName} help image',
+  },
+  {
     name: 'Admin',
     fullCommand: '@{botName} help admin',
     restrict: true,
+  },
+  {
+    name: 'Other',
+    fullCommand: '@{botName} help other',
   },
 ];
 
@@ -134,5 +142,26 @@ export const commandOverrides: CommandItem[] = [
     name: 'dc',
     fullCommand: 'dc',
     type: 'music',
+  },
+  {
+    name: 'meme',
+    fullCommand: 'meme',
+    type: 'fun',
+  },
+  {
+    name: 'cat',
+    fullCommand: 'cat',
+    type: 'image',
+  },
+  {
+    name: 'dog',
+    fullCommand: 'dog',
+    type: 'image',
+  },
+  {
+    name: 'beam up',
+    fullCommand:
+      'beam up\n(Before entering command, you must be in a voice channel!)',
+    type: 'other',
   },
 ];
