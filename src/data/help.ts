@@ -164,4 +164,9 @@ export const commandOverrides: CommandItem[] = [
       'beam up\n(Before entering command, you must be in a voice channel!)',
     type: 'other',
   },
+  {
+    name: 'serverinfo',
+    fullCommand: 'serverinfo',
+    type: 'other',
+  },
 ];

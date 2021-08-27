@@ -1,4 +1,7 @@
-import { Command, CommandMessage } from '@typeit/discord';
+import { Command, CommandMessage, Description } from '@typeit/discord';
+import { Logger } from 'Services/logger.service';
+import Utility from 'Utils/utility';
+import dayjs from 'dayjs';
 import {
   Collection,
   Guild,
@@ -8,9 +11,6 @@ import {
   PresenceStatus,
   User,
 } from 'discord.js';
-import { Logger } from 'Root/services/logger.service';
-import Utility from 'Root/utils/utility';
-import dayjs from 'dayjs';
 
 export class ServerInfo {
   private logger: Logger;
@@ -19,6 +19,12 @@ export class ServerInfo {
     this.logger = new Logger();
   }
 
+  /**
+   * Get size of member proportion
+   * @param member
+   * @param status
+   * @returns number
+   */
   private filterMembers(
     member: Collection<string, GuildMember>,
     status: PresenceStatus | 'bot' | 'human'
@@ -30,6 +36,12 @@ export class ServerInfo {
     ).size;
   }
 
+  /**
+   * Create Message
+   * @param guild
+   * @param user
+   * @returns Promise<MessageEmbed>
+   */
   private async createMessage(guild: Guild, user: User): Promise<MessageEmbed> {
     const member = guild.members.cache;
     const iconUrl = guild.iconURL() ?? '';
@@ -101,7 +113,12 @@ export class ServerInfo {
       .setFooter(`Requested by ${user.tag}`);
   }
 
+  /**
+   * Init
+   * @param command
+   */
   @Command('serverinfo')
+  @Description('Get server info')
   async init(command: CommandMessage): Promise<void | Message> {
     try {
       if (command.deletable) await command.delete();
