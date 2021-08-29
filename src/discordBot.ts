@@ -5,12 +5,11 @@ import { MemberRemove } from 'Commands/misc/memberRemove';
 import { ReactionRoles } from 'Commands/misc/reactionRoles';
 import { Main } from 'Root/main';
 import { Logger } from 'Services/logger.service';
+import { MusicService } from 'Services/music.service';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import chalk from 'chalk';
 import { Guild } from 'discord.js';
-
-import { Player } from 'discord-music-player';
 
 @Discord('<', {
   import: [
@@ -20,16 +19,18 @@ import { Player } from 'discord-music-player';
 })
 @Rules(Rule().fromString(`${environment.botId}> ` || `${environment.botId}>`))
 export class DiscordBot {
-  logger: Logger;
-  reactionRoles: ReactionRoles;
-  memberAdd: MemberAdd;
-  memberRemove: MemberRemove;
+  private logger: Logger;
+  private reactionRoles: ReactionRoles;
+  private memberAdd: MemberAdd;
+  private memberRemove: MemberRemove;
+  private musicService: MusicService;
 
   constructor() {
     this.logger = new Logger();
     this.reactionRoles = new ReactionRoles();
     this.memberAdd = new MemberAdd();
     this.memberRemove = new MemberRemove();
+    this.musicService = new MusicService();
   }
 
   /**
@@ -53,12 +54,7 @@ export class DiscordBot {
     this.memberAdd.init(Main.Client);
     this.memberRemove.init(Main.Client);
     this.reactionRoles.init(Main.Client);
-
-    const player = new Player(Main.Client, {
-      leaveOnEmpty: true,
-    });
-
-    Main.Client['player'] = player;
+    this.musicService.init();
 
     this.logger.info(chalk.bold('BOT READY'));
   }

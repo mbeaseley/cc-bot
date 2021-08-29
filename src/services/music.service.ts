@@ -2,10 +2,22 @@ import { CommandMessage } from '@typeit/discord';
 import { Main } from 'Root/main';
 import Utility from 'Utils/utility';
 import { GuildMember, VoiceChannel, VoiceState } from 'discord.js';
-import { Playlist, Song } from 'discord-music-player';
+import { Player, Playlist, Song } from 'discord-music-player';
 
 export class MusicService {
   constructor() {}
+
+  /**
+   * Music player init
+   */
+  public init(): void {
+    const player = new Player(Main.Client, {
+      leaveOnEmpty: true,
+      volume: 20,
+    });
+
+    Main.Client['player'] = player;
+  }
 
   /*===================
    * Utility functions
@@ -125,4 +137,53 @@ export class MusicService {
       ? ((await Main.Client['player'].playlist(command, query)) as Playlist)
       : Promise.resolve();
   }
+
+  /**
+   * Stop and clear player quene
+   * @param command
+   */
+  public async stop(command: CommandMessage): Promise<boolean | void> {
+    const active = this.isBotActive(command);
+
+    return active ? Main.Client['player'].stop(command) : Promise.resolve();
+  }
+
+  /**
+   * Pause current music
+   * @param command
+   */
+  public async pause(command: CommandMessage): Promise<Song | void> {
+    const active = this.isBotActive(command);
+
+    return active ? Main.Client['player'].pause(command) : Promise.resolve();
+  }
+
+  /**
+   * Resume current music
+   * @param command
+   */
+  public async resume(command: CommandMessage): Promise<Song | void> {
+    const active = this.isBotActive(command);
+
+    return active ? Main.Client['player'].resume(command) : Promise.resolve();
+  }
+
+  /**
+   * Set volume
+   * @param command
+   */
+  public async setVolume(
+    command: CommandMessage,
+    value: number
+  ): Promise<boolean | void> {
+    return Main.Client['player'].setVolume(command, value);
+  }
+
+  // public skip(command: CommandMessage, songId: any): Promise<Song | void> {
+  //   const active = this.isBotActive(command);
+
+  //   return active
+  //     ? Main.Client['player'].skip(command, songId)
+  //     : Promise.resolve();
+  // }
 }
