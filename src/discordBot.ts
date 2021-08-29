@@ -10,6 +10,8 @@ import Utility from 'Utils/utility';
 import chalk from 'chalk';
 import { Guild } from 'discord.js';
 
+import { Player } from 'discord-music-player';
+
 @Discord('<', {
   import: [
     Path.join(__dirname, 'commands/**', '*.ts'),
@@ -51,6 +53,12 @@ export class DiscordBot {
     this.memberAdd.init(Main.Client);
     this.memberRemove.init(Main.Client);
     this.reactionRoles.init(Main.Client);
+
+    const player = new Player(Main.Client, {
+      leaveOnEmpty: true,
+    });
+
+    Main.Client['player'] = player;
 
     this.logger.info(chalk.bold('BOT READY'));
   }
