@@ -1,8 +1,16 @@
 import { CommandMessage } from '@typeit/discord';
 import { Main } from 'Root/main';
+import { getVoiceState, VoiceStateTypes } from 'Types/music';
 import Utility from 'Utils/utility';
-import { GuildMember, VoiceChannel, VoiceState } from 'discord.js';
+import {
+  GuildMember,
+  MessageEmbed,
+  TextChannel,
+  VoiceChannel,
+  VoiceState,
+} from 'discord.js';
 import { Player, Playlist, Song } from 'discord-music-player';
+import { environment } from 'Root/utils/environment';
 
 export class MusicService {
   constructor() {}
@@ -13,10 +21,11 @@ export class MusicService {
   public init(): void {
     const player = new Player(Main.Client, {
       leaveOnEmpty: true,
-      volume: 20,
+      volume: 100,
     });
 
     Main.Client['player'] = player;
+    this.displayMessaging();
   }
 
   /*===================
@@ -76,6 +85,15 @@ export class MusicService {
    */
   private isBotActive(command: CommandMessage): VoiceChannel | undefined {
     return command.guild?.me?.voice.channel ?? undefined;
+  }
+
+  /**
+   * Get Channel to message
+   */
+  private getChannel(): TextChannel {
+    return Main.Client.channels.cache.get(
+      environment.commandBase
+    ) as TextChannel;
   }
 
   /*===================
@@ -186,4 +204,48 @@ export class MusicService {
   //     ? Main.Client['player'].skip(command, songId)
   //     : Promise.resolve();
   // }
+
+  /*======================
+   * Event based Messaging
+   =======================*/
+
+  /**
+   * Create Voice Update Message
+   * @param state
+   */
+  private createVoiceUpdateMessage(
+    state: VoiceStateTypes,
+    channel: TextChannel
+  ): MessageEmbed {
+    const m = {
+      move: `**I have successfully moved to another voice channel, ${channel.name}.**`,
+      leave: `**I have left ${channel.name}.**`,
+      join: `**I have successfully joined ${channel.name}.**`,
+    };
+
+    return new MessageEmbed().setColor(10027008).setDescription(m[state]);
+  }
+
+  /**
+   * Display custom messaging
+   */
+  private displayMessaging(): void {
+    Main.Client.on(
+      'voiceStateUpdate',
+      (oldState: VoiceState, newState: VoiceState) => {
+        if (
+          !oldState.member?.user.bot ||
+          oldState.channelID === newState.channelID
+        ) {
+          return undefined;
+        }
+
+        const channel = this.getChannel();
+        const state = getVoiceState(oldState, newState);
+        const message = this.createVoiceUpdateMessage(state, channel);
+
+        return channel?.send(message);
+      }
+    );
+  }
 }

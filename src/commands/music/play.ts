@@ -24,6 +24,6 @@ export class Play {
 
     return query.indexOf('playlist') > -1
       ? this.musicService.addPlaylist(command, query)
-      : this.musicService.play(command, query as string).then(console.log);
+      : this.musicService.play(command, query as string);
   }
 }
