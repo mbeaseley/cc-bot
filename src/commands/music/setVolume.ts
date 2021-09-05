@@ -13,7 +13,7 @@ export class Play {
    * Init
    * @param command
    */
-  @Command('Set volume')
+  @Command('set volume')
   @Description('Set player volume')
   async init(command: CommandMessage): Promise<boolean | void> {
     if (command.deletable) await command.delete();

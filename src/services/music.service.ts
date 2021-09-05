@@ -1,6 +1,6 @@
 import { CommandMessage } from '@typeit/discord';
 import { Main } from 'Root/main';
-import { getVoiceState, VoiceStateTypes } from 'Types/music';
+import { getVoiceState } from 'Types/music';
 import Utility from 'Utils/utility';
 import {
   GuildMember,
@@ -21,7 +21,7 @@ export class MusicService {
   public init(): void {
     const player = new Player(Main.Client, {
       leaveOnEmpty: true,
-      volume: 100,
+      volume: 70,
     });
 
     Main.Client['player'] = player;
@@ -197,39 +197,64 @@ export class MusicService {
     return Main.Client['player'].setVolume(command, value);
   }
 
-  // public skip(command: CommandMessage, songId: any): Promise<Song | void> {
-  //   const active = this.isBotActive(command);
-
-  //   return active
-  //     ? Main.Client['player'].skip(command, songId)
-  //     : Promise.resolve();
-  // }
-
   /*======================
    * Event based Messaging
    =======================*/
 
   /**
    * Create Voice Update Message
-   * @param state
+   * @param message
    */
-  private createVoiceUpdateMessage(
-    state: VoiceStateTypes,
-    channel: TextChannel
-  ): MessageEmbed {
-    const m = {
-      move: `**I have successfully moved to another voice channel, ${channel.name}.**`,
-      leave: `**I have left ${channel.name}.**`,
-      join: `**I have successfully joined ${channel.name}.**`,
-    };
+  private createVoiceUpdateMessage(message: string): MessageEmbed {
+    return new MessageEmbed().setColor(10027008).setDescription(message);
+  }
 
-    return new MessageEmbed().setColor(10027008).setDescription(m[state]);
+  private createSongUpdateMessage(song: Song, now = false): MessageEmbed {
+    const title = now ? '🎶 Now Playing' : '🎶 Song added to queue';
+    let songImage = song.thumbnail.toString();
+    if (song.thumbnail.toString().indexOf('i.ytimg.com') > -1) {
+      songImage = songImage.replace(/^hq:\d+$/, 'hqdefault');
+    }
+
+    return new MessageEmbed()
+      .setTitle(title)
+      .setColor(10027008)
+      .setDescription(`[**${song.name}**](${song.url})`)
+      .setImage(songImage)
+      .setTimestamp();
+  }
+
+  private createPLaylistAddedMessage(playlist: any): MessageEmbed {
+    const plist = playlist as Playlist;
+
+    let plistDescription = plist.videos
+      .map((v: Song, i: number) => {
+        if (i < 10) {
+          return `\`${i + 1}\` [${v.name}](${v.url})\n`;
+        }
+        return '';
+      })
+      .join('');
+
+    if (plist.videos.length > 9) {
+      plistDescription += `\`\n\n${
+        plist.videos.length + 1 - 10
+      } more tracks added...\``;
+    }
+
+    return new MessageEmbed()
+      .setTitle(`🎶 ${plist.videoCount} songs added!`)
+      .setColor(10027008)
+      .setDescription(plistDescription)
+      .setTimestamp();
   }
 
   /**
    * Display custom messaging
    */
   private displayMessaging(): void {
+    const channel = this.getChannel();
+
     Main.Client.on(
       'voiceStateUpdate',
       (oldState: VoiceState, newState: VoiceState) => {
@@ -240,12 +265,78 @@ export class MusicService {
           return undefined;
         }
 
-        const channel = this.getChannel();
-        const state = getVoiceState(oldState, newState);
-        const message = this.createVoiceUpdateMessage(state, channel);
+        const m = {
+          move: `👋 **I have successfully moved to another voice channel, ${newState.channel?.name}.**`,
+          leave: `👋 **I have left ${oldState.channel?.name}.**`,
+          join: `👋 **I have successfully joined ${newState.channel?.name}.**`,
+        };
 
+        const state = getVoiceState(oldState, newState);
+        const message = this.createVoiceUpdateMessage(m[state]);
         return channel?.send(message);
       }
     );
+
+    const player = Main.Client['player'] as Player;
+    player.on('channelEmpty', () => {
+      const message = this.createVoiceUpdateMessage(
+        '👋 Everyone left the Voice Channel, queue ended.'
+      );
+      return channel?.send(message);
+    });
+
+    player.on('songAdd', ({}, {}, song) => {
+      const message = this.createSongUpdateMessage(song);
+      return channel?.send(message);
+    });
+
+    player.on('playlistAdd', ({}, {}, playlist) => {
+      const message = this.createPLaylistAddedMessage(playlist);
+      return channel?.send(message);
+    });
+
+    player.on('queueEnd', ({}, {}) => {
+      const message = this.createVoiceUpdateMessage(
+        `⌛ **The queue has ended!**`
+      );
+      return channel?.send(message);
+    });
+
+    player.on('songChanged', ({}, newSong, {}) => {
+      const message = this.createSongUpdateMessage(newSong, true);
+      return channel?.send(message);
+    });
+
+    player.on('songFirst', ({}, song) => {
+      const message = this.createSongUpdateMessage(song, true);
+      return channel?.send(message);
+    });
+
+    player.on('error', (error, {}) => {
+      let errorMessage = '🚫 ';
+      errorMessage +=
+        error === 'SearchIsNull'
+          ? '**Oops... I cant find this song**'
+          : error === 'InvalidPlaylist'
+          ? '**Cant find this playlist!**'
+          : error === 'InvalidSpotify'
+          ? '**Cant find this song!**'
+          : error === 'QueueIsNull'
+          ? '**There is no music playing right now.**'
+          : error === 'VoiceChannelTypeInvalid'
+          ? '**You need to be in a voice channel!**'
+          : error === 'LiveUnsupported'
+          ? '**We dont support Youtube streams!**'
+          : error === 'VideoUnavailable'
+          ? '**Error! Skipping song.**'
+          : error === 'NotANumber'
+          ? '**Not a number?**'
+          : error === 'MessageTypeInvalid'
+          ? '**Not an object!**'
+          : '**Oops! Unknown Error.**';
+
+      const message = this.createVoiceUpdateMessage(errorMessage);
+      return channel?.send(message);
+    });
   }
 }
