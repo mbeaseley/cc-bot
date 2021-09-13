@@ -1,8 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { MusicService } from 'Services/music.service';
 import Utility from 'Utils/utility';
+import { Song } from 'discord-music-player';
 
-export class Play {
+export class setVolume {
   private musicService: MusicService;
 
   constructor() {
@@ -15,7 +16,7 @@ export class Play {
    */
   @Command('set volume')
   @Description('Set player volume')
-  async init(command: CommandMessage): Promise<boolean | void> {
+  async init(command: CommandMessage): Promise<Song> {
     if (command.deletable) await command.delete();
 
     let query = Utility.getOptionFromCommand(command.content, 2);

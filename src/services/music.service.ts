@@ -1,16 +1,17 @@
 import { CommandMessage } from '@typeit/discord';
 import { Main } from 'Root/main';
 import { getVoiceState } from 'Types/music';
+import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import {
   GuildMember,
+  Message,
   MessageEmbed,
   TextChannel,
   VoiceChannel,
   VoiceState,
 } from 'discord.js';
 import { Player, Playlist, Song } from 'discord-music-player';
-import { environment } from 'Root/utils/environment';
 
 export class MusicService {
   constructor() {}
@@ -26,6 +27,10 @@ export class MusicService {
 
     Main.Client['player'] = player;
     this.displayMessaging();
+  }
+
+  get player(): Player {
+    return Main.Client['player'] as Player;
   }
 
   /*===================
@@ -136,9 +141,7 @@ export class MusicService {
     query: string
   ): Promise<Song | void> {
     const res = await this.join(command);
-    return res
-      ? ((await Main.Client['player'].play(command, query)) as Song)
-      : Promise.resolve();
+    return res ? this.player.play(command, query) : Promise.resolve();
   }
 
   /**
@@ -149,41 +152,81 @@ export class MusicService {
   public async addPlaylist(
     command: CommandMessage,
     query: string
-  ): Promise<Playlist | void> {
+  ): Promise<any | void> {
     const res = await this.join(command);
-    return res
-      ? ((await Main.Client['player'].playlist(command, query)) as Playlist)
-      : Promise.resolve();
+    return res ? this.player.playlist(command, query) : Promise.resolve();
   }
 
   /**
    * Stop and clear player quene
    * @param command
    */
-  public async stop(command: CommandMessage): Promise<boolean | void> {
+  public async stop(command: CommandMessage): Promise<Song | void> {
     const active = this.isBotActive(command);
 
-    return active ? Main.Client['player'].stop(command) : Promise.resolve();
+    return active ? this.player.stop(command) : Promise.resolve();
   }
 
   /**
    * Pause current music
    * @param command
    */
-  public async pause(command: CommandMessage): Promise<Song | void> {
+  public async pause(command: CommandMessage): Promise<Message | void> {
     const active = this.isBotActive(command);
+    return Promise.resolve().then(() => {
+      if (active) {
+        this.player.resume(command);
 
-    return active ? Main.Client['player'].pause(command) : Promise.resolve();
+        const channel = this.getChannel();
+        const message = this.createVoiceUpdateMessage('⏸️  **Paused!**');
+        return channel.send(message);
+      }
+
+      return;
+    });
   }
 
   /**
    * Resume current music
    * @param command
    */
-  public async resume(command: CommandMessage): Promise<Song | void> {
+  public async resume(command: CommandMessage): Promise<Message | void> {
     const active = this.isBotActive(command);
 
-    return active ? Main.Client['player'].resume(command) : Promise.resolve();
+    return Promise.resolve().then(() => {
+      if (active) {
+        this.player.resume(command);
+
+        const channel = this.getChannel();
+        const message = this.createVoiceUpdateMessage('▶️ **Resumed!**');
+        return channel.send(message);
+      }
+
+      return;
+    });
+  }
+
+  /**
+   * Shuffle Queue
+   * @param command
+   */
+  public async shuffle(command: CommandMessage): Promise<Message | void> {
+    const active = this.isBotActive(command);
+
+    return Promise.resolve().then(async () => {
+      if (active) {
+        this.player.shuffle(command);
+
+        const channel = this.getChannel();
+        const message = this.createVoiceUpdateMessage(
+          '🔀  **Server Queue is shuffled!**'
+        );
+        await channel.send(message);
+        return this.getQueue(command);
+      }
+
+      return;
+    });
   }
 
   /**
@@ -193,8 +236,26 @@ export class MusicService {
   public async setVolume(
     command: CommandMessage,
     value: number
-  ): Promise<boolean | void> {
-    return Main.Client['player'].setVolume(command, value);
+  ): Promise<Song> {
+    return Promise.resolve(this.player.setVolume(command, value));
+  }
+
+  /**
+   * Get current queue
+   * @param command
+   */
+  public async getQueue(command: CommandMessage): Promise<Message> {
+    const queue = this.player.getQueue(command);
+
+    const channel = this.getChannel();
+
+    if (queue?.songs.length < 1) {
+      const msg = this.createVoiceUpdateMessage('🚫  Nothing in queue!');
+      return channel?.send(msg);
+    }
+
+    const message = this.createPlaylistAddedMessage(queue?.songs || []);
+    return channel?.send(message);
   }
 
   /*======================
@@ -209,6 +270,11 @@ export class MusicService {
     return new MessageEmbed().setColor(10027008).setDescription(message);
   }
 
+  /**
+   * Create song update message
+   * @param song
+   * @param now
+   */
   private createSongUpdateMessage(song: Song, now = false): MessageEmbed {
     const title = now ? '🎶 Now Playing' : '🎶 Song added to queue';
     let songImage = song.thumbnail.toString();
@@ -224,26 +290,48 @@ export class MusicService {
       .setTimestamp();
   }
 
-  private createPLaylistAddedMessage(playlist: any): MessageEmbed {
-    const plist = playlist as Playlist;
+  /**
+   * Create playlsit added message
+   * @param playlist
+   */
+  private createPlaylistAddedMessage(playlist: any): MessageEmbed {
+    let plist: Playlist = {
+      name: '',
+      author: '',
+      url: '',
+      videos: [],
+      videoCount: 0,
+    };
+    let songs: Song[] = [];
 
-    let plistDescription = plist.videos
+    if (playlist?.videos) {
+      plist = playlist;
+    } else {
+      songs = playlist;
+    }
+
+    let plistDescription = (songs.length ? songs : plist.videos)
       .map((v: Song, i: number) => {
         if (i < 10) {
-          return `\`${i + 1}\` [${v.name}](${v.url})\n`;
+          return `\`${i + 1}\` [${v.name} - ${v.duration}](${v.url})\n`;
         }
         return '';
       })
       .join('');
 
-    if (plist.videos.length > 9) {
-      plistDescription += `\`\n\n${
-        plist.videos.length + 1 - 10
-      } more tracks added...\``;
+    const moreSongs = (plist.videos || songs).length + 1 - 10;
+    if (moreSongs > 0) {
+      plistDescription += `\`\n\n${moreSongs} more tracks added...\``;
     }
 
     return new MessageEmbed()
-      .setTitle(`🎶 ${plist.videoCount} songs added!`)
+      .setTitle(
+        songs.length
+          ? `🎶  Song Queue!`
+          : plist.videoCount > 0
+          ? `🎶  ${plist.videoCount} songs added!`
+          : `🚫  Nothing In Queue!`
+      )
       .setColor(10027008)
       .setDescription(plistDescription)
       .setTimestamp();
@@ -291,7 +379,7 @@ export class MusicService {
     });
 
     player.on('playlistAdd', ({}, {}, playlist) => {
-      const message = this.createPLaylistAddedMessage(playlist);
+      const message = this.createPlaylistAddedMessage(playlist);
       return channel?.send(message);
     });
 

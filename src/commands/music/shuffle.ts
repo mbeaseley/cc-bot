@@ -2,7 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { MusicService } from 'Services/music.service';
 import { Message } from 'discord.js';
 
-export class Pause {
+export class Shuffle {
   private musicService: MusicService;
 
   constructor() {
@@ -13,11 +13,11 @@ export class Pause {
    * Init
    * @param command
    */
-  @Command('pause')
-  @Description('Pause current quene')
+  @Command('shuffle')
+  @Description('Shuffle Queue')
   async init(command: CommandMessage): Promise<Message | void> {
     if (command.deletable) await command.delete();
 
-    return this.musicService.pause(command);
+    return this.musicService.shuffle(command);
   }
 }
