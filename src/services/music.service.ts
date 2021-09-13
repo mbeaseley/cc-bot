@@ -258,6 +258,18 @@ export class MusicService {
     return channel?.send(message);
   }
 
+  /**
+   * Clear Queue
+   * @param command
+   */
+  public async clearQueue(command: CommandMessage): Promise<Message> {
+    this.player.clearQueue(command);
+
+    const channel = this.getChannel();
+    const msg = this.createVoiceUpdateMessage('🚫  Nothing in queue!');
+    return channel?.send(msg);
+  }
+
   /*======================
    * Event based Messaging
    =======================*/

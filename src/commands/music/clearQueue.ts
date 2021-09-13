@@ -2,7 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { MusicService } from 'Services/music.service';
 import { Message } from 'discord.js';
 
-export class GetQueue {
+export class ClearQueue {
   private musicService: MusicService;
 
   constructor() {
@@ -13,11 +13,11 @@ export class GetQueue {
    * Init
    * @param command
    */
-  @Command('queue')
-  @Description('Get queue')
+  @Command('clear')
+  @Description(`Clear queue (Won't clear current playing song)`)
   async init(command: CommandMessage): Promise<Message | void> {
     if (command.deletable) await command.delete();
 
-    return this.musicService.getQueue(command);
+    return this.musicService.clearQueue(command);
   }
 }
