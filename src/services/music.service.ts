@@ -382,10 +382,10 @@ export class MusicService {
     };
     let songs: Song[] = [];
 
-    if (playlist?.videos) {
-      plist = playlist;
+    if ((playlist as Playlist)?.videos) {
+      plist = playlist as Playlist;
     } else {
-      songs = playlist;
+      songs = playlist as Song[];
     }
 
     let plistDescription = (songs.length ? songs : plist.videos)
