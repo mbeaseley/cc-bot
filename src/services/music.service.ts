@@ -270,6 +270,72 @@ export class MusicService {
     return channel?.send(msg);
   }
 
+  /**
+   * Toggle repeat of queue
+   * @param command
+   * @param value
+   */
+  public async setQueueRepeatMode(
+    command: CommandMessage,
+    value: boolean
+  ): Promise<Message> {
+    this.player.setQueueRepeatMode(command, value);
+
+    const channel = this.getChannel();
+    const msg = this.createVoiceUpdateMessage(
+      `🎶 Queue set to ${!value ? 'not ' : ''}repeat`
+    );
+    return channel?.send(msg);
+  }
+
+  /**
+   * Toggle loop of queue
+   * @param command
+   * @param value
+   */
+  public async toggleQueueLoop(command: CommandMessage): Promise<Message> {
+    const loop = this.player.toggleQueueLoop(command);
+
+    const channel = this.getChannel();
+    const msg = this.createVoiceUpdateMessage(
+      `🎶 Queue set to ${!loop ? 'not ' : ''}repeat`
+    );
+    return channel?.send(msg);
+  }
+
+  /**
+   * Toggle repeat of current playing song
+   * @param command
+   * @param value
+   */
+  public async setRepeatMode(
+    command: CommandMessage,
+    value: boolean
+  ): Promise<Message> {
+    const loop = this.player.setRepeatMode(command, value);
+
+    const channel = this.getChannel();
+    const msg = this.createVoiceUpdateMessage(
+      `🎶 Queue set to ${!loop ? 'not ' : ''}repeat`
+    );
+    return channel?.send(msg);
+  }
+
+  /**
+   * Skip current playing song
+   * @param command
+   * @param value
+   */
+  public async skip(command: CommandMessage): Promise<Message> {
+    const song = this.player.skip(command);
+
+    const channel = this.getChannel();
+    const msg = this.createVoiceUpdateMessage(
+      `⏭️ ${song.name} has been skipped!`
+    );
+    return channel?.send(msg);
+  }
+
   /*======================
    * Event based Messaging
    =======================*/
