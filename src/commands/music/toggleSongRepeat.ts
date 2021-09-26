@@ -1,5 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { MusicService } from 'Services/music.service';
+import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
 export class ToggleSongRepeat {
@@ -18,6 +19,8 @@ export class ToggleSongRepeat {
   async init(command: CommandMessage): Promise<Message | void> {
     if (command.deletable) await command.delete();
 
-    return this.musicService.toggleQueueLoop(command);
+    let value = !!Utility.getOptionFromCommand(command.content, 2);
+
+    return this.musicService.setRepeatMode(command, value);
   }
 }
