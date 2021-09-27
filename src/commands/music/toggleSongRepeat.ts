@@ -19,8 +19,7 @@ export class ToggleSongRepeat {
   async init(command: CommandMessage): Promise<Message | void> {
     if (command.deletable) await command.delete();
 
-    let value = !!Utility.getOptionFromCommand(command.content, 2);
-
+    const value = !!Utility.getOptionFromCommand(command.content, 2);
     return this.musicService.setRepeatMode(command, value);
   }
 }
