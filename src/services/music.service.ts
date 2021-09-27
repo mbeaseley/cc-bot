@@ -3,6 +3,7 @@ import { Main } from 'Root/main';
 import { getVoiceState } from 'Types/music';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
+import { Player, Playlist, Song } from 'discord-music-player';
 import {
   GuildMember,
   Message,
@@ -11,11 +12,8 @@ import {
   VoiceChannel,
   VoiceState,
 } from 'discord.js';
-import { Player, Playlist, Song } from 'discord-music-player';
 
 export class MusicService {
-  constructor() {}
-
   /**
    * Music player init
    */
