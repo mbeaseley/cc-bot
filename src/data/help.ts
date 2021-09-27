@@ -134,16 +134,6 @@ export const commandOverrides: CommandItem[] = [
     type: 'admin',
   },
   {
-    name: 'join',
-    fullCommand: 'join',
-    type: 'music',
-  },
-  {
-    name: 'dc',
-    fullCommand: 'dc',
-    type: 'music',
-  },
-  {
     name: 'meme',
     fullCommand: 'meme',
     type: 'fun',
@@ -168,5 +158,70 @@ export const commandOverrides: CommandItem[] = [
     name: 'serverinfo',
     fullCommand: 'serverinfo',
     type: 'other',
+  },
+  {
+    name: 'join',
+    fullCommand: 'join',
+    type: 'music',
+  },
+  {
+    name: 'dc',
+    fullCommand: 'dc',
+    type: 'music',
+  },
+  {
+    name: 'clear',
+    fullCommand: 'clear',
+    type: 'music',
+  },
+  {
+    name: 'queue',
+    fullCommand: 'queue',
+    type: 'music',
+  },
+  {
+    name: 'play',
+    fullCommand: 'play <song|playlist>',
+    type: 'music',
+  },
+  {
+    name: 'pause',
+    fullCommand: 'pause',
+    type: 'music',
+  },
+  {
+    name: 'resume',
+    fullCommand: 'resume',
+    type: 'music',
+  },
+  {
+    name: 'skip',
+    fullCommand: 'skip',
+    type: 'music',
+  },
+  {
+    name: 'stop',
+    fullCommand: 'stop',
+    type: 'music',
+  },
+  {
+    name: 'shuffle',
+    fullCommand: 'shuffle',
+    type: 'music',
+  },
+  {
+    name: 'set volume',
+    fullCommand: 'set volume <number>',
+    type: 'music',
+  },
+  {
+    name: 'loop',
+    fullCommand: 'loop',
+    type: 'music',
+  },
+  {
+    name: 'repeat',
+    fullCommand: 'repeat <true|false>',
+    type: 'music',
   },
 ];
