@@ -4,8 +4,9 @@ import { ReactionService } from 'Root/services/reaction.service';
 import { Logger } from 'Services/logger.service';
 import { RulesService } from 'Services/rules.service';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
-import { GuildEmoji, Message, MessageEmbed, Role } from 'discord.js';
+import { GuildEmoji, Message, MessageEmbed } from 'discord.js';
 
 const QUESTION_TYPES = ['rules', 'game roles'];
 
@@ -56,27 +57,26 @@ export class ReactionQuestions {
       })
       .filter((g) => g?.name) as GuildEmoji[];
 
-    const gr = (emoji: GuildEmoji, role: Role | undefined) =>
-      `\n*Click the <:${emoji.name}:${emoji.id}> emoji to join ${
-        role?.mentionable ? '<@&' + role?.id + '>' : role?.name
-      } group*`;
     const games = guildEmojis.map((ge) => {
       const role = reactionRoles.find((r) => r[ge.name] !== undefined);
       if (!role?.[ge.name] && !command?.guild?.roles) {
         return '';
       }
       const r = Utility.findRole(command?.guild?.roles, role?.[ge.name]);
-      return gr(ge, r);
+      const roleCopy = r?.mentionable
+        ? '<@&' + r?.id + '>'
+        : (r?.name as string);
+      return Translate.find('roleAction', [ge.name, ge.id, roleCopy]);
     });
 
     const message = new MessageEmbed()
       .setAuthor(
-        'Available Game Groups',
+        Translate.find('questionAuthor'),
         command.client.user?.displayAvatarURL()
       )
       .setColor(3093237)
       .setDescription(
-        `**Choose the game groups that you want to join. \nThis will notify you when somone is searching for people to play with\nor even @mention the group yourself:**\n\n${games}`
+        Translate.find('questionDescription', [games.toString()])
       );
 
     return command.channel
@@ -113,24 +113,20 @@ export class ReactionQuestions {
       }
 
       this.logger.error(
-        `Command: 'question' has error: incorrect type choosen.`
+        Translate.find('errorCustom', ['question', 'incorrect type choosen'])
       );
       return Utility.sendMessage(
         command,
-        `**Please use correct type and formatting!**`,
+        Translate.find('questionFormatError'),
         'channel',
         5000
       );
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(
-        `Command: 'question' has error: ${(e as Error).message}.`
-      );
+      this.logger.error(Translate.find('errorLog', [(e as Error).message]));
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', [(e as Error).message]),
         'channel',
         5000
       );
