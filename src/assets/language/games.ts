@@ -1,1 +1,22 @@
-export const games = {};
+export const games = {
+  playerChoiceDescription: '**I have chosen {0}!**',
+  playerChoiceFetch: '**:hourglass: Choosing player...**',
+  playerChoiceVoice: '**Please join a voicechat to use this command!**',
+  dbdKillerTitle: 'DBD Random Killer',
+  dbdSurviverTitle: 'DBD Random Surviver',
+  dbdhelpAuthor: '{0} DBD Plugin Commands',
+  mcTitle: 'Minecraft Server Status',
+  mcThumbnail: 'attachment://favicon.png',
+  mcUrl: 'https://mcsrvstat.us/server/{0}:{1}',
+  mcServerTitle: 'Server IP/Port:',
+  mcIp: '{0}: {1}',
+  mcVersion: 'Server Version: ',
+  mcDes: 'Description: ',
+  mcOnline: 'Online PLayers: ',
+  mcFormatError: '**Incorrect format** Please check help for correct format!',
+  mcFetch: '⏳ Fetching {0}:{1} server info...',
+  mcNoServer: `**This server does not exist**`,
+  mcError: `An error has occured. Most likely you have not set your ip/domain and port correctly. If this error keeps occurring, please contact support.`,
+  mcNoGuild: '**No guild Id found!**',
+  mcIpSet: '**Minecraft service domain/ip and port have been set!**',
+};

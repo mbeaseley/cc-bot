@@ -6,6 +6,7 @@ import Utility from 'Utils/utility';
 import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
 import { status } from 'minecraft-server-util';
 import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
+import Translate from 'Root/utils/translate';
 
 export class Minecraft {
   private logger: Logger;
@@ -50,18 +51,21 @@ export class Minecraft {
 
     return new MessageEmbed()
       .setColor(0x00cc06)
-      .setTitle('Minecraft Server Status')
+      .setTitle(Translate.find('mcTitle'))
       .attachFiles(status.favicon ? [attachment] : [])
-      .setThumbnail(status.favicon ? 'attachment://favicon.png' : '')
-      .setURL(`https://mcsrvstat.us/server/${mcUrl.domain}:${mcUrl.port}`)
-      .addField('Server IP/Port:', `${status.host}:${status.port}`)
-      .addField('Server Version: ', status.version)
+      .setThumbnail(status.favicon ? Translate.find('mcThumbnail') : '')
+      .setURL(Translate.find('mcUrl'))
       .addField(
-        'Description: ',
+        Translate.find('mcServerTitle'),
+        Translate.find('mcIp', status.host, status.port.toString())
+      )
+      .addField(Translate.find('mcVersion'), status.version)
+      .addField(
+        Translate.find('mcDes'),
         status.description?.descriptionText.replace(/§[a-zA-Z0-9]/g, '') || '~'
       )
       .addField(
-        'Online Players: ',
+        Translate.find('mcOnline'),
         `${status.onlinePlayers}/${status.maxPlayers}`
       );
   }
@@ -111,11 +115,11 @@ export class Minecraft {
       if (!newMcUrl.domain) {
         if (command.deletable) await command.delete();
         this.logger.error(
-          `Command: 'minecraft' has error: domain and port not defined.`
+          Translate.find('errorLog', 'minecraft', 'domain and port not defined')
         );
         return Utility.sendMessage(
           command,
-          '**Incorrect format** Please check help for correct format!',
+          Translate.find('mcFormatError'),
           'channel',
           5000
         );
@@ -123,7 +127,7 @@ export class Minecraft {
 
       const fetchingMsg = await Utility.sendMessage(
         command,
-        `⏳ Fetching ${newMcUrl.domain}:${newMcUrl.port} server info...`
+        Translate.find('mcFetch')
       );
 
       const res = await status(newMcUrl.domain, {
@@ -138,7 +142,7 @@ export class Minecraft {
       if (!res) {
         return Utility.sendMessage(
           command,
-          `**This server doesn't exist**`,
+          Translate.find('mcNoServer'),
           'channel',
           5000
         );
@@ -149,11 +153,11 @@ export class Minecraft {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'minecraft' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'minecraft', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `An error has occured. Most likely you haven't set your ip/domain and port correctly. If this error keeps occurring, please contact support.`,
+        Translate.find('mcError'),
         'channel',
         5000
       );
@@ -197,11 +201,11 @@ export class Minecraft {
       if (!urlSplit.length) {
         if (command.deletable) await command.delete();
         this.logger.error(
-          `Command: 'minecraft set' has error: domain and port not defined.`
+          Translate.find('errorLog', 'minecraft', 'domain and port not defined')
         );
         return Utility.sendMessage(
           command,
-          '**Incorrect format** Please check help for correct format!',
+          Translate.find('mcFormatError'),
           'channel',
           5000
         );
@@ -214,7 +218,7 @@ export class Minecraft {
         this.logger.error(`Command: 'minecraft set' has error: no guild id`);
         return Utility.sendMessage(
           command,
-          '**No guild Id found!**',
+          Translate.find('mcNoGuild'),
           'channel',
           5000
         );
@@ -225,20 +229,18 @@ export class Minecraft {
       if (command.deletable) await command.delete();
       return Utility.sendMessage(
         command,
-        '**Minecraft service domain/ip and port have been set!**',
+        Translate.find('mcIpSet'),
         'channel',
         5000
       );
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'minecraft' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'minecraft', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

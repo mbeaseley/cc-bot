@@ -3,6 +3,7 @@ import { commands } from 'Data/dbdCommands';
 import { DBDService } from 'Services/dbd.service';
 import { KillerBuild, KillerItem, SurviverBuild } from 'Types/dbd';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
 
@@ -95,9 +96,10 @@ export class Dbd {
         ? (build as KillerBuild)
         : (build as SurviverBuild);
 
-    const title = `DBD Random ${
-      build instanceof KillerBuild ? 'Killer' : 'Surviver'
-    }`;
+    const title =
+      build instanceof KillerBuild
+        ? Translate.find('dbdKillerTitle')
+        : Translate.find('dbdSurviverTitle');
     const thumbnail =
       dbdBuild instanceof KillerBuild ? dbdBuild.image : undefined;
     const embed = Utility.createEmbedMessage(dbdBuild, title, thumbnail, [
@@ -131,7 +133,10 @@ export class Dbd {
     const message = new MessageEmbed()
       .setColor(10181046)
       .setAuthor(
-        `${command?.client?.user?.username} DBD Plugin Commands`,
+        Translate.find(
+          'dbdhelpAuthor',
+          command?.client?.user?.username as string
+        ),
         command?.client?.user?.displayAvatarURL()
       )
       .setThumbnail(environment.botThumbnail || '')
