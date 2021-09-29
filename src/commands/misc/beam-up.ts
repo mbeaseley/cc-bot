@@ -1,6 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import {
   GuildChannel,
@@ -55,7 +56,7 @@ export class BeamUp {
       return BeamUp.member?.voice.setChannel(vc.id.toString());
     }
 
-    return Promise.reject('**Unable to allow member to join!**');
+    return Promise.reject(Translate.find('beamUpFail'));
   }
 
   /**
@@ -82,10 +83,8 @@ export class BeamUp {
 
     return new MessageEmbed()
       .setColor(member.displayHexColor)
-      .setAuthor('Beam Up Command', user?.displayAvatarURL())
-      .setDescription(
-        `<@!${member.user.id}> is asking to be beamed up to a restrictive channel!\n`
-      );
+      .setAuthor(Translate.find('beamUpAuthor'), user?.displayAvatarURL())
+      .setDescription(Translate.find('beamUpDescription'));
   }
 
   /**
@@ -106,7 +105,7 @@ export class BeamUp {
       if (!voiceChannel.length) {
         return Utility.sendMessage(
           command,
-          '**No admin member are within restrictive voice channels!**',
+          Translate.find('beamUpNotRestrictive'),
           'channel',
           5000
         );
@@ -123,7 +122,7 @@ export class BeamUp {
       if (permission) {
         return Utility.sendMessage(
           command,
-          `**You have permission to join the voice channel named ${BeamUp.voiceChannel.name}!**`,
+          Translate.find('beamUpPermission'),
           'channel',
           5000
         );
@@ -133,7 +132,7 @@ export class BeamUp {
       if (!e?.name) {
         return Utility.sendMessage(
           command,
-          `**Unable to find emoji!**`,
+          Translate.find('beamUpNoEmoji'),
           'channel',
           5000
         );
@@ -146,13 +145,11 @@ export class BeamUp {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'beam up' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'beam up', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

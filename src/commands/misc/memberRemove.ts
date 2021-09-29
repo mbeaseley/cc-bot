@@ -1,5 +1,6 @@
 import { Client } from '@typeit/discord';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 import {
   GuildMember,
   Message,
@@ -34,7 +35,7 @@ export class MemberRemove {
     }
 
     return channel.send(
-      `:wave: **${member.user?.username}** has left this server!`
+      Translate.find('memberRemoveLeft', member.user?.username as string)
     );
   }
 
