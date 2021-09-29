@@ -2,6 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { AnimalsService } from 'Services/animals.service';
 import { Logger } from 'Services/logger.service';
 import { Animal } from 'Types/animal';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { ClientUser, Message, MessageEmbed } from 'discord.js';
 
@@ -23,7 +24,7 @@ export class Cat {
   private createMessage(animal: Animal, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
       .setColor(25600)
-      .setAuthor('Cat Image Command', user?.displayAvatarURL())
+      .setAuthor(Translate.find('catAuthor'), user?.displayAvatarURL())
       .setImage(animal.link || '');
   }
 
@@ -39,7 +40,7 @@ export class Cat {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching Cat...**'
+        Translate.find('catFetch')
       );
 
       const res = await this.animalsService.getCat();
@@ -48,7 +49,7 @@ export class Cat {
       if (!res?.link) {
         return Utility.sendMessage(
           command,
-          '**No cat was found!**',
+          Translate.find('noCat'),
           'channel',
           5000
         );
@@ -58,12 +59,12 @@ export class Cat {
       return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(`Command: 'cat' has error: ${(e as Error).message}.`);
+      this.logger.error(
+        Translate.find('errorLog', 'cat', (e as Error).message)
+      );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );
