@@ -1,6 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { AdviceService } from 'Services/advice.service';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
@@ -25,7 +26,7 @@ export class Advice {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching Advice...**'
+        Translate.find('adviceFetch')
       );
 
       const user = Utility.getOptionFromCommand(command.content, 2)?.[0];
@@ -35,7 +36,7 @@ export class Advice {
       if (!givenAdvice?.advice) {
         return Utility.sendMessage(
           command,
-          '**No advice was given!**',
+          Translate.find('noAdvice'),
           'channel',
           5000
         );
@@ -47,13 +48,11 @@ export class Advice {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'advice' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'advice', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'reply',
         5000
       );

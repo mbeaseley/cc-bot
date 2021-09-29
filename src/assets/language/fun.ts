@@ -1,1 +1,20 @@
-export const fun = {};
+export const fun = {
+  adviceFetch: '**:hourglass: Fetching Advice...**',
+  noAdvice: '**No advice was given!**',
+  complimentFetch: '**:hourglass: Fetching Compliment...**',
+  noCompliment: '**No compliment was found!**',
+  jokeFetch: '**:hourglass: Fetching Joke...**',
+  noJoke: '**No joke was found!**',
+  flipFetch: '**:hourglass: Flipping coin!**',
+  heads: 'Heads',
+  tails: 'Tails',
+  flip: '**{0} :coin:**',
+  insultFetch: '**:hourglass: Fetching Insult...**',
+  noInsult: '**No insult was found!**',
+  memeAuthor: 'Very Bad Meme Command',
+  memeDescription: '**{0}**',
+  memeFetch: '**:hourglass: Fetching Meme...**',
+  noMeme: '**No meme was found!**',
+  pollAuthor: '{0} Poll',
+  pollFormat: '**Please use correct formatting**',
+};

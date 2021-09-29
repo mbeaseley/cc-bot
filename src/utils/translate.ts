@@ -14,7 +14,7 @@ export default class Translate {
    * @param args
    * @returns string
    */
-  static find(key: string, args?: string[]): string {
+  static find(key: string, ...args: string[]): string {
     const allCopys = {
       ...admin,
       ...error,

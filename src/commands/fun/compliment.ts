@@ -1,6 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { ComplimentService } from 'Services/compliment.service';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
@@ -44,7 +45,7 @@ export class Compliment {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching Compliment...**'
+        Translate.find('complimentFetch')
       );
 
       const res = await this.complimentService.getCompliment();
@@ -53,7 +54,7 @@ export class Compliment {
       if (!res?.compliment) {
         return Utility.sendMessage(
           command,
-          '**No compliment was found!**',
+          Translate.find('noCompliment'),
           'channel',
           5000
         );
@@ -67,13 +68,11 @@ export class Compliment {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'compliment' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'compliment', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', 'compliment', (e as Error).message),
         'channel',
         5000
       );

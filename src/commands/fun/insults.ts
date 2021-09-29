@@ -1,6 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { InsultsService } from 'Services/insults.service';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
@@ -41,7 +42,7 @@ export class Insult {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching Insult...**'
+        Translate.find('insultFetch')
       );
 
       const res = await this.insultsService.getInsult();
@@ -50,7 +51,7 @@ export class Insult {
       if (!res) {
         return Utility.sendMessage(
           command,
-          '**No insult was found!**',
+          Translate.find('noInsult'),
           'channel',
           5000
         );
@@ -63,13 +64,11 @@ export class Insult {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'insult' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'insult', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', 'insult', (e as Error).message),
         'channel',
         5000
       );

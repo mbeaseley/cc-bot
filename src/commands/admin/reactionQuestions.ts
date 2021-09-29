@@ -66,7 +66,7 @@ export class ReactionQuestions {
       const roleCopy = r?.mentionable
         ? '<@&' + r?.id + '>'
         : (r?.name as string);
-      return Translate.find('roleAction', [ge.name, ge.id, roleCopy]);
+      return Translate.find('roleAction', ge.name, ge.id, roleCopy);
     });
 
     const message = new MessageEmbed()
@@ -75,9 +75,7 @@ export class ReactionQuestions {
         command.client.user?.displayAvatarURL()
       )
       .setColor(3093237)
-      .setDescription(
-        Translate.find('questionDescription', [games.toString()])
-      );
+      .setDescription(Translate.find('questionDescription', games.toString()));
 
     return command.channel
       .send(message)
@@ -113,7 +111,7 @@ export class ReactionQuestions {
       }
 
       this.logger.error(
-        Translate.find('errorCustom', ['question', 'incorrect type choosen'])
+        Translate.find('errorLog', 'question', 'incorrect type choosen')
       );
       return Utility.sendMessage(
         command,
@@ -123,10 +121,12 @@ export class ReactionQuestions {
       );
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(Translate.find('errorLog', [(e as Error).message]));
+      this.logger.error(
+        Translate.find('errorLog', 'question', (e as Error).message)
+      );
       return Utility.sendMessage(
         command,
-        Translate.find('errorDefault', [(e as Error).message]),
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );
