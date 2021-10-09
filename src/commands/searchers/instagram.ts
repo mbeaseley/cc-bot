@@ -2,6 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { InstagramService } from 'Services/instagram.service';
 import { Logger } from 'Services/logger.service';
 import { InstaUser } from 'Types/instagram';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
 
@@ -22,16 +23,32 @@ export class Instagram {
     return new MessageEmbed()
       .setColor(0x0099ff)
       .setTitle(u.fullName)
-      .setURL(`https://instagram.com/${u.username}`)
+      .setURL(Translate.find('instaUrl', u.username as string))
       .setThumbnail(u.profileImage ?? '')
-      .addField(`Username:`, u.username || '~')
-      .addField(`Full Name: `, u.fullName || '~')
-      .addField(`Biography: `, u.biography || '~')
-      .addField(`Posts:`, u.posts || '~', true)
-      .addField(`Followers: `, u.followers || '~', true)
-      .addField(`Following: `, u.following || '~', true)
-      .addField(`Private Account: `, u.private ? 'Yes 🔐' : 'No 🔓', true)
-      .addField(`Verified Account: `, u.verified ? 'Yes ✅' : 'No ❌', true);
+      .addField(Translate.find('instaUsernameHeader'), u.username || '~')
+      .addField(Translate.find('instaNameHeader'), u.fullName || '~')
+      .addField(Translate.find('instaBioHeader'), u.biography || '~')
+      .addField(Translate.find('instaPostHeader'), u.posts || '~', true)
+      .addField(
+        Translate.find('instaFollowersHeader'),
+        u.followers || '~',
+        true
+      )
+      .addField(
+        Translate.find('instaFollowingHeader'),
+        u.following || '~',
+        true
+      )
+      .addField(
+        Translate.find('instaPrivateHeader'),
+        u.private ? 'Yes 🔐' : 'No 🔓',
+        true
+      )
+      .addField(
+        Translate.find('instaVerifiedHeader'),
+        u.verified ? 'Yes ✅' : 'No ❌',
+        true
+      );
   }
 
   /**
@@ -45,9 +62,7 @@ export class Instagram {
     try {
       if (command.deletable) await command.delete();
 
-      const msg = await command.channel.send(
-        '**:hourglass: Fetching account...**'
-      );
+      const msg = await command.channel.send(Translate.find('instaFetch'));
 
       const username = Utility.getOptionFromCommand(
         command.content,
@@ -61,7 +76,7 @@ export class Instagram {
       if (!instaUser?.username) {
         return Utility.sendMessage(
           command,
-          '**This username was unable to be found.**',
+          Translate.find('instaNoUser'),
           'channel',
           5000
         );
@@ -72,13 +87,11 @@ export class Instagram {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'instagram' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'instagram', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

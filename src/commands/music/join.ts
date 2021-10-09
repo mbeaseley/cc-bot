@@ -1,5 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { GuildMember, Message, MessageEmbed } from 'discord.js';
 
@@ -17,9 +18,7 @@ export class Join {
    * @returns MessageEmbed
    */
   private createMessage(member: GuildMember, moved: boolean): MessageEmbed {
-    const d = moved
-      ? '**I have successfully moved to another voice channel.**'
-      : '**I have successfully joined the voice channel.**';
+    const d = moved ? Translate.find('joinMoved') : Translate.find('join');
     return new MessageEmbed()
       .setColor(member.displayHexColor)
       .setDescription(d);
@@ -38,10 +37,7 @@ export class Join {
 
       //Checks if user is in voice channel
       if (!command.member?.voice.channel) {
-        return Utility.sendMessage(
-          command,
-          '**You are not in a voice channel that I can join.**'
-        );
+        return Utility.sendMessage(command, Translate.find('joinFail'));
       }
 
       // Check if VC is full and bot can't join doesn't have (MANAGE_CHANNELS)
@@ -54,7 +50,7 @@ export class Join {
       ) {
         return Utility.sendMessage(
           command,
-          '**The voice channel is full**',
+          Translate.find('joinFull'),
           'channel',
           10000
         );
@@ -68,12 +64,12 @@ export class Join {
       return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(`Command: 'join' has error: ${(e as Error).message}.`);
+      this.logger.error(
+        Translate.find('errorLog', 'join', (e as Error).message)
+      );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

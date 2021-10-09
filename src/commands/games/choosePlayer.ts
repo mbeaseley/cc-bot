@@ -1,6 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import {
   GuildChannel,
@@ -99,7 +100,7 @@ export class ChoosePlayer {
   private createMessage(content: string, member: GuildMember): MessageEmbed {
     return new MessageEmbed()
       .setColor(member.displayHexColor)
-      .setDescription(`**I have chosen ${content}!**`);
+      .setDescription(Translate.find('playerChoiceDescription', content));
   }
 
   /**
@@ -116,7 +117,7 @@ export class ChoosePlayer {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Choosing player...**'
+        Translate.find('playerChoiceFetch')
       );
 
       const channel = this.findUserChannel(command);
@@ -127,7 +128,7 @@ export class ChoosePlayer {
       if (!users.length) {
         return Utility.sendMessage(
           command,
-          '**Please join a voicechat to use this command!**',
+          Translate.find('playerChoiceVoice'),
           'channel',
           5000
         );
@@ -142,13 +143,11 @@ export class ChoosePlayer {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'playerchoice' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'playerchoice', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

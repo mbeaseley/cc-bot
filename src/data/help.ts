@@ -210,11 +210,6 @@ export const commandOverrides: CommandItem[] = [
     type: 'music',
   },
   {
-    name: 'set volume',
-    fullCommand: 'set volume <number>',
-    type: 'music',
-  },
-  {
     name: 'loop',
     fullCommand: 'loop',
     type: 'music',

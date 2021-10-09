@@ -2,6 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { MemeService } from 'Services/meme.service';
 import { MemeItem } from 'Types/meme';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { ClientUser, Message, MessageEmbed } from 'discord.js';
 
@@ -23,8 +24,8 @@ export class Meme {
   private createMessage(meme: MemeItem, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
       .setColor(16738740)
-      .setAuthor('Very Bad Meme Command', user?.displayAvatarURL())
-      .setDescription(`**${meme.caption}**`)
+      .setAuthor(Translate.find('memeAuthor'), user?.displayAvatarURL())
+      .setDescription(Translate.find('memeDescription'))
       .setImage(meme.image || '');
   }
 
@@ -40,7 +41,7 @@ export class Meme {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching Meme...**'
+        Translate.find('memeFetch')
       );
 
       const res = await this.memeService.getMeme();
@@ -49,7 +50,7 @@ export class Meme {
       if (!res.image) {
         return Utility.sendMessage(
           command,
-          '**No meme was found!**',
+          Translate.find('noMeme'),
           'channel',
           5000
         );
@@ -59,12 +60,12 @@ export class Meme {
       return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(`Command: 'meme' has error: ${(e as Error).message}.`);
+      this.logger.error(
+        Translate.find('errorLog', 'meme', (e as Error).message)
+      );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

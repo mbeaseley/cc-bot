@@ -1,5 +1,7 @@
 import { CommandMessage, CommandNotFound } from '@typeit/discord';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
+import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
 export class NotFoundCommand {
@@ -13,7 +15,12 @@ export class NotFoundCommand {
   async commandNotFound(command: CommandMessage): Promise<Message | void> {
     if (command.content.indexOf(environment.botId) > -1) {
       if (command.deletable) await command.delete();
-      return command.reply(environment.commandNotFound);
+      return Utility.sendMessage(
+        command,
+        Translate.find('error'),
+        'reply',
+        5000
+      );
     }
 
     return Promise.resolve();

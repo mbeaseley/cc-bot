@@ -2,6 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { SteamService } from 'Services/steam.service';
 import { PlayerSummary, UserBans } from 'Types/steam';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
 
@@ -26,20 +27,22 @@ export class Steam {
   ): MessageEmbed {
     return new MessageEmbed()
       .setColor(0x0099ff)
-      .setAuthor(`Steam Services`, playerSummary?.avatarFull)
+      .setAuthor(Translate.find('steamAuthor'), playerSummary?.avatarFull)
       .setTitle(playerSummary.name)
       .setURL(playerSummary?.profileUrl || '')
       .setThumbnail(playerSummary.avatarFull)
       .setDescription(
-        `**Real Name:** ${playerSummary.realName || '~'}\n**Status:** ${
-          playerSummary.nameState || '~'
-        }\n**Location:** ${playerSummary.location?.cityName || '~'}, ${
-          playerSummary.location?.countryCode
-        }\n**Account Created:** ${
-          playerSummary.timeCreated?.format('DD/MM/YYYY') || '~'
-        }\n**Bans:** Vac: ${userBans.numberOfVACBans || '~'}, Game: ${
-          userBans.numberOfGameBans || '~'
-        }\n**Link:** [Link to profile](${playerSummary.profileUrl})`
+        Translate.find(
+          'steamDes',
+          playerSummary.realName || '~',
+          playerSummary.nameState || '~',
+          playerSummary.location?.cityName || '~',
+          playerSummary.location?.countryCode || '~',
+          playerSummary.timeCreated?.format('DD/MM/YYYY') || '~',
+          userBans.numberOfVACBans.toString() || '~',
+          userBans.numberOfGameBans.toString() || '~',
+          playerSummary.profileUrl as string
+        )
       )
       .setTimestamp();
   }
@@ -56,7 +59,7 @@ export class Steam {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching account...**'
+        Translate.find('steamFetch')
       );
 
       const vanityUrl = Utility.getOptionFromCommand(
@@ -71,7 +74,7 @@ export class Steam {
       if (!user?.steamId) {
         return Utility.sendMessage(
           command,
-          '**This username was unable to be found.**',
+          Translate.find('steamNoUser'),
           'channel',
           5000
         );
@@ -87,12 +90,12 @@ export class Steam {
       return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(`Command: 'steam' has error: ${(e as Error).message}.`);
+      this.logger.error(
+        Translate.find('errorLog', 'steam', (e as Error).message)
+      );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

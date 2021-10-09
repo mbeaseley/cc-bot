@@ -1,5 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import dayjs from 'dayjs';
 import {
@@ -51,26 +52,38 @@ export class ServerInfo {
     ];
 
     const fields = [
-      { name: 'Server name:', value: `\`${guild.name}\``, inline: true },
-      { name: 'Server owner:', value: `\`${owner}\``, inline: true },
-      { name: 'Server ID:', value: `\`${guild.id}\``, inline: true },
       {
-        name: 'Server created date:',
+        name: Translate.find('serverName'),
+        value: `\`${guild.name}\``,
+        inline: true,
+      },
+      {
+        name: Translate.find('serverOwner'),
+        value: `\`${owner}\``,
+        inline: true,
+      },
+      {
+        name: Translate.find('serverId'),
+        value: `\`${guild.id}\``,
+        inline: true,
+      },
+      {
+        name: Translate.find('serverDate'),
         value: dayjs(guild.createdAt).format('DD/MM/YYYY'),
         inline: true,
       },
       {
-        name: 'Server region:',
+        name: Translate.find('serverRegion'),
         value: `\`${guild.region}\``,
         inline: true,
       },
       {
-        name: 'Verification level:',
+        name: Translate.find('serverVerification'),
         value: `\`${guild.verificationLevel}\``,
         inline: true,
       },
       {
-        name: `Member count ${guild.memberCount}:`,
+        name: Translate.find('serverCount', guild.memberCount.toString()),
         value: `\`${this.filterMembers(
           member,
           'online'
@@ -87,7 +100,7 @@ export class ServerInfo {
         inline: true,
       },
       {
-        name: 'Features:',
+        name: Translate.find('serverFeature'),
         value: `\`${
           guild.features.length === 0
             ? 'NONE'
@@ -96,7 +109,7 @@ export class ServerInfo {
         inline: true,
       },
       {
-        name: `Roles ${guild.roles.cache.size}: `,
+        name: Translate.find('serverRoles', guild.roles.cache.size.toString()),
         value: `${roles.join(', ')}${
           roles.length != guild.roles.cache.size ? '...' : '.'
         }`,
@@ -105,12 +118,12 @@ export class ServerInfo {
     ];
 
     return new MessageEmbed()
-      .setAuthor(`${guild.name}'s server info`, iconUrl)
+      .setAuthor(Translate.find('serverAuthor', guild.name), iconUrl)
       .setColor(3447003)
       .setThumbnail(iconUrl)
       .addFields(fields)
       .setTimestamp()
-      .setFooter(`Requested by ${user.tag}`);
+      .setFooter(Translate.find('serverRequest', user.tag));
   }
 
   /**
@@ -125,7 +138,7 @@ export class ServerInfo {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching Info...**'
+        Translate.find('serverFetch')
       );
 
       if (!command.guild) {
@@ -139,13 +152,11 @@ export class ServerInfo {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'beam up' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'serverinfo', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

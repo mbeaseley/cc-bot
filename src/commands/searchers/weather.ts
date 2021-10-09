@@ -3,6 +3,7 @@ import { windDirections } from 'Data/weather';
 import { Logger } from 'Services/logger.service';
 import { WeatherService } from 'Services/weather.service';
 import { WeatherObject } from 'Types/weather';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { ClientUser, Message, MessageEmbed } from 'discord.js';
 
@@ -43,50 +44,48 @@ export class Weather {
   ): MessageEmbed => {
     return new MessageEmbed()
       .setAuthor(
-        `Weather Forecast for ${w.name}, ${w.area?.country}`,
+        Translate.find('weatherAuthor', w.name || '', w.area?.country || ''),
         user?.displayAvatarURL()
       )
       .setColor(5602003)
-      .setThumbnail(
-        `http://openweathermap.org/img/wn/${w.weather?.icon}@2x.png`
-      )
+      .setThumbnail(Translate.find('weatherUrl', w.weather?.icon as string))
       .setDescription(
         `**${Utility.captaliseFirstLetter(w.weather?.description ?? '')}**`
       )
       .addFields([
         {
-          name: 'Timezone',
+          name: Translate.find('weatherTimezone'),
           value: `${w.timezone}`,
           inline: true,
         },
         {
-          name: 'Degree Type',
+          name: Translate.find('weatherDegree'),
           value: 'Celsius',
           inline: true,
         },
         {
-          name: 'Temperature',
+          name: Translate.find('weatherTemp'),
           value: w.weatherDetails
             ? `${Math.round(w.weatherDetails.temp)}°`
             : 'Unknown',
           inline: true,
         },
         {
-          name: 'Wind',
+          name: Translate.find('weatherWind'),
           value: `${w.wind?.speed} m/s ${this.getWindDirection(
             w.wind?.degree
           )}`,
           inline: true,
         },
         {
-          name: 'Feel like',
+          name: Translate.find('weatherFeelLike'),
           value: w.weatherDetails
             ? `${Math.round(w.weatherDetails.feelingTempLike)}°`
             : 'Unknown',
           inline: true,
         },
         {
-          name: 'Humidity',
+          name: Translate.find('weatherHumidity'),
           value: `${w.weatherDetails?.humidity}%`,
           inline: true,
         },
@@ -105,7 +104,7 @@ export class Weather {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching weather...**'
+        Translate.find('weatherFetch')
       );
 
       const location = Utility.getOptionFromCommand(
@@ -118,7 +117,7 @@ export class Weather {
         await msg.delete();
         return Utility.sendMessage(
           command,
-          `**Please add location to query**`,
+          Translate.find('weatherNoLocation'),
           'channel',
           5000
         );
@@ -132,13 +131,11 @@ export class Weather {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'weather' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'weather', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );
