@@ -2,11 +2,11 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { MinecraftService } from 'Services/minecraft.service';
 import { McServerDetail, McUrl } from 'Types/minecraft';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
 import { status } from 'minecraft-server-util';
 import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
-import Translate from 'Root/utils/translate';
 
 export class Minecraft {
   private logger: Logger;
@@ -37,7 +37,7 @@ export class Minecraft {
    * @param status
    * @param mcUrl
    */
-  private createMessage(status: StatusResponse, mcUrl: McUrl): MessageEmbed {
+  private createMessage(status: StatusResponse): MessageEmbed {
     let imageStream: Buffer = Buffer.from('');
 
     if (status.favicon) {
@@ -148,7 +148,7 @@ export class Minecraft {
         );
       }
 
-      const message = this.createMessage(res, newMcUrl);
+      const message = this.createMessage(res);
       return Utility.sendMessage(command, message);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();

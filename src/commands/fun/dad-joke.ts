@@ -1,9 +1,9 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { DadJokeService } from 'Services/dad-joke.service';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
-import Translate from 'Root/utils/translate';
 
 export class DadJoke {
   private dadJokeService: DadJokeService;
