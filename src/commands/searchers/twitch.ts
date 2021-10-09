@@ -2,6 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { TwitchService } from 'Services/twitch.service';
 import { Followers, Stream, User } from 'Types/twitch';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message, MessageEmbed } from 'discord.js';
 
@@ -29,21 +30,28 @@ export class Twitch {
     const m = new MessageEmbed()
       .setTitle(user.displayName)
       .setColor(6570405)
-      .setURL(`https://twitch.tv/${user.loginName}`)
+      .setURL(Translate.find('twitchUrl'))
       .setThumbnail(`${user.profileImageUrl}`)
-      .setAuthor('Twitch', 'https://i.imgur.com/4b9X738.png')
+      .setAuthor(
+        Translate.find('twitchAuthor'),
+        'https://i.imgur.com/4b9X738.png'
+      )
       .addField(
-        `Biography: `,
-        user.description || `This user doesn't have a biography.`,
+        Translate.find('twitchBio'),
+        user.description || Translate.find('twitchNoUser'),
         true
       )
-      .addField(`Total Views: `, user.viewCount || `~`, true)
-      .addField(`Followers: `, followers.total, true);
+      .addField(Translate.find('twitchViews'), user.viewCount || `~`, true)
+      .addField(Translate.find('twitchFollowers'), followers.total, true);
 
     if (stream?.id) {
       m.addField(
         '\u200B',
-        `**${stream.title}** for ${stream.viewerCount} viewers`
+        Translate.find(
+          'twitchSteam',
+          stream.title || '~',
+          stream.viewerCount?.toString() || '~'
+        )
       ).setImage(
         `${stream.thumbnailUrl
           ?.replace('{width}', `${1920}`)
@@ -62,7 +70,7 @@ export class Twitch {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching account...**'
+        Translate.find('twitchFetch')
       );
 
       const username = Utility.getOptionFromCommand(
@@ -81,18 +89,16 @@ export class Twitch {
         return Utility.sendMessage(command, message);
       } else {
         await msg.delete();
-        return Utility.sendMessage(command, '**Twitch user not found.**');
+        return Utility.sendMessage(command, Translate.find('twitchNotFound'));
       }
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'twitch' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'twitch', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

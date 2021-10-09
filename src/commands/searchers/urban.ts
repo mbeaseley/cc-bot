@@ -1,5 +1,6 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import chalk from 'chalk';
 import { Message, MessageEmbed } from 'discord.js';
@@ -25,11 +26,11 @@ export class UrbanDictionary {
     const formattedPhrase = phrase.charAt(0).toUpperCase() + lower.slice(1);
 
     return new MessageEmbed()
-      .setTitle(`${formattedPhrase} Definition`)
+      .setTitle(Translate.find('urbanTitle', formattedPhrase))
       .setColor(1079)
       .setURL(entry.permalink)
       .setThumbnail('https://i.imgur.com/LmyPRai.png')
-      .setDescription(`${entry.definition}\nFor example: ${entry.example}`)
+      .setDescription(Translate.find('urbanDes'))
       .addField('👍', entry.thumbs_up, true)
       .addField('👎', entry.thumbs_down, true);
   }
@@ -53,7 +54,7 @@ export class UrbanDictionary {
       if (!phrase) {
         return Utility.sendMessage(
           command,
-          '**Try again, please add word to define!**',
+          Translate.find('urbanNoPhrase'),
           'channel',
           5000
         );
@@ -64,7 +65,7 @@ export class UrbanDictionary {
           this.logger.error(`${chalk.bold('BOT ERROR')}: ${err.message}`);
           return Utility.sendMessage(
             command,
-            '**Invalid word, please try a different word!**',
+            Translate.find('urbanError'),
             'channel',
             5000
           );
@@ -76,13 +77,11 @@ export class UrbanDictionary {
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `${chalk.bold("Command: 'urban' has error")}: ${(e as Error).message}.`
+        Translate.find('errorLog', 'urban', (e as Error).message)
       );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );
