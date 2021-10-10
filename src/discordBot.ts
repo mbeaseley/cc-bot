@@ -6,6 +6,7 @@ import { ReactionRoles } from 'Commands/misc/reactionRoles';
 import { Main } from 'Root/main';
 import { Logger } from 'Services/logger.service';
 import { MusicService } from 'Services/music.service';
+import { YoutubeService } from 'Services/youtube.service';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import chalk from 'chalk';
@@ -24,6 +25,7 @@ export class DiscordBot {
   private memberAdd: MemberAdd;
   private memberRemove: MemberRemove;
   private musicService: MusicService;
+  private youtubeService: YoutubeService;
 
   constructor() {
     this.logger = new Logger();
@@ -31,6 +33,7 @@ export class DiscordBot {
     this.memberAdd = new MemberAdd();
     this.memberRemove = new MemberRemove();
     this.musicService = new MusicService();
+    this.youtubeService = new YoutubeService();
   }
 
   /**
@@ -55,6 +58,8 @@ export class DiscordBot {
     this.memberRemove.init(Main.Client);
     this.reactionRoles.init(Main.Client);
     this.musicService.init();
+    // Checks for new videos being published
+    this.youtubeService.check(Main.Client);
 
     this.logger.info(chalk.bold('BOT READY'));
   }
