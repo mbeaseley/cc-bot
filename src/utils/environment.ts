@@ -21,6 +21,7 @@ interface EnvironmentObject {
   twitchSecret: string;
   steamApiKey: string;
   commandBase: string;
+  streamsBase: string;
 }
 
 export const environment = {
@@ -44,4 +45,5 @@ export const environment = {
   twitchSecret: process.env.TWITCHSECRET,
   steamApiKey: process.env.STEAMAPIKEY,
   commandBase: process.env.COMMANDBASE,
+  streamsBase: process.env.STREAMSBASE,
 } as EnvironmentObject;

@@ -219,4 +219,9 @@ export const commandOverrides: CommandItem[] = [
     fullCommand: 'repeat <true|false>',
     type: 'music',
   },
+  {
+    name: 'add youtube',
+    fullCommand: 'add youtube <channel id>',
+    type: 'searchers',
+  },
 ];
