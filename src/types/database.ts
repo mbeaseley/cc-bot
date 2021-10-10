@@ -26,6 +26,7 @@ export enum RulesCollection {
 
 export enum ServersCollection {
   minecraft = 'minecraft',
+  youtube = 'youtube',
 }
 
 export type DatabaseName = keyof Databases;

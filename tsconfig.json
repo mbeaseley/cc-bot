@@ -41,6 +41,7 @@
     "paths": {
       "Root/*": ["src/*"],
       "Assets/*": ["src/assets/*"],
+      "Language/*": ["src/assets/language/*"],
       "Commands/*": ["src/commands/*"],
       "Data/*": ["src/data/*"],
       "Guards/*": ["src/guards/*"],

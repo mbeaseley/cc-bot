@@ -9,6 +9,7 @@ import {
 import { isAdmin } from 'Guards/isAdmin';
 import { Logger } from 'Services/logger.service';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import * as Canvas from 'canvas';
 import {
@@ -70,7 +71,7 @@ export class MemberAdd {
     context.font = `28px ${this.font}`;
     context.fillStyle = this.color;
     context.fillText(
-      'Welcome to the server,',
+      Translate.find('memberWelcome'),
       canvas.width / 2.5,
       canvas.height / 3.5
     );
@@ -88,7 +89,7 @@ export class MemberAdd {
     context.font = `20px ${this.font}`;
     context.fillStyle = this.color;
     context.fillText(
-      `member #${memberCount}`,
+      Translate.find('memberCount', memberCount.toString()),
       canvas.width / 2.5,
       canvas.height / 1.4
     );
@@ -155,7 +156,7 @@ export class MemberAdd {
       'welcome-image.png'
     );
 
-    return channel.send(`Welcome to the server, ${member}!`, attachment);
+    return channel.send(Translate.find('memberSend'), attachment);
   }
 
   /**
@@ -184,30 +185,37 @@ export class MemberAdd {
       const users = userStrings.map((u) => u.replace(/[^0-9]/g, ''));
 
       if (!users) {
-        return command.channel
-          .send(`**No members added to command**`)
-          .then((m) => m.delete({ timeout: 5000 }));
+        return Utility.sendMessage(
+          command,
+          Translate.find('memberNotAdded'),
+          'channel',
+          5000
+        );
       }
 
       return users.forEach(async (u) => {
         const m = await command.guild?.members.fetch(u);
         if (!m) {
-          return command.channel.send(`**Member does not exist**`);
+          return Utility.sendMessage(
+            command,
+            Translate.find('memberNotExist'),
+            'channel',
+            5000
+          );
         }
         return this.handleMessage(m);
       });
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        `Command: 'welcome' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'welcome', (e as Error).message)
       );
-      return command.channel
-        .send(
-          `The following error has occurred: ${
-            (e as Error).message
-          }. If this error keeps occurring, please contact support.`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        Translate.find('errorDefault', (e as Error).message),
+        'channel',
+        5000
+      );
     }
   }
 }

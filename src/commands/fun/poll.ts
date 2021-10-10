@@ -1,8 +1,8 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Logger } from 'Services/logger.service';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
-import * as chalk from 'chalk';
 import { ClientUser, EmbedField, Message, MessageEmbed } from 'discord.js';
 export class Poll {
   private logger: Logger;
@@ -35,7 +35,10 @@ export class Poll {
     } as EmbedField;
 
     return new MessageEmbed()
-      .setAuthor(`${user?.username} Poll`, user?.displayAvatarURL())
+      .setAuthor(
+        Translate.find('pollAuthor', user?.username as string),
+        user?.displayAvatarURL()
+      )
       .setColor(19100)
       .addField(field.name, field.value, field.inline);
   }
@@ -56,12 +59,9 @@ export class Poll {
       .filter((e) => e.trim() != '');
 
     if (!pollArray?.length) {
-      this.logger.error(
-        `${chalk.bold('BOT ERROR')}: incorrect formatting used on command`
-      );
       return Utility.sendMessage(
         command,
-        '**Please use correct formatting**',
+        Translate.find('pollFormat'),
         'channel',
         5000
       );
@@ -83,12 +83,12 @@ export class Poll {
       return this.createPollingObject(command);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(`Command: 'poll' has error: ${(e as Error).message}.`);
+      this.logger.error(
+        Translate.find('errorLog', 'poll', (e as Error).message)
+      );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', (e as Error).message),
         'channel',
         5000
       );

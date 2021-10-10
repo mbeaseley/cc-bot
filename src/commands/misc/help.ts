@@ -8,6 +8,7 @@ import {
 import { commandHelpTypes, commandOverrides } from 'Data/help';
 import { CommandItem, CommandType } from 'Types/help';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { EmbedFieldData, Message, MessageEmbed } from 'discord.js';
 
@@ -25,7 +26,11 @@ export class Help {
     return new MessageEmbed()
       .setColor(10181046)
       .setAuthor(
-        `${command?.client?.user?.username}${t} Plugin Commands`,
+        Translate.find(
+          'helpAuthor',
+          command?.client?.user?.username as string,
+          t
+        ),
         command?.client?.user?.displayAvatarURL()
       )
       .setThumbnail(environment.botThumbnail);
@@ -116,24 +121,28 @@ export class Help {
     );
     if (type && !commandGroup) {
       if (command.deletable) await command.delete();
-      return command.channel
-        .send(
-          `**This command grouping does not exist! Please use just help to see valid groupings.**`
-        )
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        Translate.find('helpNoGroup'),
+        'channel',
+        5000
+      );
     }
 
     if (!Utility.isAdmin(command) && commandGroup?.restrict) {
       if (command.deletable) await command.delete();
-      return command.channel
-        .send(`**You don't have the permissions for this**`)
-        .then((m) => m.delete({ timeout: 5000 }));
+      return Utility.sendMessage(
+        command,
+        Translate.find('helpNoPermission'),
+        'channel',
+        5000
+      );
     }
 
     const allCommands = this.fetchCommands(commandGroup);
     return this.createHelpStatus(command, allCommands, commandGroup).catch(
       () => {
-        command.reply(environment.error);
+        Utility.sendMessage(command, Translate.find('error'), 'reply', 5000);
       }
     );
   }

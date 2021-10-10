@@ -2,6 +2,7 @@ import { Command, CommandMessage, Description } from '@typeit/discord';
 import { Compliment } from 'Commands/fun/compliment';
 import { Insult } from 'Commands/fun/insults';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import { Message } from 'discord.js';
 
 export class SayIt {
@@ -25,12 +26,11 @@ export class SayIt {
   async init(command: CommandMessage): Promise<Message | void> {
     try {
       const index = Math.round(Math.random());
-
       return index ? this.compliment.init(command) : this.insult.init(command);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       return this.logger.error(
-        `Command: 'sayit' has error: ${(e as Error).message}.`
+        Translate.find('errorLog', 'sayit', (e as Error).message)
       );
     }
   }

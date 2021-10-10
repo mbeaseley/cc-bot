@@ -1,6 +1,7 @@
 import { Command, CommandMessage, Description } from '@typeit/discord';
 import { DadJokeService } from 'Services/dad-joke.service';
 import { Logger } from 'Services/logger.service';
+import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { Message } from 'discord.js';
 
@@ -44,7 +45,7 @@ export class DadJoke {
 
       const msg = await Utility.sendMessage(
         command,
-        '**:hourglass: Fetching Joke...**'
+        Translate.find('jokeFetch')
       );
 
       const res = await this.dadJokeService.getJoke();
@@ -53,7 +54,7 @@ export class DadJoke {
       if (!res?.joke) {
         return Utility.sendMessage(
           command,
-          '**No joke was found!**',
+          Translate.find('noJoke'),
           'channel',
           5000
         );
@@ -66,12 +67,12 @@ export class DadJoke {
         : Utility.sendMessage(command, message, 'reply');
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
-      this.logger.error(`Command: 'joke' has error: ${(e as Error).message}.`);
+      this.logger.error(
+        Translate.find('errorLog', 'joke', (e as Error).message)
+      );
       return Utility.sendMessage(
         command,
-        `The following error has occurred: ${
-          (e as Error).message
-        }. If this error keeps occurring, please contact support.`,
+        Translate.find('errorDefault', 'joke', (e as Error).message),
         'channel',
         5000
       );

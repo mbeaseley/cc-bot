@@ -210,11 +210,6 @@ export const commandOverrides: CommandItem[] = [
     type: 'music',
   },
   {
-    name: 'set volume',
-    fullCommand: 'set volume <number>',
-    type: 'music',
-  },
-  {
     name: 'loop',
     fullCommand: 'loop',
     type: 'music',
@@ -223,5 +218,10 @@ export const commandOverrides: CommandItem[] = [
     name: 'repeat',
     fullCommand: 'repeat <true|false>',
     type: 'music',
+  },
+  {
+    name: 'add youtube',
+    fullCommand: 'add youtube <channel id>',
+    type: 'searchers',
   },
 ];
