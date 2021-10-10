@@ -1,12 +1,12 @@
 import { Client } from '@typeit/discord';
+import { DatabaseService } from 'Services/database.service';
+import { ServersCollection } from 'Types/database';
 import {
   Channel,
   ChannelRssResponse,
   Video,
   YoutubeChannel,
 } from 'Types/youtube';
-import { DatabaseService } from 'Services/database.service';
-import { ServersCollection } from 'Types/database';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
 import dayjs = require('dayjs');
