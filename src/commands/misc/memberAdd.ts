@@ -156,7 +156,10 @@ export class MemberAdd {
       'welcome-image.png'
     );
 
-    return channel.send(Translate.find('memberSend'), attachment);
+    return channel.send(
+      Translate.find('memberSend', `<@!${member.id}>`),
+      attachment
+    );
   }
 
   /**
