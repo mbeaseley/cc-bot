@@ -32,12 +32,11 @@ export class YoutubeService {
    * Get watchlist channels
    * @returns string[]
    */
-  private async getDBStoredChannels(): Promise<string[]> {
-    const res = (await this.databaseService.get(
+  private async getDBStoredChannels(): Promise<YoutubeChannel[]> {
+    return (await this.databaseService.get(
       'servers',
       ServersCollection.youtube
     )) as YoutubeChannel[];
-    return res.map((r) => r.channelId);
   }
 
   /**
@@ -70,18 +69,32 @@ export class YoutubeService {
    */
   public async check(client: Client): Promise<Message | void> {
     setInterval(async () => {
-      const channelIds = await this.getDBStoredChannels();
+      const channels = await this.getDBStoredChannels();
 
       const parser = new Parser();
-      channelIds.forEach(async (id) => {
+      channels.forEach(async (channel) => {
         const res = (await parser.parseURL(
-          `https://www.youtube.com/feeds/videos.xml?channel_id=${id}`
+          `https://www.youtube.com/feeds/videos.xml?channel_id=${channel.channelId}`
         )) as ChannelRssResponse;
         const channelResponse = this.fromPayload(res);
 
-        if (dayjs().diff(channelResponse.items[0].pubDate) > this.interval) {
+        console.log(channelResponse.items[0].id, channel.latestVideoId);
+
+        if (channel.latestVideoId === channelResponse.items[0].id) {
           return Promise.resolve();
         } else {
+          await this.databaseService.update(
+            'servers',
+            ServersCollection.youtube,
+            {
+              channelId: channel.channelId,
+            },
+            {
+              channelId: channel.channelId,
+              latestVideoId: channelResponse.items[0].id,
+            }
+          );
+
           const textChannel = this.getChannel(client);
           const message = this.createMessage(
             channelResponse.items[0],
@@ -98,9 +111,9 @@ export class YoutubeService {
    * @param channelId
    */
   public async addChannelToWatch(channelId: string): Promise<void> {
-    const channelIds = await this.getDBStoredChannels();
+    const channels = await this.getDBStoredChannels();
 
-    if (channelIds.find((c) => c === channelId)) {
+    if (channels.find((c) => c.channelId === channelId)) {
       return Promise.reject();
     }
 
