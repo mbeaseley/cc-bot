@@ -45,6 +45,7 @@ export class Channel {
 
 export interface YoutubeChannel {
   channelId: string;
+  latestVideoId: string;
 }
 
 export interface ChannelRssResponse {
