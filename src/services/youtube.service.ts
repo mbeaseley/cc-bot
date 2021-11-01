@@ -78,9 +78,11 @@ export class YoutubeService {
         )) as ChannelRssResponse;
         const channelResponse = this.fromPayload(res);
 
-        console.log(channelResponse.items[0].id, channel.latestVideoId);
-
-        if (channel.latestVideoId === channelResponse.items[0].id) {
+        const latestVideo = channelResponse.items?.[0];
+        if (
+          channel.latestVideoId === latestVideo?.id ||
+          dayjs().diff(latestVideo?.pubDate, 'millisecond') > this.interval
+        ) {
           return Promise.resolve();
         } else {
           await this.databaseService.update(
