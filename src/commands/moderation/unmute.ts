@@ -6,7 +6,7 @@ import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { GuildMember, Message, MessageEmbed } from 'discord.js';
 
-export class Undeafen {
+export class Unmute {
   private logger: Logger;
   private moderationService: ModerationService;
 
@@ -22,15 +22,15 @@ export class Undeafen {
   private createMessage(member: GuildMember): MessageEmbed {
     return new MessageEmbed()
       .setColor(member.displayHexColor)
-      .setDescription(Translate.find('undeafenSuccess', member.id));
+      .setDescription(Translate.find('unmutedSuccess', member.id));
   }
 
   /**
-   * Undeafen init
+   * Unmute init
    * @param command
    */
-  @Command('undeafen')
-  @Description('Undeafen a user')
+  @Command('unmute')
+  @Description('Unmute a user')
   @Guard(isAdmin)
   async init(command: CommandMessage): Promise<Message | void> {
     try {
@@ -81,13 +81,13 @@ export class Undeafen {
         );
       }
 
-      await this.moderationService.setDeaf(member, false);
+      await this.moderationService.setMute(member, false);
       const message = this.createMessage(member);
       return Utility.sendMessage(command, message, 'channel', 10000);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        Translate.find('errorLog', 'undeafen', (e as Error).message)
+        Translate.find('errorLog', 'unmute', (e as Error).message)
       );
       return Utility.sendMessage(
         command,

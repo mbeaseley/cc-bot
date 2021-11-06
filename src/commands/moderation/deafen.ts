@@ -5,6 +5,7 @@ import { ModerationService } from 'Services/moderation.service';
 import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import { GuildMember, Message, MessageEmbed } from 'discord.js';
+
 export class Deafen {
   private logger: Logger;
   private moderationService: ModerationService;

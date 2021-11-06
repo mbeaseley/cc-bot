@@ -11,4 +11,13 @@ export class ModerationService {
   setDeaf(member: GuildMember, value: boolean): Promise<GuildMember> {
     return member.voice.setDeaf(value);
   }
+
+  /**
+   * Set active member mute state
+   * @param member
+   * @param value
+   */
+  setMute(member: GuildMember, value: boolean): Promise<GuildMember> {
+    return member.voice.setMute(value);
+  }
 }
