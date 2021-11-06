@@ -4,6 +4,7 @@ import { fun } from 'Language/fun';
 import { games } from 'Language/games';
 import { image } from 'Language/image';
 import { misc } from 'Language/misc';
+import { moderation } from 'Language/moderation';
 import { music } from 'Language/music';
 import { searchers } from 'Language/searchers';
 
@@ -22,6 +23,7 @@ export default class Translate {
       ...games,
       ...image,
       ...misc,
+      ...moderation,
       ...music,
       ...searchers,
     };
