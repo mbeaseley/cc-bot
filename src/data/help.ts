@@ -134,6 +134,11 @@ export const commandOverrides: CommandItem[] = [
     type: 'admin',
   },
   {
+    name: 'undeafen',
+    fullCommand: 'undeafen <@username>',
+    type: 'admin',
+  },
+  {
     name: 'welcome',
     fullCommand: 'welcome <@username1> <@username2(optional)>...',
     type: 'admin',

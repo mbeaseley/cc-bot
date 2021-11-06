@@ -21,15 +21,15 @@ export class Deafen {
   private createMessage(member: GuildMember): MessageEmbed {
     return new MessageEmbed()
       .setColor(member.displayHexColor)
-      .setDescription(Translate.find('deafenSuccess', member.id));
+      .setDescription(Translate.find('undeafenSuccess', member.id));
   }
 
   /**
-   * Deafen init
+   * Undeafen init
    * @param command
    */
-  @Command('deafen')
-  @Description('Deafen a user')
+  @Command('undeafen')
+  @Description('Undeafen a user')
   @Guard(isAdmin)
   async init(command: CommandMessage): Promise<Message | void> {
     try {
@@ -80,13 +80,13 @@ export class Deafen {
         );
       }
 
-      await this.moderationService.setDeaf(member, true);
+      await this.moderationService.setDeaf(member, false);
       const message = this.createMessage(member);
       return Utility.sendMessage(command, message, 'channel', 10000);
     } catch (e: unknown) {
       if (command.deletable) await command.delete();
       this.logger.error(
-        Translate.find('errorLog', 'deafen', (e as Error).message)
+        Translate.find('errorLog', 'undeafen', (e as Error).message)
       );
       return Utility.sendMessage(
         command,

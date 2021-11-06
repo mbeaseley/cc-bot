@@ -3,4 +3,5 @@ export const moderation = {
   notInVoiceChannel: '**User is not in voice channel!**',
   selfPunish: `**You can't punish yourself**`,
   deafenSuccess: '**<@{0}> was succesfully deafen!**',
+  undeafenSuccess: '**<@{0}> was succesfully undeafen!**',
 };
