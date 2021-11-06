@@ -84,7 +84,7 @@ export class BeamUp {
     return new MessageEmbed()
       .setColor(member.displayHexColor)
       .setAuthor(Translate.find('beamUpAuthor'), user?.displayAvatarURL())
-      .setDescription(Translate.find('beamUpDescription'));
+      .setDescription(Translate.find('beamUpDescription', member.user.id));
   }
 
   /**
@@ -97,9 +97,14 @@ export class BeamUp {
     try {
       if (command.deletable) await command.delete();
 
+      const author = Utility.getAuthor(command);
+
       const voiceChannels = environment.admins
         .map((a) => this.findUserChannel(command.guild?.channels, a))
-        .filter(Boolean) as GuildChannel[];
+        .filter(Boolean)
+        .filter((c) =>
+          c?.permissionsFor(author)?.has('CONNECT', false)
+        ) as GuildChannel[];
       const voiceChannel = [...new Set(voiceChannels)];
 
       if (!voiceChannel.length) {
@@ -113,20 +118,6 @@ export class BeamUp {
 
       BeamUp.voiceChannel = voiceChannel[0];
       BeamUp.member = command.member;
-      const author = Utility.getAuthor(command);
-
-      const permission = BeamUp.voiceChannel
-        ?.permissionsFor(author)
-        ?.has('CONNECT', false);
-
-      if (permission) {
-        return Utility.sendMessage(
-          command,
-          Translate.find('beamUpPermission'),
-          'channel',
-          5000
-        );
-      }
 
       const e = Utility.findEmoji(command.client.emojis, 'ufo');
       if (!e?.name) {
