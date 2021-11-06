@@ -56,11 +56,7 @@ export class Deafen {
       }
 
       if (member.partial) {
-        try {
-          await member.fetch();
-        } catch (e: unknown) {
-          throw e;
-        }
+        await member.fetch();
       }
 
       if (!member.voice.channel) {
