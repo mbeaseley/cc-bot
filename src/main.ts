@@ -1,10 +1,9 @@
-import { Client, Discord, Rule, Rules } from '@typeit/discord';
+import * as path from 'path';
+import { Client } from 'discordx';
 import 'dotenv/config';
-import { DiscordBot } from 'Root/discordBot';
 import { environment } from 'Utils/environment';
+import { Intents } from 'discord.js';
 
-@Discord('<')
-@Rules(Rule().fromString(`${environment.botId}> ` || `${environment.botId}>`))
 export class Main {
   private static _client: Client;
 
@@ -12,19 +11,31 @@ export class Main {
     return this._client;
   }
 
-  /**
-   * @name start
-   * @description Starts up discord bot
-   */
+  static set Client(value: Client) {
+    this._client = value;
+  }
+
   static async start(): Promise<void> {
-    const token = environment.token;
+    const defaultPrefix = '!';
     Main._client = new Client({
-      classes: [DiscordBot],
+      simpleCommand: {
+        prefix: defaultPrefix,
+      },
+      intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.GUILD_VOICE_STATES,
+      ],
+      classes: [
+        path.join(__dirname, './discordBot.{ts,js}'),
+        path.join(__dirname, 'commands/**', '*.{ts,js}'),
+      ],
+      botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
       silent: true,
-      variablesChar: '',
     });
 
-    Main._client.login(token);
+    Main.Client.login(environment.token);
   }
 }
 

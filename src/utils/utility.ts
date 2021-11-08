@@ -1,4 +1,4 @@
-import { CommandMessage } from '@typeit/discord';
+// import { CommandMessage } from 'discordx';
 import { environment } from 'Utils/environment';
 import {
   EmbedField,
@@ -140,7 +140,7 @@ export default class Utility {
    * @param command
    * @returns User
    */
-  static getAuthor(command: CommandMessage): User {
+  static getAuthor(command: any): User {
     return command.author;
   }
 
@@ -149,7 +149,7 @@ export default class Utility {
    * @param command
    * @returns boolean
    */
-  static isAdmin(command: CommandMessage): boolean {
+  static isAdmin(command: any): boolean {
     const id = this.getAuthor(command)?.id as string;
     return !!environment.admins.find((a) => a === id);
   }
@@ -163,7 +163,7 @@ export default class Utility {
    * @returns Promise<Message>
    */
   static sendMessage(
-    command: CommandMessage,
+    command: any,
     content: string | MessageEmbed,
     type: 'channel' | 'reply' | 'author' = 'channel',
     deleteDelay?: number
@@ -176,7 +176,7 @@ export default class Utility {
         : command.reply(content);
 
     return deleteDelay
-      ? msg.then((m) => m.delete({ timeout: deleteDelay }))
+      ? msg.then((m: any) => m.delete({ timeout: deleteDelay }))
       : msg;
   }
 
