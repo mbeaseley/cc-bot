@@ -1,12 +1,12 @@
-import { admin } from 'Language/admin';
-import { error } from 'Language/error';
-import { fun } from 'Language/fun';
-import { games } from 'Language/games';
-import { image } from 'Language/image';
-import { misc } from 'Language/misc';
-import { moderation } from 'Language/moderation';
-import { music } from 'Language/music';
-import { searchers } from 'Language/searchers';
+import { admin } from '../assets/language/admin';
+import { error } from '../assets/language/error';
+import { fun } from '../assets/language/fun';
+import { games } from '../assets/language/games';
+import { image } from '../assets/language/image';
+import { misc } from '../assets/language/misc';
+import { moderation } from '../assets/language/moderation';
+import { music } from '../assets/language/music';
+import { searchers } from '../assets/language/searchers';
 
 export default class Translate {
   /**
@@ -33,7 +33,8 @@ export default class Translate {
       return '';
     }
 
-    let selectedCopy = allCopys[selectedKey];
+    /* @ts-ignore */
+    let selectedCopy: string = allCopys[selectedKey];
     args?.map((a: string, i: number) => {
       selectedCopy = selectedCopy.replace(`{${i}}`, a);
     });

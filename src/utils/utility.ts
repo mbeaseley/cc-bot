@@ -1,5 +1,5 @@
 // import { CommandMessage } from 'discordx';
-import { environment } from 'Utils/environment';
+// import { environment } from './environment';
 import {
   EmbedField,
   Guild,
@@ -13,7 +13,7 @@ import {
   RoleManager,
   User,
 } from 'discord.js';
-import _ = require('underscore');
+import * as _ from 'underscore';
 
 export default class Utility {
   /**
@@ -96,7 +96,7 @@ export default class Utility {
    * @returns Guild
    */
   static getGuild(guilds: GuildManager): Guild | undefined {
-    return guilds.cache.find((g) => g.id === environment.server);
+    return guilds.cache.find((g) => g.id === process.env.SERVER);
   }
 
   /**
@@ -151,7 +151,7 @@ export default class Utility {
    */
   static isAdmin(command: any): boolean {
     const id = this.getAuthor(command)?.id as string;
-    return !!environment.admins.find((a) => a === id);
+    return !!JSON.parse(process.env.ADMINS || '').find((a: string) => a === id);
   }
 
   /**

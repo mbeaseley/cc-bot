@@ -1,9 +1,12 @@
-import * as path from 'path';
-import { Client } from 'discordx';
-import 'dotenv/config';
-import { environment } from 'Utils/environment';
-import { Intents } from 'discord.js';
+import 'reflect-metadata';
+import path from 'path';
+import { Intents, Interaction, Message } from 'discord.js';
+import { Client, Discord } from 'discordx';
+import * as dotenv from 'dotenv';
 
+dotenv.config();
+
+@Discord()
 export class Main {
   private static _client: Client;
 
@@ -15,11 +18,14 @@ export class Main {
     this._client = value;
   }
 
+  /**
+   * @name start
+   * @description Starts up discord bot
+   */
   static async start(): Promise<void> {
-    const defaultPrefix = '!';
-    Main._client = new Client({
+    Main.Client = new Client({
       simpleCommand: {
-        prefix: defaultPrefix,
+        prefix: '!',
       },
       intents: [
         Intents.FLAGS.GUILDS,
@@ -27,15 +33,32 @@ export class Main {
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
-      classes: [
-        path.join(__dirname, './discordBot.{ts,js}'),
-        path.join(__dirname, 'commands/**', '*.{ts,js}'),
-      ],
+      classes: [path.join(__dirname, 'commands', '**/*.{ts,js}')],
       botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
       silent: true,
     });
 
-    Main.Client.login(environment.token);
+    Main.Client.login(process.env.TOKEN ?? '');
+
+    Main.Client.once('ready', async () => {
+      await Main.Client.initApplicationCommands({
+        guild: { log: true },
+        global: { log: true },
+      });
+
+      // init permissions; enabled log to see changes
+      await Main.Client.initApplicationPermissions(true);
+
+      console.log('Bot started');
+    });
+
+    Main.Client.on('interactionCreate', (interaction: Interaction) => {
+      Main.Client.executeInteraction(interaction);
+    });
+
+    Main.Client.on('messageCreate', (message: Message) => {
+      Main.Client.executeCommand(message);
+    });
   }
 }
 
