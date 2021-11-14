@@ -15,7 +15,6 @@ export abstract class Instagram {
   /**
    * Create message
    * @param u
-   * @returns
    */
   private createMessage(u: InstaUser): MessageEmbed {
     return new MessageEmbed()
@@ -53,6 +52,11 @@ export abstract class Instagram {
       );
   }
 
+  /**
+   * Instagram Command
+   * @param user
+   * @param interaction
+   */
   @Slash('instagram', { description: 'Find someone you know on Instagram' })
   async init(
     @SlashOption('user', {
