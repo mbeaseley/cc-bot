@@ -27,7 +27,7 @@ export abstract class Insult {
    * @param user
    * @param interaction
    */
-  @Slash('insult')
+  @Slash('insult', { description: `Send a fun insult to yourself or a friend` })
   async init(
     @SlashOption('user', {
       description: 'Who do you want to send advice to?',

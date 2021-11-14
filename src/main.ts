@@ -32,6 +32,7 @@ export class Main {
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Intents.FLAGS.GUILD_VOICE_STATES,
+        Intents.FLAGS.GUILD_PRESENCES,
       ],
       classes: [path.join(__dirname, 'commands', '**/*.{ts,js}')],
       botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],

@@ -27,7 +27,9 @@ export abstract class Advice {
    * @param user
    * @param interaction
    */
-  @Slash('advice')
+  @Slash('advice', {
+    description: `Send some friendly advice to yourself or a friend`,
+  })
   async init(
     @SlashOption('user', {
       description: 'Who do you want to send advice to?',

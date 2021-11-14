@@ -29,7 +29,7 @@ export abstract class Insult {
    * @param user
    * @param interaction
    */
-  @Slash('meme')
+  @Slash('meme', { description: `Want a bad meme?` })
   async init(interaction: CommandInteraction): Promise<void> {
     const meme = await this.memeService.getMeme();
 

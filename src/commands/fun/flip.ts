@@ -25,7 +25,7 @@ export abstract class CoinFlip {
    * Coin flip Command
    * @param interaction
    */
-  @Slash('flip')
+  @Slash('flip', { description: `Flip a coin` })
   async init(
     interaction: CommandInteraction
   ): Promise<Message<true> | APIMessage | Message<boolean>> {

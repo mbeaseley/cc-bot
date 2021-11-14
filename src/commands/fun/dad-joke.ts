@@ -27,7 +27,7 @@ export abstract class DadJoke {
    * @param user
    * @param interaction
    */
-  @Slash('joke')
+  @Slash('joke', { description: `Make your friends laugh with a dad joke` })
   async init(
     @SlashOption('user', {
       description: 'Who do you want to send advice to?',

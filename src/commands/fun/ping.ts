@@ -3,7 +3,7 @@ import { Discord, Slash } from 'discordx';
 
 @Discord()
 export abstract class Ping {
-  @Slash('ping')
+  @Slash('ping', { description: 'Classic Ping Pong!' })
   async init(interaction: CommandInteraction) {
     return interaction.reply('pong');
   }
