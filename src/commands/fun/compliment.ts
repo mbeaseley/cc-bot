@@ -35,7 +35,7 @@ export abstract class Compliment {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send advice to?',
+      description: 'Who do you want to send a compliment to?',
     })
     user: string,
     interaction: CommandInteraction

@@ -35,7 +35,7 @@ export abstract class SayIt {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send advice to?',
+      description: 'Who do you want to send this to?',
     })
     user: string,
     interaction: CommandInteraction

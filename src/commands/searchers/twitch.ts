@@ -45,7 +45,7 @@ export abstract class Twitch {
       )
       .addField(
         Translate.find('twitchFollowers'),
-        followers.total.toString() ?? '~',
+        followers?.total.toString() ?? '~',
         true
       );
 
