@@ -30,7 +30,7 @@ export abstract class Urban {
   }
 
   /**
-   * Cats Command
+   * Urban Command
    * @param user
    * @param interaction
    */
