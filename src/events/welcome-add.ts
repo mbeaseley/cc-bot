@@ -5,7 +5,7 @@ import {
   PartialGuildMember,
   TextChannel,
 } from 'discord.js';
-import { ArgsOf, Client, Discord, On } from 'discordx';
+import { ArgsOf, Discord, On } from 'discordx';
 import Translate from '../utils/translate';
 import * as Canvas from 'canvas';
 import path from 'path';
