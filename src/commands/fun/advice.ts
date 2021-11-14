@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { AdviceService } from '../../services/advice.service';
 
@@ -15,9 +15,9 @@ export abstract class Advice {
    * @param advice
    * @returns MessageEmbed
    */
-  private createMessage(advice: string): MessageEmbed {
+  private createMessage(advice: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setTitle('Advice Command')
+      .setAuthor('Advice Command', user?.displayAvatarURL())
       .setColor('RANDOM')
       .setDescription(advice);
   }
@@ -46,7 +46,7 @@ export abstract class Advice {
     }
 
     const adviceString = user ? `${user}, ${advice}` : advice;
-    const msg = this.createMessage(adviceString);
+    const msg = this.createMessage(adviceString, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }

@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { InsultService } from '../../services/insult.service';
 import { ComplimentService } from '../../services/compliment.service';
@@ -18,9 +18,9 @@ export abstract class SayIt {
    * @param advice
    * @returns MessageEmbed
    */
-  private createMessage(copy: string): MessageEmbed {
+  private createMessage(copy: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setTitle('Say It Command')
+      .setAuthor('Say It Command', user?.displayAvatarURL())
       .setColor('RANDOM')
       .setDescription(copy);
   }
@@ -55,7 +55,7 @@ export abstract class SayIt {
     }
 
     const copyString = user ? `${user}, ${copy}` : copy;
-    const msg = this.createMessage(copyString);
+    const msg = this.createMessage(copyString, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }

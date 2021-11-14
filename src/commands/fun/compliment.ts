@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { ComplimentService } from '../../services/compliment.service';
 
@@ -15,9 +15,12 @@ export abstract class Compliment {
    * @param advice
    * @returns MessageEmbed
    */
-  private createMessage(compliment: string): MessageEmbed {
+  private createMessage(
+    compliment: string,
+    user: ClientUser | null
+  ): MessageEmbed {
     return new MessageEmbed()
-      .setTitle('Compliment Command')
+      .setAuthor('Compliment Command', user?.displayAvatarURL())
       .setColor('RANDOM')
       .setDescription(compliment);
   }
@@ -46,7 +49,7 @@ export abstract class Compliment {
     }
 
     const complimentString = user ? `${user}, ${compliment}` : compliment;
-    const msg = this.createMessage(complimentString);
+    const msg = this.createMessage(complimentString, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }

@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { InsultService } from '../../services/insult.service';
 
@@ -15,9 +15,9 @@ export abstract class Insult {
    * @param advice
    * @returns MessageEmbed
    */
-  private createMessage(insult: string): MessageEmbed {
+  private createMessage(insult: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setTitle('Insult Command')
+      .setAuthor('Insult Command', user?.displayAvatarURL())
       .setColor('RANDOM')
       .setDescription(insult);
   }
@@ -44,7 +44,7 @@ export abstract class Insult {
     }
 
     const insultString = user ? `${user}, ${insult}` : insult;
-    const msg = this.createMessage(insultString);
+    const msg = this.createMessage(insultString, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }

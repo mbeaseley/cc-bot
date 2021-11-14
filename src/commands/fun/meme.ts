@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 import { MemeService } from '../../services/meme.service';
 import { MemeItem } from '../../types/meme';
@@ -16,9 +16,9 @@ export abstract class Insult {
    * @param advice
    * @returns MessageEmbed
    */
-  private createMessage(meme: MemeItem): MessageEmbed {
+  private createMessage(meme: MemeItem, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setTitle('Meme Command')
+      .setAuthor('Meme Command', user?.displayAvatarURL())
       .setColor('RANDOM')
       .setDescription(meme.caption ?? '')
       .setImage(meme.image ?? '');
@@ -39,7 +39,7 @@ export abstract class Insult {
       return interaction.deleteReply();
     }
 
-    const msg = this.createMessage(meme);
+    const msg = this.createMessage(meme, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }

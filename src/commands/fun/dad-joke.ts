@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { DadJokeService } from '../../services/dad-joke.service';
 
@@ -15,9 +15,9 @@ export abstract class DadJoke {
    * @param advice
    * @returns MessageEmbed
    */
-  private createMessage(joke: string): MessageEmbed {
+  private createMessage(joke: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setTitle('Dad Joke Command')
+      .setAuthor('Dad Joke Command', user?.displayAvatarURL())
       .setColor('RANDOM')
       .setDescription(joke);
   }
@@ -46,7 +46,7 @@ export abstract class DadJoke {
     const jokeString = user
       ? `${user}, ${joke}\n${delivery ?? ''}`
       : `${joke}\n${delivery ?? ''}`;
-    const msg = this.createMessage(jokeString);
+    const msg = this.createMessage(jokeString, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }
