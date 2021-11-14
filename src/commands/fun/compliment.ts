@@ -11,7 +11,7 @@ export abstract class Compliment {
   }
 
   /**
-   * Create Message for advice command
+   * Create Message for compliment command
    * @param advice
    * @returns MessageEmbed
    */
