@@ -3,7 +3,7 @@ import { Discord, Slash, SlashOption } from 'discordx';
 import { InsultService } from '../../services/insult.service';
 
 @Discord()
-export abstract class Compliment {
+export abstract class Insult {
   private insultService: InsultService;
 
   constructor() {
@@ -23,7 +23,7 @@ export abstract class Compliment {
   }
 
   /**
-   * Compliment Command
+   * Insult Command
    * @param user
    * @param interaction
    */
