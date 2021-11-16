@@ -45,7 +45,7 @@ export default class Utility {
     title: string,
     thumbnail?: string,
     excludeKeys?: string[]
-  ): MessageEmbed | MessageEmbedOptions | undefined {
+  ): MessageEmbed {
     const fields: EmbedField[] = [];
 
     Object.entries(data).forEach(([key, value]) => {
