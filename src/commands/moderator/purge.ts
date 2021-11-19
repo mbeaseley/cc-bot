@@ -1,7 +1,14 @@
 import { CommandInteraction, TextChannel } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, Permission, Slash, SlashOption } from 'discordx';
+import { environment } from '../../utils/environment';
 
 @Discord()
+@Permission(false)
+@Permission({
+  id: environment.moderatorRoles[0],
+  type: 'ROLE',
+  permission: true,
+})
 export abstract class Purge {
   /**
    * Purge Command
