@@ -15,6 +15,7 @@ export class WeatherModelService extends HttpClient {
    * @returns WeatherObject
    */
   private fromPayload(res: ApiResponseObject): WeatherObject {
+    console.log(res);
     const w = new WeatherObject();
     w.id = res.id;
     w.coord = {
