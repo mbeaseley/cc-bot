@@ -1,8 +1,9 @@
 import 'reflect-metadata';
 import path from 'path';
-import { Intents, Interaction, Message } from 'discord.js';
+import { Guild, Intents, Interaction, Message } from 'discord.js';
 import { Client, Discord } from 'discordx';
 import * as dotenv from 'dotenv';
+import Utility from './utils/utility';
 
 dotenv.config();
 
@@ -62,6 +63,9 @@ export class Main {
       // init permissions; enabled log to see changes
       await Main.Client.initApplicationPermissions(true);
 
+      const guild = Utility.getGuild(Main.Client.guilds);
+      this.prototype.preFetchAllMessages(guild);
+
       console.log('Bot started');
     });
 
@@ -71,6 +75,21 @@ export class Main {
 
     Main.Client.on('messageCreate', (message: Message) => {
       Main.Client.executeCommand(message);
+    });
+  }
+
+  /**
+   * Fetch all messages and add to memory
+   * @param guild
+   * @returns void
+   */
+  private preFetchAllMessages(guild: Guild | undefined): void {
+    return guild?.channels.cache.forEach(async (ch) => {
+      if (ch.isText()) {
+        await ch.messages.fetch();
+      }
+
+      return Promise.resolve();
     });
   }
 }
