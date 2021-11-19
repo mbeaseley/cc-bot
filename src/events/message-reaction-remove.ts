@@ -1,6 +1,7 @@
 import { GuildMember, Role } from 'discord.js';
 import { ArgsOf, Discord, On } from 'discordx';
 import { ReactionService } from '../services/reaction.service';
+import { Reaction } from '../types/reaction';
 import { environment } from '../utils/environment';
 import Utility from '../utils/utility';
 
