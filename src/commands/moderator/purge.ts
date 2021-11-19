@@ -8,7 +8,9 @@ export abstract class Purge {
    * @param number
    * @param interaction
    */
-  @Slash('purge', { description: `Delete up to 100 messages!` })
+  @Slash('purge', {
+    description: `Delete up to 100 messages!\nCommand: /purge number(optional)`,
+  })
   async init(
     @SlashOption('number', {
       description: 'Number to delete (Limit is 100)',

@@ -22,18 +22,6 @@ export abstract class ChoosePlayer {
     | ButtonInteraction
     | undefined;
 
-  // /**
-  //  * Get exclude user id list
-  //  * @param command
-  //  */
-  // private getExcludeUsers(command: CommandMessage): string[] {
-  //   const commandContent = Utility.getOptionFromCommand(
-  //     command.content,
-  //     2
-  //   ) as string[];
-  //   return commandContent.map((c) => c.replace(/^[0-9]*$/, ''));
-  // }
-
   /**
    * Find random user from voice channel
    * @param members
@@ -103,7 +91,9 @@ export abstract class ChoosePlayer {
    * Choose player command
    * @param interaction
    */
-  @Slash('choose-player', { description: 'Chooses Player in voice chat' })
+  @Slash('choose-player', {
+    description: 'Chooses Player in voice chat\nCommand: /choose-player',
+  })
   async init(
     interaction: CommandInteraction | ButtonInteraction
   ): Promise<Message<true> | APIMessage | Message<boolean> | void> {

@@ -45,7 +45,8 @@ export abstract class Steam {
   }
 
   @Slash('steam', {
-    description: 'Check and share your profile with friends on steam',
+    description:
+      'Check and share your profile with friends on steam\nCommand:/steam name(optional)',
   })
   async init(
     @SlashOption('name', {

@@ -31,7 +31,7 @@ export abstract class Compliment {
    * @param interaction
    */
   @Slash('compliment', {
-    description: `Send a nice compliment to yourself or a friend`,
+    description: `Send a nice compliment to yourself or a friend\nCommand: /compliment user(optional)`,
   })
   async init(
     @SlashOption('user', {

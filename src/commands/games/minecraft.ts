@@ -79,7 +79,8 @@ export abstract class Minecraft {
    * @param interaction
    */
   @Slash('minecraft', {
-    description: 'Ping a minecraft server for information',
+    description:
+      'Ping a minecraft server for information\nCommand: /minecraft ip(optional) port(optional)',
   })
   async getMCServer(
     @SlashOption('ip', {
@@ -146,7 +147,10 @@ export abstract class Minecraft {
    * @param port
    * @param interaction
    */
-  @Slash('set-minecraft', { description: 'Set default IP and Port for server' })
+  @Slash('set-minecraft', {
+    description:
+      'Set default IP and Port for server\nCommand: /set-minecraft ip(required) port(optional)',
+  })
   async setMCServer(
     @SlashOption('ip', {
       description: 'IP of your minecraft server ',

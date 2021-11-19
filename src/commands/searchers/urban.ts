@@ -35,7 +35,7 @@ export abstract class Urban {
    * @param interaction
    */
   @Slash('urban', {
-    description: `Get urban definition of word`,
+    description: `Get urban definition of word\nCommand:/urban phrase(required)`,
   })
   async init(
     @SlashOption('phrase', {

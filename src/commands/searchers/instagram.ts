@@ -57,7 +57,10 @@ export abstract class Instagram {
    * @param user
    * @param interaction
    */
-  @Slash('instagram', { description: 'Find someone you know on Instagram' })
+  @Slash('instagram', {
+    description:
+      'Find someone you know on Instagram\nCommand: /instagram user(optional)',
+  })
   async init(
     @SlashOption('user', {
       description: 'Username?',

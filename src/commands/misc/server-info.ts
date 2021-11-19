@@ -122,7 +122,9 @@ export abstract class ServerInfo {
    * Server info command
    * @param interaction
    */
-  @Slash('server-info', { description: 'Get to know this server' })
+  @Slash('server-info', {
+    description: 'Get to know this server\nCommand: /server-info',
+  })
   async init(interaction: CommandInteraction): Promise<void> {
     if (!interaction.guild) {
       await interaction.reply('**No guild was found!**');

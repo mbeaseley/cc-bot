@@ -68,7 +68,8 @@ export abstract class Twitch {
   }
 
   @Slash('twitch', {
-    description: 'Find your favourites streamers',
+    description:
+      'Find your favourites streamers\nCommand:/twitch user(optional)',
   })
   async init(
     @SlashOption('user', {

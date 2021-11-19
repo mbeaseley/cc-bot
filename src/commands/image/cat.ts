@@ -28,7 +28,7 @@ export abstract class Cat {
    * @param interaction
    */
   @Slash('cat', {
-    description: `Image of a cat?`,
+    description: `Image of a cat?\nCommand: /cat`,
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const { link } = await this.animalService.getCat();
