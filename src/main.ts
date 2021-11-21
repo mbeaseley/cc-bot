@@ -4,12 +4,19 @@ import { Guild, Intents, Interaction, Message } from 'discord.js';
 import { Client, Discord } from 'discordx';
 import * as dotenv from 'dotenv';
 import Utility from './utils/utility';
+import { Logger } from './services/logger.service';
+import chalk from 'chalk';
 
 dotenv.config();
 
 @Discord()
 export class Main {
   private static _client: Client;
+  private static logger: Logger;
+
+  constructor() {
+    Main.logger = new Logger();
+  }
 
   static get Client(): Client {
     return this._client;
@@ -54,6 +61,10 @@ export class Main {
     Main.Client.login(process.env.TOKEN ?? '');
 
     Main.Client.once('ready', async () => {
+      Main.logger.info('info check');
+      Main.logger.warn('warning check');
+      Main.logger.error('error check');
+
       await Main.Client.initApplicationCommands({
         guild: { log: true },
         global: { log: true },
@@ -65,7 +76,13 @@ export class Main {
       const guild = Utility.getGuild(Main.Client.guilds);
       this.prototype.preFetchAllMessages(guild);
 
-      console.log('Bot started');
+      // Bot Actions
+      //todo: check if botName needed
+      Main.Client.user?.setActivity(`@${Main.Client.user.username} • /help`, {
+        type: 'LISTENING',
+      });
+
+      Main.logger.info(chalk.bold('BOT READY'));
     });
 
     Main.Client.on('interactionCreate', (interaction: Interaction) => {
