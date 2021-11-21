@@ -38,7 +38,7 @@ export abstract class DadJoke {
     interaction: CommandInteraction
   ): Promise<void> {
     const { joke, delivery } = await this.dadJokeService.getJoke();
-    console.log(joke);
+
     if (!joke) {
       await interaction.reply('**No dad joke was given!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
