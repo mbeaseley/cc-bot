@@ -48,15 +48,21 @@ export abstract class Mute {
     const target = members?.find((m) => m.id === userId);
 
     if (!target?.id) {
-      return;
+      await interaction.reply(Translate.find('noUser'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
 
     if (!target.voice.channel) {
-      return;
+      await interaction.reply(Translate.find('notInVoiceChannel'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
 
     if (target.user.id === member.user.id) {
-      return;
+      await interaction.reply(Translate.find('selfPunish'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
 
     await this.moderationService.setMute(target, true);

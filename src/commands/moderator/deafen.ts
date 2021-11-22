@@ -11,7 +11,7 @@ import Translate from '../../utils/translate';
   type: 'ROLE',
   permission: true,
 })
-export abstract class Unmute {
+export abstract class Mute {
   private moderationService: ModerationService;
 
   constructor() {
@@ -25,7 +25,7 @@ export abstract class Unmute {
   private createMessage(member: GuildMember): MessageEmbed {
     return new MessageEmbed()
       .setColor(member.displayHexColor)
-      .setDescription(Translate.find('unmutedSuccess', member.id));
+      .setDescription(Translate.find('mutedSuccess', member.id));
   }
 
   /**
@@ -33,10 +33,10 @@ export abstract class Unmute {
    * @param user
    * @param interaction
    */
-  @Slash('unmute', { description: 'Unmute a user' })
+  @Slash('deafen', { description: 'Deafen a user' })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to unmute?',
+      description: 'Who do you want to deafen?',
       required: true,
     })
     user: string,
@@ -48,18 +48,18 @@ export abstract class Unmute {
     const target = members?.find((m) => m.id === userId);
 
     if (!target?.id) {
-      await interaction.reply(Translate.find('noUser'));
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      return interaction.deleteReply();
+      return;
     }
 
     if (!target.voice.channel) {
-      await interaction.reply(Translate.find('notInVoiceChannel'));
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      return interaction.deleteReply();
+      return;
     }
 
-    await this.moderationService.setMute(target, false);
+    if (target.user.id === member.user.id) {
+      return;
+    }
+
+    await this.moderationService.setMute(target, true);
     const msg = this.createMessage(target);
     return interaction.reply({ embeds: [msg] });
   }
