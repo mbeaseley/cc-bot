@@ -25,25 +25,25 @@ export abstract class Mute {
   private createMessage(member: GuildMember): MessageEmbed {
     return new MessageEmbed()
       .setColor(member.displayHexColor)
-      .setDescription(Translate.find('deafenSuccess', member.id));
+      .setDescription(Translate.find('undeafenSuccess', member.id));
   }
 
   /**
-   * Deafen command
+   * Undeafen command
    * @param user
    * @param interaction
    */
-  @Slash('deafen', { description: 'Deafen a user' })
+  @Slash('undeafen', { description: 'Undeafen a user' })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to deafen?',
+      description: 'Who do you want to undeafen?',
       required: true,
     })
     user: string,
     interaction: CommandInteraction
   ): Promise<void> {
     const userId = user.replace(/\D/g, '');
-    const { member, guild } = interaction;
+    const { guild } = interaction;
     const members = await guild?.members.fetch();
     const target = members?.find((m) => m.id === userId);
 
@@ -59,13 +59,7 @@ export abstract class Mute {
       return interaction.deleteReply();
     }
 
-    if (target.user.id === member.user.id) {
-      await interaction.reply(Translate.find('selfPunish'));
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      return interaction.deleteReply();
-    }
-
-    await this.moderationService.setDeaf(target, true);
+    await this.moderationService.setDeaf(target, false);
     const msg = this.createMessage(target);
     return interaction.reply({ embeds: [msg] });
   }

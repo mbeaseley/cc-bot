@@ -43,7 +43,7 @@ export abstract class Unmute {
     interaction: CommandInteraction
   ): Promise<void> {
     const userId = user.replace(/\D/g, '');
-    const { member, guild } = interaction;
+    const { guild } = interaction;
     const members = await guild?.members.fetch();
     const target = members?.find((m) => m.id === userId);
 
