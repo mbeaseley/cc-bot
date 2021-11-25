@@ -7,7 +7,6 @@ import {
 } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { PollQuestion, selectionEmojis } from '../../types/poll';
-import Translate from '../../utils/translate';
 
 @Discord()
 export abstract class Poll {
