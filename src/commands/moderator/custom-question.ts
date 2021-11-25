@@ -7,7 +7,7 @@ import {
   MessageEmbed,
   RoleManager,
 } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
 import { ReactionService } from '../../services/reaction.service';
 import { RulesService } from '../../services/rules.service';
 import { QuestionMessage } from '../../types/question';
@@ -18,6 +18,12 @@ import Utility from '../../utils/utility';
 const QUESTION_TYPES = ['rules', 'game roles'];
 
 @Discord()
+@Permission(false)
+@Permission({
+  id: environment.moderatorRoles[0],
+  type: 'ROLE',
+  permission: true,
+})
 export abstract class CustomQuestion {
   private rulesService: RulesService;
   private reactionService: ReactionService;
