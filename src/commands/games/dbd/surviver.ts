@@ -54,7 +54,7 @@ export abstract class Surviver {
    * @param interaction
    */
   @Slash('dbd-surviver', {
-    description: 'Get a random dbd surviver build\nCommand: /dbd-surviver',
+    description: 'Get a random dbd surviver build.',
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createSurviverBuild();

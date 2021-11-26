@@ -123,7 +123,7 @@ export abstract class ServerInfo {
    * @param interaction
    */
   @Slash('server-info', {
-    description: 'Get to know this server\nCommand: /server-info',
+    description: 'Get to know this server.',
   })
   async init(interaction: CommandInteraction): Promise<void> {
     if (!interaction.guild) {

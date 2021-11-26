@@ -75,7 +75,7 @@ export abstract class Killer {
    * @param interaction
    */
   @Slash('dbd-killer', {
-    description: 'Get a random dbd killer build\nCommand: /dbd-killer',
+    description: 'Get a random dbd killer build.',
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createKillerBuild(interaction.member.user.id);

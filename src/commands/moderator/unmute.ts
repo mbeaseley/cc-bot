@@ -33,7 +33,9 @@ export abstract class Unmute {
    * @param user
    * @param interaction
    */
-  @Slash('unmute', { description: 'Unmute a user' })
+  @Slash('unmute', {
+    description: 'Unmute a user!',
+  })
   async init(
     @SlashOption('user', {
       description: 'Who do you want to unmute?',

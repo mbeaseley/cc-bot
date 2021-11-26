@@ -31,7 +31,7 @@ export abstract class SayIt {
    * @param interaction
    */
   @Slash('say-it', {
-    description: `Try your luck, get or send a user with a insult or compliment!\nCommand: /say-it user(optional)`,
+    description: `Try your luck, get or send a user with a insult or compliment!`,
   })
   async init(
     @SlashOption('user', {

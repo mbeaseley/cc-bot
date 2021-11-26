@@ -33,7 +33,9 @@ export abstract class Mute {
    * @param user
    * @param interaction
    */
-  @Slash('deafen', { description: 'Deafen a user' })
+  @Slash('deafen', {
+    description: 'Deafen a user! Command: /deaf user(required)',
+  })
   async init(
     @SlashOption('user', {
       description: 'Who do you want to deafen?',

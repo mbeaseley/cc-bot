@@ -130,7 +130,7 @@ export abstract class CustomQuestion {
    * @param interaction
    */
   @Slash('custom-question', {
-    description: 'Display a custom message like game roles and server rules',
+    description: 'Display a custom message like game roles and server rules!',
   })
   async init(
     @SlashChoice('Server Rules', QUESTION_TYPES[0])

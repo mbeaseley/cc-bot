@@ -3,7 +3,7 @@ import { Discord, Slash } from 'discordx';
 import { AnimalsService } from '../../services/animal.service';
 
 @Discord()
-export abstract class Cat {
+export abstract class Fox {
   private animalService: AnimalsService;
 
   constructor() {
@@ -11,30 +11,30 @@ export abstract class Cat {
   }
 
   /**
-   * Create Message for cats command
+   * Create Message for fox command
    * @param advice
    * @returns MessageEmbed
    */
-  private createMessage(cat: string, user: ClientUser | null): MessageEmbed {
+  private createMessage(fox: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Cat Command', user?.displayAvatarURL())
+      .setAuthor('Fox Command', user?.displayAvatarURL())
       .setColor('RANDOM')
-      .setImage(cat);
+      .setImage(fox);
   }
 
   /**
-   * Cats Command
+   * Fox Command
    * @param user
    * @param interaction
    */
-  @Slash('cat', {
-    description: `Image of a cat?`,
+  @Slash('fox', {
+    description: `Image of a fox?`,
   })
   async init(interaction: CommandInteraction): Promise<void> {
-    const { link } = await this.animalService.getCat();
+    const { link } = await this.animalService.getFox();
 
     if (!link) {
-      await interaction.reply('**No cat was given!**');
+      await interaction.reply('**No fox was given!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

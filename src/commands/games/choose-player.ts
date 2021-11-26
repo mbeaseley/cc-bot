@@ -92,7 +92,7 @@ export abstract class ChoosePlayer {
    * @param interaction
    */
   @Slash('choose-player', {
-    description: 'Chooses Player in voice chat\nCommand: /choose-player',
+    description: 'Chooses Player in voice chat.',
   })
   async init(
     interaction: CommandInteraction | ButtonInteraction

@@ -41,7 +41,7 @@ export abstract class Poll {
   }
 
   @Slash('poll', {
-    description: 'Create a poll for friends to answer (max 26 options)',
+    description: 'Create a poll for friends to answer (max 26 options). ',
   })
   async init(
     @SlashOption('question', {

@@ -8,7 +8,9 @@ export abstract class Help {
    * Help Command
    * @param interaction
    */
-  @Slash('help', { description: 'Pagination for all slash command' })
+  @Slash('help', {
+    description: 'Pagination for all slash command.',
+  })
   async init(interaction: CommandInteraction): Promise<void> {
     const commands = MetadataStorage.instance.applicationCommands.map((cmd) => {
       return { name: cmd.name, description: cmd.description };

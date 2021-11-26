@@ -76,7 +76,7 @@ export abstract class BeamUp {
    * @param interaction
    */
   @Slash('beam-up', {
-    description: 'Beam up member to restrictive voice channel',
+    description: 'Beam up member to restrictive voice channel!',
   })
   async init(
     interaction: CommandInteraction

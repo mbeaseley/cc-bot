@@ -90,7 +90,9 @@ export abstract class Weather {
       ]);
   };
 
-  @Slash('weather', { description: 'Get today weather' })
+  @Slash('weather', {
+    description: 'Get today weather!',
+  })
   async init(
     @SlashOption('location', {
       description: 'Enter a major city?',
