@@ -6,6 +6,8 @@ import * as dotenv from 'dotenv';
 import Utility from './utils/utility';
 import { Logger } from './services/logger.service';
 import chalk from 'chalk';
+import { YoutubeService } from './services/youtube.service';
+import { environment } from './utils/environment';
 
 dotenv.config();
 
@@ -13,9 +15,11 @@ dotenv.config();
 export class Main {
   private static _client: Client;
   private static logger: Logger;
+  private static youtubeService: YoutubeService;
 
   constructor() {
     Main.logger = new Logger();
+    Main.youtubeService = new YoutubeService();
   }
 
   static get Client(): Client {
@@ -58,7 +62,7 @@ export class Main {
       silent: true,
     });
 
-    Main.Client.login(process.env.TOKEN ?? '');
+    Main.Client.login(environment.token ?? '');
 
     Main.Client.once('ready', async () => {
       Main.logger.info('info check');
@@ -81,6 +85,8 @@ export class Main {
       Main.Client.user?.setActivity(`@${Main.Client.user.username} • /help`, {
         type: 'LISTENING',
       });
+
+      await Main.youtubeService.check(Main.Client);
 
       Main.logger.info(chalk.bold('BOT READY'));
     });

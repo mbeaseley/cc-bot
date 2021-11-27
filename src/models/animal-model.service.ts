@@ -1,5 +1,5 @@
 import { HttpClient } from '../interceptor/http-client';
-import { Animal, AnimalKind, AnimalKind } from '../types/animal';
+import { Animal, AnimalKind } from '../types/animal';
 import { AxiosResponse } from 'axios';
 
 export class AnimalsModelService extends HttpClient {

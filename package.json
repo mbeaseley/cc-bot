@@ -21,7 +21,6 @@
   "dependencies": {
     "@discordx/importer": "^1.0.5",
     "@discordx/utilities": "^3.1.4",
-    "@types/mongodb": "^3.6.19",
     "@types/underscore": "^1.11.3",
     "@types/urban-dictionary": "^3.0.0",
     "@types/ws": "^7.4.6",
@@ -36,7 +35,7 @@
     "dotenv": "^10.0.0",
     "ffmpeg": "^0.0.4",
     "minecraft-server-util": "^4.1.2",
-    "mongodb": "^3.6.10",
+    "mongodb": "^4.2.0",
     "opusscript": "^0.0.8",
     "reflect-metadata": "^0.1.13",
     "rss-parser": "^3.12.0",
@@ -47,7 +46,6 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
-    "@types/mongodb": "^3.6.19",
     "@types/node": "^16.11.7",
     "@types/underscore": "^1.11.3",
     "@types/urban-dictionary": "^3.0.0",

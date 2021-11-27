@@ -2,11 +2,7 @@ import { environment } from '../utils/environment';
 import { Logger } from '../services/logger.service';
 import { DatabaseName, Databases } from '../types/database';
 import * as chalk from 'chalk';
-import {
-  InsertOneWriteOpResult,
-  MongoClient,
-  UpdateWriteOpResult,
-} from 'mongodb';
+import { InsertOneResult, MongoClient, UpdateResult } from 'mongodb';
 
 export class DatabaseService {
   private _client: MongoClient | undefined;
@@ -42,10 +38,7 @@ export class DatabaseService {
    */
   private setConnection(): MongoClient {
     const uri = `mongodb+srv://${environment.dbUsername}:${environment.dbPassword}@cluster0.6ubpu.mongodb.net/test?retryWrites=true&w=majority`;
-    return new MongoClient(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    return new MongoClient(uri);
   }
 
   /**
@@ -107,7 +100,7 @@ export class DatabaseService {
     dbName: DatabaseName,
     collectionName: Databases[T],
     document: Object
-  ): Promise<InsertOneWriteOpResult<any> | undefined> {
+  ): Promise<InsertOneResult<Document> | undefined> {
     const db = this.Client?.db(dbName);
     return db?.collection(collectionName).insertOne(document);
   }
@@ -145,7 +138,7 @@ export class DatabaseService {
     collectionName: Databases[T],
     existDocument: Object,
     document: Object
-  ): Promise<UpdateWriteOpResult | undefined> {
+  ): Promise<UpdateResult | undefined> {
     const db = this.Client?.db(dbName);
     return db
       ?.collection(collectionName)

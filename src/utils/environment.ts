@@ -1,11 +1,10 @@
-require('dotenv').config({ path: `.env.${process.env.TS_NODE_DEV}` });
+require('dotenv').config({ path: `.env` });
 
 interface EnvironmentObject {
   token: string;
   botId: string;
   botName: string;
   botThumbnail: string;
-  admins: string[] | never[];
   moderatorRoles: string[];
   server: string;
   error: string;
@@ -30,8 +29,7 @@ export const environment = {
   botId: process.env.BOTID ?? '',
   botName: process.env.BOTNAME ?? '',
   botThumbnail: process.env.BOTTHUMBNAIL ?? '',
-  admins: JSON.parse(process.env.ADMINS || ''),
-  moderatorRoles: JSON.parse(process.env.MODROLES ?? ''),
+  moderatorRoles: (process.env.MODROLES ?? '').split(' ') ?? [],
   server: process.env.SERVER,
   error: 'I have failed you!',
   commandNotFound: `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`,
