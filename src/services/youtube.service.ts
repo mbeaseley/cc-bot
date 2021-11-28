@@ -100,4 +100,20 @@ export class YoutubeService {
       });
     }, this.interval);
   }
+
+  /**
+   * Check and add channel id to watch list in database
+   * @param channelId
+   */
+  public async addChannelToWatch(channelId: string): Promise<void> {
+    const channels = await this.getDBStoredChannels();
+
+    if (channels.find((c) => c.channelId === channelId)) {
+      return Promise.reject();
+    }
+
+    return this.databaseService.create('servers', ServersCollection.youtube, {
+      channelId,
+    });
+  }
 }
