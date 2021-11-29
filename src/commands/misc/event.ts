@@ -4,11 +4,17 @@ import {
   EmbedField,
   MessageEmbed,
 } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
 import { PollQuestion, selectionEmojis } from '../../types/poll';
 import { environment } from '../../utils/environment';
 
 @Discord()
+@Permission(false)
+@Permission({
+  id: environment.eventIds.role,
+  type: 'ROLE',
+  permission: true,
+})
 export abstract class Event {
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
 
@@ -94,7 +100,7 @@ export abstract class Event {
   }
 
   /**
-   *
+   * Event Command
    * @param title
    * @param description
    * @param poll
@@ -123,10 +129,15 @@ export abstract class Event {
     poll: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const { guild, user, client } = interaction;
+    const { guild, user, client, channel } = interaction;
 
     const category = guild?.channels.cache.find(
-      (c) => c.id === environment.eventChannelId
+      (c) => c.id === environment.eventIds.category
+    );
+    const isGeneralChannel = !!guild?.channels.cache.find(
+      (c) =>
+        c.id === environment.eventIds.channel &&
+        environment.eventIds.channel === channel?.id
     );
 
     if (!category) {
@@ -135,30 +146,36 @@ export abstract class Event {
       return interaction.deleteReply();
     }
 
+    if (!isGeneralChannel) {
+      await interaction.reply('**Please create event on general channel**');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
+    }
+
     if (category?.partial) {
       await category.fetch();
     }
 
-    const channel = await guild?.channels.create(title, {
+    const newChannel = await guild?.channels.create(title, {
       type: 'GUILD_TEXT',
       topic: description,
     });
 
-    if (!channel) {
+    if (!newChannel) {
       await interaction.reply('**Unable to create text channel**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
     const pollWanted = poll === 'true';
-    await channel?.setParent(category.id);
+    await newChannel?.setParent(category.id);
     const msg = this.createChannelBaseMessage(
       title,
       user.id,
       pollWanted,
       client.user
     );
-    await channel.send({ embeds: [msg] });
+    await newChannel.send({ embeds: [msg] });
 
     if (pollWanted) {
       const pollQuestion = new PollQuestion(
@@ -166,7 +183,7 @@ export abstract class Event {
         ['Yes', 'No'] ?? []
       );
       const pollMsg = this.createPollMessage(pollQuestion, client.user);
-      const pollInteraction = await channel.send({ embeds: [pollMsg] });
+      const pollInteraction = await newChannel.send({ embeds: [pollMsg] });
       pollQuestion.answers.forEach(async (_, i) => {
         await pollInteraction.react(selectionEmojis[i][this.alphabet[i]]);
       });
