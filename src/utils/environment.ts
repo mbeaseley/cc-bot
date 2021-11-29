@@ -22,6 +22,7 @@ interface EnvironmentObject {
   steamApiKey: string;
   commandBase: string;
   streamsBase: string;
+  eventChannelId: string;
 }
 
 export const environment = {
@@ -46,4 +47,5 @@ export const environment = {
   steamApiKey: process.env.STEAMAPIKEY,
   commandBase: process.env.COMMANDBASE,
   streamsBase: process.env.STREAMSBASE,
+  eventChannelId: process.env.EVENTCATAGORYID,
 } as EnvironmentObject;
