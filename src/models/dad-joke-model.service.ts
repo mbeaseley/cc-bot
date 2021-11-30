@@ -21,14 +21,11 @@ export class DadJokeModelService extends HttpClient {
    * @returns Promise<AxiosResponse<JokeResponse>>
    */
   private getResponse = (): Promise<AxiosResponse<ApiJokeResponse>> =>
-    this.instance.get(
-      'https://v2.jokeapi.dev/joke/Miscellaneous,Pun,Spooky,Christmas',
-      {
-        headers: {
-          Accept: 'application/json',
-        },
+    this.instance.get('https://v2.jokeapi.dev/joke/Miscellaneous,Pun,Spooky,Christmas', {
+      headers: {
+        Accept: 'application/json'
       }
-    );
+    });
 
   /**
    * Get formatted response

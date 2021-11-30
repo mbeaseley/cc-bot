@@ -14,8 +14,8 @@ export class ComplimentModelService extends HttpClient {
   private getResponse = (): Promise<AxiosResponse<ComplimentObject>> =>
     this.instance.get('https://complimentr.com/api', {
       headers: {
-        Accept: 'application/json',
-      },
+        Accept: 'application/json'
+      }
     });
 
   /**

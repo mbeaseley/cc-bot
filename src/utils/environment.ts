@@ -43,7 +43,7 @@ export const environment = {
   memberAdd: process.env.MEMBERADD ?? '',
   memberRemove: process.env.MEMBERREMOVE ?? '',
   emojiAcceptRules: {
-    name: process.env.EMOJIACCEPTEDNAME,
+    name: process.env.EMOJIACCEPTEDNAME
   },
   dbUsername: process.env.DBUSERNAME,
   dbPassword: process.env.DBPASSWORD,
@@ -56,6 +56,6 @@ export const environment = {
   eventIds: {
     category: process.env.EVENTCATEGORYID,
     channel: process.env.EVENTCHANNELID,
-    role: process.env.EVENTROLEID,
-  },
+    role: process.env.EVENTROLEID
+  }
 } as EnvironmentObject;

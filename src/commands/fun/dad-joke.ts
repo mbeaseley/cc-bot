@@ -12,7 +12,8 @@ export abstract class DadJoke {
 
   /**
    * Create Message for dad joke command
-   * @param advice
+   * @param joke
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(joke: string, user: ClientUser | null): MessageEmbed {
@@ -28,11 +29,11 @@ export abstract class DadJoke {
    * @param interaction
    */
   @Slash('joke', {
-    description: `Make your friends laugh with a dad joke.`,
+    description: `Make your friends laugh with a dad joke.`
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send a joke to?',
+      description: 'Who do you want to send a joke to?'
     })
     user: string,
     interaction: CommandInteraction
@@ -45,9 +46,7 @@ export abstract class DadJoke {
       return interaction.deleteReply();
     }
 
-    const jokeString = user
-      ? `${user}, ${joke}\n${delivery ?? ''}`
-      : `${joke}\n${delivery ?? ''}`;
+    const jokeString = user ? `${user}, ${joke}\n${delivery ?? ''}` : `${joke}\n${delivery ?? ''}`;
     const msg = this.createMessage(jokeString, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }

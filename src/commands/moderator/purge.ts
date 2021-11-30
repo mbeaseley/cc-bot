@@ -7,7 +7,7 @@ import { environment } from 'Utils/environment';
 @Permission({
   id: environment.moderatorRoles[0],
   type: 'ROLE',
-  permission: true,
+  permission: true
 })
 export abstract class Purge {
   /**
@@ -16,12 +16,12 @@ export abstract class Purge {
    * @param interaction
    */
   @Slash('purge', {
-    description: `Delete up to 100 messages!`,
+    description: `Delete up to 100 messages!`
   })
   async init(
     @SlashOption('number', {
       description: 'Number to delete (Limit is 100)',
-      type: 'NUMBER',
+      type: 'NUMBER'
     })
     number: number,
     interaction: CommandInteraction

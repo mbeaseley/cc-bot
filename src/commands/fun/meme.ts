@@ -13,7 +13,8 @@ export abstract class Insult {
 
   /**
    * Create Message for meme command
-   * @param advice
+   * @param meme
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(meme: MemeItem, user: ClientUser | null): MessageEmbed {

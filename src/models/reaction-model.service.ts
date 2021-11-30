@@ -53,10 +53,7 @@ export class ReactionModelService {
       return Promise.resolve(this.reactionRoles);
     }
 
-    const res = await this.databaseService.get(
-      'emojis',
-      EmojisCollections.roles
-    );
+    const res = await this.databaseService.get('emojis', EmojisCollections.roles);
     this.reactionRoles = this.fromReactionRolesPayload(res);
     return Promise.resolve(this.reactionRoles);
   }
@@ -86,9 +83,7 @@ export class ReactionModelService {
    * @param res
    * @returns Reaction[]
    */
-  private fromReactionActionsPayload(
-    res: { emoji_name: string; action: string }[]
-  ): Reaction[] {
+  private fromReactionActionsPayload(res: { emoji_name: string; action: string }[]): Reaction[] {
     return res.map((r) => {
       return { [r.emoji_name]: r.action } as Reaction;
     });
@@ -103,10 +98,7 @@ export class ReactionModelService {
       return Promise.resolve(this.reactionActions);
     }
 
-    const res = await this.databaseService.get(
-      'emojis',
-      EmojisCollections.actions
-    );
+    const res = await this.databaseService.get('emojis', EmojisCollections.actions);
     this.reactionActions = this.fromReactionActionsPayload(res);
     return Promise.resolve(this.reactionActions);
   }

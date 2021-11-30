@@ -12,7 +12,8 @@ export abstract class RedPanda {
 
   /**
    * Create Message for red panda command
-   * @param advice
+   * @param panda
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(panda: string, user: ClientUser | null): MessageEmbed {
@@ -28,7 +29,7 @@ export abstract class RedPanda {
    * @param interaction
    */
   @Slash('red-panda', {
-    description: `Image of a red panda?`,
+    description: `Image of a red panda?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const { link } = await this.animalService.getRedPanda();

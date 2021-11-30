@@ -24,10 +24,7 @@ export abstract class Weather {
       return '';
     }
 
-    return (
-      windDirections.find((w) => windDegree >= w.min && windDegree <= w.max)
-        ?.name ?? 'North'
-    );
+    return windDirections.find((w) => windDegree >= w.min && windDegree <= w.max)?.name ?? 'North';
   }
 
   /**
@@ -36,10 +33,7 @@ export abstract class Weather {
    * @param user
    * @returns MessageEmbed
    */
-  private createMessage = (
-    w: WeatherObject,
-    user: ClientUser | null
-  ): MessageEmbed => {
+  private createMessage = (w: WeatherObject, user: ClientUser | null): MessageEmbed => {
     return new MessageEmbed()
       .setAuthor(
         Translate.find('weatherAuthor', w.name || '', w.area?.country || ''),
@@ -47,56 +41,48 @@ export abstract class Weather {
       )
       .setColor(5602003)
       .setThumbnail(Translate.find('weatherUrl', w.weather?.icon as string))
-      .setDescription(
-        `**${Utility.captaliseFirstLetter(w.weather?.description ?? '')}**`
-      )
+      .setDescription(`**${Utility.captaliseFirstLetter(w.weather?.description ?? '')}**`)
       .addFields([
         {
           name: Translate.find('weatherTimezone'),
           value: `${w.timezone}`,
-          inline: true,
+          inline: true
         },
         {
           name: Translate.find('weatherDegree'),
           value: 'Celsius',
-          inline: true,
+          inline: true
         },
         {
           name: Translate.find('weatherTemp'),
-          value: w.weatherDetails
-            ? `${Math.round(w.weatherDetails.temp)}°`
-            : 'Unknown',
-          inline: true,
+          value: w.weatherDetails ? `${Math.round(w.weatherDetails.temp)}°` : 'Unknown',
+          inline: true
         },
         {
           name: Translate.find('weatherWind'),
-          value: `${w.wind?.speed} m/s ${this.getWindDirection(
-            w.wind?.degree
-          )}`,
-          inline: true,
+          value: `${w.wind?.speed} m/s ${this.getWindDirection(w.wind?.degree)}`,
+          inline: true
         },
         {
           name: Translate.find('weatherFeelLike'),
-          value: w.weatherDetails
-            ? `${Math.round(w.weatherDetails.feelingTempLike)}°`
-            : 'Unknown',
-          inline: true,
+          value: w.weatherDetails ? `${Math.round(w.weatherDetails.feelingTempLike)}°` : 'Unknown',
+          inline: true
         },
         {
           name: Translate.find('weatherHumidity'),
           value: `${w.weatherDetails?.humidity}%`,
-          inline: true,
-        },
+          inline: true
+        }
       ]);
   };
 
   @Slash('weather', {
-    description: 'Get today weather!',
+    description: 'Get today weather!'
   })
   async init(
     @SlashOption('location', {
       description: 'Enter a major city?',
-      required: true,
+      required: true
     })
     location: string,
     interaction: CommandInteraction

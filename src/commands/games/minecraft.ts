@@ -1,8 +1,4 @@
-import {
-  CommandInteraction,
-  MessageAttachment,
-  MessageEmbed,
-} from 'discord.js';
+import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { MinecraftService } from 'Services/minecraft.service';
 import { McServerDetail, McUrl } from 'Types/minecraft';
@@ -26,12 +22,8 @@ export abstract class Minecraft {
    */
   private async findMcUrl(guildId: string, server: McUrl): Promise<McUrl> {
     if (!server.domain && guildId) {
-      const res = await this.minecraftService.getServerDetails(
-        guildId.toString()
-      );
-      return Promise.resolve(
-        new McUrl(res?.domain, res?.port ? +res.port : 25565)
-      );
+      const res = await this.minecraftService.getServerDetails(guildId.toString());
+      return Promise.resolve(new McUrl(res?.domain, res?.port ? +res.port : 25565));
     }
 
     return Promise.resolve(server ?? new McUrl());
@@ -46,30 +38,20 @@ export abstract class Minecraft {
     let imageStream: Buffer = Buffer.from('');
 
     if (status.favicon) {
-      imageStream = Buffer.from(
-        status.favicon.toString().split(',').slice(1).join(','),
-        'base64'
-      );
+      imageStream = Buffer.from(status.favicon.toString().split(',').slice(1).join(','), 'base64');
     }
 
     return new MessageEmbed()
       .setColor(0x00cc06)
       .setTitle(Translate.find('mcTitle'))
-      .setThumbnail(
-        status.favicon
-          ? Translate.find('mcThumbnail', 'attachment://favicon.png')
-          : ''
-      )
+      .setThumbnail(status.favicon ? Translate.find('mcThumbnail', 'attachment://favicon.png') : '')
       .setURL(Translate.find('mcUrl'))
       .addField(
         Translate.find('mcServerTitle'),
         Translate.find('mcIp', status.host, status.port.toString())
       )
       .addField(Translate.find('mcVersion'), status.version ?? '~')
-      .addField(
-        Translate.find('mcOnline'),
-        `${status.onlinePlayers}/${status.maxPlayers}`
-      );
+      .addField(Translate.find('mcOnline'), `${status.onlinePlayers}/${status.maxPlayers}`);
   }
 
   /**
@@ -80,23 +62,20 @@ export abstract class Minecraft {
    */
   @Slash('minecraft', {
     description:
-      'Ping a minecraft server for information. Command: /minecraft ip(optional) port(optional)',
+      'Ping a minecraft server for information. Command: /minecraft ip(optional) port(optional)'
   })
   async getMCServer(
     @SlashOption('ip', {
-      description: 'IP of your minecraft server ',
+      description: 'IP of your minecraft server '
     })
     ip: string,
     @SlashOption('port', {
-      description: 'Port of your minecraft server ',
+      description: 'Port of your minecraft server '
     })
     port: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const server = await this.findMcUrl(
-      interaction.guild?.id ?? '',
-      new McUrl(ip, +port ?? 25565)
-    );
+    const server = await this.findMcUrl(interaction.guild?.id ?? '', new McUrl(ip, +port ?? 25565));
 
     if (!server.domain) {
       await interaction.reply(Translate.find('mcFormatError'));
@@ -105,7 +84,7 @@ export abstract class Minecraft {
     }
 
     const res = await status(server.domain, {
-      port: server.port || 25565,
+      port: server.port || 25565
     }).catch(() => {});
 
     if (!res) {
@@ -124,9 +103,7 @@ export abstract class Minecraft {
    * @param mcUrl
    */
   private async getAndSetServer(guildId: string, mcUrl: McUrl): Promise<void> {
-    const serverUrl = (await this.minecraftService.getServerDetails(
-      guildId
-    )) as McServerDetail;
+    const serverUrl = (await this.minecraftService.getServerDetails(guildId)) as McServerDetail;
 
     return serverUrl
       ? this.minecraftService.updateServerDetails(
@@ -148,16 +125,16 @@ export abstract class Minecraft {
    * @param interaction
    */
   @Slash('set-minecraft', {
-    description: 'Set default IP and Port for server. ',
+    description: 'Set default IP and Port for server. '
   })
   async setMCServer(
     @SlashOption('ip', {
       description: 'IP of your minecraft server ',
-      required: true,
+      required: true
     })
     ip: string,
     @SlashOption('port', {
-      description: 'Port of your minecraft server ',
+      description: 'Port of your minecraft server '
     })
     port: string,
     interaction: CommandInteraction

@@ -1,10 +1,4 @@
-import {
-  ClientUser,
-  CommandInteraction,
-  EmbedField,
-  Message,
-  MessageEmbed,
-} from 'discord.js';
+import { ClientUser, CommandInteraction, EmbedField, Message, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
 
@@ -18,10 +12,7 @@ export abstract class Poll {
    * @param user
    * @returns MessageEmbed
    */
-  private createMessage(
-    poll: PollQuestion,
-    user: ClientUser | null
-  ): MessageEmbed {
+  private createMessage(poll: PollQuestion, user: ClientUser | null): MessageEmbed {
     const answers = poll.answers
       .filter((el) => el)
       .map((a, i) => {
@@ -31,7 +22,7 @@ export abstract class Poll {
     const field = {
       name: `${poll.question}\n  `,
       value: answers.toString().split(',').join(''),
-      inline: false,
+      inline: false
     } as EmbedField;
 
     return new MessageEmbed()
@@ -41,18 +32,17 @@ export abstract class Poll {
   }
 
   @Slash('poll', {
-    description: 'Create a poll for friends to answer (max 26 options). ',
+    description: 'Create a poll for friends to answer (max 26 options). '
   })
   async init(
     @SlashOption('question', {
       description: 'What is your poll question?',
-      required: true,
+      required: true
     })
     question: string,
     @SlashOption('options', {
-      description:
-        'What are your poll options? (Split each option using a comma)',
-      required: true,
+      description: 'What are your poll options? (Split each option using a comma)',
+      required: true
     })
     options: string,
     interaction: CommandInteraction
@@ -62,7 +52,7 @@ export abstract class Poll {
     const msg = this.createMessage(poll, interaction.client.user);
     const message = (await interaction.reply({
       embeds: [msg],
-      fetchReply: true,
+      fetchReply: true
     })) as Message;
     return poll.answers.forEach(async (_, i) => {
       await message.react(selectionEmojis[i][this.alphabet[i]]);

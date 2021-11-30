@@ -3,11 +3,11 @@ import path from 'path';
 import { Guild, Intents, Interaction, Message } from 'discord.js';
 import { Client, Discord } from 'discordx';
 import * as dotenv from 'dotenv';
-import Utility from './utils/utility';
-import { Logger } from './services/logger.service';
+import Utility from 'Utils/utility';
+import { Logger } from 'Services/logger.service';
 import chalk from 'chalk';
-import { YoutubeService } from './services/youtube.service';
-import { environment } from './utils/environment';
+import { YoutubeService } from 'Services/youtube.service';
+import { environment } from 'Utils/environment';
 
 dotenv.config();
 
@@ -37,7 +37,7 @@ export class Main {
   static async start(): Promise<void> {
     Main.Client = new Client({
       simpleCommand: {
-        prefix: '!',
+        prefix: '!'
       },
       intents: [
         Intents.FLAGS.GUILDS,
@@ -52,14 +52,14 @@ export class Main {
         Intents.FLAGS.GUILD_INTEGRATIONS,
         Intents.FLAGS.GUILD_INVITES,
         Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_VOICE_STATES,
+        Intents.FLAGS.GUILD_VOICE_STATES
       ],
       classes: [
         path.join(__dirname, 'commands', '**/*.{ts,js}'),
-        path.join(__dirname, 'events', '**/*.{ts,js}'),
+        path.join(__dirname, 'events', '**/*.{ts,js}')
       ],
       botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
-      silent: true,
+      silent: true
     });
 
     Main.Client.login(environment.token ?? '');
@@ -71,7 +71,7 @@ export class Main {
 
       await Main.Client.initApplicationCommands({
         guild: { log: true },
-        global: { log: true },
+        global: { log: true }
       });
 
       // init permissions; enabled log to see changes
@@ -83,7 +83,7 @@ export class Main {
       // Bot Actions
       //todo: check if botName needed
       Main.Client.user?.setActivity(`@${Main.Client.user.username} • /help`, {
-        type: 'LISTENING',
+        type: 'LISTENING'
       });
 
       await Main.youtubeService.check(Main.Client);

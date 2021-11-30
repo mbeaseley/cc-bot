@@ -1,9 +1,4 @@
-import {
-  GuildMember,
-  Message,
-  PartialGuildMember,
-  TextChannel,
-} from 'discord.js';
+import { GuildMember, Message, PartialGuildMember, TextChannel } from 'discord.js';
 import { ArgsOf, Discord, On } from 'discordx';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
@@ -15,9 +10,7 @@ export abstract class memberRemove {
    * @param member
    * @returns Promise<Message>
    */
-  private async handleRemoval(
-    member: GuildMember | PartialGuildMember
-  ): Promise<Message | void> {
+  private async handleRemoval(member: GuildMember | PartialGuildMember): Promise<Message | void> {
     const { guild } = member;
     const channel = guild.channels.cache.get(environment.memberRemove);
 
@@ -25,11 +18,7 @@ export abstract class memberRemove {
       return Promise.resolve();
     }
 
-    if (
-      !((channel): channel is TextChannel => channel.type === 'GUILD_TEXT')(
-        channel
-      )
-    ) {
+    if (!((channel): channel is TextChannel => channel.type === 'GUILD_TEXT')(channel)) {
       return Promise.resolve();
     }
 
@@ -37,9 +26,7 @@ export abstract class memberRemove {
       return Promise.reject();
     }
 
-    return channel.send(
-      Translate.find('memberRemoveLeft', member.user?.username as string)
-    );
+    return channel.send(Translate.find('memberRemoveLeft', member.user?.username as string));
   }
 
   /**
@@ -47,9 +34,7 @@ export abstract class memberRemove {
    * @param guildMember
    */
   @On('guildMemberRemove')
-  async init([
-    guildMember,
-  ]: ArgsOf<'guildMemberRemove'>): Promise<Message | void> {
+  async init([guildMember]: ArgsOf<'guildMemberRemove'>): Promise<Message | void> {
     return this.handleRemoval(guildMember);
   }
 }

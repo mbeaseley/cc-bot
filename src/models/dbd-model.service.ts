@@ -7,7 +7,7 @@ import {
   PlayerKiller,
   SurvivorAddon,
   SurvivorLoot,
-  SurvivorOffering,
+  SurvivorOffering
 } from '../types/dbd';
 
 export class DBDModelService {
@@ -64,10 +64,7 @@ export class DBDModelService {
       return Promise.resolve(this.playerKillers);
     }
 
-    const res = await this.databaseService.get(
-      'dbd',
-      DBDCollections.playerKillers
-    );
+    const res = await this.databaseService.get('dbd', DBDCollections.playerKillers);
     this.playerKillers = this.fromPlayerKillerPayload(res);
     return Promise.resolve(this.playerKillers);
   }
@@ -164,10 +161,7 @@ export class DBDModelService {
       return Promise.resolve(this.killerPerks);
     }
 
-    const res = await this.databaseService.get(
-      'dbd',
-      DBDCollections.killerPerks
-    );
+    const res = await this.databaseService.get('dbd', DBDCollections.killerPerks);
     this.killerPerks = this.fromKillerPerksPayload(res);
     return Promise.resolve(this.killerPerks);
   }
@@ -197,9 +191,7 @@ export class DBDModelService {
    * @param res
    * @returns string[]
    */
-  private fromKillerOfferingsPayload(
-    res: { name: string; rarity: string }[]
-  ): KillerOffering[] {
+  private fromKillerOfferingsPayload(res: { name: string; rarity: string }[]): KillerOffering[] {
     return res.map((r) => new KillerOffering(r.name, r.rarity));
   }
 
@@ -212,10 +204,7 @@ export class DBDModelService {
       return Promise.resolve(this.killerOfferings);
     }
 
-    const res = await this.databaseService.get(
-      'dbd',
-      DBDCollections.killerOfferings
-    );
+    const res = await this.databaseService.get('dbd', DBDCollections.killerOfferings);
     this.killerOfferings = this.fromKillerOfferingsPayload(res);
     return Promise.resolve(this.killerOfferings);
   }
@@ -258,10 +247,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorPerks);
     }
 
-    const res = await this.databaseService.get(
-      'dbd',
-      DBDCollections.survivorPerks
-    );
+    const res = await this.databaseService.get('dbd', DBDCollections.survivorPerks);
     this.survivorPerks = this.fromSurvivorPerksPayload(res);
     return Promise.resolve(this.survivorPerks);
   }
@@ -314,10 +300,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorLoot);
     }
 
-    const res = await this.databaseService.get(
-      'dbd',
-      DBDCollections.survivorLoots
-    );
+    const res = await this.databaseService.get('dbd', DBDCollections.survivorLoots);
     this.survivorLoot = this.fromSurvivorLootPayload(res);
     return Promise.resolve(this.survivorLoot);
   }
@@ -362,10 +345,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorOfferings);
     }
 
-    const res = await this.databaseService.get(
-      'dbd',
-      DBDCollections.survivorOfferings
-    );
+    const res = await this.databaseService.get('dbd', DBDCollections.survivorOfferings);
     this.survivorOfferings = this.fromSurvivorOfferingsPayload(res);
     return Promise.resolve(this.survivorOfferings);
   }

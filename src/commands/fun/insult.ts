@@ -12,7 +12,8 @@ export abstract class Insult {
 
   /**
    * Create Message for insult command
-   * @param advice
+   * @param insult
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(insult: string, user: ClientUser | null): MessageEmbed {
@@ -28,11 +29,11 @@ export abstract class Insult {
    * @param interaction
    */
   @Slash('insult', {
-    description: `Send a fun insult to yourself or a friend.`,
+    description: `Send a fun insult to yourself or a friend.`
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send a insult to?',
+      description: 'Who do you want to send a insult to?'
     })
     user: string,
     interaction: CommandInteraction

@@ -9,7 +9,7 @@ import Translate from 'Utils/translate';
 @Permission({
   id: environment.moderatorRoles[0],
   type: 'ROLE',
-  permission: true,
+  permission: true
 })
 export abstract class Mute {
   private moderationService: ModerationService;
@@ -37,7 +37,7 @@ export abstract class Mute {
   async init(
     @SlashOption('user', {
       description: 'Who do you want to mute?',
-      required: true,
+      required: true
     })
     user: string,
     interaction: CommandInteraction

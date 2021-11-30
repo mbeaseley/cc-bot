@@ -25,31 +25,11 @@ export abstract class Instagram {
       .addField(Translate.find('instaUsernameHeader'), u.username ?? '~')
       .addField(Translate.find('instaNameHeader'), u.fullName ?? '~')
       .addField(Translate.find('instaBioHeader'), u.biography ?? '~')
-      .addField(
-        Translate.find('instaPostHeader'),
-        u.posts?.toString() ?? '~',
-        true
-      )
-      .addField(
-        Translate.find('instaFollowersHeader'),
-        u.followers?.toString() || '~',
-        true
-      )
-      .addField(
-        Translate.find('instaFollowingHeader'),
-        u.following?.toString() || '~',
-        true
-      )
-      .addField(
-        Translate.find('instaPrivateHeader'),
-        u.private ? 'Yes 🔐' : 'No 🔓',
-        true
-      )
-      .addField(
-        Translate.find('instaVerifiedHeader'),
-        u.verified ? 'Yes ✅' : 'No ❌',
-        true
-      );
+      .addField(Translate.find('instaPostHeader'), u.posts?.toString() ?? '~', true)
+      .addField(Translate.find('instaFollowersHeader'), u.followers?.toString() || '~', true)
+      .addField(Translate.find('instaFollowingHeader'), u.following?.toString() || '~', true)
+      .addField(Translate.find('instaPrivateHeader'), u.private ? 'Yes 🔐' : 'No 🔓', true)
+      .addField(Translate.find('instaVerifiedHeader'), u.verified ? 'Yes ✅' : 'No ❌', true);
   }
 
   /**
@@ -58,12 +38,12 @@ export abstract class Instagram {
    * @param interaction
    */
   @Slash('instagram', {
-    description: 'Find someone you know on Instagram.',
+    description: 'Find someone you know on Instagram.'
   })
   async init(
     @SlashOption('user', {
       description: 'Username?',
-      required: true,
+      required: true
     })
     user: string,
     interaction: CommandInteraction

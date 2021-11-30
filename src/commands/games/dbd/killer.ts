@@ -26,8 +26,7 @@ export abstract class Killer {
     // Killer
     const playerKillers = await this.dbdService.getPlayerKillers();
     const availableKillers =
-      playerKillers.find((p) => p.userId === authorId)?.availableKiller ||
-      DEFAULTKILLERS;
+      playerKillers.find((p) => p.userId === authorId)?.availableKiller || DEFAULTKILLERS;
 
     const allKillers = await this.dbdService.getKillers();
     const killers = allKillers
@@ -63,11 +62,7 @@ export abstract class Killer {
   private createMessage(build: KillerBuild): MessageEmbed {
     const { image, ...b } = { ...build };
 
-    return Utility.createEmbedMessage(
-      b,
-      Translate.find('dbdKillerTitle'),
-      build.image
-    );
+    return Utility.createEmbedMessage(b, Translate.find('dbdKillerTitle'), build.image);
   }
 
   /**
@@ -75,7 +70,7 @@ export abstract class Killer {
    * @param interaction
    */
   @Slash('dbd-killer', {
-    description: 'Get a random dbd killer build.',
+    description: 'Get a random dbd killer build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createKillerBuild(interaction.member.user.id);

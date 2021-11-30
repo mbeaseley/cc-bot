@@ -4,7 +4,7 @@ import {
   CommandInteraction,
   MessageButton,
   MessageActionRow,
-  Message,
+  Message
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
 
@@ -14,7 +14,9 @@ type Coin = 'Heads' | 'Tails';
 export abstract class CoinFlip {
   /**
    * Create message
-   * @returns
+   * @param guess
+   * @param result
+   * @returns string
    */
   createMessage(guess: Coin, result: Coin): string {
     const guessResult = `${result === guess ? 'You win!' : 'You lose!'}`;
@@ -47,7 +49,7 @@ export abstract class CoinFlip {
 
     return interaction.editReply({
       content: `Heads or Tails?`,
-      components: [row],
+      components: [row]
     });
   }
 

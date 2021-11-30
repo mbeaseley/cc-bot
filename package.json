@@ -61,9 +61,6 @@
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
-  "prettier": {
-    "singleQuote": true
-  },
   "nodemonConfig": {
     "ignore": [
       "**/*.test.ts",

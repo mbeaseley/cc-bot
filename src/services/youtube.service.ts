@@ -1,12 +1,7 @@
 import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Client } from 'discordx';
 import { ServersCollection } from 'Types/database';
-import {
-  Channel,
-  ChannelRssResponse,
-  Video,
-  YoutubeChannel,
-} from 'Types/youtube';
+import { Channel, ChannelRssResponse, Video, YoutubeChannel } from 'Types/youtube';
 import { DatabaseService } from 'Services/database.service';
 import dayjs = require('dayjs');
 import { Logger } from 'Services/logger.service';
@@ -78,11 +73,11 @@ export class YoutubeService {
             'servers',
             ServersCollection.youtube,
             {
-              channelId: c.channelId,
+              channelId: c.channelId
             },
             {
               channelId: c.channelId,
-              latestVideoId: channelResponse.items[0].id,
+              latestVideoId: channelResponse.items[0].id
             }
           );
 
@@ -113,7 +108,7 @@ export class YoutubeService {
     }
 
     return this.databaseService.create('servers', ServersCollection.youtube, {
-      channelId,
+      channelId
     });
   }
 }

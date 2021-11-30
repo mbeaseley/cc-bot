@@ -15,7 +15,8 @@ export abstract class SayIt {
 
   /**
    * Create Message for say it command
-   * @param advice
+   * @param copy
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(copy: string, user: ClientUser | null): MessageEmbed {
@@ -31,11 +32,11 @@ export abstract class SayIt {
    * @param interaction
    */
   @Slash('say-it', {
-    description: `Try your luck, get or send a user with a insult or compliment!`,
+    description: `Try your luck, get or send a user with a insult or compliment!`
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send this to?',
+      description: 'Who do you want to send this to?'
     })
     user: string,
     interaction: CommandInteraction

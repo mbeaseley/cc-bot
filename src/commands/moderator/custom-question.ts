@@ -5,7 +5,7 @@ import {
   GuildEmoji,
   Message,
   MessageEmbed,
-  RoleManager,
+  RoleManager
 } from 'discord.js';
 import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
 import { ReactionService } from 'Services/reaction.service';
@@ -22,7 +22,7 @@ const QUESTION_TYPES = ['rules', 'game roles'];
 @Permission({
   id: environment.moderatorRoles[0],
   type: 'ROLE',
-  permission: true,
+  permission: true
 })
 export abstract class CustomQuestion {
   private rulesService: RulesService;
@@ -33,10 +33,7 @@ export abstract class CustomQuestion {
     this.reactionService = new ReactionService();
   }
 
-  getEmoji(
-    emojis: BaseGuildEmojiManager,
-    target: string
-  ): GuildEmoji | undefined {
+  getEmoji(emojis: BaseGuildEmojiManager, target: string): GuildEmoji | undefined {
     return emojis.cache.find((emoji) => emoji.name === target);
   }
 
@@ -46,10 +43,7 @@ export abstract class CustomQuestion {
    * @param bot
    * @returns MessageEmbed
    */
-  private createRulesEmbed(
-    message: string,
-    bot: ClientUser | null
-  ): MessageEmbed {
+  private createRulesEmbed(message: string, bot: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
       .setColor(2424832)
       .setAuthor(`Discord Server Rules`, bot?.displayAvatarURL())
@@ -76,7 +70,7 @@ export abstract class CustomQuestion {
 
     return {
       message,
-      emoji: [`${e?.name}:${e?.id}`],
+      emoji: [`${e?.name}:${e?.id}`]
     };
   }
 
@@ -107,9 +101,7 @@ export abstract class CustomQuestion {
         return '';
       }
       const r = Utility.findRole(roles, role?.[name as string]);
-      const roleCopy = r?.mentionable
-        ? '<@&' + r?.id + '>'
-        : (r?.name as string);
+      const roleCopy = r?.mentionable ? '<@&' + r?.id + '>' : (r?.name as string);
       return Translate.find('roleAction', name as string, id, roleCopy);
     });
 
@@ -120,7 +112,7 @@ export abstract class CustomQuestion {
 
     return {
       message,
-      emoji: guildEmojis.map((e) => `${e?.name}:${e?.id}`),
+      emoji: guildEmojis.map((e) => `${e?.name}:${e?.id}`)
     };
   }
 
@@ -130,7 +122,7 @@ export abstract class CustomQuestion {
    * @param interaction
    */
   @Slash('custom-question', {
-    description: 'Display a custom message like game roles and server rules!',
+    description: 'Display a custom message like game roles and server rules!'
   })
   async init(
     @SlashChoice('Server Rules', QUESTION_TYPES[0])
@@ -142,22 +134,15 @@ export abstract class CustomQuestion {
     const { client, guild } = interaction;
     let questionMessage: QuestionMessage = {
       message: undefined,
-      emoji: [],
+      emoji: []
     };
 
     if (question === QUESTION_TYPES[0]) {
-      questionMessage = await this.createRulesMessage(
-        client.emojis,
-        client.user
-      );
+      questionMessage = await this.createRulesMessage(client.emojis, client.user);
     }
 
     if (question === QUESTION_TYPES[1]) {
-      questionMessage = await this.createGameRolesMessage(
-        client.emojis,
-        guild?.roles,
-        client.user
-      );
+      questionMessage = await this.createGameRolesMessage(client.emojis, guild?.roles, client.user);
     }
 
     if (!questionMessage?.message || !questionMessage.emoji?.length) {
@@ -170,7 +155,7 @@ export abstract class CustomQuestion {
 
     const msg = (await interaction.reply({
       embeds: [questionMessage.message as MessageEmbed],
-      fetchReply: true,
+      fetchReply: true
     })) as Message;
     return questionMessage.emoji?.forEach((e) => msg.react(e));
   }

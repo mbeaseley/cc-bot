@@ -24,8 +24,8 @@ export class AdviceModelService extends HttpClient {
   private getResponse = (): Promise<AxiosResponse<ApiAdviceResponse>> =>
     this.instance.get('https://api.adviceslip.com/advice', {
       headers: {
-        Accept: 'application/json',
-      },
+        Accept: 'application/json'
+      }
     });
 
   /**

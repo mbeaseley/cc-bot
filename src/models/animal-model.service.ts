@@ -15,8 +15,8 @@ export class AnimalsModelService extends HttpClient {
   private getResponse = (link: AnimalKind): Promise<AxiosResponse<Animal>> =>
     this.instance.get(link, {
       headers: {
-        Accept: 'application/json',
-      },
+        Accept: 'application/json'
+      }
     });
 
   /**

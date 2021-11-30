@@ -19,10 +19,7 @@ export abstract class messageReactionRemove {
    * @param emojiName
    * @returns string
    */
-  private getChoosenRoleOrAction(
-    reactions: Reaction[],
-    emojiName: string
-  ): string {
+  private getChoosenRoleOrAction(reactions: Reaction[], emojiName: string): string {
     let choosenReaction = '';
     reactions.forEach((r) => {
       if (r[emojiName]) {
@@ -41,10 +38,7 @@ export abstract class messageReactionRemove {
    * @param role
    * @returns void
    */
-  private async removeRole(
-    member: GuildMember,
-    role: Role | undefined
-  ): Promise<void> {
+  private async removeRole(member: GuildMember, role: Role | undefined): Promise<void> {
     if (!role?.id) {
       return Promise.reject();
     }
@@ -63,10 +57,7 @@ export abstract class messageReactionRemove {
    * @returns
    */
   @On('messageReactionRemove')
-  async init([
-    messageReaction,
-    user,
-  ]: ArgsOf<'messageReactionRemove'>): Promise<any> {
+  async init([messageReaction, user]: ArgsOf<'messageReactionRemove'>): Promise<any> {
     if (user.bot) {
       return Promise.resolve();
     }

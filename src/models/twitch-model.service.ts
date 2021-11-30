@@ -7,7 +7,7 @@ import {
   Followers,
   Stream,
   Token,
-  User,
+  User
 } from 'Types/twitch';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
@@ -48,15 +48,13 @@ export class TwitchModelService extends HttpClient {
   /**
    * Get Token Response
    */
-  private getTokenResponse = (): Promise<
-    AxiosResponse<ApiTokenResponseObject>
-  > =>
+  private getTokenResponse = (): Promise<AxiosResponse<ApiTokenResponseObject>> =>
     this.instance.post<ApiTokenResponseObject>(
       `https://id.twitch.tv/oauth2/token?client_id=${environment.twitchClientId}&client_secret=${environment.twitchSecret}&grant_type=client_credentials&scope=user:read:email`,
       {
         headers: {
-          Accept: 'application/json',
-        },
+          Accept: 'application/json'
+        }
       }
     );
 
@@ -85,8 +83,8 @@ export class TwitchModelService extends HttpClient {
         headers: {
           Accept: 'application/json',
           'Client-ID': environment.twitchClientId,
-          Authorization: `Bearer ${this.token.token}`,
-        },
+          Authorization: `Bearer ${this.token.token}`
+        }
       }
     );
   };
@@ -131,7 +129,7 @@ export class TwitchModelService extends HttpClient {
     }
 
     const res = (await this.getResponse('users', {
-      login,
+      login
     })) as ApiUserResponseObject;
     return this.fromUserPayload(res);
   }
@@ -180,7 +178,7 @@ export class TwitchModelService extends HttpClient {
     }
 
     const res = (await this.getResponse('streams', {
-      user_login: username,
+      user_login: username
     })) as ApiStreamResponseObject;
     return this.fromStreamPayload(res);
   }
@@ -212,7 +210,7 @@ export class TwitchModelService extends HttpClient {
     }
 
     const res = (await this.getResponse('users/follows', {
-      to_id: id,
+      to_id: id
     })) as ApiFollowersResponseObject;
     return this.fromFollowersPayload(res);
   }

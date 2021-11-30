@@ -27,7 +27,7 @@ export const playerStatus = [
   'Snooze',
   'Looking to trade',
   'Looking to play',
-  'Unknown',
+  'Unknown'
 ];
 
 export class PlayerSummary {
@@ -89,12 +89,7 @@ export class SteamLocation {
   cityId: number;
   cityName: string;
 
-  constructor(
-    countryCode: string,
-    stateCode: string,
-    cityId: number,
-    cityName: string
-  ) {
+  constructor(countryCode: string, stateCode: string, cityId: number, cityName: string) {
     this.countryCode = countryCode;
     this.stateCode = stateCode;
     this.cityId = cityId;

@@ -5,7 +5,7 @@ import {
   GuildMember,
   MessageEmbed,
   PresenceStatus,
-  User,
+  User
 } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 import Translate from 'Utils/translate';
@@ -37,59 +37,48 @@ export abstract class ServerInfo {
    * @param user
    * @returns Promise<MessageEmbed>
    */
-  private async createMessage(
-    guild: Guild,
-    user: User | APIUser
-  ): Promise<MessageEmbed> {
+  private async createMessage(guild: Guild, user: User | APIUser): Promise<MessageEmbed> {
     const member = guild.members.cache;
     const iconUrl = guild.iconURL() ?? '';
     const owner = member.find((m) => m.id === guild.ownerId)?.user.tag;
-    const roles = [
-      ...guild.roles.cache.sort((a, b) => b.position - a.position).values(),
-    ];
+    const roles = [...guild.roles.cache.sort((a, b) => b.position - a.position).values()];
 
     const fields = [
       {
         name: Translate.find('serverName'),
         value: `\`${guild.name}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverOwner'),
         value: `\`${owner}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverId'),
         value: `\`${guild.id}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverDate'),
         value: dayjs(guild.createdAt).format('DD/MM/YYYY'),
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverVerification'),
         value: `\`${guild.verificationLevel}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverCount', guild.memberCount.toString()),
-        value: `\`${this.filterMembers(
-          member,
-          'online'
-        )} online, ${this.filterMembers(
+        value: `\`${this.filterMembers(member, 'online')} online, ${this.filterMembers(
           member,
           'idle'
-        )} idle and  ${this.filterMembers(
-          member,
-          'dnd'
-        )} DnD \n ${this.filterMembers(
+        )} idle and  ${this.filterMembers(member, 'dnd')} DnD \n ${this.filterMembers(
           member,
           'bot'
         )} bots, ${this.filterMembers(member, 'human')} humans\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverFeature'),
@@ -98,15 +87,13 @@ export abstract class ServerInfo {
             ? 'NONE'
             : guild.features.toString().toLowerCase().replace(/,/g, ', ')
         }\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverRoles', guild.roles.cache.size.toString()),
-        value: `${roles.join(', ')}${
-          roles.length != guild.roles.cache.size ? '...' : '.'
-        }`,
-        inline: true,
-      },
+        value: `${roles.join(', ')}${roles.length != guild.roles.cache.size ? '...' : '.'}`,
+        inline: true
+      }
     ];
 
     return new MessageEmbed()
@@ -123,7 +110,7 @@ export abstract class ServerInfo {
    * @param interaction
    */
   @Slash('server-info', {
-    description: 'Get to know this server.',
+    description: 'Get to know this server.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     if (!interaction.guild) {
@@ -132,10 +119,7 @@ export abstract class ServerInfo {
       return interaction.deleteReply();
     }
 
-    const msg = await this.createMessage(
-      interaction.guild,
-      interaction.member.user
-    );
+    const msg = await this.createMessage(interaction.guild, interaction.member.user);
     return interaction.reply({ embeds: [msg] });
   }
 }

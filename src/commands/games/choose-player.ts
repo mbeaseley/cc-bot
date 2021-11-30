@@ -8,7 +8,7 @@ import {
   MessageActionRow,
   MessageButton,
   MessageEmbed,
-  User,
+  User
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
 import Translate from 'Utils/translate';
@@ -16,10 +16,7 @@ import Translate from 'Utils/translate';
 @Discord()
 export abstract class ChoosePlayer {
   private currentUser: User | undefined;
-  private previousInteraction:
-    | CommandInteraction
-    | ButtonInteraction
-    | undefined;
+  private previousInteraction: CommandInteraction | ButtonInteraction | undefined;
 
   /**
    * Find random user from voice channel
@@ -27,9 +24,7 @@ export abstract class ChoosePlayer {
    * @returns User
    */
   findRandomUser(members: Collection<string, GuildMember>): User | undefined {
-    const u = members
-      .map((m) => m.user)
-      .filter((user) => user.id !== undefined);
+    const u = members.map((m) => m.user).filter((user) => user.id !== undefined);
     const previousUser = this.currentUser;
 
     if (u?.length === 1) {
@@ -50,9 +45,7 @@ export abstract class ChoosePlayer {
   private createMessage(selectedUser: User): MessageEmbed {
     return new MessageEmbed()
       .setColor(selectedUser.hexAccentColor ?? 'RANDOM')
-      .setDescription(
-        Translate.find('playerChoiceDescription', selectedUser.username)
-      );
+      .setDescription(Translate.find('playerChoiceDescription', selectedUser.username));
   }
 
   /**
@@ -79,7 +72,7 @@ export abstract class ChoosePlayer {
 
       return interaction.editReply({
         embeds: [msg],
-        components: [row],
+        components: [row]
       });
     } else {
       return interaction.reply({ embeds: [msg] });
@@ -91,7 +84,7 @@ export abstract class ChoosePlayer {
    * @param interaction
    */
   @Slash('choose-player', {
-    description: 'Chooses Player in voice chat.',
+    description: 'Chooses Player in voice chat.'
   })
   async init(
     interaction: CommandInteraction | ButtonInteraction
@@ -109,9 +102,7 @@ export abstract class ChoosePlayer {
     const channel = user?.voice.channel;
 
     if (!channel) {
-      await interaction.reply(
-        '**Please join voice channel to use this command!**'
-      );
+      await interaction.reply('**Please join voice channel to use this command!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

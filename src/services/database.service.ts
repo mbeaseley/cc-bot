@@ -140,9 +140,7 @@ export class DatabaseService {
     document: Object
   ): Promise<UpdateResult | undefined> {
     const db = this.Client?.db(dbName);
-    return db
-      ?.collection(collectionName)
-      .updateOne(existDocument, { $set: document });
+    return db?.collection(collectionName).updateOne(existDocument, { $set: document });
   }
 
   /**
@@ -160,12 +158,7 @@ export class DatabaseService {
 
     try {
       await this.Client.connect();
-      await this.updateDocument(
-        dbName,
-        collectionName,
-        existDocument,
-        document
-      );
+      await this.updateDocument(dbName, collectionName, existDocument, document);
     } catch (e: unknown) {
       this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {

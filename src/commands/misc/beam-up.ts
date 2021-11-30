@@ -10,7 +10,7 @@ import {
   Message,
   MessageActionRow,
   MessageButton,
-  MessageEmbed,
+  MessageEmbed
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
 import { BeamUpItem } from 'Types/beam-up';
@@ -50,20 +50,14 @@ export abstract class BeamUp {
       (c) => c.isVoice() && c.type === 'GUILD_VOICE'
     ) as Collection<string, GuildChannel>;
 
-    return voiceChannels.find(
-      (c) => c.isVoice() && c.id === member.voice.channelId
-    );
+    return voiceChannels.find((c) => c.isVoice() && c.id === member.voice.channelId);
   }
 
   /**
    * Create message
    * @param command
    */
-  private createMessage(
-    description: string,
-    member?: GuildMember,
-    bot?: ClientUser
-  ): MessageEmbed {
+  private createMessage(description: string, member?: GuildMember, bot?: ClientUser): MessageEmbed {
     return new MessageEmbed()
       .setColor(member?.displayHexColor ?? 11166957)
       .setAuthor(Translate.find('beamUpAuthor'), bot?.displayAvatarURL())
@@ -75,7 +69,7 @@ export abstract class BeamUp {
    * @param interaction
    */
   @Slash('beam-up', {
-    description: 'Beam up member to restrictive voice channel!',
+    description: 'Beam up member to restrictive voice channel!'
   })
   async init(
     interaction: CommandInteraction
@@ -97,10 +91,7 @@ export abstract class BeamUp {
     }
 
     const voiceChannels = members
-      ?.filter(
-        (m) =>
-          !!m.roles.cache.find((r) => r.id === environment.moderatorRoles[0])
-      )
+      ?.filter((m) => !!m.roles.cache.find((r) => r.id === environment.moderatorRoles[0]))
       .map((a) => this.findUserChannel(guild?.channels, a))
       .filter(Boolean)
       .filter((c) => !c?.permissionsFor(user).has('CONNECT', false));
@@ -123,11 +114,7 @@ export abstract class BeamUp {
 
     this.beamUpItem = new BeamUpItem(validChannels[0], user);
     const msg = this.createMessage(
-      Translate.find(
-        'beamUpDescription',
-        environment.moderatorRoles[0],
-        member.user.id
-      ),
+      Translate.find('beamUpDescription', environment.moderatorRoles[0], member.user.id),
       this.author,
       client.user ?? undefined
     );
@@ -148,7 +135,7 @@ export abstract class BeamUp {
 
     return interaction.editReply({
       embeds: [msg],
-      components: [row],
+      components: [row]
     });
   }
 
@@ -161,9 +148,7 @@ export abstract class BeamUp {
     const { member, guild } = interaction;
     const members = await guild?.members.fetch();
     const user = members?.find((m) => m.id === member.user.id);
-    return !!user?.roles.cache.find(
-      (r) => r.id === environment.moderatorRoles[0]
-    );
+    return !!user?.roles.cache.find((r) => r.id === environment.moderatorRoles[0]);
   }
 
   /**

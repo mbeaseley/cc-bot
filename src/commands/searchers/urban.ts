@@ -10,10 +10,7 @@ export abstract class Urban {
    * @param phrase
    * @param entry
    */
-  private createMessage(
-    phrase: string,
-    entry: urban.DefinitionObject
-  ): MessageEmbed {
+  private createMessage(phrase: string, entry: urban.DefinitionObject): MessageEmbed {
     const lower = phrase.toLowerCase();
     const formattedPhrase = phrase.charAt(0).toUpperCase() + lower.slice(1);
 
@@ -22,9 +19,7 @@ export abstract class Urban {
       .setColor(1079)
       .setURL(entry.permalink)
       .setThumbnail('https://i.imgur.com/LmyPRai.png')
-      .setDescription(
-        Translate.find('urbanDes', entry.definition, entry.example)
-      )
+      .setDescription(Translate.find('urbanDes', entry.definition, entry.example))
       .addField('👍', entry.thumbs_up.toString(), true)
       .addField('👎', entry.thumbs_down.toString(), true);
   }
@@ -35,12 +30,12 @@ export abstract class Urban {
    * @param interaction
    */
   @Slash('urban', {
-    description: `Get urban definition of word.`,
+    description: `Get urban definition of word.`
   })
   async init(
     @SlashOption('phrase', {
       description: 'What do you want to search?',
-      required: true,
+      required: true
     })
     phrase: string,
     interaction: CommandInteraction

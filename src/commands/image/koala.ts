@@ -12,7 +12,8 @@ export abstract class Koala {
 
   /**
    * Create Message for koala command
-   * @param advice
+   * @param koala
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(koala: string, user: ClientUser | null): MessageEmbed {
@@ -28,7 +29,7 @@ export abstract class Koala {
    * @param interaction
    */
   @Slash('koala', {
-    description: `Image of a koala?`,
+    description: `Image of a koala?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const { link } = await this.animalService.getKoala();

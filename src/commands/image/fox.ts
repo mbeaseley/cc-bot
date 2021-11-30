@@ -12,7 +12,8 @@ export abstract class Fox {
 
   /**
    * Create Message for fox command
-   * @param advice
+   * @param fox
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(fox: string, user: ClientUser | null): MessageEmbed {
@@ -28,7 +29,7 @@ export abstract class Fox {
    * @param interaction
    */
   @Slash('fox', {
-    description: `Image of a fox?`,
+    description: `Image of a fox?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const { link } = await this.animalService.getFox();

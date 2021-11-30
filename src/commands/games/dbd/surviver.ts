@@ -43,10 +43,7 @@ export abstract class Surviver {
    * @returns MessageEmbed
    */
   private createMessage(build: SurviverBuild): MessageEmbed {
-    return Utility.createEmbedMessage(
-      build,
-      Translate.find('dbdSurviverTitle')
-    );
+    return Utility.createEmbedMessage(build, Translate.find('dbdSurviverTitle'));
   }
 
   /**
@@ -54,7 +51,7 @@ export abstract class Surviver {
    * @param interaction
    */
   @Slash('dbd-surviver', {
-    description: 'Get a random dbd surviver build.',
+    description: 'Get a random dbd surviver build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createSurviverBuild();

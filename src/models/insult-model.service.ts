@@ -13,8 +13,8 @@ export class InsultModelService extends HttpClient {
   private getResponse = (): Promise<AxiosResponse<string>> =>
     this.instance.get('insult', {
       headers: {
-        Accept: 'application/json',
-      },
+        Accept: 'application/json'
+      }
     });
 
   /**

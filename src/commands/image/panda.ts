@@ -12,7 +12,8 @@ export abstract class Panda {
 
   /**
    * Create Message for panda command
-   * @param advice
+   * @param panda
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(panda: string, user: ClientUser | null): MessageEmbed {
@@ -28,7 +29,7 @@ export abstract class Panda {
    * @param interaction
    */
   @Slash('panda', {
-    description: `Image of a panda?`,
+    description: `Image of a panda?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const { link } = await this.animalService.getPanda();

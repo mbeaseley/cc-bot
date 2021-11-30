@@ -9,7 +9,7 @@ import Translate from 'Utils/translate';
 @Permission({
   id: environment.moderatorRoles[0],
   type: 'ROLE',
-  permission: true,
+  permission: true
 })
 export abstract class Mute {
   private moderationService: ModerationService;
@@ -34,12 +34,12 @@ export abstract class Mute {
    * @param interaction
    */
   @Slash('deafen', {
-    description: 'Deafen a user! Command: /deaf user(required)',
+    description: 'Deafen a user! Command: /deaf user(required)'
   })
   async init(
     @SlashOption('user', {
       description: 'Who do you want to deafen?',
-      required: true,
+      required: true
     })
     user: string,
     interaction: CommandInteraction

@@ -14,8 +14,8 @@ export class MemeModelService extends HttpClient {
   private getResponse = (): Promise<AxiosResponse<MemeItem>> =>
     this.instance.get('meme', {
       headers: {
-        Accept: 'application/json',
-      },
+        Accept: 'application/json'
+      }
     });
 
   /**

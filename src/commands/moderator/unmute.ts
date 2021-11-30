@@ -9,7 +9,7 @@ import Translate from 'Utils/translate';
 @Permission({
   id: environment.moderatorRoles[0],
   type: 'ROLE',
-  permission: true,
+  permission: true
 })
 export abstract class Unmute {
   private moderationService: ModerationService;
@@ -34,12 +34,12 @@ export abstract class Unmute {
    * @param interaction
    */
   @Slash('unmute', {
-    description: 'Unmute a user!',
+    description: 'Unmute a user!'
   })
   async init(
     @SlashOption('user', {
       description: 'Who do you want to unmute?',
-      required: true,
+      required: true
     })
     user: string,
     interaction: CommandInteraction

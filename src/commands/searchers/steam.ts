@@ -18,10 +18,7 @@ export abstract class Steam {
    * @param userBans
    * @returns MessageEmbed
    */
-  private createMessage(
-    playerSummary: PlayerSummary,
-    userBans: UserBans
-  ): MessageEmbed {
+  private createMessage(playerSummary: PlayerSummary, userBans: UserBans): MessageEmbed {
     return new MessageEmbed()
       .setColor(0x0099ff)
       .setAuthor(Translate.find('steamAuthor'), playerSummary?.avatarFull)
@@ -45,12 +42,12 @@ export abstract class Steam {
   }
 
   @Slash('steam', {
-    description: 'Check and share your profile with friends on steam.',
+    description: 'Check and share your profile with friends on steam.'
   })
   async init(
     @SlashOption('name', {
       description: 'Vanity Url?',
-      required: true,
+      required: true
     })
     url: string,
     interaction: CommandInteraction
@@ -63,9 +60,7 @@ export abstract class Steam {
       return interaction.deleteReply();
     }
 
-    const playerSummary = await this.steamService.getPlayerSummary(
-      user.steamId
-    );
+    const playerSummary = await this.steamService.getPlayerSummary(user.steamId);
     const userBans = await this.steamService.getUserBans(user.steamId);
 
     const msg = this.createMessage(playerSummary, userBans);

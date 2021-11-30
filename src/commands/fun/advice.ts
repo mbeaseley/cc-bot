@@ -13,6 +13,7 @@ export abstract class Advice {
   /**
    * Create Message for advice command
    * @param advice
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(advice: string, user: ClientUser | null): MessageEmbed {
@@ -28,11 +29,11 @@ export abstract class Advice {
    * @param interaction
    */
   @Slash('advice', {
-    description: `Send some friendly advice to yourself or a friend.`,
+    description: `Send some friendly advice to yourself or a friend.`
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send advice to?',
+      description: 'Who do you want to send advice to?'
     })
     user: string,
     interaction: CommandInteraction

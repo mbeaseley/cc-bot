@@ -12,13 +12,11 @@ export abstract class Compliment {
 
   /**
    * Create Message for compliment command
-   * @param advice
+   * @param compliment
+   * @param user
    * @returns MessageEmbed
    */
-  private createMessage(
-    compliment: string,
-    user: ClientUser | null
-  ): MessageEmbed {
+  private createMessage(compliment: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
       .setAuthor('Compliment Command', user?.displayAvatarURL())
       .setColor('RANDOM')
@@ -31,11 +29,11 @@ export abstract class Compliment {
    * @param interaction
    */
   @Slash('compliment', {
-    description: `Send a nice compliment to yourself or a friend.`,
+    description: `Send a nice compliment to yourself or a friend.`
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send a compliment to?',
+      description: 'Who do you want to send a compliment to?'
     })
     user: string,
     interaction: CommandInteraction

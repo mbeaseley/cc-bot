@@ -25,7 +25,7 @@ export default class Translate {
       ...misc,
       ...moderation,
       ...music,
-      ...searchers,
+      ...searchers
     };
     const selectedKey = Object.keys(allCopys).find((k) => k === key);
 

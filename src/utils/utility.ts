@@ -9,7 +9,7 @@ import {
   MessageEmbedOptions,
   Role,
   RoleManager,
-  User,
+  User
 } from 'discord.js';
 import * as _ from 'underscore';
 
@@ -49,14 +49,9 @@ export default class Utility {
     Object.entries(data).forEach(([key, value]) => {
       if (excludeKeys?.find((k) => k === key)) return;
       const field: EmbedField = {
-        name: (key.charAt(0).toUpperCase() + key.slice(1))
-          .replace(/([A-Z])/g, ' $1')
-          .trim(),
-        value:
-          typeof value !== 'string'
-            ? this.createFieldValue(value)?.join('\n')
-            : value,
-        inline: false,
+        name: (key.charAt(0).toUpperCase() + key.slice(1)).replace(/([A-Z])/g, ' $1').trim(),
+        value: typeof value !== 'string' ? this.createFieldValue(value)?.join('\n') : value,
+        inline: false
       };
 
       fields.push(field);

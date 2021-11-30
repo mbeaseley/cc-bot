@@ -56,10 +56,7 @@ export class RulesModelService {
 
       const emojikeys = ['name', 'id'];
       const emojiCopyKeys = ['emoji_name', 'emoji_id'];
-      if (
-        acceptEmoji?.name &&
-        Utility.checkStatementForStrings(emojiCopyKeys, rule.content)
-      ) {
+      if (acceptEmoji?.name && Utility.checkStatementForStrings(emojiCopyKeys, rule.content)) {
         emojikeys.forEach((k) => {
           rule.content = rule.content.replace(
             `emoji_${k}`,
@@ -77,9 +74,7 @@ export class RulesModelService {
    * @param acceptEmoji
    * @returns RuleItem[]
    */
-  public async getServerRules(
-    acceptEmoji: GuildEmoji | undefined
-  ): Promise<RuleItem[]> {
+  public async getServerRules(acceptEmoji: GuildEmoji | undefined): Promise<RuleItem[]> {
     if (this.serverRules.length) {
       return Promise.resolve(this.serverRules);
     }

@@ -1,9 +1,4 @@
-import {
-  ClientUser,
-  CommandInteraction,
-  EmbedField,
-  MessageEmbed,
-} from 'discord.js';
+import { ClientUser, CommandInteraction, EmbedField, MessageEmbed } from 'discord.js';
 import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
 import { environment } from 'Utils/environment';
@@ -13,7 +8,7 @@ import { environment } from 'Utils/environment';
 @Permission({
   id: environment.eventIds.role,
   type: 'ROLE',
-  permission: true,
+  permission: true
 })
 export abstract class Event {
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
@@ -51,10 +46,7 @@ export abstract class Event {
    * @param user
    * @returns MessageEmbed
    */
-  private createPollMessage(
-    poll: PollQuestion,
-    user: ClientUser | null
-  ): MessageEmbed {
+  private createPollMessage(poll: PollQuestion, user: ClientUser | null): MessageEmbed {
     const answers = poll.answers
       .filter((el) => el)
       .map((a, i) => {
@@ -64,7 +56,7 @@ export abstract class Event {
     const field = {
       name: `${poll.question}\n  `,
       value: answers.toString().split(',').join(''),
-      inline: false,
+      inline: false
     } as EmbedField;
 
     return new MessageEmbed()
@@ -107,37 +99,33 @@ export abstract class Event {
    * @param interaction
    */
   @Slash('create-event', {
-    description: 'Create an event include creating channel and poll',
+    description: 'Create an event include creating channel and poll'
   })
   async init(
     @SlashOption('title', {
       description: 'Title of event',
-      required: true,
+      required: true
     })
     title: string,
     @SlashOption('description', {
       description: 'description of event',
-      required: true,
+      required: true
     })
     description: string,
     @SlashChoice('Yes', 'true')
     @SlashChoice('No', 'false')
     @SlashOption('poll', {
       description: 'description of event',
-      required: true,
+      required: true
     })
     poll: string,
     interaction: CommandInteraction
   ): Promise<void> {
     const { guild, user, client, channel } = interaction;
 
-    const category = guild?.channels.cache.find(
-      (c) => c.id === environment.eventIds.category
-    );
+    const category = guild?.channels.cache.find((c) => c.id === environment.eventIds.category);
     const isGeneralChannel = !!guild?.channels.cache.find(
-      (c) =>
-        c.id === environment.eventIds.channel &&
-        environment.eventIds.channel === channel?.id
+      (c) => c.id === environment.eventIds.channel && environment.eventIds.channel === channel?.id
     );
 
     if (!category) {
@@ -158,7 +146,7 @@ export abstract class Event {
 
     const newChannel = await guild?.channels.create(title, {
       type: 'GUILD_TEXT',
-      topic: description,
+      topic: description
     });
 
     if (!newChannel) {
@@ -169,19 +157,11 @@ export abstract class Event {
 
     const pollWanted = poll === 'true';
     await newChannel?.setParent(category.id);
-    const msg = this.createChannelBaseMessage(
-      title,
-      user.id,
-      pollWanted,
-      client.user
-    );
+    const msg = this.createChannelBaseMessage(title, user.id, pollWanted, client.user);
     await newChannel.send({ embeds: [msg] });
 
     if (pollWanted) {
-      const pollQuestion = new PollQuestion(
-        'Are you interested?',
-        ['Yes', 'No'] ?? []
-      );
+      const pollQuestion = new PollQuestion('Are you interested?', ['Yes', 'No'] ?? []);
       const pollMsg = this.createPollMessage(pollQuestion, client.user);
       const pollInteraction = await newChannel.send({ embeds: [pollMsg] });
       pollQuestion.answers.forEach(async (_, i) => {
@@ -189,12 +169,7 @@ export abstract class Event {
       });
     }
 
-    const successMsg = this.createActionCompleteMessage(
-      title,
-      user.id,
-      pollWanted,
-      client.user
-    );
+    const successMsg = this.createActionCompleteMessage(title, user.id, pollWanted, client.user);
     return interaction.reply({ embeds: [successMsg] });
   }
 }

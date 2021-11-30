@@ -19,10 +19,7 @@ export abstract class messageReactionAdd {
    * @param emojiName
    * @returns string
    */
-  private getChoosenRoleOrAction(
-    reactions: Reaction[],
-    emojiName: string
-  ): string {
+  private getChoosenRoleOrAction(reactions: Reaction[], emojiName: string): string {
     let choosenReaction = '';
     reactions.forEach((r) => {
       if (r[emojiName]) {
@@ -41,10 +38,7 @@ export abstract class messageReactionAdd {
    * @param role
    * @returns void
    */
-  private async addRole(
-    member: GuildMember,
-    role: Role | undefined
-  ): Promise<void> {
+  private async addRole(member: GuildMember, role: Role | undefined): Promise<void> {
     if (!role?.id) {
       return Promise.reject();
     }
@@ -82,10 +76,7 @@ export abstract class messageReactionAdd {
    * @returns
    */
   @On('messageReactionAdd')
-  async init([
-    messageReaction,
-    user,
-  ]: ArgsOf<'messageReactionAdd'>): Promise<any> {
+  async init([messageReaction, user]: ArgsOf<'messageReactionAdd'>): Promise<any> {
     if (user.bot) {
       return Promise.resolve();
     }
@@ -117,9 +108,7 @@ export abstract class messageReactionAdd {
       return this.addRole(member, role);
     }
 
-    const isMod = member.roles.cache.find(
-      (r) => environment.moderatorRoles.indexOf(r.id) > -1
-    );
+    const isMod = member.roles.cache.find((r) => environment.moderatorRoles.indexOf(r.id) > -1);
 
     const reactionActions = await this.reactionService.getReactionActions();
     const choosenAction = this.getChoosenRoleOrAction(

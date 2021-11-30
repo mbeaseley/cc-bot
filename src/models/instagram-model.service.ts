@@ -30,17 +30,12 @@ export class InstagramModelService extends HttpClient {
    * @param username
    * @returns Promise<ApiInstaUserResponse>
    */
-  private getResponse = (
-    username: string
-  ): Promise<AxiosResponse<ApiInstaUserResponse>> =>
-    this.instance.get<ApiInstaUserResponse>(
-      `https://www.instagram.com/${username}/feed/?__a=1`,
-      {
-        headers: {
-          Accept: 'application/json',
-        },
+  private getResponse = (username: string): Promise<AxiosResponse<ApiInstaUserResponse>> =>
+    this.instance.get<ApiInstaUserResponse>(`https://www.instagram.com/${username}/feed/?__a=1`, {
+      headers: {
+        Accept: 'application/json'
       }
-    );
+    });
 
   /**
    * Get Insta User

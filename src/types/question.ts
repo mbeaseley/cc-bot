@@ -12,7 +12,7 @@ export class RuleItem {
 
 export enum RuleType {
   rule = 'rule',
-  copy = 'copy',
+  copy = 'copy'
 }
 
 export interface QuestionMessage {

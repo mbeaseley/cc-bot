@@ -9,17 +9,14 @@ export abstract class HttpClient {
 
   public constructor(baseURL: string) {
     this.instance = axios.create({
-      baseURL,
+      baseURL
     });
 
     this._initializeResponseInterceptor();
   }
 
   private _initializeResponseInterceptor = () => {
-    this.instance.interceptors.response.use(
-      this._handleResponse,
-      this._handleError
-    );
+    this.instance.interceptors.response.use(this._handleResponse, this._handleError);
   };
 
   private _handleResponse = ({ data }: AxiosResponse) => data;

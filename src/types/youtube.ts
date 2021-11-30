@@ -8,14 +8,7 @@ export class Video {
   id: string;
   isoDate: dayjs.Dayjs;
 
-  constructor(
-    title: string,
-    link: string,
-    pubDate: any,
-    author: string,
-    id: string,
-    isoDate: any
-  ) {
+  constructor(title: string, link: string, pubDate: any, author: string, id: string, isoDate: any) {
     this.title = title;
     this.link = link;
     this.pubDate = dayjs(pubDate);
@@ -37,9 +30,7 @@ export class Channel {
     this.title = title;
     this.feedUrl = feedUrl;
 
-    this.items = items.map(
-      (i) => new Video(i.title, i.link, i.pubDate, i.author, i.id, i.isoDate)
-    );
+    this.items = items.map((i) => new Video(i.title, i.link, i.pubDate, i.author, i.id, i.isoDate));
   }
 }
 

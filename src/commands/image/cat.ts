@@ -12,7 +12,8 @@ export abstract class Cat {
 
   /**
    * Create Message for cats command
-   * @param advice
+   * @param cat
+   * @param user
    * @returns MessageEmbed
    */
   private createMessage(cat: string, user: ClientUser | null): MessageEmbed {
@@ -28,7 +29,7 @@ export abstract class Cat {
    * @param interaction
    */
   @Slash('cat', {
-    description: `Image of a cat?`,
+    description: `Image of a cat?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const { link } = await this.animalService.getCat();

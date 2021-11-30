@@ -19,48 +19,27 @@ export abstract class Twitch {
    * @param stream
    * @returns MessageEmbed
    */
-  private createMessage(
-    user: User,
-    followers: Followers,
-    stream: Stream
-  ): MessageEmbed {
+  private createMessage(user: User, followers: Followers, stream: Stream): MessageEmbed {
     const m = new MessageEmbed()
       .setTitle(user.displayName ?? '~')
       .setColor(6570405)
       .setURL(Translate.find('twitchUrl'))
       .setThumbnail(`${user.profileImageUrl}`)
-      .setAuthor(
-        Translate.find('twitchAuthor'),
-        'https://i.imgur.com/4b9X738.png'
-      )
+      .setAuthor(Translate.find('twitchAuthor'), 'https://i.imgur.com/4b9X738.png')
       .addField(
         Translate.find('twitchBio'),
         user.description || Translate.find('twitchNoUser'),
         true
       )
-      .addField(
-        Translate.find('twitchViews'),
-        user.viewCount?.toString() ?? '~',
-        true
-      )
-      .addField(
-        Translate.find('twitchFollowers'),
-        followers?.total?.toString() ?? '~',
-        true
-      );
+      .addField(Translate.find('twitchViews'), user.viewCount?.toString() ?? '~', true)
+      .addField(Translate.find('twitchFollowers'), followers?.total?.toString() ?? '~', true);
 
     if (stream?.id) {
       m.addField(
         '\u200B',
-        Translate.find(
-          'twitchSteam',
-          stream.title || '~',
-          stream.viewerCount?.toString() || '~'
-        )
+        Translate.find('twitchSteam', stream.title || '~', stream.viewerCount?.toString() || '~')
       ).setImage(
-        `${stream.thumbnailUrl
-          ?.replace('{width}', `${1920}`)
-          .replace('{height}', `${1080}`)}`
+        `${stream.thumbnailUrl?.replace('{width}', `${1920}`).replace('{height}', `${1080}`)}`
       );
     }
 
@@ -68,12 +47,12 @@ export abstract class Twitch {
   }
 
   @Slash('twitch', {
-    description: 'Find your favourites streamers.',
+    description: 'Find your favourites streamers.'
   })
   async init(
     @SlashOption('user', {
       description: 'Username?',
-      required: true,
+      required: true
     })
     username: string,
     interaction: CommandInteraction

@@ -9,7 +9,7 @@ import Translate from 'Utils/translate';
 @Permission({
   id: environment.moderatorRoles[0],
   type: 'ROLE',
-  permission: true,
+  permission: true
 })
 export abstract class Youtube {
   private youtubeService: YoutubeService;
@@ -19,12 +19,12 @@ export abstract class Youtube {
   }
 
   @Slash('add-youtube', {
-    description: `Add youtube channel to video check list`,
+    description: `Add youtube channel to video check list`
   })
   async init(
     @SlashOption('id', {
       description: 'Channel Id you want to add',
-      required: true,
+      required: true
     })
     id: string,
     interaction: CommandInteraction
