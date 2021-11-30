@@ -1,5 +1,5 @@
-import { MemeModelService } from '../models/meme-model.service';
-import { MemeItem } from '../types/meme';
+import { MemeModelService } from 'Models/meme-model.service';
+import { MemeItem } from 'Types/meme';
 
 export class MemeService {
   private memeModelService: MemeModelService;

@@ -1,7 +1,7 @@
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { InsultService } from '../../services/insult.service';
-import { ComplimentService } from '../../services/compliment.service';
+import { InsultService } from 'Services/insult.service';
+import { ComplimentService } from 'Services/compliment.service';
 
 @Discord()
 export abstract class SayIt {

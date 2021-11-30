@@ -1,10 +1,10 @@
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { windDirections } from '../../data/weather';
-import { WeatherService } from '../../services/weather.service';
-import { WeatherObject } from '../../types/weather';
-import Translate from '../../utils/translate';
-import Utility from '../../utils/utility';
+import { windDirections } from 'Data/weather';
+import { WeatherService } from 'Services/weather.service';
+import { WeatherObject } from 'Types/weather';
+import Translate from 'Utils/translate';
+import Utility from 'Utils/utility';
 
 @Discord()
 export abstract class Weather {

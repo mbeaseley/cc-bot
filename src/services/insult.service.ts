@@ -1,4 +1,4 @@
-import { InsultModelService } from '../models/insult-model.service';
+import { InsultModelService } from 'Models/insult-model.service';
 
 export class InsultService {
   private insultModelService: InsultModelService;

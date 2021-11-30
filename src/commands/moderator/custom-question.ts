@@ -8,12 +8,12 @@ import {
   RoleManager,
 } from 'discord.js';
 import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
-import { ReactionService } from '../../services/reaction.service';
-import { RulesService } from '../../services/rules.service';
-import { QuestionMessage } from '../../types/question';
-import { environment } from '../../utils/environment';
-import Translate from '../../utils/translate';
-import Utility from '../../utils/utility';
+import { ReactionService } from 'Services/reaction.service';
+import { RulesService } from 'Services/rules.service';
+import { QuestionMessage } from 'Types/question';
+import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
+import Utility from 'Utils/utility';
 
 const QUESTION_TYPES = ['rules', 'game roles'];
 

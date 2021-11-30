@@ -4,9 +4,9 @@ import {
   MessageEmbed,
 } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { MinecraftService } from '../../services/minecraft.service';
-import { McServerDetail, McUrl } from '../../types/minecraft';
-import Translate from '../../utils/translate';
+import { MinecraftService } from 'Services/minecraft.service';
+import { McServerDetail, McUrl } from 'Types/minecraft';
+import Translate from 'Utils/translate';
 import { status } from 'minecraft-server-util';
 import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
 

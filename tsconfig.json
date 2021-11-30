@@ -7,6 +7,21 @@
     "strict": true                             /* Enable all strict type-checking options. */,
     "esModuleInterop": true                    /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
 
+    /* Module Resolution Options */
+    "baseUrl": ".",
+    "paths": {
+      "Root/*": ["src/*"],
+      "Assets/*": ["src/assets/*"],
+      "Commands/*": ["src/commands/*"],
+      "Data/*": ["src/data/*"],
+      "Events/*": ["src/events/*"],
+      "Interceptor/*": ["src/interceptor/*"],
+      "Models/*": ["src/models/*"],
+      "Services/*": ["src/services/*"],
+      "Types/*": ["src/types/*"],
+      "Utils/*": ["src/utils/*"]
+    },
+
     /* Experimental Options */
     "experimentalDecorators": true             /* Enables experimental support for ES7 decorators. */,
     "emitDecoratorMetadata": true              /* Enables experimental support for emitting type metadata for decorators. */,

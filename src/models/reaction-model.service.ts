@@ -1,6 +1,6 @@
-import { DatabaseService } from '../services/database.service';
-import { EmojisCollections } from '../types/database';
-import { Reaction } from '../types/reaction';
+import { DatabaseService } from 'Services/database.service';
+import { EmojisCollections } from 'Types/database';
+import { Reaction } from 'Types/reaction';
 
 export class ReactionModelService {
   private databaseService: DatabaseService;

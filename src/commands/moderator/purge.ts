@@ -1,6 +1,6 @@
 import { CommandInteraction, TextChannel } from 'discord.js';
 import { Discord, Permission, Slash, SlashOption } from 'discordx';
-import { environment } from '../../utils/environment';
+import { environment } from 'Utils/environment';
 
 @Discord()
 @Permission(false)

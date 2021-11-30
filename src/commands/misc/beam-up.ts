@@ -4,7 +4,6 @@ import {
   ClientUser,
   Collection,
   CommandInteraction,
-  Guild,
   GuildChannel,
   GuildChannelManager,
   GuildMember,
@@ -14,9 +13,9 @@ import {
   MessageEmbed,
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
-import { BeamUpItem } from '../../types/beam-up';
-import { environment } from '../../utils/environment';
-import Translate from '../../utils/translate';
+import { BeamUpItem } from 'Types/beam-up';
+import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class BeamUp {

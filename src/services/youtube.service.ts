@@ -1,19 +1,19 @@
 import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Client } from 'discordx';
-import { ServersCollection } from '../types/database';
+import { ServersCollection } from 'Types/database';
 import {
   Channel,
   ChannelRssResponse,
   Video,
   YoutubeChannel,
-} from '../types/youtube';
-import { DatabaseService } from './database.service';
+} from 'Types/youtube';
+import { DatabaseService } from 'Services/database.service';
 import dayjs = require('dayjs');
-import { Logger } from './logger.service';
+import { Logger } from 'Services/logger.service';
 import chalk = require('chalk');
 import Parser from 'rss-parser';
-import { environment } from '../utils/environment';
-import Translate from '../utils/translate';
+import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 
 export class YoutubeService {
   private interval: number = 300 * 1000; // 5 minutes

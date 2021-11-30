@@ -5,8 +5,8 @@ import {
   MessageEmbed,
 } from 'discord.js';
 import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
-import { PollQuestion, selectionEmojis } from '../../types/poll';
-import { environment } from '../../utils/environment';
+import { PollQuestion, selectionEmojis } from 'Types/poll';
+import { environment } from 'Utils/environment';
 
 @Discord()
 @Permission(false)

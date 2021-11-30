@@ -1,6 +1,6 @@
-import { environment } from '../utils/environment';
-import { Logger } from '../services/logger.service';
-import { DatabaseName, Databases } from '../types/database';
+import { environment } from 'Utils/environment';
+import { Logger } from 'Services/logger.service';
+import { DatabaseName, Databases } from 'Types/database';
 import * as chalk from 'chalk';
 import { InsertOneResult, MongoClient, UpdateResult } from 'mongodb';
 

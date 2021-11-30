@@ -1,9 +1,9 @@
 import { GuildMember, Message, PartialMessage, Role } from 'discord.js';
 import { ArgsOf, Discord, On } from 'discordx';
-import { ReactionService } from '../services/reaction.service';
-import { Reaction, ReactionActions } from '../types/reaction';
-import { environment } from '../utils/environment';
-import Utility from '../utils/utility';
+import { ReactionService } from 'Services/reaction.service';
+import { Reaction, ReactionActions } from 'Types/reaction';
+import { environment } from 'Utils/environment';
+import Utility from 'Utils/utility';
 
 @Discord()
 export abstract class messageReactionAdd {

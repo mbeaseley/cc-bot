@@ -1,5 +1,5 @@
-import { ComplimentModelService } from '../models/compliment-model.service';
-import { ComplimentObject } from '../types/compliment';
+import { ComplimentModelService } from 'Models/compliment-model.service';
+import { ComplimentObject } from 'Types/compliment';
 
 export class ComplimentService {
   private complimentModelService: ComplimentModelService;

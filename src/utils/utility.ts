@@ -1,5 +1,3 @@
-// import { CommandMessage } from 'discordx';
-// import { environment } from './environment';
 import {
   EmbedField,
   Guild,
@@ -116,81 +114,6 @@ export default class Utility {
    */
   static captaliseFirstLetter(value: string): string {
     return value[0].toUpperCase() + value.slice(1);
-  }
-
-  /**
-   * Get string option from command message
-   * @param command
-   * @param indexToRemove
-   * @param joinCharacter
-   * @returns string | string[]
-   */
-  static getOptionFromCommand(
-    command: string,
-    indexToRemove: number,
-    joinCharacter?: string
-  ): string[] | string {
-    const array = command.split(' ');
-    array.splice(0, indexToRemove);
-    return joinCharacter ? array.join(joinCharacter) : array;
-  }
-
-  /**
-   * Gets author
-   * @param command
-   * @returns User
-   */
-  static getAuthor(command: any): User {
-    return command.author;
-  }
-
-  /**
-   * Checks if user is admin
-   * @param command
-   * @returns boolean
-   */
-  static isAdmin(command: any): boolean {
-    const id = this.getAuthor(command)?.id as string;
-    return !!JSON.parse(process.env.ADMINS || '').find((a: string) => a === id);
-  }
-
-  /**
-   * Sends command message response
-   * @param command
-   * @param content
-   * @param type
-   * @param deleteDelay
-   * @returns Promise<Message>
-   */
-  static sendMessage(
-    command: any,
-    content: string | MessageEmbed,
-    type: 'channel' | 'reply' | 'author' = 'channel',
-    deleteDelay?: number
-  ): Promise<Message> {
-    const msg =
-      type === 'channel'
-        ? command.channel.send(content)
-        : type === 'author'
-        ? command.author.send(content)
-        : command.reply(content);
-
-    return deleteDelay
-      ? msg.then((m: any) => m.delete({ timeout: deleteDelay }))
-      : msg;
-  }
-
-  /**
-   * Find emoji
-   * @param guildEmojiManager
-   * @param emojiName
-   * @returns GuildEmoji | undefined
-   */
-  static findEmoji(
-    guildEmojiManager: GuildEmojiManager,
-    emojiName: string
-  ): GuildEmoji | undefined {
-    return guildEmojiManager.cache.find((e) => e.name === emojiName);
   }
 
   /**

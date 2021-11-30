@@ -1,7 +1,6 @@
 import { APIMessage } from '@discordjs/builders/node_modules/discord-api-types/payloads/v9';
 import {
   ButtonInteraction,
-  ClientUser,
   Collection,
   CommandInteraction,
   GuildMember,
@@ -12,7 +11,7 @@ import {
   User,
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
-import Translate from '../../utils/translate';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class ChoosePlayer {

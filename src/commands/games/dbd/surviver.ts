@@ -1,9 +1,9 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
-import { DBDService } from '../../../services/dbd.service';
-import { SurviverBuild } from '../../../types/dbd';
-import Utility from '../../../utils/utility';
-import Translate from '../../../utils/translate';
+import { DBDService } from 'Services/dbd.service';
+import { SurviverBuild } from 'Types/dbd';
+import Utility from 'Utils/utility';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class Surviver {

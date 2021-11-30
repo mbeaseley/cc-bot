@@ -1,5 +1,5 @@
-import { AdviceModelService } from '../models/advice-model.service';
-import { AdviceItem } from '../types/advice';
+import { AdviceModelService } from 'Models/advice-model.service';
+import { AdviceItem } from 'Types/advice';
 
 export class AdviceService {
   private adviceModelService: AdviceModelService;

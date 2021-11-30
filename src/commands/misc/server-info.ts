@@ -8,7 +8,7 @@ import {
   User,
 } from 'discord.js';
 import { Discord, Slash } from 'discordx';
-import Translate from '../../utils/translate';
+import Translate from 'Utils/translate';
 import dayjs = require('dayjs');
 import { APIUser } from '@discordjs/builders/node_modules/discord-api-types';
 

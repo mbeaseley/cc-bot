@@ -1,5 +1,5 @@
-import { DadJokeModelService } from '../models/dad-joke-model.service';
-import { Joke } from '../types/dad-joke';
+import { DadJokeModelService } from 'Models/dad-joke-model.service';
+import { Joke } from 'Types/dad-joke';
 
 export class DadJokeService {
   private dadJokeModelService: DadJokeModelService;

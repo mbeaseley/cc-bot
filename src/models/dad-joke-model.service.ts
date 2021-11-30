@@ -1,5 +1,5 @@
-import { HttpClient } from '../interceptor/http-client';
-import { ApiJokeResponse, Joke } from '../types/dad-joke';
+import { HttpClient } from 'Interceptor/http-client';
+import { ApiJokeResponse, Joke } from 'Types/dad-joke';
 import { AxiosResponse } from 'axios';
 
 export class DadJokeModelService extends HttpClient {

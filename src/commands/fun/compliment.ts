@@ -1,6 +1,6 @@
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { ComplimentService } from '../../services/compliment.service';
+import { ComplimentService } from 'Services/compliment.service';
 
 @Discord()
 export abstract class Compliment {

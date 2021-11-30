@@ -1,5 +1,5 @@
-import { HttpClient } from '../interceptor/http-client';
-import { MemeItem } from '../types/meme';
+import { HttpClient } from 'Interceptor/http-client';
+import { MemeItem } from 'Types/meme';
 import { AxiosResponse } from 'axios';
 
 export class MemeModelService extends HttpClient {

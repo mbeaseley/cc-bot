@@ -1,5 +1,5 @@
-import { AnimalsModelService } from '../models/animal-model.service';
-import { Animal } from '../types/animal';
+import { AnimalsModelService } from 'Models/animal-model.service';
+import { Animal } from 'Types/animal';
 
 export class AnimalsService {
   private animalsModelService: AnimalsModelService;

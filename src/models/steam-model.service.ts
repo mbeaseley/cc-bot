@@ -1,4 +1,4 @@
-import { HttpClient } from '../interceptor/http-client';
+import { HttpClient } from 'Interceptor/http-client';
 import {
   ApiLocationResponseObject,
   ApiPlayerSummaryResponseObject,
@@ -9,8 +9,8 @@ import {
   SteamLocation,
   UserBans,
   VanityUser,
-} from '../types/steam';
-import { environment } from '../utils/environment';
+} from 'Types/steam';
+import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');
 

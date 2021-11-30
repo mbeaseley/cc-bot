@@ -1,6 +1,6 @@
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
-import { AnimalsService } from '../../services/animal.service';
+import { AnimalsService } from 'Services/animal.service';
 
 @Discord()
 export abstract class RedPanda {

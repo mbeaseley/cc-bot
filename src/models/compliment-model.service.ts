@@ -1,5 +1,5 @@
-import { HttpClient } from '../interceptor/http-client';
-import { ComplimentObject } from '../types/compliment';
+import { HttpClient } from 'Interceptor/http-client';
+import { ComplimentObject } from 'Types/compliment';
 import { AxiosResponse } from 'axios';
 
 export class ComplimentModelService extends HttpClient {

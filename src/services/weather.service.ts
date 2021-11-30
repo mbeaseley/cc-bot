@@ -1,5 +1,5 @@
-import { WeatherModelService } from '../models/weather-model.service';
-import { WeatherObject } from '../types/weather';
+import { WeatherModelService } from 'Models/weather-model.service';
+import { WeatherObject } from 'Types/weather';
 
 export class WeatherService {
   private weatherModelService: WeatherModelService;

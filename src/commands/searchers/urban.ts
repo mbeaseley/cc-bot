@@ -1,7 +1,7 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import * as urban from 'urban-dictionary';
-import Translate from '../../utils/translate';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class Urban {

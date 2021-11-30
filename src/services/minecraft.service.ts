@@ -1,6 +1,6 @@
-import { DatabaseService } from './database.service';
-import { ServersCollection } from '../types/database';
-import { McServerDetail } from '../types/minecraft';
+import { DatabaseService } from 'Services/database.service';
+import { ServersCollection } from 'Types/database';
+import { McServerDetail } from 'Types/minecraft';
 
 export class MinecraftService {
   private databaseService: DatabaseService;

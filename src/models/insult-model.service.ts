@@ -1,4 +1,4 @@
-import { HttpClient } from '../interceptor/http-client';
+import { HttpClient } from 'Interceptor/http-client';
 import { AxiosResponse } from 'axios';
 
 export class InsultModelService extends HttpClient {

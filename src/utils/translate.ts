@@ -1,12 +1,12 @@
-import { admin } from '../assets/language/admin';
-import { error } from '../assets/language/error';
-import { fun } from '../assets/language/fun';
-import { games } from '../assets/language/games';
-import { image } from '../assets/language/image';
-import { misc } from '../assets/language/misc';
-import { moderation } from '../assets/language/moderation';
-import { music } from '../assets/language/music';
-import { searchers } from '../assets/language/searchers';
+import { admin } from 'Assets/language/admin';
+import { error } from 'Assets/language/error';
+import { fun } from 'Assets/language/fun';
+import { games } from 'Assets/language/games';
+import { image } from 'Assets/language/image';
+import { misc } from 'Assets/language/misc';
+import { moderation } from 'Assets/language/moderation';
+import { music } from 'Assets/language/music';
+import { searchers } from 'Assets/language/searchers';
 
 export default class Translate {
   /**

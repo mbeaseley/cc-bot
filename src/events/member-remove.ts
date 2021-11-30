@@ -5,8 +5,8 @@ import {
   TextChannel,
 } from 'discord.js';
 import { ArgsOf, Discord, On } from 'discordx';
-import { environment } from '../utils/environment';
-import Translate from '../utils/translate';
+import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class memberRemove {

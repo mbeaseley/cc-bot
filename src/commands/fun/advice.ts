@@ -1,6 +1,6 @@
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { AdviceService } from '../../services/advice.service';
+import { AdviceService } from 'Services/advice.service';
 
 @Discord()
 export abstract class Advice {

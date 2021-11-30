@@ -1,5 +1,5 @@
-import { DatabaseService } from '../services/database.service';
-import { DBDCollections } from '../types/database';
+import { DatabaseService } from 'Services/database.service';
+import { DBDCollections } from 'Types/database';
 import {
   KillerAddon,
   KillerItem,

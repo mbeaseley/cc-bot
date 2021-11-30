@@ -1,8 +1,8 @@
 import { MessageEmbed, CommandInteraction } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { TwitchService } from '../../services/twitch.service';
-import { Followers, Stream, User } from '../../types/twitch';
-import Translate from '../../utils/translate';
+import { TwitchService } from 'Services/twitch.service';
+import { Followers, Stream, User } from 'Types/twitch';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class Twitch {
