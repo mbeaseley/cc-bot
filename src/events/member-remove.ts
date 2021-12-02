@@ -1,7 +1,7 @@
-import { GuildMember, Message, PartialGuildMember, TextChannel } from 'discord.js';
-import { ArgsOf, Discord, On } from 'discordx';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
+import { GuildMember, Message, PartialGuildMember, TextChannel } from 'discord.js';
+import { ArgsOf, Discord, On } from 'discordx';
 
 @Discord()
 export abstract class memberRemove {

@@ -1,7 +1,7 @@
-import { ClientUser, CommandInteraction, EmbedField, MessageEmbed } from 'discord.js';
-import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
 import { environment } from 'Utils/environment';
+import { ClientUser, CommandInteraction, EmbedField, MessageEmbed } from 'discord.js';
+import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
 
 @Discord()
 @Permission(false)

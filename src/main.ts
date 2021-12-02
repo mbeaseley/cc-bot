@@ -1,13 +1,13 @@
 import 'reflect-metadata';
-import path from 'path';
-import chalk from 'chalk';
-import { Guild, Intents, Interaction, Message } from 'discord.js';
-import { Client, Discord } from 'discordx';
-import * as dotenv from 'dotenv';
 import { Logger } from 'Services/logger.service';
 import { YoutubeService } from 'Services/youtube.service';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
+import chalk from 'chalk';
+import { Guild, Intents, Interaction, Message } from 'discord.js';
+import { Client, Discord } from 'discordx';
+import * as dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 

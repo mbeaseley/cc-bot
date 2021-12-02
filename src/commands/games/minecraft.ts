@@ -1,11 +1,11 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
-import { status } from 'minecraft-server-util';
-import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
 import { Logger } from 'Services/logger.service';
 import { MinecraftService } from 'Services/minecraft.service';
 import { McServerDetail, McUrl } from 'Types/minecraft';
 import Translate from 'Utils/translate';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash, SlashOption } from 'discordx';
+import { status } from 'minecraft-server-util';
+import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
 
 @Discord()
 export abstract class Minecraft {

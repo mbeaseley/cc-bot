@@ -18,7 +18,20 @@
     "no-console": 1,
     "import/order": [
       "error",
-      { "newlines-between": "never", "alphabetize": { "order": "asc" }, "groups": ["builtin", "external", "parent", "sibling", "index"] }
+      {
+        "newlines-between": "never",
+        "alphabetize": { "order": "asc" },
+        "groups": [
+          "index",
+          "sibling",
+          "parent",
+          "internal",
+          "external",
+          "builtin",
+          "object",
+          "type"
+        ]
+      }
     ],
     "sort-imports": [
       "error",

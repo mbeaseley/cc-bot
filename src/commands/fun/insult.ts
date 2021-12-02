@@ -1,6 +1,6 @@
+import { InsultService } from 'Services/insult.service';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { InsultService } from 'Services/insult.service';
 
 @Discord()
 export abstract class Insult {

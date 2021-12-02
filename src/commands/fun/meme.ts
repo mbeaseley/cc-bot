@@ -1,7 +1,7 @@
-import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash } from 'discordx';
 import { MemeService } from 'Services/meme.service';
 import { MemeItem } from 'Types/meme';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash } from 'discordx';
 
 @Discord()
 export abstract class Insult {

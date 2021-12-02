@@ -1,6 +1,6 @@
-import { AxiosResponse } from 'axios';
 import { HttpClient } from 'Interceptor/http-client';
 import { MemeItem } from 'Types/meme';
+import { AxiosResponse } from 'axios';
 
 export class MemeModelService extends HttpClient {
   constructor() {

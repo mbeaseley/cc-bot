@@ -1,8 +1,8 @@
-import { CommandInteraction } from 'discord.js';
-import { Discord, Permission, Slash, SlashOption } from 'discordx';
 import { YoutubeService } from 'Services/youtube.service';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
+import { CommandInteraction } from 'discord.js';
+import { Discord, Permission, Slash, SlashOption } from 'discordx';
 
 @Discord()
 @Permission(false)

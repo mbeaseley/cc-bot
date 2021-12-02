@@ -1,3 +1,9 @@
+import { ReactionService } from 'Services/reaction.service';
+import { RulesService } from 'Services/rules.service';
+import { QuestionMessage } from 'Types/question';
+import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
+import Utility from 'Utils/utility';
 import {
   BaseGuildEmojiManager,
   ClientUser,
@@ -8,12 +14,6 @@ import {
   RoleManager
 } from 'discord.js';
 import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
-import { ReactionService } from 'Services/reaction.service';
-import { RulesService } from 'Services/rules.service';
-import { QuestionMessage } from 'Types/question';
-import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
 
 const QUESTION_TYPES = ['rules', 'game roles'];
 

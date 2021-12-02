@@ -1,8 +1,8 @@
-import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
-import { Discord, Permission, Slash, SlashOption } from 'discordx';
 import { ModerationService } from 'Services/moderation.service';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
+import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
+import { Discord, Permission, Slash, SlashOption } from 'discordx';
 
 @Discord()
 @Permission(false)

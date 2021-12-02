@@ -1,9 +1,9 @@
-import { GuildMember, Role } from 'discord.js';
-import { ArgsOf, Discord, On } from 'discordx';
 import { ReactionService } from 'Services/reaction.service';
 import { Reaction } from 'Types/reaction';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
+import { GuildMember, Role } from 'discord.js';
+import { ArgsOf, Discord, On } from 'discordx';
 
 @Discord()
 export abstract class messageReactionRemove {

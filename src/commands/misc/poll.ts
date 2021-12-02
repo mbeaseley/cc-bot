@@ -1,6 +1,6 @@
+import { PollQuestion, selectionEmojis } from 'Types/poll';
 import { ClientUser, CommandInteraction, EmbedField, Message, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { PollQuestion, selectionEmojis } from 'Types/poll';
 
 @Discord()
 export abstract class Poll {

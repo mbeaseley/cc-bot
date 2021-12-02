@@ -1,3 +1,4 @@
+import Translate from 'Utils/translate';
 import {
   ButtonInteraction,
   Collection,
@@ -10,7 +11,6 @@ import {
   User
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
-import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class ChoosePlayer {

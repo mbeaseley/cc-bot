@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios';
-import dayjs = require('dayjs');
 import { HttpClient } from 'Interceptor/http-client';
 import {
   ApiLocationResponseObject,
@@ -13,6 +11,8 @@ import {
   VanityUser
 } from 'Types/steam';
 import { environment } from 'Utils/environment';
+import { AxiosResponse } from 'axios';
+import dayjs = require('dayjs');
 
 export class SteamModelService extends HttpClient {
   /**

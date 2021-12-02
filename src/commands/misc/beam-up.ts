@@ -1,3 +1,6 @@
+import { BeamUpItem } from 'Types/beam-up';
+import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 import {
   ButtonInteraction,
   ClientUser,
@@ -12,9 +15,6 @@ import {
   MessageEmbed
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
-import { BeamUpItem } from 'Types/beam-up';
-import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class BeamUp {

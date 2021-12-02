@@ -1,6 +1,6 @@
+import { DadJokeService } from 'Services/dad-joke.service';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { DadJokeService } from 'Services/dad-joke.service';
 
 @Discord()
 export abstract class DadJoke {

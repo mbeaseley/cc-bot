@@ -1,9 +1,9 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash } from 'discordx';
 import { DBDService } from 'Services/dbd.service';
 import { KillerBuild, KillerItem } from 'Types/dbd';
 import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash } from 'discordx';
 
 const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 

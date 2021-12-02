@@ -1,14 +1,14 @@
-import chalk = require('chalk');
-import dayjs = require('dayjs');
-import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
-import { Client } from 'discordx';
-import Parser from 'rss-parser';
 import { DatabaseService } from 'Services/database.service';
 import { Logger } from 'Services/logger.service';
 import { ServersCollection } from 'Types/database';
 import { Channel, ChannelRssResponse, Video, YoutubeChannel } from 'Types/youtube';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
+import chalk = require('chalk');
+import dayjs = require('dayjs');
+import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Client } from 'discordx';
+import Parser from 'rss-parser';
 
 export class YoutubeService {
   private interval: number = 300 * 1000; // 5 minutes

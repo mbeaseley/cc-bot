@@ -1,3 +1,4 @@
+import Translate from 'Utils/translate';
 import dayjs = require('dayjs');
 import {
   Collection,
@@ -9,7 +10,6 @@ import {
   User
 } from 'discord.js';
 import { Discord, Slash } from 'discordx';
-import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class ServerInfo {

@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios';
-import dayjs = require('dayjs');
 import { HttpClient } from 'Interceptor/http-client';
 import {
   ApiFollowersResponseObject,
@@ -12,6 +10,8 @@ import {
   User
 } from 'Types/twitch';
 import { environment } from 'Utils/environment';
+import { AxiosResponse } from 'axios';
+import dayjs = require('dayjs');
 
 export class TwitchModelService extends HttpClient {
   private _token: Token | undefined;
