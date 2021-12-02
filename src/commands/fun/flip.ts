@@ -1,7 +1,7 @@
-import { APIMessage } from '@discordjs/builders/node_modules/discord-api-types/payloads/v9';
 import {
   ButtonInteraction,
   CommandInteraction,
+  GuildCacheMessage,
   MessageButton,
   MessageActionRow,
   Message
@@ -28,9 +28,7 @@ export abstract class CoinFlip {
    * @param interaction
    */
   @Slash('flip', { description: `Flip a coin` })
-  async init(
-    interaction: CommandInteraction
-  ): Promise<Message<true> | APIMessage | Message<boolean>> {
+  async init(interaction: CommandInteraction): Promise<GuildCacheMessage<any> | void> {
     await interaction.deferReply();
 
     const headsBtn = new MessageButton()

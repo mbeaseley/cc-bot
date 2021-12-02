@@ -10,7 +10,6 @@ import {
 import { Discord, Slash } from 'discordx';
 import Translate from 'Utils/translate';
 import dayjs = require('dayjs');
-import { APIUser } from '@discordjs/builders/node_modules/discord-api-types';
 
 @Discord()
 export abstract class ServerInfo {
@@ -37,7 +36,7 @@ export abstract class ServerInfo {
    * @param user
    * @returns Promise<MessageEmbed>
    */
-  private async createMessage(guild: Guild, user: User | APIUser): Promise<MessageEmbed> {
+  private async createMessage(guild: Guild, user: User): Promise<MessageEmbed> {
     const member = guild.members.cache;
     const iconUrl = guild.iconURL() ?? '';
     const owner = member.find((m) => m.id === guild.ownerId)?.user.tag;
@@ -113,13 +112,15 @@ export abstract class ServerInfo {
     description: 'Get to know this server.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
-    if (!interaction.guild) {
+    const { guild, member } = interaction;
+
+    if (!guild) {
       await interaction.reply('**No guild was found!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
-    const msg = await this.createMessage(interaction.guild, interaction.member.user);
+    const msg = await this.createMessage(guild, member.user as User);
     return interaction.reply({ embeds: [msg] });
   }
 }

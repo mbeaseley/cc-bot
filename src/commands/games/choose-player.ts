@@ -1,8 +1,8 @@
-import { APIMessage } from '@discordjs/builders/node_modules/discord-api-types/payloads/v9';
 import {
   ButtonInteraction,
   Collection,
   CommandInteraction,
+  GuildCacheMessage,
   GuildMember,
   Message,
   MessageActionRow,
@@ -58,7 +58,7 @@ export abstract class ChoosePlayer {
     interaction: CommandInteraction | ButtonInteraction,
     users: Collection<string, GuildMember>,
     msg: MessageEmbed
-  ): Promise<Message<true> | APIMessage | Message<boolean> | void> {
+  ): Promise<GuildCacheMessage<any> | void> {
     if (users.size > 1) {
       await interaction.deferReply();
 
@@ -88,7 +88,7 @@ export abstract class ChoosePlayer {
   })
   async init(
     interaction: CommandInteraction | ButtonInteraction
-  ): Promise<Message<true> | APIMessage | Message<boolean> | void> {
+  ): Promise<GuildCacheMessage<any> | void> {
     this.previousInteraction = interaction;
     let users = await interaction.guild?.members.fetch();
     let user = users?.find((u) => u.id === interaction.member.user.id);
@@ -125,9 +125,7 @@ export abstract class ChoosePlayer {
    * @param interaction
    */
   @ButtonComponent('roll-again-btn')
-  async headsAction(
-    interaction: ButtonInteraction
-  ): Promise<Message<true> | APIMessage | Message<boolean> | void> {
+  async headsAction(interaction: ButtonInteraction): Promise<GuildCacheMessage<any> | void> {
     await this.previousInteraction?.deleteReply();
     return this.init(interaction);
   }

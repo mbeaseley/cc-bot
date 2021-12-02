@@ -1,9 +1,9 @@
-import { APIMessage } from '@discordjs/builders/node_modules/discord-api-types/payloads/v9';
 import {
   ButtonInteraction,
   ClientUser,
   Collection,
   CommandInteraction,
+  GuildCacheMessage,
   GuildChannel,
   GuildChannelManager,
   GuildMember,
@@ -71,9 +71,7 @@ export abstract class BeamUp {
   @Slash('beam-up', {
     description: 'Beam up member to restrictive voice channel!'
   })
-  async init(
-    interaction: CommandInteraction
-  ): Promise<Message<true> | APIMessage | Message<boolean> | void> {
+  async init(interaction: CommandInteraction): Promise<GuildCacheMessage<any> | void> {
     this.previousInteraction = interaction;
     const { member, guild, client } = interaction;
     const members = await guild?.members.fetch();
