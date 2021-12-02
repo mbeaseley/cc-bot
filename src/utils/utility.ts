@@ -1,16 +1,4 @@
-import {
-  EmbedField,
-  Guild,
-  GuildEmoji,
-  GuildEmojiManager,
-  GuildManager,
-  Message,
-  MessageEmbed,
-  MessageEmbedOptions,
-  Role,
-  RoleManager,
-  User
-} from 'discord.js';
+import { EmbedField, Guild, GuildManager, MessageEmbed, Role, RoleManager } from 'discord.js';
 import * as _ from 'underscore';
 
 export default class Utility {
@@ -19,7 +7,7 @@ export default class Utility {
    * @param value
    * @returns
    */
-  static createFieldValue(value: any): any[] {
+  static createFieldValue<T>(value: T[]): any[] {
     return value.map((v: any) => {
       if (typeof v !== 'string' && v.rarity) {
         return `${v.name} (${v.rarity})`;

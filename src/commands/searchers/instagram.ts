@@ -1,8 +1,8 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import Translate from 'Utils/translate';
 import { InstagramService } from 'Services/instagram.service';
 import { InstaUser } from 'Types/instagram';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class Instagram {

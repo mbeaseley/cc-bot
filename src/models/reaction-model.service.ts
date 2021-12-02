@@ -1,6 +1,6 @@
 import { DatabaseService } from 'Services/database.service';
 import { EmojisCollections } from 'Types/database';
-import { Reaction } from 'Types/reaction';
+import { ApiEmojiRole, ApiReactionAction, Reaction } from 'Types/reaction';
 
 export class ReactionModelService {
   private databaseService: DatabaseService;
@@ -36,9 +36,7 @@ export class ReactionModelService {
    * @param res
    * @returns Reaction[]
    */
-  private fromReactionRolesPayload(
-    res: { emoji_name: string; role_name: string; type: string }[]
-  ): Reaction[] {
+  private fromReactionRolesPayload(res: ApiEmojiRole[]): Reaction[] {
     return res.map((r) => {
       return { [r.emoji_name]: r.role_name, type: r.type } as Reaction;
     });
@@ -53,7 +51,10 @@ export class ReactionModelService {
       return Promise.resolve(this.reactionRoles);
     }
 
-    const res = await this.databaseService.get('emojis', EmojisCollections.roles);
+    const res = await this.databaseService.get<any, ApiEmojiRole>(
+      'emojis',
+      EmojisCollections.roles
+    );
     this.reactionRoles = this.fromReactionRolesPayload(res);
     return Promise.resolve(this.reactionRoles);
   }
@@ -83,7 +84,7 @@ export class ReactionModelService {
    * @param res
    * @returns Reaction[]
    */
-  private fromReactionActionsPayload(res: { emoji_name: string; action: string }[]): Reaction[] {
+  private fromReactionActionsPayload(res: ApiReactionAction[]): Reaction[] {
     return res.map((r) => {
       return { [r.emoji_name]: r.action } as Reaction;
     });
@@ -98,7 +99,10 @@ export class ReactionModelService {
       return Promise.resolve(this.reactionActions);
     }
 
-    const res = await this.databaseService.get('emojis', EmojisCollections.actions);
+    const res = await this.databaseService.get<any, ApiReactionAction>(
+      'emojis',
+      EmojisCollections.actions
+    );
     this.reactionActions = this.fromReactionActionsPayload(res);
     return Promise.resolve(this.reactionActions);
   }

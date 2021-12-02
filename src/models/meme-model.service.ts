@@ -1,6 +1,6 @@
+import { AxiosResponse } from 'axios';
 import { HttpClient } from 'Interceptor/http-client';
 import { MemeItem } from 'Types/meme';
-import { AxiosResponse } from 'axios';
 
 export class MemeModelService extends HttpClient {
   constructor() {
@@ -23,6 +23,6 @@ export class MemeModelService extends HttpClient {
    * @returns Promise<MemeItem>
    */
   public async getMeme(): Promise<MemeItem> {
-    return this.getResponse();
+    return (await this.getResponse())?.data;
   }
 }

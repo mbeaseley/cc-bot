@@ -2,9 +2,8 @@ import {
   ButtonInteraction,
   CommandInteraction,
   GuildCacheMessage,
-  MessageButton,
   MessageActionRow,
-  Message
+  MessageButton
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
 

@@ -7,7 +7,6 @@ import {
   GuildChannel,
   GuildChannelManager,
   GuildMember,
-  Message,
   MessageActionRow,
   MessageButton,
   MessageEmbed

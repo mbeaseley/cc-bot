@@ -1,3 +1,5 @@
+import path from 'path';
+import * as Canvas from 'canvas';
 import {
   GuildMember,
   Message,
@@ -6,10 +8,8 @@ import {
   TextChannel
 } from 'discord.js';
 import { ArgsOf, Discord, On } from 'discordx';
-import Translate from 'Utils/translate';
-import * as Canvas from 'canvas';
-import path from 'path';
 import { environment } from 'Utils/environment';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class WelcomeAdd {

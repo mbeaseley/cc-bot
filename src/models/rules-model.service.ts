@@ -1,8 +1,9 @@
+import { GuildEmoji } from 'discord.js';
 import { DatabaseService } from 'Services/database.service';
 import { RulesCollection } from 'Types/database';
 import { RuleItem, RuleType } from 'Types/question';
+import { ApiServerRules } from 'Types/rules';
 import Utility from 'Utils/utility';
-import { GuildEmoji } from 'discord.js';
 
 export class RulesModelService {
   private databaseService: DatabaseService;
@@ -39,7 +40,7 @@ export class RulesModelService {
    * @returns RuleItem[]
    */
   private fromServerPayload(
-    res: { content: string; type: string }[],
+    res: ApiServerRules[],
     acceptEmoji: GuildEmoji | undefined
   ): RuleItem[] {
     let ruleCount = 1;
@@ -79,7 +80,10 @@ export class RulesModelService {
       return Promise.resolve(this.serverRules);
     }
 
-    const res = await this.databaseService.get('rules', RulesCollection.server);
+    const res = await this.databaseService.get<any, ApiServerRules>(
+      'rules',
+      RulesCollection.server
+    );
     this.serverRules = this.fromServerPayload(res, acceptEmoji);
     return this.serverRules;
   }

@@ -42,5 +42,5 @@ export const searchers = {
   youtubeSuccess: '**Channel Id have been set on watchlist!**',
   youtubeError: '**Channel Id have already been set on watchlist!**',
   youtubeAuthor: '{0} new video is live on Youtube!',
-  youtubeDes: '[Watch Now]({0})',
+  youtubeDes: '[Watch Now]({0})'
 };

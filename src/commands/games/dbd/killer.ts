@@ -1,9 +1,9 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
-import { KillerBuild, KillerItem } from 'Types/dbd';
 import { DBDService } from 'Services/dbd.service';
-import Utility from 'Utils/utility';
+import { KillerBuild, KillerItem } from 'Types/dbd';
 import Translate from 'Utils/translate';
+import Utility from 'Utils/utility';
 
 const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 
@@ -62,7 +62,7 @@ export abstract class Killer {
   private createMessage(build: KillerBuild): MessageEmbed {
     const { image, ...b } = { ...build };
 
-    return Utility.createEmbedMessage(b, Translate.find('dbdKillerTitle'), build.image);
+    return Utility.createEmbedMessage(b, Translate.find('dbdKillerTitle'), image);
   }
 
   /**
@@ -75,8 +75,8 @@ export abstract class Killer {
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createKillerBuild(interaction.member.user.id);
 
-    let users = await interaction.guild?.members.fetch();
-    let user = users?.find((u) => u.id === interaction.member.user.id);
+    const users = await interaction.guild?.members.fetch();
+    const user = users?.find((u) => u.id === interaction.member.user.id);
 
     const msg = this.createMessage(build);
 

@@ -1,6 +1,13 @@
 import { DatabaseService } from 'Services/database.service';
 import { DBDCollections } from 'Types/database';
 import {
+  ApiKillerOffering,
+  ApiKillerPerk,
+  ApiKillers,
+  ApiPlayerKillers,
+  ApiSurvivorLoot,
+  ApiSurvivorOffering,
+  ApiSurvivorPerk,
   KillerAddon,
   KillerItem,
   KillerOffering,
@@ -8,7 +15,7 @@ import {
   SurvivorAddon,
   SurvivorLoot,
   SurvivorOffering
-} from '../types/dbd';
+} from 'Types/dbd';
 
 export class DBDModelService {
   private databaseService: DatabaseService;
@@ -49,9 +56,7 @@ export class DBDModelService {
    * @param res
    * @returns PlayerKiller[]
    */
-  private fromPlayerKillerPayload(
-    res: { user_id: string; available_killers: number[] }[]
-  ): PlayerKiller[] {
+  private fromPlayerKillerPayload(res: ApiPlayerKillers[]): PlayerKiller[] {
     return res.map((r) => new PlayerKiller(r.user_id, r.available_killers));
   }
 
@@ -64,7 +69,10 @@ export class DBDModelService {
       return Promise.resolve(this.playerKillers);
     }
 
-    const res = await this.databaseService.get('dbd', DBDCollections.playerKillers);
+    const res = await this.databaseService.get<any, ApiPlayerKillers>(
+      'dbd',
+      DBDCollections.playerKillers
+    );
     this.playerKillers = this.fromPlayerKillerPayload(res);
     return Promise.resolve(this.playerKillers);
   }
@@ -94,14 +102,7 @@ export class DBDModelService {
    * @param res
    * @returns KillerItem[]
    */
-  private fromKillersPayload(
-    res: {
-      id: number;
-      name: string;
-      image: string;
-      addons: { name: string; rarity: string }[];
-    }[]
-  ): KillerItem[] {
+  private fromKillersPayload(res: ApiKillers[]): KillerItem[] {
     return res.map((r) => {
       const k = new KillerItem(r.id, r.name, r.image);
       k.addons = r.addons.map((ra) => new KillerAddon(ra.name, ra.rarity));
@@ -118,7 +119,7 @@ export class DBDModelService {
       return Promise.resolve(this.killers);
     }
 
-    const res = await this.databaseService.get('dbd', DBDCollections.killers);
+    const res = await this.databaseService.get<any, ApiKillers>('dbd', DBDCollections.killers);
     this.killers = this.fromKillersPayload(res);
     return Promise.resolve(this.killers);
   }
@@ -148,7 +149,7 @@ export class DBDModelService {
    * @param res
    * @returns string[]
    */
-  private fromKillerPerksPayload(res: { perk: string }[]): string[] {
+  private fromKillerPerksPayload(res: ApiKillerPerk[]): string[] {
     return res.map((r) => r.perk);
   }
 
@@ -161,7 +162,10 @@ export class DBDModelService {
       return Promise.resolve(this.killerPerks);
     }
 
-    const res = await this.databaseService.get('dbd', DBDCollections.killerPerks);
+    const res = await this.databaseService.get<any, ApiKillerPerk>(
+      'dbd',
+      DBDCollections.killerPerks
+    );
     this.killerPerks = this.fromKillerPerksPayload(res);
     return Promise.resolve(this.killerPerks);
   }
@@ -191,7 +195,7 @@ export class DBDModelService {
    * @param res
    * @returns string[]
    */
-  private fromKillerOfferingsPayload(res: { name: string; rarity: string }[]): KillerOffering[] {
+  private fromKillerOfferingsPayload(res: ApiKillerOffering[]): KillerOffering[] {
     return res.map((r) => new KillerOffering(r.name, r.rarity));
   }
 
@@ -204,7 +208,10 @@ export class DBDModelService {
       return Promise.resolve(this.killerOfferings);
     }
 
-    const res = await this.databaseService.get('dbd', DBDCollections.killerOfferings);
+    const res = await this.databaseService.get<any, ApiKillerOffering>(
+      'dbd',
+      DBDCollections.killerOfferings
+    );
     this.killerOfferings = this.fromKillerOfferingsPayload(res);
     return Promise.resolve(this.killerOfferings);
   }
@@ -234,7 +241,7 @@ export class DBDModelService {
    * @param res
    * @returns string[]
    */
-  private fromSurvivorPerksPayload(res: { perk: string }[]): string[] {
+  private fromSurvivorPerksPayload(res: ApiSurvivorPerk[]): string[] {
     return res.map((r) => r.perk);
   }
 
@@ -247,7 +254,10 @@ export class DBDModelService {
       return Promise.resolve(this.survivorPerks);
     }
 
-    const res = await this.databaseService.get('dbd', DBDCollections.survivorPerks);
+    const res = await this.databaseService.get<any, ApiSurvivorPerk>(
+      'dbd',
+      DBDCollections.survivorPerks
+    );
     this.survivorPerks = this.fromSurvivorPerksPayload(res);
     return Promise.resolve(this.survivorPerks);
   }
@@ -277,13 +287,7 @@ export class DBDModelService {
    * @param res
    * @returns SurvivorLoot[]
    */
-  private fromSurvivorLootPayload(
-    res: {
-      name: string;
-      rarity: string;
-      addons: { name: string; rarity: string }[];
-    }[]
-  ): SurvivorLoot[] {
+  private fromSurvivorLootPayload(res: ApiSurvivorLoot[]): SurvivorLoot[] {
     return res.map((r) => {
       const s = new SurvivorLoot(r.name, r.rarity);
       s.addons = r.addons.map((a) => new SurvivorAddon(a.name, a.rarity));
@@ -300,7 +304,10 @@ export class DBDModelService {
       return Promise.resolve(this.survivorLoot);
     }
 
-    const res = await this.databaseService.get('dbd', DBDCollections.survivorLoots);
+    const res = await this.databaseService.get<any, ApiSurvivorLoot>(
+      'dbd',
+      DBDCollections.survivorLoots
+    );
     this.survivorLoot = this.fromSurvivorLootPayload(res);
     return Promise.resolve(this.survivorLoot);
   }
@@ -330,9 +337,7 @@ export class DBDModelService {
    * @param res
    * @returns SuvivorOffering[]
    */
-  private fromSurvivorOfferingsPayload(
-    res: { name: string; rarity: string }[]
-  ): SurvivorOffering[] {
+  private fromSurvivorOfferingsPayload(res: ApiSurvivorOffering[]): SurvivorOffering[] {
     return res.map((r) => new SurvivorOffering(r.name, r.rarity));
   }
 
@@ -345,7 +350,10 @@ export class DBDModelService {
       return Promise.resolve(this.survivorOfferings);
     }
 
-    const res = await this.databaseService.get('dbd', DBDCollections.survivorOfferings);
+    const res = await this.databaseService.get<any, ApiSurvivorOffering>(
+      'dbd',
+      DBDCollections.survivorOfferings
+    );
     this.survivorOfferings = this.fromSurvivorOfferingsPayload(res);
     return Promise.resolve(this.survivorOfferings);
   }

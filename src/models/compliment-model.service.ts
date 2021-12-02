@@ -1,6 +1,6 @@
+import { AxiosResponse } from 'axios';
 import { HttpClient } from 'Interceptor/http-client';
 import { ComplimentObject } from 'Types/compliment';
-import { AxiosResponse } from 'axios';
 
 export class ComplimentModelService extends HttpClient {
   constructor() {
@@ -23,6 +23,6 @@ export class ComplimentModelService extends HttpClient {
    * @returns Promise<ComplimentObject>
    */
   public async getCompliment(): Promise<ComplimentObject> {
-    return this.getResponse();
+    return (await this.getResponse())?.data;
   }
 }

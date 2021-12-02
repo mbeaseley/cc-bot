@@ -1,17 +1,20 @@
-import { CommandInteraction, MessageAttachment, MessageEmbed } from 'discord.js';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
+import { status } from 'minecraft-server-util';
+import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
+import { Logger } from 'Services/logger.service';
 import { MinecraftService } from 'Services/minecraft.service';
 import { McServerDetail, McUrl } from 'Types/minecraft';
 import Translate from 'Utils/translate';
-import { status } from 'minecraft-server-util';
-import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
 
 @Discord()
 export abstract class Minecraft {
   private minecraftService: MinecraftService;
+  private logger: Logger;
 
   constructor() {
     this.minecraftService = new MinecraftService();
+    this.logger = new Logger();
   }
 
   /**
@@ -35,12 +38,6 @@ export abstract class Minecraft {
    * @param mcUrl
    */
   private createMessage(status: StatusResponse): MessageEmbed {
-    let imageStream: Buffer = Buffer.from('');
-
-    if (status.favicon) {
-      imageStream = Buffer.from(status.favicon.toString().split(',').slice(1).join(','), 'base64');
-    }
-
     return new MessageEmbed()
       .setColor(0x00cc06)
       .setTitle(Translate.find('mcTitle'))
@@ -85,7 +82,7 @@ export abstract class Minecraft {
 
     const res = await status(server.domain, {
       port: server.port || 25565
-    }).catch(() => {});
+    }).catch(() => this.logger.error('**Fail to find server**'));
 
     if (!res) {
       await interaction.reply(Translate.find('mcFormatError'));

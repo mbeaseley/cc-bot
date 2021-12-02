@@ -8,6 +8,10 @@ import { moderation } from 'Assets/language/moderation';
 import { music } from 'Assets/language/music';
 import { searchers } from 'Assets/language/searchers';
 
+interface Translations {
+  [key: string]: string;
+}
+
 export default class Translate {
   /**
    * Find correct translate copy
@@ -16,7 +20,7 @@ export default class Translate {
    * @returns string
    */
   static find(key: string, ...args: string[]): string {
-    const allCopys = {
+    const allCopys: Translations = {
       ...admin,
       ...error,
       ...fun,
@@ -33,7 +37,6 @@ export default class Translate {
       return '';
     }
 
-    /* @ts-ignore */
     let selectedCopy: string = allCopys[selectedKey];
     args?.map((a: string, i: number) => {
       selectedCopy = selectedCopy.replace(`{${i}}`, a);

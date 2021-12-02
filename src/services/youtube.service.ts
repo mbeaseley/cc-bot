@@ -1,12 +1,12 @@
+import chalk = require('chalk');
+import dayjs = require('dayjs');
 import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Client } from 'discordx';
+import Parser from 'rss-parser';
+import { DatabaseService } from 'Services/database.service';
+import { Logger } from 'Services/logger.service';
 import { ServersCollection } from 'Types/database';
 import { Channel, ChannelRssResponse, Video, YoutubeChannel } from 'Types/youtube';
-import { DatabaseService } from 'Services/database.service';
-import dayjs = require('dayjs');
-import { Logger } from 'Services/logger.service';
-import chalk = require('chalk');
-import Parser from 'rss-parser';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
 

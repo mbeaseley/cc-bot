@@ -16,5 +16,5 @@ export const fun = {
   memeFetch: '**:hourglass: Fetching Meme...**',
   noMeme: '**No meme was found!**',
   pollAuthor: '{0} Poll',
-  pollFormat: '**Please use correct formatting**',
+  pollFormat: '**Please use correct formatting**'
 };

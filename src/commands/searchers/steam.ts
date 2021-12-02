@@ -1,8 +1,8 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import Translate from 'Utils/translate';
 import { SteamService } from 'Services/steam.service';
 import { PlayerSummary, UserBans } from 'Types/steam';
+import Translate from 'Utils/translate';
 
 @Discord()
 export abstract class Steam {

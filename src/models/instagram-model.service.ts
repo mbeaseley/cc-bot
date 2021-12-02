@@ -1,6 +1,6 @@
+import { AxiosResponse } from 'axios';
 import { HttpClient } from 'Interceptor/http-client';
 import { ApiInstaUserResponse, InstaUser } from 'Types/instagram';
-import { AxiosResponse } from 'axios';
 
 export class InstagramModelService extends HttpClient {
   /**
@@ -42,7 +42,7 @@ export class InstagramModelService extends HttpClient {
    * @param username
    */
   public async getInstaUser(username: string): Promise<InstaUser> {
-    const res = await this.getResponse(username);
-    return this.fromPayload(res);
+    const { data } = await this.getResponse(username);
+    return this.fromPayload(data);
   }
 }

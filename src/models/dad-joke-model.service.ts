@@ -1,6 +1,6 @@
+import { AxiosResponse } from 'axios';
 import { HttpClient } from 'Interceptor/http-client';
 import { ApiJokeResponse, Joke } from 'Types/dad-joke';
-import { AxiosResponse } from 'axios';
 
 export class DadJokeModelService extends HttpClient {
   constructor() {
@@ -32,7 +32,7 @@ export class DadJokeModelService extends HttpClient {
    * @returns Promise<JokeResponse>
    */
   public async getJoke(): Promise<Joke> {
-    const res = await this.getResponse();
-    return this.fromPayload(res);
+    const { data } = await this.getResponse();
+    return this.fromPayload(data);
   }
 }

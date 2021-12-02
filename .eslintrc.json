@@ -1,36 +1,43 @@
 {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": { "project": "./tsconfig.json", "createDefaultProgram": true },
-    "env": { "es6": true },
-    "ignorePatterns": ["node_modules", "build", "coverage"],
-    "plugins": ["import", "eslint-comments", "functional"],
-    "extends": [
-      "eslint:recommended",
-      "plugin:eslint-comments/recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:import/typescript",
-      "prettier",
-      "prettier/@typescript-eslint"
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": "./tsconfig.json", "createDefaultProgram": true },
+  "ignorePatterns": ["node_modules", "build", "coverage"],
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "no-console": 1,
+    "import/order": [
+      "error",
+      { "newlines-between": "never", "alphabetize": { "order": "asc" } }
     ],
-    "globals": { "BigInt": true, "console": true, "WebAssembly": true },
-    "rules": {
-      "@typescript-eslint/explicit-module-boundary-types": "off",
-      "eslint-comments/disable-enable-pair": [
-        "error",
-        { "allowWholeFile": true }
-      ],
-      "eslint-comments/no-unused-disable": "error",
-      "import/order": [
-        "error",
-        { "newlines-between": "never", "alphabetize": { "order": "asc" } }
-      ],
-      "sort-imports": [
-        "error",
-        { "ignoreDeclarationSort": true, "ignoreCase": true }
-      ],
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-empty-interface": "off",
-      "@typescript-eslint/no-var-requires": "off"
+    "sort-imports": [
+      "error",
+      { "ignoreDeclarationSort": true, "ignoreCase": true }
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "import/no-unresolved": "error"
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        "project": "./tsconfig.json"
+      }
     }
   }
+}

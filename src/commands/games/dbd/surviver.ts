@@ -2,8 +2,8 @@ import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 import { DBDService } from 'Services/dbd.service';
 import { SurviverBuild } from 'Types/dbd';
-import Utility from 'Utils/utility';
 import Translate from 'Utils/translate';
+import Utility from 'Utils/utility';
 
 @Discord()
 export abstract class Surviver {
@@ -56,8 +56,8 @@ export abstract class Surviver {
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createSurviverBuild();
 
-    let users = await interaction.guild?.members.fetch();
-    let user = users?.find((u) => u.id === interaction.member.user.id);
+    const users = await interaction.guild?.members.fetch();
+    const user = users?.find((u) => u.id === interaction.member.user.id);
 
     const msg = this.createMessage(build);
 

@@ -1,8 +1,8 @@
+import { AxiosResponse } from 'axios';
+import dayjs = require('dayjs');
 import { HttpClient } from 'Interceptor/http-client';
 import { ApiResponseObject, WeatherItem, WeatherObject } from 'Types/weather';
 import { environment } from 'Utils/environment';
-import { AxiosResponse } from 'axios';
-import dayjs = require('dayjs');
 
 export class WeatherModelService extends HttpClient {
   /**
@@ -95,7 +95,7 @@ export class WeatherModelService extends HttpClient {
    * @returns Promise WeatherObject
    */
   public async getCurrentWeather(location: string): Promise<WeatherObject> {
-    const res = await this.getCurrentWeatherResponse(location);
-    return this.fromPayload(res);
+    const { data } = await this.getCurrentWeatherResponse(location);
+    return this.fromPayload(data);
   }
 }

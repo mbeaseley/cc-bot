@@ -1,5 +1,5 @@
-import { HttpClient } from 'Interceptor/http-client';
 import { AxiosResponse } from 'axios';
+import { HttpClient } from 'Interceptor/http-client';
 
 export class InsultModelService extends HttpClient {
   constructor() {
@@ -22,6 +22,6 @@ export class InsultModelService extends HttpClient {
    * @returns Promise<string>
    */
   public async getInsult(): Promise<string> {
-    return this.getResponse();
+    return (await this.getResponse())?.data;
   }
 }

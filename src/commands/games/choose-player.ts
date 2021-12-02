@@ -4,7 +4,6 @@ import {
   CommandInteraction,
   GuildCacheMessage,
   GuildMember,
-  Message,
   MessageActionRow,
   MessageButton,
   MessageEmbed,
@@ -90,8 +89,8 @@ export abstract class ChoosePlayer {
     interaction: CommandInteraction | ButtonInteraction
   ): Promise<GuildCacheMessage<any> | void> {
     this.previousInteraction = interaction;
-    let users = await interaction.guild?.members.fetch();
-    let user = users?.find((u) => u.id === interaction.member.user.id);
+    const users = await interaction.guild?.members.fetch();
+    const user = users?.find((u) => u.id === interaction.member.user.id);
 
     if (!user) {
       await interaction.reply('**Sorry, failed to find user!**');
