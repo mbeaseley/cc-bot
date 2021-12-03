@@ -1,3 +1,4 @@
+import { environment } from 'Utils/environment';
 import { EmbedField, Guild, GuildManager, MessageEmbed, Role, RoleManager } from 'discord.js';
 import * as _ from 'underscore';
 
@@ -77,7 +78,7 @@ export default class Utility {
    * @returns Guild
    */
   static getGuild(guilds: GuildManager): Guild | undefined {
-    return guilds.cache.find((g) => g.id === process.env.SERVER);
+    return guilds.cache.find((g) => g.id === environment.server);
   }
 
   /**

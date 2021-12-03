@@ -5,12 +5,8 @@ require('dotenv').config({ path: `.env` });
 interface EnvironmentObject {
   token: string;
   botId: string;
-  botName: string;
-  botThumbnail: string;
   moderatorRoles: Permission[];
   server: string;
-  error: string;
-  commandNotFound: string;
   memberAdd: string;
   memberRemove: string;
   emojiAcceptRules: {
@@ -34,14 +30,10 @@ interface EnvironmentObject {
 export const environment = {
   token: process.env.TOKEN ?? '',
   botId: process.env.BOTID ?? '',
-  botName: process.env.BOTNAME ?? '',
-  botThumbnail: process.env.BOTTHUMBNAIL ?? '',
   moderatorRoles: (process.env.MODROLES ?? '').split(' ').map((id) => {
     return new Permission(id, 'ROLE');
   }),
   server: process.env.SERVER,
-  error: 'I have failed you!',
-  commandNotFound: `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`,
   memberAdd: process.env.MEMBERADD ?? '',
   memberRemove: process.env.MEMBERREMOVE ?? '',
   emojiAcceptRules: {

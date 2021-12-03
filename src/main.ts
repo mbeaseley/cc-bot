@@ -81,7 +81,6 @@ export class Main {
       this.prototype.preFetchAllMessages(guild);
 
       // Bot Actions
-      //todo: check if botName needed
       Main.Client.user?.setActivity(`@${Main.Client.user.username} • /help`, {
         type: 'LISTENING'
       });
