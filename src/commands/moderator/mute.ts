@@ -1,3 +1,4 @@
+import { hasPermission } from 'Guards/has-permission';
 import { ModerationService } from 'Services/moderation.service';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
@@ -6,11 +7,7 @@ import { Discord, Permission, Slash, SlashOption } from 'discordx';
 
 @Discord()
 @Permission(false)
-@Permission({
-  id: environment.moderatorRoles[0],
-  type: 'ROLE',
-  permission: true
-})
+@Permission(...hasPermission(environment.moderatorRoles))
 export abstract class Mute {
   private moderationService: ModerationService;
 

@@ -1,9 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-// declare module 'axios' {
-//   type AxiosResponse<T = any> = Promise<T>;
-// }
-
 export abstract class HttpClient {
   readonly instance: AxiosInstance;
 

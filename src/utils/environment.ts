@@ -1,3 +1,5 @@
+import { Permission } from 'Types/permission';
+
 require('dotenv').config({ path: `.env` });
 
 interface EnvironmentObject {
@@ -5,7 +7,7 @@ interface EnvironmentObject {
   botId: string;
   botName: string;
   botThumbnail: string;
-  moderatorRoles: string[];
+  moderatorRoles: Permission[];
   server: string;
   error: string;
   commandNotFound: string;
@@ -22,8 +24,6 @@ interface EnvironmentObject {
   steamApiKey: string;
   commandBase: string;
   streamsBase: string;
-  eventChannelId: string;
-  eventRoleId: string;
   eventIds: {
     category: string;
     channel: string;
@@ -36,7 +36,9 @@ export const environment = {
   botId: process.env.BOTID ?? '',
   botName: process.env.BOTNAME ?? '',
   botThumbnail: process.env.BOTTHUMBNAIL ?? '',
-  moderatorRoles: (process.env.MODROLES ?? '').split(' ') ?? [],
+  moderatorRoles: (process.env.MODROLES ?? '').split(' ').map((id) => {
+    return new Permission(id, 'ROLE');
+  }),
   server: process.env.SERVER,
   error: 'I have failed you!',
   commandNotFound: `TRY AGAIN! YOU DIDN'T DO IT RIGHT!`,

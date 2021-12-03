@@ -1,3 +1,4 @@
+import { hasPermission } from 'Guards/has-permission';
 import { ReactionService } from 'Services/reaction.service';
 import { RulesService } from 'Services/rules.service';
 import { QuestionMessage } from 'Types/question';
@@ -19,11 +20,7 @@ const QUESTION_TYPES = ['rules', 'game roles'];
 
 @Discord()
 @Permission(false)
-@Permission({
-  id: environment.moderatorRoles[0],
-  type: 'ROLE',
-  permission: true
-})
+@Permission(...hasPermission(environment.moderatorRoles))
 export abstract class CustomQuestion {
   private rulesService: RulesService;
   private reactionService: ReactionService;

@@ -108,7 +108,8 @@ export abstract class messageReactionAdd {
       return this.addRole(member, role);
     }
 
-    const isMod = member.roles.cache.find((r) => environment.moderatorRoles.indexOf(r.id) > -1);
+    const mods = environment.moderatorRoles.map((m) => m.id);
+    const isMod = member.roles.cache.find((r) => mods.indexOf(r.id) > -1);
 
     const reactionActions = await this.reactionService.getReactionActions();
     const choosenAction = this.getChoosenRoleOrAction(

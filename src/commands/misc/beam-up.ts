@@ -87,8 +87,9 @@ export abstract class BeamUp {
       return interaction.deleteReply();
     }
 
+    const mods = environment.moderatorRoles.map((m) => m.id);
     const voiceChannels = members
-      ?.filter((m) => !!m.roles.cache.find((r) => r.id === environment.moderatorRoles[0]))
+      ?.filter((m) => !!m.roles.cache.find((r) => mods.indexOf(r.id) > -1))
       .map((a) => this.findUserChannel(guild?.channels, a))
       .filter(Boolean)
       .filter((c) => !c?.permissionsFor(user).has('CONNECT', false));
@@ -111,7 +112,7 @@ export abstract class BeamUp {
 
     this.beamUpItem = new BeamUpItem(validChannels[0], user);
     const msg = this.createMessage(
-      Translate.find('beamUpDescription', environment.moderatorRoles[0], member.user.id),
+      Translate.find('beamUpDescription', member.user.id),
       this.author,
       client.user ?? undefined
     );
@@ -145,7 +146,7 @@ export abstract class BeamUp {
     const { member, guild } = interaction;
     const members = await guild?.members.fetch();
     const user = members?.find((m) => m.id === member.user.id);
-    return !!user?.roles.cache.find((r) => r.id === environment.moderatorRoles[0]);
+    return !!user?.roles.cache.find((r) => r.id === environment.moderatorRoles[0].id);
   }
 
   /**
