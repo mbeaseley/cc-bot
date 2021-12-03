@@ -1,61 +1,53 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
 import { AdviceService } from 'Services/advice.service';
-import { Logger } from 'Services/logger.service';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import { Message } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash, SlashOption } from 'discordx';
 
-export class Advice {
-  private logger: Logger;
+@Discord()
+export abstract class Advice {
   private adviceService: AdviceService;
 
   constructor() {
-    this.logger = new Logger();
     this.adviceService = new AdviceService();
   }
 
   /**
-   * Display friendly advice
-   * @param command
+   * Create Message for advice command
+   * @param advice
+   * @param user
+   * @returns MessageEmbed
    */
-  @Command('advice')
-  @Description('Send some friendly advice to yourself or a friend')
-  async init(command: CommandMessage): Promise<Message> {
-    try {
-      if (command.deletable) await command.delete();
+  private createMessage(advice: string, user: ClientUser | null): MessageEmbed {
+    return new MessageEmbed()
+      .setAuthor('Advice Command', user?.displayAvatarURL())
+      .setColor('RANDOM')
+      .setDescription(advice);
+  }
 
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('adviceFetch')
-      );
+  /**
+   * Advice Command
+   * @param user
+   * @param interaction
+   */
+  @Slash('advice', {
+    description: `Send some friendly advice to yourself or a friend.`
+  })
+  async init(
+    @SlashOption('user', {
+      description: 'Who do you want to send advice to?'
+    })
+    user: string,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    const { advice } = await this.adviceService.getAdvice();
 
-      const user = Utility.getOptionFromCommand(command.content, 2)?.[0];
-      const givenAdvice = await this.adviceService.getAdvice();
-      await msg.delete();
-
-      if (!givenAdvice?.advice) {
-        return Utility.sendMessage(
-          command,
-          Translate.find('noAdvice'),
-          'channel',
-          5000
-        );
-      }
-
-      return user
-        ? Utility.sendMessage(command, `${user}, ${givenAdvice.advice}`)
-        : Utility.sendMessage(command, givenAdvice.advice, 'reply');
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'advice', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', (e as Error).message),
-        'reply',
-        5000
-      );
+    if (!advice) {
+      await interaction.reply('**No advice was given!**');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
+
+    const adviceString = user ? `${user}, ${advice}` : advice;
+    const msg = this.createMessage(adviceString, interaction.client.user);
+    return interaction.reply({ embeds: [msg] });
   }
 }

@@ -13,9 +13,7 @@ export class RulesService {
    * Fetch Server Rules
    * @returns RuleItem[]
    */
-  public async getServerRules(
-    acceptEmoji: GuildEmoji | undefined
-  ): Promise<RuleItem[]> {
+  public async getServerRules(acceptEmoji: GuildEmoji | undefined): Promise<RuleItem[]> {
     return this.rulesModelService.getServerRules(acceptEmoji);
   }
 }

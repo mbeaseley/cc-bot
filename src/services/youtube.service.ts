@@ -1,31 +1,23 @@
-import { Client } from '@typeit/discord';
 import { DatabaseService } from 'Services/database.service';
+import { Logger } from 'Services/logger.service';
 import { ServersCollection } from 'Types/database';
-import {
-  Channel,
-  ChannelRssResponse,
-  Video,
-  YoutubeChannel,
-} from 'Types/youtube';
+import { Channel, ChannelRssResponse, Video, YoutubeChannel } from 'Types/youtube';
 import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
+import chalk = require('chalk');
 import dayjs = require('dayjs');
 import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Client } from 'discordx';
 import Parser from 'rss-parser';
 
 export class YoutubeService {
   private interval: number = 300 * 1000; // 5 minutes
+  private logger: Logger;
   private databaseService: DatabaseService;
 
   constructor() {
+    this.logger = new Logger();
     this.databaseService = new DatabaseService();
-  }
-
-  /**
-   * Get Channel to message
-   */
-  private getChannel(client: Client): TextChannel {
-    return client.channels.cache.get(environment.streamsBase) as TextChannel;
   }
 
   /**
@@ -63,47 +55,43 @@ export class YoutubeService {
       .setFooter(dayjs().format('DD/MM/YYYY'));
   }
 
-  /**
-   * Checks watchlist and display new video if present
-   * @param client
-   */
   public async check(client: Client): Promise<Message | void> {
     setInterval(async () => {
+      this.logger.info(chalk.bold('Checking channels'));
       const channels = await this.getDBStoredChannels();
-
       const parser = new Parser();
-      channels.forEach(async (channel) => {
+      channels.forEach(async (c) => {
         const res = (await parser.parseURL(
-          `https://www.youtube.com/feeds/videos.xml?channel_id=${channel.channelId}`
+          `https://www.youtube.com/feeds/videos.xml?channel_id=${c.channelId}`
         )) as ChannelRssResponse;
         const channelResponse = this.fromPayload(res);
 
         const latestVideo = channelResponse.items?.[0];
-        if (
-          channel.latestVideoId === latestVideo?.id ||
-          dayjs().diff(latestVideo?.pubDate, 'millisecond') > this.interval
-        ) {
-          return Promise.resolve();
-        } else {
+
+        if (c.latestVideoId !== latestVideo.id) {
           await this.databaseService.update(
             'servers',
             ServersCollection.youtube,
             {
-              channelId: channel.channelId,
+              channelId: c.channelId
             },
             {
-              channelId: channel.channelId,
-              latestVideoId: channelResponse.items[0].id,
+              channelId: c.channelId,
+              latestVideoId: channelResponse.items[0].id
             }
           );
 
-          const textChannel = this.getChannel(client);
-          const message = this.createMessage(
+          const textChannel = client.channels.cache.find(
+            (c) => c.id === environment.streamsBase && c.isText()
+          ) as TextChannel;
+          const msg = this.createMessage(
             channelResponse.items[0],
             (client.user as ClientUser).displayAvatarURL()
           );
-          return textChannel.send(message);
+          return textChannel.send({ embeds: [msg] });
         }
+
+        return Promise.resolve();
       });
     }, this.interval);
   }
@@ -120,7 +108,7 @@ export class YoutubeService {
     }
 
     return this.databaseService.create('servers', ServersCollection.youtube, {
-      channelId,
+      channelId
     });
   }
 }

@@ -1,3 +1,5 @@
+import { MessageEmbed } from 'discord.js';
+
 export class RuleItem {
   content: string;
   type: RuleType;
@@ -10,5 +12,10 @@ export class RuleItem {
 
 export enum RuleType {
   rule = 'rule',
-  copy = 'copy',
+  copy = 'copy'
+}
+
+export interface QuestionMessage {
+  message: MessageEmbed | undefined;
+  emoji: string[] | undefined;
 }

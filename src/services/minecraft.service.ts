@@ -14,9 +14,7 @@ export class MinecraftService {
    * @param guildId
    * @returns Promise<McServerDetail | undefined>
    */
-  public async getServerDetails(
-    guildId: string
-  ): Promise<McServerDetail | undefined> {
+  public async getServerDetails(guildId: string): Promise<McServerDetail | undefined> {
     const res = (await this.databaseService.get(
       'servers',
       ServersCollection.minecraft
@@ -33,21 +31,17 @@ export class MinecraftService {
    * @param domain
    * @param port
    */
-  public async updateServerDetails(
-    guildId: string,
-    domain: string,
-    port: string
-  ): Promise<void> {
+  public async updateServerDetails(guildId: string, domain: string, port: string): Promise<void> {
     return this.databaseService.update(
       'servers',
       ServersCollection.minecraft,
       {
-        guildId,
+        guildId
       },
       {
         guildId,
         domain,
-        port,
+        port
       }
     );
   }
@@ -59,15 +53,11 @@ export class MinecraftService {
    * @param port
    * @returns
    */
-  public async setServerDetails(
-    guildId: string,
-    domain: string,
-    port: string
-  ): Promise<void> {
+  public async setServerDetails(guildId: string, domain: string, port: string): Promise<void> {
     return this.databaseService.create('servers', ServersCollection.minecraft, {
       guildId,
       domain,
-      port,
+      port
     });
   }
 }

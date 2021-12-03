@@ -15,5 +15,5 @@ export const windDirections: WindDirection[] = [
   { name: 'West', min: 258.75, max: 281.24 },
   { name: 'West Northwest', min: 281.25, max: 303.74 },
   { name: 'Northwest', min: 303.75, max: 326.24 },
-  { name: 'North Northwest', min: 326.25, max: 348.74 },
+  { name: 'North Northwest', min: 326.25, max: 348.74 }
 ];

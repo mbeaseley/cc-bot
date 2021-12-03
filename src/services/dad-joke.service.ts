@@ -1,5 +1,5 @@
 import { DadJokeModelService } from 'Models/dad-joke-model.service';
-import { JokeResponse } from 'Types/dadJoke';
+import { Joke } from 'Types/dad-joke';
 
 export class DadJokeService {
   private dadJokeModelService: DadJokeModelService;
@@ -10,9 +10,9 @@ export class DadJokeService {
 
   /**
    * Fetch Joke
-   * @returns Promise<JokeResponse>
+   * @returns Promise<Joke>
    */
-  public async getJoke(): Promise<JokeResponse> {
+  public async getJoke(): Promise<Joke> {
     return this.dadJokeModelService.getJoke();
   }
 }

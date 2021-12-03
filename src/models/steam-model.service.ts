@@ -1,4 +1,4 @@
-import { HttpClient } from 'Interceptor/httpClient';
+import { HttpClient } from 'Interceptor/http-client';
 import {
   ApiLocationResponseObject,
   ApiPlayerSummaryResponseObject,
@@ -8,7 +8,7 @@ import {
   PlayerSummary,
   SteamLocation,
   UserBans,
-  VanityUser,
+  VanityUser
 } from 'Types/steam';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
@@ -20,19 +20,17 @@ export class SteamModelService extends HttpClient {
    * @param endpoint
    * @param queryParams
    */
-  private getResponse = (
+  private getResponse = <T>(
     endpoint: string,
     queryParams: Record<string, string>
-  ): Promise<AxiosResponse<any>> => {
+  ): Promise<AxiosResponse<T>> => {
     const qParams = new URLSearchParams(queryParams);
     return this.instance.get<any>(
-      `http://api.steampowered.com/ISteamUser/` +
-        endpoint +
-        `?${qParams.toString()}`,
+      `http://api.steampowered.com/ISteamUser/` + endpoint + `?${qParams.toString()}`,
       {
         headers: {
-          Accept: 'application/json',
-        },
+          Accept: 'application/json'
+        }
       }
     );
   };
@@ -63,11 +61,14 @@ export class SteamModelService extends HttpClient {
    * @param vanityurl
    */
   public async getVanityUser(vanityurl: string): Promise<VanityUser> {
-    const res = (await this.getResponse('ResolveVanityURL/v0001/', {
-      key: environment.steamApiKey,
-      vanityurl,
-    })) as ApiVanityUserResponseObject;
-    return this.fromVanityUserPayload(res);
+    const { data } = await this.getResponse<ApiVanityUserResponseObject>(
+      'ResolveVanityURL/v0001/',
+      {
+        key: environment.steamApiKey,
+        vanityurl
+      }
+    );
+    return this.fromVanityUserPayload(data);
   }
 
   /**
@@ -115,11 +116,14 @@ export class SteamModelService extends HttpClient {
    * @param steamId
    */
   public async getPlayerSummary(steamId: string): Promise<PlayerSummary> {
-    const res = (await this.getResponse('GetPlayerSummaries/v0002/', {
-      key: environment.steamApiKey,
-      steamids: steamId,
-    })) as ApiPlayerSummaryResponseObject;
-    return this.fromPlayerSummaryPayload(res);
+    const { data } = await this.getResponse<ApiPlayerSummaryResponseObject>(
+      'GetPlayerSummaries/v0002/',
+      {
+        key: environment.steamApiKey,
+        steamids: steamId
+      }
+    );
+    return this.fromPlayerSummaryPayload(data);
   }
 
   /**
@@ -134,10 +138,7 @@ export class SteamModelService extends HttpClient {
    */
   fromLocationPayload(res: ApiLocationResponseObject[]): SteamLocation[] {
     return (
-      res?.map(
-        (r) =>
-          new SteamLocation(r.countrycode, r.statecode, r.cityid, r.cityname)
-      ) || []
+      res?.map((r) => new SteamLocation(r.countrycode, r.statecode, r.cityid, r.cityname)) || []
     );
   }
 
@@ -154,8 +155,8 @@ export class SteamModelService extends HttpClient {
       `https://steamcommunity.com/actions/QueryLocations/${countryCode}/${stateCode}`,
       {
         headers: {
-          Accept: 'application/json',
-        },
+          Accept: 'application/json'
+        }
       }
     );
   };
@@ -165,20 +166,17 @@ export class SteamModelService extends HttpClient {
    * @param playerSummary
    * @returns PlayerSummary
    */
-  public async getPlayerLocation(
-    playerSummary: PlayerSummary
-  ): Promise<PlayerSummary> {
+  public async getPlayerLocation(playerSummary: PlayerSummary): Promise<PlayerSummary> {
     if (!playerSummary?.countryCode || !playerSummary?.stateCode) {
       return playerSummary;
     }
 
-    const res = await this.getPossibleLocations(
+    const { data } = await this.getPossibleLocations(
       playerSummary.countryCode,
       playerSummary.stateCode
     );
-    const locations = this.fromLocationPayload(res);
-    playerSummary.location =
-      locations.find((l) => l.cityId === playerSummary.cityId) || undefined;
+    const locations = this.fromLocationPayload(data);
+    playerSummary.location = locations.find((l) => l.cityId === playerSummary.cityId) || undefined;
 
     return Promise.resolve(playerSummary);
   }
@@ -215,10 +213,10 @@ export class SteamModelService extends HttpClient {
    * @param steamId
    */
   public async getUserBans(steamId: string): Promise<UserBans> {
-    const res = (await this.getResponse('GetPlayerBans/v1/', {
+    const { data } = await this.getResponse<ApiUserBanResponseObject>('GetPlayerBans/v1/', {
       key: environment.steamApiKey,
-      steamids: steamId,
-    })) as ApiUserBanResponseObject;
-    return this.fromUserBansPayload(res);
+      steamids: steamId
+    });
+    return this.fromUserBansPayload(data);
   }
 }

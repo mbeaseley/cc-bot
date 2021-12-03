@@ -1,25 +1,18 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Logger } from 'Services/logger.service';
 import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import dayjs from 'dayjs';
+import dayjs = require('dayjs');
 import {
   Collection,
+  CommandInteraction,
   Guild,
   GuildMember,
-  Message,
   MessageEmbed,
   PresenceStatus,
-  User,
+  User
 } from 'discord.js';
+import { Discord, Slash } from 'discordx';
 
-export class ServerInfo {
-  private logger: Logger;
-
-  constructor() {
-    this.logger = new Logger();
-  }
-
+@Discord()
+export abstract class ServerInfo {
   /**
    * Get size of member proportion
    * @param member
@@ -32,7 +25,7 @@ export class ServerInfo {
   ): number {
     return (
       ['bot', 'human'].indexOf(status) < 0
-        ? member.filter((m) => m.presence.status === status)
+        ? member.filter((m) => m.presence?.status === status)
         : member.filter((m) => (status === 'bot' ? m.user.bot : !m.user.bot))
     ).size;
   }
@@ -46,58 +39,45 @@ export class ServerInfo {
   private async createMessage(guild: Guild, user: User): Promise<MessageEmbed> {
     const member = guild.members.cache;
     const iconUrl = guild.iconURL() ?? '';
-    const owner = member.find((m) => m.id === guild.ownerID)?.user.tag;
-    const roles = [
-      ...guild.roles.cache.sort((a, b) => b.position - a.position).values(),
-    ];
+    const owner = member.find((m) => m.id === guild.ownerId)?.user.tag;
+    const roles = [...guild.roles.cache.sort((a, b) => b.position - a.position).values()];
 
     const fields = [
       {
         name: Translate.find('serverName'),
         value: `\`${guild.name}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverOwner'),
         value: `\`${owner}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverId'),
         value: `\`${guild.id}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverDate'),
         value: dayjs(guild.createdAt).format('DD/MM/YYYY'),
-        inline: true,
-      },
-      {
-        name: Translate.find('serverRegion'),
-        value: `\`${guild.region}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverVerification'),
         value: `\`${guild.verificationLevel}\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverCount', guild.memberCount.toString()),
-        value: `\`${this.filterMembers(
-          member,
-          'online'
-        )} online, ${this.filterMembers(
+        value: `\`${this.filterMembers(member, 'online')} online, ${this.filterMembers(
           member,
           'idle'
-        )} idle and  ${this.filterMembers(
-          member,
-          'dnd'
-        )} DnD \n ${this.filterMembers(
+        )} idle and  ${this.filterMembers(member, 'dnd')} DnD \n ${this.filterMembers(
           member,
           'bot'
         )} bots, ${this.filterMembers(member, 'human')} humans\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverFeature'),
@@ -106,15 +86,13 @@ export class ServerInfo {
             ? 'NONE'
             : guild.features.toString().toLowerCase().replace(/,/g, ', ')
         }\``,
-        inline: true,
+        inline: true
       },
       {
         name: Translate.find('serverRoles', guild.roles.cache.size.toString()),
-        value: `${roles.join(', ')}${
-          roles.length != guild.roles.cache.size ? '...' : '.'
-        }`,
-        inline: true,
-      },
+        value: `${roles.join(', ')}${roles.length != guild.roles.cache.size ? '...' : '.'}`,
+        inline: true
+      }
     ];
 
     return new MessageEmbed()
@@ -123,43 +101,26 @@ export class ServerInfo {
       .setThumbnail(iconUrl)
       .addFields(fields)
       .setTimestamp()
-      .setFooter(Translate.find('serverRequest', user.tag));
+      .setFooter(Translate.find('serverRequest', user.username));
   }
 
   /**
-   * Init
-   * @param command
+   * Server info command
+   * @param interaction
    */
-  @Command('serverinfo')
-  @Description('Get server info')
-  async init(command: CommandMessage): Promise<void | Message> {
-    try {
-      if (command.deletable) await command.delete();
+  @Slash('server-info', {
+    description: 'Get to know this server.'
+  })
+  async init(interaction: CommandInteraction): Promise<void> {
+    const { guild, member } = interaction;
 
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('serverFetch')
-      );
-
-      if (!command.guild) {
-        return;
-      }
-
-      const message = await this.createMessage(command.guild, command.author);
-      await msg.delete();
-
-      return command.channel.send(message);
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'serverinfo', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', (e as Error).message),
-        'channel',
-        5000
-      );
+    if (!guild) {
+      await interaction.reply('**No guild was found!**');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
+
+    const msg = await this.createMessage(guild, member.user as User);
+    return interaction.reply({ embeds: [msg] });
   }
 }

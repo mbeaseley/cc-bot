@@ -1,4 +1,4 @@
-import { HttpClient } from 'Interceptor/httpClient';
+import { HttpClient } from 'Interceptor/http-client';
 import { AdviceItem, ApiAdviceResponse } from 'Types/advice';
 import { AxiosResponse } from 'axios';
 
@@ -12,13 +12,9 @@ export class AdviceModelService extends HttpClient {
    * @param res
    * @returns AdviceItem
    */
-  private fromPayload(res: ApiAdviceResponse): AdviceItem | undefined {
-    const slip = res.slip;
-    if (slip) {
-      return new AdviceItem(slip.id, slip.advice);
-    } else {
-      return undefined;
-    }
+  private fromPayload(data: ApiAdviceResponse): AdviceItem {
+    const { slip } = data;
+    return new AdviceItem(slip.id, slip.advice);
   }
 
   /**
@@ -28,16 +24,16 @@ export class AdviceModelService extends HttpClient {
   private getResponse = (): Promise<AxiosResponse<ApiAdviceResponse>> =>
     this.instance.get('https://api.adviceslip.com/advice', {
       headers: {
-        Accept: 'application/json',
-      },
+        Accept: 'application/json'
+      }
     });
 
   /**
    * Get single advice
-   * @returns Promise<AdviceItem | undefined>
+   * @returns Promise<AdviceItem>
    */
-  public async getAdvice(): Promise<AdviceItem | undefined> {
-    const res = await this.getResponse();
-    return this.fromPayload(res);
+  public async getAdvice(): Promise<AdviceItem> {
+    const { data } = await this.getResponse();
+    return this.fromPayload(data);
   }
 }

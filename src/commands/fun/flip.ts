@@ -1,56 +1,74 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Logger } from 'Services/logger.service';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import { Message } from 'discord.js';
+import {
+  ButtonInteraction,
+  CommandInteraction,
+  GuildCacheMessage,
+  MessageActionRow,
+  MessageButton
+} from 'discord.js';
+import { ButtonComponent, Discord, Slash } from 'discordx';
 
-export class coinFlip {
-  private logger: Logger;
+type Coin = 'Heads' | 'Tails';
 
-  constructor() {
-    this.logger = new Logger();
+@Discord()
+export abstract class CoinFlip {
+  /**
+   * Create message
+   * @param guess
+   * @param result
+   * @returns string
+   */
+  createMessage(guess: Coin, result: Coin): string {
+    const guessResult = `${result === guess ? 'You win!' : 'You lose!'}`;
+    return `**${result}, ${guessResult} :coin:**`;
   }
 
   /**
-   * Coin flip event
-   * @returns
+   * Coin flip Command
+   * @param interaction
    */
-  flipCoin(): string {
-    const coinFlip = Math.floor(Math.random() * 2);
-    return Translate.find(coinFlip === 0 ? 'tails' : 'heads');
+  @Slash('flip', { description: `Flip a coin` })
+  async init(interaction: CommandInteraction): Promise<GuildCacheMessage<any> | void> {
+    await interaction.deferReply();
+
+    const headsBtn = new MessageButton()
+      .setLabel('Heads')
+      .setEmoji('🪙')
+      .setStyle('PRIMARY')
+      .setCustomId('heads-btn');
+
+    const tailsBtn = new MessageButton()
+      .setLabel('Tails')
+      .setEmoji('🪙')
+      .setStyle('SECONDARY')
+      .setCustomId('tails-btn');
+
+    const row = new MessageActionRow().addComponents([headsBtn, tailsBtn]);
+
+    return interaction.editReply({
+      content: `Heads or Tails?`,
+      components: [row]
+    });
   }
 
   /**
-   * Coin flip command
-   * @param command
+   * Heads Button Interaction
+   * @param interaction
    */
-  @Command('flip')
-  @Description('Flip a coin')
-  async init(command: CommandMessage): Promise<NodeJS.Timeout | Message> {
-    try {
-      if (command.deletable) await command.delete();
+  @ButtonComponent('heads-btn')
+  headsAction(interaction: ButtonInteraction): Promise<void> {
+    const coinFlip = Math.floor(Math.random() * 2) === 0 ? 'Heads' : 'Tails';
+    const res = this.createMessage('Heads', coinFlip);
+    return interaction.reply(res);
+  }
 
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('flipFetch')
-      );
-      await msg.delete({ timeout: 1000 });
-
-      const result = this.flipCoin();
-      return setTimeout(() => {
-        return Utility.sendMessage(command, Translate.find('flip', result));
-      }, 1000);
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'flip', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', (e as Error).message),
-        'channel',
-        5000
-      );
-    }
+  /**
+   * Tails Button Interaction
+   * @param interaction
+   */
+  @ButtonComponent('tails-btn')
+  tailsAction(interaction: ButtonInteraction): Promise<void> {
+    const coinFlip = Math.floor(Math.random() * 2) === 0 ? 'Heads' : 'Tails';
+    const res = this.createMessage('Tails', coinFlip);
+    return interaction.reply(res);
   }
 }

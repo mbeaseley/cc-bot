@@ -12,9 +12,7 @@ export class ReactionService {
    * Fetch Reaction Roles
    * @returns Reaction[]
    */
-  public async getReactionRoles(
-    type?: 'user' | 'social' | 'game'
-  ): Promise<Reaction[]> {
+  public async getReactionRoles(type?: 'user' | 'social' | 'game'): Promise<Reaction[]> {
     const roles = await this.reactionModelService.getReactionRoles();
     return type ? roles.filter((r) => r.type === type) : roles;
   }

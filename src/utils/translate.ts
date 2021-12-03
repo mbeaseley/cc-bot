@@ -1,12 +1,16 @@
-import { admin } from 'Language/admin';
-import { error } from 'Language/error';
-import { fun } from 'Language/fun';
-import { games } from 'Language/games';
-import { image } from 'Language/image';
-import { misc } from 'Language/misc';
-import { moderation } from 'Language/moderation';
-import { music } from 'Language/music';
-import { searchers } from 'Language/searchers';
+import { admin } from 'Assets/language/admin';
+import { error } from 'Assets/language/error';
+import { fun } from 'Assets/language/fun';
+import { games } from 'Assets/language/games';
+import { image } from 'Assets/language/image';
+import { misc } from 'Assets/language/misc';
+import { moderation } from 'Assets/language/moderation';
+import { music } from 'Assets/language/music';
+import { searchers } from 'Assets/language/searchers';
+
+interface Translations {
+  [key: string]: string;
+}
 
 export default class Translate {
   /**
@@ -16,7 +20,7 @@ export default class Translate {
    * @returns string
    */
   static find(key: string, ...args: string[]): string {
-    const allCopys = {
+    const allCopys: Translations = {
       ...admin,
       ...error,
       ...fun,
@@ -25,7 +29,7 @@ export default class Translate {
       ...misc,
       ...moderation,
       ...music,
-      ...searchers,
+      ...searchers
     };
     const selectedKey = Object.keys(allCopys).find((k) => k === key);
 
@@ -33,7 +37,7 @@ export default class Translate {
       return '';
     }
 
-    let selectedCopy = allCopys[selectedKey];
+    let selectedCopy: string = allCopys[selectedKey];
     args?.map((a: string, i: number) => {
       selectedCopy = selectedCopy.replace(`{${i}}`, a);
     });
