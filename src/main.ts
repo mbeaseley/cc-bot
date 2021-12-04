@@ -3,11 +3,11 @@ import { Logger } from 'Services/logger.service';
 import { YoutubeService } from 'Services/youtube.service';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
+import { importx } from '@discordx/importer';
 import chalk from 'chalk';
 import { Guild, Intents, Interaction, Message } from 'discord.js';
 import { Client, Discord } from 'discordx';
 import * as dotenv from 'dotenv';
-import path from 'path';
 
 dotenv.config();
 
@@ -36,9 +36,6 @@ export class Main {
    */
   static async start(): Promise<void> {
     Main.Client = new Client({
-      simpleCommand: {
-        prefix: '!'
-      },
       intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
@@ -54,15 +51,12 @@ export class Main {
         Intents.FLAGS.GUILD_MEMBERS,
         Intents.FLAGS.GUILD_VOICE_STATES
       ],
-      classes: [
-        path.join(__dirname, 'commands', '**/*.{ts,js}'),
-        path.join(__dirname, 'events', '**/*.{ts,js}')
-      ],
       botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
       silent: true
     });
 
-    Main.Client.login(environment.token ?? '');
+    await importx(...[`${__dirname}/commands/**/*.{ts,js}`, `${__dirname}/events/**/*.{ts,js}`]);
+    await Main.Client.login(environment.token ?? '');
 
     Main.Client.once('ready', async () => {
       Main.logger.info('info check');
