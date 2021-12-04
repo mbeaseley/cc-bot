@@ -7,7 +7,7 @@ import { Discord, Permission, Slash, SlashOption } from 'discordx';
 
 @Discord()
 @Permission(false)
-@Permission(...hasPermission(environment.moderatorRoles))
+@Permission(hasPermission(environment.moderatorRoles))
 export abstract class Youtube {
   private youtubeService: YoutubeService;
 

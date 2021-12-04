@@ -1,8 +1,13 @@
 import { Permission } from 'Types/permission';
-import { IPermissions } from 'discordx';
+import { ApplicationCommandPermissions } from 'discord.js';
 
-export const hasPermission = (items: Permission[]): IPermissions[] => {
-  return items.map((p) => {
-    return { id: p.id, type: p.type, permission: true };
+/**
+ * Convert values into correct format
+ * @param value
+ * @returns ApplicationCommandPermissions[]
+ */
+export const hasPermission = (value: Permission[]): ApplicationCommandPermissions[] => {
+  return value.map((v) => {
+    return { id: v.id, permission: true, type: v.type };
   });
 };

@@ -20,7 +20,7 @@ const QUESTION_TYPES = ['rules', 'game roles'];
 
 @Discord()
 @Permission(false)
-@Permission(...hasPermission(environment.moderatorRoles))
+@Permission(hasPermission(environment.moderatorRoles))
 export abstract class CustomQuestion {
   private rulesService: RulesService;
   private reactionService: ReactionService;
