@@ -1,4 +1,4 @@
-import { HttpClient } from 'Interceptor/httpClient';
+import { HttpClient } from 'Interceptor/http-client';
 import { ApiResponseObject, WeatherItem, WeatherObject } from 'Types/weather';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
@@ -15,7 +15,7 @@ export class WeatherModelService extends HttpClient {
     w.id = res.id;
     w.coord = {
       lon: res.coord?.lon,
-      lat: res.coord?.lat,
+      lat: res.coord?.lat
     };
     const weather = res.weather[0];
     const weatherItem = new WeatherItem(
@@ -32,29 +32,29 @@ export class WeatherModelService extends HttpClient {
       tempMin: res.main?.temp_min,
       tempMax: res.main?.temp_max,
       pressure: res.main?.pressure,
-      humidity: res.main?.humidity,
+      humidity: res.main?.humidity
     };
     w.visibility = res.visibility;
     w.wind = {
       speed: res.wind?.speed,
       degree: res.wind?.deg,
-      gust: res.wind?.gust,
+      gust: res.wind?.gust
     };
     w.clouds = {
-      all: res.clouds?.all,
+      all: res.clouds?.all
     };
 
     if (res.rain) {
       w.rains = {
         oneHour: res.rain['1hr'],
-        threeHour: res.rain['3hr'],
+        threeHour: res.rain['3hr']
       };
     }
 
     if (res.snow) {
       w.snow = {
         oneHour: res.snow['1hr'],
-        threeHour: res.snow['3hr'],
+        threeHour: res.snow['3hr']
       };
     }
     w.timeOfDate = dayjs(res.dt * 1e3);
@@ -63,7 +63,7 @@ export class WeatherModelService extends HttpClient {
       id: res.sys?.id,
       country: res.sys?.country,
       sunrise: dayjs(res.sys?.sunrise * 1e3),
-      sunset: dayjs(res.sys?.sunset * 1e3),
+      sunset: dayjs(res.sys?.sunset * 1e3)
     };
     const plusMinus = res.timezone / 3600 > 0 ? '+' : '';
     w.timezone = `UTC${plusMinus}${res.timezone / 3600}`;
@@ -79,26 +79,23 @@ export class WeatherModelService extends HttpClient {
   private getCurrentWeatherResponse = (
     location: string
   ): Promise<AxiosResponse<ApiResponseObject>> =>
-    this.instance.get<ApiResponseObject>(
-      'https://api.openweathermap.org/data/2.5/weather',
-      {
-        headers: {
-          Accept: 'application/json',
-        },
-        params: {
-          appid: environment.weatherAppId,
-          q: location,
-          units: 'metric',
-        },
+    this.instance.get<ApiResponseObject>('https://api.openweathermap.org/data/2.5/weather', {
+      headers: {
+        Accept: 'application/json'
+      },
+      params: {
+        appid: environment.weatherAppId,
+        q: location,
+        units: 'metric'
       }
-    );
+    });
 
   /**
    * Get Current Weather
    * @returns Promise WeatherObject
    */
   public async getCurrentWeather(location: string): Promise<WeatherObject> {
-    const res = await this.getCurrentWeatherResponse(location);
-    return this.fromPayload(res);
+    const { data } = await this.getCurrentWeatherResponse(location);
+    return this.fromPayload(data);
   }
 }

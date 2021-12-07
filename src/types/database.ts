@@ -12,21 +12,21 @@ export enum DBDCollections {
   playerKillers = 'player_killers',
   survivorLoots = 'survivor_loots',
   survivorOfferings = 'survivor_offerings',
-  survivorPerks = 'survivor_perks',
+  survivorPerks = 'survivor_perks'
 }
 
 export enum EmojisCollections {
   actions = 'actions',
-  roles = 'roles',
+  roles = 'roles'
 }
 
 export enum RulesCollection {
-  server = 'server',
+  server = 'server'
 }
 
 export enum ServersCollection {
   minecraft = 'minecraft',
-  youtube = 'youtube',
+  youtube = 'youtube'
 }
 
 export type DatabaseName = keyof Databases;

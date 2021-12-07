@@ -1,81 +1,53 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
 import { DadJokeService } from 'Services/dad-joke.service';
-import { Logger } from 'Services/logger.service';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import { Message } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash, SlashOption } from 'discordx';
 
-export class DadJoke {
+@Discord()
+export abstract class DadJoke {
   private dadJokeService: DadJokeService;
-  private logger: Logger;
 
   constructor() {
     this.dadJokeService = new DadJokeService();
-    this.logger = new Logger();
   }
 
   /**
-   * Create message
-   * @param command
-   * @param message
+   * Create Message for dad joke command
+   * @param joke
+   * @param user
+   * @returns MessageEmbed
    */
-  private createMessage = (
-    command: CommandMessage,
-    message: string
-  ): string => {
-    const commandArray = Utility.getOptionFromCommand(command.content, 2);
-    const string = commandArray?.[commandArray.length - 1];
-
-    return string?.startsWith('<') && string?.endsWith('>')
-      ? string.concat(', ', message)
-      : message;
-  };
+  private createMessage(joke: string, user: ClientUser | null): MessageEmbed {
+    return new MessageEmbed()
+      .setAuthor('Dad Joke Command', user?.displayAvatarURL())
+      .setColor('RANDOM')
+      .setDescription(joke);
+  }
 
   /**
-   * @name jokeInit
-   * @param command
-   * @description Display joke
-   * @returns
+   * Dad joke Command
+   * @param user
+   * @param interaction
    */
-  @Command('joke')
-  @Description('Make your friends laugh with a dad joke')
-  async init(command: CommandMessage): Promise<Message> {
-    try {
-      if (command.deletable) await command.delete();
+  @Slash('joke', {
+    description: `Make your friends laugh with a dad joke.`
+  })
+  async init(
+    @SlashOption('user', {
+      description: 'Who do you want to send a joke to?'
+    })
+    user: string,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    const { joke, delivery } = await this.dadJokeService.getJoke();
 
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('jokeFetch')
-      );
-
-      const res = await this.dadJokeService.getJoke();
-      await msg.delete();
-
-      if (!res?.joke) {
-        return Utility.sendMessage(
-          command,
-          Translate.find('noJoke'),
-          'channel',
-          5000
-        );
-      }
-
-      const message = this.createMessage(command, res.joke);
-
-      return message.startsWith('<')
-        ? Utility.sendMessage(command, message)
-        : Utility.sendMessage(command, message, 'reply');
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'joke', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', 'joke', (e as Error).message),
-        'channel',
-        5000
-      );
+    if (!joke) {
+      await interaction.reply('**No dad joke was given!**');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
+
+    const jokeString = user ? `${user}, ${joke}\n${delivery ?? ''}` : `${joke}\n${delivery ?? ''}`;
+    const msg = this.createMessage(jokeString, interaction.client.user);
+    return interaction.reply({ embeds: [msg] });
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from 'Interceptor/httpClient';
+import { HttpClient } from 'Interceptor/http-client';
 import { ApiInstaUserResponse, InstaUser } from 'Types/instagram';
 import { AxiosResponse } from 'axios';
 
@@ -30,24 +30,19 @@ export class InstagramModelService extends HttpClient {
    * @param username
    * @returns Promise<ApiInstaUserResponse>
    */
-  private getResponse = (
-    username: string
-  ): Promise<AxiosResponse<ApiInstaUserResponse>> =>
-    this.instance.get<ApiInstaUserResponse>(
-      `https://www.instagram.com/${username}/feed/?__a=1`,
-      {
-        headers: {
-          Accept: 'application/json',
-        },
+  private getResponse = (username: string): Promise<AxiosResponse<ApiInstaUserResponse>> =>
+    this.instance.get<ApiInstaUserResponse>(`https://www.instagram.com/${username}/feed/?__a=1`, {
+      headers: {
+        Accept: 'application/json'
       }
-    );
+    });
 
   /**
    * Get Insta User
    * @param username
    */
   public async getInstaUser(username: string): Promise<InstaUser> {
-    const res = await this.getResponse(username);
-    return this.fromPayload(res);
+    const { data } = await this.getResponse(username);
+    return this.fromPayload(data);
   }
 }

@@ -1,73 +1,46 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
-import { AnimalsService } from 'Services/animals.service';
-import { Logger } from 'Services/logger.service';
-import { Animal } from 'Types/animal';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import { ClientUser, Message, MessageEmbed } from 'discord.js';
+import { AnimalsService } from 'Services/animal.service';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash } from 'discordx';
 
-export class Cat {
-  private animalsService: AnimalsService;
-  private logger: Logger;
+@Discord()
+export abstract class Cat {
+  private animalService: AnimalsService;
 
   constructor() {
-    this.animalsService = new AnimalsService();
-    this.logger = new Logger();
+    this.animalService = new AnimalsService();
   }
 
   /**
-   * Create message
-   * @param command
-   * @param meme
+   * Create Message for cats command
+   * @param cat
+   * @param user
    * @returns MessageEmbed
    */
-  private createMessage(animal: Animal, user: ClientUser | null): MessageEmbed {
+  private createMessage(cat: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setColor(25600)
-      .setAuthor(Translate.find('catAuthor'), user?.displayAvatarURL())
-      .setImage(animal.link || '');
+      .setAuthor('Cat Command', user?.displayAvatarURL())
+      .setColor('RANDOM')
+      .setImage(cat);
   }
 
   /**
-   * Cat Init
-   * @param command
+   * Cats Command
+   * @param user
+   * @param interaction
    */
-  @Command('cat')
-  @Description('Image of a cat?')
-  async init(command: CommandMessage): Promise<Message> {
-    try {
-      if (command.deletable) await command.delete();
+  @Slash('cat', {
+    description: `Image of a cat?`
+  })
+  async init(interaction: CommandInteraction): Promise<void> {
+    const { link } = await this.animalService.getCat();
 
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('catFetch')
-      );
-
-      const res = await this.animalsService.getCat();
-      await msg.delete();
-
-      if (!res?.link) {
-        return Utility.sendMessage(
-          command,
-          Translate.find('noCat'),
-          'channel',
-          5000
-        );
-      }
-
-      const message = this.createMessage(res, command.client.user);
-      return Utility.sendMessage(command, message);
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'cat', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', (e as Error).message),
-        'channel',
-        5000
-      );
+    if (!link) {
+      await interaction.reply('**No cat was given!**');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
+
+    const msg = this.createMessage(link, interaction.client.user);
+    return interaction.reply({ embeds: [msg] });
   }
 }

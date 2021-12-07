@@ -1,75 +1,39 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Logger } from 'Services/logger.service';
+import { hasPermission } from 'Guards/has-permission';
 import { YoutubeService } from 'Services/youtube.service';
+import { environment } from 'Utils/environment';
 import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import { Message } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
+import { Discord, Permission, Slash, SlashOption } from 'discordx';
 
-export class Youtube {
-  private logger: Logger;
-  private youtubeService = new YoutubeService();
+@Discord()
+@Permission(false)
+@Permission(hasPermission(environment.moderatorRoles))
+export abstract class Youtube {
+  private youtubeService: YoutubeService;
 
   constructor() {
-    this.logger = new Logger();
     this.youtubeService = new YoutubeService();
   }
 
-  @Command('add youtube')
-  @Description('Add youtube channel to watch list')
-  async init(command: CommandMessage): Promise<Message | void> {
+  @Slash('add-youtube', {
+    description: `Add youtube channel to video check list`
+  })
+  async init(
+    @SlashOption('id', {
+      description: 'Channel Id you want to add',
+      required: true
+    })
+    id: string,
+    interaction: CommandInteraction
+  ): Promise<void> {
     try {
-      if (command.deletable) await command.delete();
-
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('youtubeFetch')
-      );
-
-      const id = Utility.getOptionFromCommand(
-        command.content,
-        2,
-        ' '
-      ) as string;
-
-      if (!id) {
-        return Utility.sendMessage(
-          command,
-          Translate.find('youtubeNoId'),
-          'channel',
-          5000
-        );
-      }
-
-      await msg.delete();
-      await this.youtubeService
-        .addChannelToWatch(id)
-        .then(() => {
-          return Utility.sendMessage(
-            command,
-            Translate.find('youtubeSuccess'),
-            'channel',
-            5000
-          );
-        })
-        .catch(() => {
-          return Utility.sendMessage(
-            command,
-            Translate.find('youtubeError'),
-            'channel',
-            5000
-          );
-        });
+      await this.youtubeService.addChannelToWatch(id);
+      await interaction.reply(Translate.find('youtubeSuccess'));
     } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'add youtube', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', (e as Error).message),
-        'channel',
-        5000
-      );
+      await interaction.reply(Translate.find('youtubeError'));
     }
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return interaction.deleteReply();
   }
 }

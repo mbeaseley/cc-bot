@@ -5,5 +5,5 @@ export const music = {
   join: '**I have successfully joined the voice channel.**',
   joinFail: '**You are not in a voice channel that I can join.**',
   joinFull: '**The voice channel is full**',
-  playAdd: '**Please add a song or playlist link when using this command!**',
+  playAdd: '**Please add a song or playlist link when using this command!**'
 };

@@ -1,27 +1,16 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
-import { Logger } from 'Services/logger.service';
 import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import chalk from 'chalk';
-import { Message, MessageEmbed } from 'discord.js';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash, SlashOption } from 'discordx';
 import * as urban from 'urban-dictionary';
 
-export class UrbanDictionary {
-  private logger: Logger;
-
-  constructor() {
-    this.logger = new Logger();
-  }
-
+@Discord()
+export abstract class Urban {
   /**
    * Create custom message
    * @param phrase
    * @param entry
    */
-  private createMessage(
-    phrase: string,
-    entry: urban.DefinitionObject
-  ): MessageEmbed {
+  private createMessage(phrase: string, entry: urban.DefinitionObject): MessageEmbed {
     const lower = phrase.toLowerCase();
     const formattedPhrase = phrase.charAt(0).toUpperCase() + lower.slice(1);
 
@@ -30,61 +19,36 @@ export class UrbanDictionary {
       .setColor(1079)
       .setURL(entry.permalink)
       .setThumbnail('https://i.imgur.com/LmyPRai.png')
-      .setDescription(Translate.find('urbanDes'))
-      .addField('👍', entry.thumbs_up, true)
-      .addField('👎', entry.thumbs_down, true);
+      .setDescription(Translate.find('urbanDes', entry.definition, entry.example))
+      .addField('👍', entry.thumbs_up.toString(), true)
+      .addField('👎', entry.thumbs_down.toString(), true);
   }
 
   /**
-   * Fetch definition of phrase from Urban Dictionary
-   * @param command
+   * Urban Command
+   * @param user
+   * @param interaction
    */
-  @Command('urban')
-  @Description('Get urban definition of word')
-  async getDefinition(command: CommandMessage): Promise<Message | void> {
-    try {
-      if (command.deletable) await command.delete();
-
-      const phrase = Utility.getOptionFromCommand(
-        command.content,
-        2,
-        ' '
-      ) as string;
-
-      if (!phrase) {
-        return Utility.sendMessage(
-          command,
-          Translate.find('urbanNoPhrase'),
-          'channel',
-          5000
-        );
+  @Slash('urban', {
+    description: `Get urban definition of word.`
+  })
+  async init(
+    @SlashOption('phrase', {
+      description: 'What do you want to search?',
+      required: true
+    })
+    phrase: string,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    return urban.define(phrase, async (err, entries) => {
+      if (err) {
+        await interaction.reply(Translate.find('urbanError'));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        return interaction.deleteReply();
       }
 
-      return urban.define(phrase, async (err, entries) => {
-        if (err) {
-          this.logger.error(`${chalk.bold('BOT ERROR')}: ${err.message}`);
-          return Utility.sendMessage(
-            command,
-            Translate.find('urbanError'),
-            'channel',
-            5000
-          );
-        }
-
-        const embed = this.createMessage(phrase, entries[0]);
-        return Utility.sendMessage(command, embed);
-      });
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'urban', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', (e as Error).message),
-        'channel',
-        5000
-      );
-    }
+      const msg = this.createMessage(phrase, entries[0]);
+      return interaction.reply({ embeds: [msg] });
+    });
   }
 }

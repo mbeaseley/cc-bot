@@ -1,19 +1,17 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
 import { windDirections } from 'Data/weather';
-import { Logger } from 'Services/logger.service';
 import { WeatherService } from 'Services/weather.service';
 import { WeatherObject } from 'Types/weather';
 import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
-import { ClientUser, Message, MessageEmbed } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash, SlashOption } from 'discordx';
 
-export class Weather {
-  private logger: Logger;
+@Discord()
+export abstract class Weather {
   private weatherService: WeatherService;
 
   constructor() {
     this.weatherService = new WeatherService();
-    this.logger = new Logger();
   }
 
   /**
@@ -26,10 +24,7 @@ export class Weather {
       return '';
     }
 
-    return (
-      windDirections.find((w) => windDegree >= w.min && windDegree <= w.max)
-        ?.name ?? 'North'
-    );
+    return windDirections.find((w) => windDegree >= w.min && windDegree <= w.max)?.name ?? 'North';
   }
 
   /**
@@ -38,10 +33,7 @@ export class Weather {
    * @param user
    * @returns MessageEmbed
    */
-  private createMessage = (
-    w: WeatherObject,
-    user: ClientUser | null
-  ): MessageEmbed => {
+  private createMessage = (w: WeatherObject, user: ClientUser | null): MessageEmbed => {
     return new MessageEmbed()
       .setAuthor(
         Translate.find('weatherAuthor', w.name || '', w.area?.country || ''),
@@ -49,96 +41,61 @@ export class Weather {
       )
       .setColor(5602003)
       .setThumbnail(Translate.find('weatherUrl', w.weather?.icon as string))
-      .setDescription(
-        `**${Utility.captaliseFirstLetter(w.weather?.description ?? '')}**`
-      )
+      .setDescription(`**${Utility.captaliseFirstLetter(w.weather?.description ?? '')}**`)
       .addFields([
         {
           name: Translate.find('weatherTimezone'),
           value: `${w.timezone}`,
-          inline: true,
+          inline: true
         },
         {
           name: Translate.find('weatherDegree'),
           value: 'Celsius',
-          inline: true,
+          inline: true
         },
         {
           name: Translate.find('weatherTemp'),
-          value: w.weatherDetails
-            ? `${Math.round(w.weatherDetails.temp)}°`
-            : 'Unknown',
-          inline: true,
+          value: w.weatherDetails ? `${Math.round(w.weatherDetails.temp)}°` : 'Unknown',
+          inline: true
         },
         {
           name: Translate.find('weatherWind'),
-          value: `${w.wind?.speed} m/s ${this.getWindDirection(
-            w.wind?.degree
-          )}`,
-          inline: true,
+          value: `${w.wind?.speed} m/s ${this.getWindDirection(w.wind?.degree)}`,
+          inline: true
         },
         {
           name: Translate.find('weatherFeelLike'),
-          value: w.weatherDetails
-            ? `${Math.round(w.weatherDetails.feelingTempLike)}°`
-            : 'Unknown',
-          inline: true,
+          value: w.weatherDetails ? `${Math.round(w.weatherDetails.feelingTempLike)}°` : 'Unknown',
+          inline: true
         },
         {
           name: Translate.find('weatherHumidity'),
           value: `${w.weatherDetails?.humidity}%`,
-          inline: true,
-        },
+          inline: true
+        }
       ]);
   };
 
-  /**
-   * Weather Init
-   * @param command
-   */
-  @Command('weather')
-  @Description('Get the weather of your area')
-  async init(command: CommandMessage): Promise<Message | void> {
-    try {
-      if (command.deletable) await command.delete();
+  @Slash('weather', {
+    description: 'Get today weather!'
+  })
+  async init(
+    @SlashOption('location', {
+      description: 'Enter a major city?',
+      required: true
+    })
+    location: string,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    const weather = await this.weatherService.getCurrentWeather(location);
 
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('weatherFetch')
-      );
-
-      const location = Utility.getOptionFromCommand(
-        command.content,
-        2,
-        ' '
-      ) as string;
-
-      if (!location) {
-        await msg.delete();
-        return Utility.sendMessage(
-          command,
-          Translate.find('weatherNoLocation'),
-          'channel',
-          5000
-        );
-      } else {
-        const weather = await this.weatherService.getCurrentWeather(location);
-        await msg.delete();
-
-        const message = this.createMessage(weather, command.client.user);
-        return Utility.sendMessage(command, message);
-      }
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'weather', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', (e as Error).message),
-        'channel',
-        5000
-      );
+    if (!weather) {
+      await interaction.reply(Translate.find('weatherNoLocation'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
+
+    const msg = this.createMessage(weather, interaction.client.user);
+    return interaction.reply({ embeds: [msg] });
   }
 }

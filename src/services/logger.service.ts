@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import chalk from 'chalk';
 import dayjs from 'dayjs';
 
@@ -10,9 +11,7 @@ export class Logger {
   }
 
   public warn(message: string): void {
-    console.log(
-      chalk.bgYellow(chalk.black(`⚠ ${this.date} : `, chalk.underline(message)))
-    );
+    console.log(chalk.bgYellow(chalk.black(`⚠ ${this.date} : `, chalk.underline(message))));
   }
 
   public error(message: string): void {

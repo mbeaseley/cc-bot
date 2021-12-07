@@ -12,7 +12,7 @@ export class AdviceService {
    * Get single advice
    * @returns Promise<AdviceItem>
    */
-  public async getAdvice(): Promise<AdviceItem | undefined> {
+  public async getAdvice(): Promise<AdviceItem> {
     return this.adviceModelService.getAdvice();
   }
 }

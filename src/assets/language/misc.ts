@@ -1,10 +1,8 @@
 export const misc = {
   beamUpFail: '**Unable to allow member to join!**',
   beamUpAuthor: 'Beam Up Command',
-  beamUpDescription:
-    '<@!{0}> is asking to be beamed up to a restrictive channel!\n',
-  beamUpNotRestrictive:
-    '**No admin member are within restrictive voice channels!**',
+  beamUpDescription: '<@!{0}> is asking to be beamed up to a restrictive channel!\n',
+  beamUpNotRestrictive: '**No admin member are within restrictive voice channels!**',
   beamUpPermission:
     '**You have permission to join the voice channel named ${BeamUp.voiceChannel.name}!**',
   beamUpNoEmoji: '**Unable to find emoji!**',
@@ -29,5 +27,5 @@ export const misc = {
   serverRoles: 'Roles {0}:',
   serverAuthor: `{0}'s server info`,
   serverRequest: `Requested by {0}`,
-  serverFetch: `**:hourglass: Fetching Info...**`,
+  serverFetch: `**:hourglass: Fetching Info...**`
 };

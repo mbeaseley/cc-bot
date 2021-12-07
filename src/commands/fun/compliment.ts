@@ -1,81 +1,53 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
 import { ComplimentService } from 'Services/compliment.service';
-import { Logger } from 'Services/logger.service';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import { Message } from 'discord.js';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash, SlashOption } from 'discordx';
 
-export class Compliment {
+@Discord()
+export abstract class Compliment {
   private complimentService: ComplimentService;
-  private logger: Logger;
 
   constructor() {
     this.complimentService = new ComplimentService();
-    this.logger = new Logger();
   }
 
   /**
-   * Create message
-   * @param command
-   * @param message
+   * Create Message for compliment command
+   * @param compliment
+   * @param user
+   * @returns MessageEmbed
    */
-  private createMessage = (
-    command: CommandMessage,
-    message: string
-  ): string => {
-    const commandArray = Utility.getOptionFromCommand(command.content, 2);
-    const string = commandArray?.[commandArray.length - 1];
-
-    return string?.startsWith('<') && string?.endsWith('>')
-      ? string.concat(', ', message)
-      : message;
-  };
+  private createMessage(compliment: string, user: ClientUser | null): MessageEmbed {
+    return new MessageEmbed()
+      .setAuthor('Compliment Command', user?.displayAvatarURL())
+      .setColor('RANDOM')
+      .setDescription(compliment);
+  }
 
   /**
-   * @name complimentInit
-   * @param command
-   * @description Display compliment to author or tagged user
-   * @returns
+   * Compliment Command
+   * @param user
+   * @param interaction
    */
-  @Command('compliment')
-  @Description('Send a nice compliment to yourself or a friend')
-  async init(command: CommandMessage): Promise<Message | void> {
-    try {
-      if (command.deletable) await command.delete();
+  @Slash('compliment', {
+    description: `Send a nice compliment to yourself or a friend.`
+  })
+  async init(
+    @SlashOption('user', {
+      description: 'Who do you want to send a compliment to?'
+    })
+    user: string,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    const { compliment } = await this.complimentService.getCompliment();
 
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('complimentFetch')
-      );
-
-      const res = await this.complimentService.getCompliment();
-      await msg.delete();
-
-      if (!res?.compliment) {
-        return Utility.sendMessage(
-          command,
-          Translate.find('noCompliment'),
-          'channel',
-          5000
-        );
-      }
-
-      const message = this.createMessage(command, res.compliment);
-
-      return message.startsWith('<')
-        ? Utility.sendMessage(command, message)
-        : Utility.sendMessage(command, message, 'reply');
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'compliment', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', 'compliment', (e as Error).message),
-        'channel',
-        5000
-      );
+    if (!compliment) {
+      await interaction.reply('**No compliment was given!**');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
+
+    const complimentString = user ? `${user}, ${compliment}` : compliment;
+    const msg = this.createMessage(complimentString, interaction.client.user);
+    return interaction.reply({ embeds: [msg] });
   }
 }

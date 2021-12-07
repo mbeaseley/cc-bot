@@ -1,149 +1,31 @@
-import {
-  Client,
-  Command,
-  CommandInfos,
-  CommandMessage,
-  RuleBuilder,
-} from '@typeit/discord';
-import { commandHelpTypes, commandOverrides } from 'Data/help';
-import { CommandItem, CommandType } from 'Types/help';
-import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import { EmbedFieldData, Message, MessageEmbed } from 'discord.js';
+import { Pagination } from '@discordx/utilities';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, MetadataStorage, Slash } from 'discordx';
 
-export class Help {
+@Discord()
+export abstract class Help {
   /**
-   * Create base message
-   * @param command
-   * @returns MessageEmbed
+   * Help Command
+   * @param interaction
    */
-  private createBaseMessage(
-    command: CommandMessage,
-    type?: CommandItem
-  ): MessageEmbed {
-    const t = type ? ` ${type.name}` : '';
-    return new MessageEmbed()
-      .setColor(10181046)
-      .setAuthor(
-        Translate.find(
-          'helpAuthor',
-          command?.client?.user?.username as string,
-          t
-        ),
-        command?.client?.user?.displayAvatarURL()
-      )
-      .setThumbnail(environment.botThumbnail);
-  }
+  @Slash('help', {
+    description: 'Pagination for all slash command.'
+  })
+  async init(interaction: CommandInteraction): Promise<void> {
+    const commands = MetadataStorage.instance.applicationCommands.map((cmd) => {
+      return { name: cmd.name, description: cmd.description };
+    });
 
-  /**
-   * Create help status message
-   */
-  private async createHelpStatus(
-    command: CommandMessage,
-    allCommands: CommandInfos<any, RuleBuilder>[],
-    type?: CommandItem
-  ): Promise<Message | void> {
-    if (type) {
-      const fields = allCommands.map((c) => {
-        const item = commandOverrides.find((cd) => cd.name === c.commandName);
-        c.commandName = item ? item.fullCommand : c.commandName;
-        return {
-          name: `**${c.description}**`,
-          value: `\`@${environment.botName} ${c.commandName}\``,
-        };
-      });
+    const pages = commands.map((cmd, i) => {
+      return new MessageEmbed()
+        .setFooter(`Page ${i + 1} of ${commands.length}`)
+        .setAuthor('Slash command info', interaction.client.user?.displayAvatarURL())
+        .setColor(10181046)
+        .addField('Name', cmd.name)
+        .addField('Description', cmd.description);
+    });
 
-      const message = this.createBaseMessage(command, type);
-      message.addFields([...fields]);
-
-      if (command.deletable) await command.delete();
-      return Utility.sendMessage(command, message);
-    } else {
-      const message = this.createBaseMessage(command);
-      let fields: EmbedFieldData[] = commandHelpTypes.map((c) => {
-        const fullCommand = c.fullCommand.replace(
-          '{botName}',
-          command?.client?.user?.username || ''
-        );
-
-        return {
-          name: c.name,
-          value: `\`${fullCommand}\``,
-        };
-      });
-
-      if (!Utility.isAdmin(command)) {
-        fields = fields.filter(
-          (c) => !commandHelpTypes.find((r) => r.name === c.name)?.restrict
-        );
-      }
-
-      message.addFields([...fields]);
-      if (command.deletable) await command.delete();
-      return Utility.sendMessage(command, message);
-    }
-  }
-
-  /**
-   * Fetch Commands
-   * @param type
-   */
-  fetchCommands(type?: CommandItem): CommandInfos<any, RuleBuilder>[] {
-    const commands = Client.getCommands();
-
-    if (type) {
-      const commandNames = commandOverrides
-        .filter((c) => c.type === type.name.toLowerCase())
-        .map((c) => c.name);
-      return commands.filter(
-        (c) => commandNames.indexOf(c.commandName as string) > -1
-      );
-    }
-
-    return commands.filter((c) => c.commandName !== 'help');
-  }
-
-  /**
-   * @name helpInit
-   * @param command
-   * @description Display possible commands
-   * @returns
-   */
-  @Command('help')
-  async helpInit(command: CommandMessage): Promise<Message | void> {
-    const type = (
-      Utility.getOptionFromCommand(command.content, 2, ' ') as CommandType
-    ).toLowerCase();
-
-    const commandGroup = commandHelpTypes.find(
-      (c) => c.name.toLowerCase() === type
-    );
-    if (type && !commandGroup) {
-      if (command.deletable) await command.delete();
-      return Utility.sendMessage(
-        command,
-        Translate.find('helpNoGroup'),
-        'channel',
-        5000
-      );
-    }
-
-    if (!Utility.isAdmin(command) && commandGroup?.restrict) {
-      if (command.deletable) await command.delete();
-      return Utility.sendMessage(
-        command,
-        Translate.find('helpNoPermission'),
-        'channel',
-        5000
-      );
-    }
-
-    const allCommands = this.fetchCommands(commandGroup);
-    return this.createHelpStatus(command, allCommands, commandGroup).catch(
-      () => {
-        Utility.sendMessage(command, Translate.find('error'), 'reply', 5000);
-      }
-    );
+    const pagination = new Pagination(interaction, pages);
+    await pagination.send();
   }
 }

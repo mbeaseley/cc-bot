@@ -2,11 +2,7 @@ import { Logger } from 'Services/logger.service';
 import { DatabaseName, Databases } from 'Types/database';
 import { environment } from 'Utils/environment';
 import * as chalk from 'chalk';
-import {
-  InsertOneWriteOpResult,
-  MongoClient,
-  UpdateWriteOpResult,
-} from 'mongodb';
+import { InsertOneResult, MongoClient, UpdateResult } from 'mongodb';
 
 export class DatabaseService {
   private _client: MongoClient | undefined;
@@ -42,10 +38,7 @@ export class DatabaseService {
    */
   private setConnection(): MongoClient {
     const uri = `mongodb+srv://${environment.dbUsername}:${environment.dbPassword}@cluster0.6ubpu.mongodb.net/test?retryWrites=true&w=majority`;
-    return new MongoClient(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    return new MongoClient(uri);
   }
 
   /**
@@ -73,10 +66,10 @@ export class DatabaseService {
    * @param dbName
    * @param collectionName
    */
-  public async get<T extends DatabaseName>(
+  public async get<N extends DatabaseName, T>(
     dbName: DatabaseName,
-    collectionName: Databases[T]
-  ): Promise<any[]> {
+    collectionName: Databases[N]
+  ): Promise<T[]> {
     let res: any[] = [];
     this.Client = this.setConnection();
 
@@ -87,8 +80,9 @@ export class DatabaseService {
       this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {
       await this.Client.close();
-      return res;
     }
+
+    return res;
   }
 
   /**
@@ -103,11 +97,11 @@ export class DatabaseService {
    * @param collectionName
    * @param document
    */
-  private async createDocument<T extends DatabaseName>(
+  private async createDocument<N extends DatabaseName, D>(
     dbName: DatabaseName,
-    collectionName: Databases[T],
-    document: Object
-  ): Promise<InsertOneWriteOpResult<any> | undefined> {
+    collectionName: Databases[N],
+    document: D
+  ): Promise<InsertOneResult<Document> | undefined> {
     const db = this.Client?.db(dbName);
     return db?.collection(collectionName).insertOne(document);
   }
@@ -118,10 +112,10 @@ export class DatabaseService {
    * @param collectionName
    * @param document
    */
-  public async create<T extends DatabaseName>(
+  public async create<N extends DatabaseName, D>(
     dbName: DatabaseName,
-    collectionName: Databases[T],
-    document: Object
+    collectionName: Databases[N],
+    document: D
   ): Promise<void> {
     this.Client = this.setConnection();
 
@@ -140,16 +134,14 @@ export class DatabaseService {
    * Update
    * ==================================
    */
-  private async updateDocument<T extends DatabaseName>(
+  private async updateDocument<N extends DatabaseName, E, D>(
     dbName: DatabaseName,
-    collectionName: Databases[T],
-    existDocument: Object,
-    document: Object
-  ): Promise<UpdateWriteOpResult | undefined> {
+    collectionName: Databases[N],
+    existDocument: E,
+    document: D
+  ): Promise<UpdateResult | undefined> {
     const db = this.Client?.db(dbName);
-    return db
-      ?.collection(collectionName)
-      .updateOne(existDocument, { $set: document });
+    return db?.collection(collectionName).updateOne(existDocument, { $set: document });
   }
 
   /**
@@ -157,22 +149,17 @@ export class DatabaseService {
    * @param dbName
    * @param collectionName
    */
-  public async update<T extends DatabaseName>(
+  public async update<N extends DatabaseName, E, D>(
     dbName: DatabaseName,
-    collectionName: Databases[T],
-    existDocument: Object,
-    document: Object
+    collectionName: Databases[N],
+    existDocument: E,
+    document: D
   ): Promise<void> {
     this.Client = this.setConnection();
 
     try {
       await this.Client.connect();
-      await this.updateDocument(
-        dbName,
-        collectionName,
-        existDocument,
-        document
-      );
+      await this.updateDocument(dbName, collectionName, existDocument, document);
     } catch (e: unknown) {
       this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {

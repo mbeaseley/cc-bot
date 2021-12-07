@@ -1,73 +1,46 @@
-import { Command, CommandMessage, Description } from '@typeit/discord';
-import { AnimalsService } from 'Services/animals.service';
-import { Logger } from 'Services/logger.service';
-import { Animal } from 'Types/animal';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
-import { ClientUser, Message, MessageEmbed } from 'discord.js';
+import { AnimalsService } from 'Services/animal.service';
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
+import { Discord, Slash } from 'discordx';
 
-export class Dog {
-  private animalsService: AnimalsService;
-  private logger: Logger;
+@Discord()
+export abstract class Dog {
+  private animalService: AnimalsService;
 
   constructor() {
-    this.animalsService = new AnimalsService();
-    this.logger = new Logger();
+    this.animalService = new AnimalsService();
   }
 
   /**
-   * Create message
-   * @param command
-   * @param meme
+   * Create Message for dog command
+   * @param dog
+   * @param user
    * @returns MessageEmbed
    */
-  private createMessage(animal: Animal, user: ClientUser | null): MessageEmbed {
+  private createMessage(dog: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setColor(32768)
-      .setAuthor(Translate.find('dogAuthor'), user?.displayAvatarURL())
-      .setImage(animal.link || '');
+      .setAuthor('Dog Command', user?.displayAvatarURL())
+      .setColor('RANDOM')
+      .setImage(dog);
   }
 
   /**
-   * Dog Init
-   * @param command
+   * Dog Command
+   * @param user
+   * @param interaction
    */
-  @Command('dog')
-  @Description('Image of a dog?')
-  async init(command: CommandMessage): Promise<Message> {
-    try {
-      if (command.deletable) await command.delete();
+  @Slash('dog', {
+    description: `Image of a dog?`
+  })
+  async init(interaction: CommandInteraction): Promise<void> {
+    const { link } = await this.animalService.getDog();
 
-      const msg = await Utility.sendMessage(
-        command,
-        Translate.find('dogFetch')
-      );
-
-      const res = await this.animalsService.getDog();
-      await msg.delete();
-
-      if (!res?.link) {
-        return Utility.sendMessage(
-          command,
-          Translate.find('noDog'),
-          'channel',
-          5000
-        );
-      }
-
-      const message = this.createMessage(res, command.client.user);
-      return Utility.sendMessage(command, message);
-    } catch (e: unknown) {
-      if (command.deletable) await command.delete();
-      this.logger.error(
-        Translate.find('errorLog', 'dog', (e as Error).message)
-      );
-      return Utility.sendMessage(
-        command,
-        Translate.find('errorDefault', (e as Error).message),
-        'channel',
-        5000
-      );
+    if (!link) {
+      await interaction.reply('**No dog was given!**');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
     }
+
+    const msg = this.createMessage(link, interaction.client.user);
+    return interaction.reply({ embeds: [msg] });
   }
 }

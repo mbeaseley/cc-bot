@@ -5,5 +5,5 @@ export const moderation = {
   deafenSuccess: '**<@{0}> was succesfully deafen!**',
   undeafenSuccess: '**<@{0}> was succesfully undeafen!**',
   mutedSuccess: '**<@{0}> was succesfully muted!**',
-  unmutedSuccess: '**<@{0}> was succesfully unmuted!**',
+  unmutedSuccess: '**<@{0}> was succesfully unmuted!**'
 };

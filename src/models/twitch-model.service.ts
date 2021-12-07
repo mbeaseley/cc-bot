@@ -1,4 +1,4 @@
-import { HttpClient } from 'Interceptor/httpClient';
+import { HttpClient } from 'Interceptor/http-client';
 import {
   ApiFollowersResponseObject,
   ApiStreamResponseObject,
@@ -7,7 +7,7 @@ import {
   Followers,
   Stream,
   Token,
-  User,
+  User
 } from 'Types/twitch';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
@@ -48,15 +48,13 @@ export class TwitchModelService extends HttpClient {
   /**
    * Get Token Response
    */
-  private getTokenResponse = (): Promise<
-    AxiosResponse<ApiTokenResponseObject>
-  > =>
+  private getTokenResponse = (): Promise<AxiosResponse<ApiTokenResponseObject>> =>
     this.instance.post<ApiTokenResponseObject>(
       `https://id.twitch.tv/oauth2/token?client_id=${environment.twitchClientId}&client_secret=${environment.twitchSecret}&grant_type=client_credentials&scope=user:read:email`,
       {
         headers: {
-          Accept: 'application/json',
-        },
+          Accept: 'application/json'
+        }
       }
     );
 
@@ -64,8 +62,8 @@ export class TwitchModelService extends HttpClient {
    * Get Token response
    */
   async getToken(): Promise<Token> {
-    const res = await this.getTokenResponse();
-    this.token = this.fromTokenPayload(res);
+    const { data } = await this.getTokenResponse();
+    this.token = this.fromTokenPayload(data);
     return this.token;
   }
 
@@ -74,10 +72,10 @@ export class TwitchModelService extends HttpClient {
    * @param endpoint
    * @param queryParams
    */
-  private getResponse = (
+  private getResponse = <T>(
     endpoint: string,
     queryParams: Record<string, string>
-  ): Promise<AxiosResponse<any>> => {
+  ): Promise<AxiosResponse<T>> => {
     const qParams = new URLSearchParams(queryParams);
     return this.instance.get<any>(
       `https://api.twitch.tv/helix/` + endpoint + `?${qParams.toString()}`,
@@ -85,8 +83,8 @@ export class TwitchModelService extends HttpClient {
         headers: {
           Accept: 'application/json',
           'Client-ID': environment.twitchClientId,
-          Authorization: `Bearer ${this.token.token}`,
-        },
+          Authorization: `Bearer ${this.token.token}`
+        }
       }
     );
   };
@@ -130,10 +128,10 @@ export class TwitchModelService extends HttpClient {
       await this.getToken();
     }
 
-    const res = (await this.getResponse('users', {
-      login,
-    })) as ApiUserResponseObject;
-    return this.fromUserPayload(res);
+    const { data } = await this.getResponse<ApiUserResponseObject>('users', {
+      login
+    });
+    return this.fromUserPayload(data);
   }
 
   /**
@@ -179,10 +177,10 @@ export class TwitchModelService extends HttpClient {
       await this.getToken();
     }
 
-    const res = (await this.getResponse('streams', {
-      user_login: username,
-    })) as ApiStreamResponseObject;
-    return this.fromStreamPayload(res);
+    const { data } = await this.getResponse<ApiStreamResponseObject>('streams', {
+      user_login: username
+    });
+    return this.fromStreamPayload(data);
   }
 
   /**
@@ -211,9 +209,9 @@ export class TwitchModelService extends HttpClient {
       await this.getToken();
     }
 
-    const res = (await this.getResponse('users/follows', {
-      to_id: id,
-    })) as ApiFollowersResponseObject;
-    return this.fromFollowersPayload(res);
+    const { data } = await this.getResponse<ApiFollowersResponseObject>('users/follows', {
+      to_id: id
+    });
+    return this.fromFollowersPayload(data);
   }
 }

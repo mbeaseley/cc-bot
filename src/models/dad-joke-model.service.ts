@@ -1,5 +1,5 @@
-import { HttpClient } from 'Interceptor/httpClient';
-import { JokeResponse } from 'Types/dadJoke';
+import { HttpClient } from 'Interceptor/http-client';
+import { ApiJokeResponse, Joke } from 'Types/dad-joke';
 import { AxiosResponse } from 'axios';
 
 export class DadJokeModelService extends HttpClient {
@@ -8,21 +8,31 @@ export class DadJokeModelService extends HttpClient {
   }
 
   /**
+   * Format into correct type
+   * @param res
+   * @returns AdviceItem
+   */
+  private fromPayload(res: ApiJokeResponse): Joke {
+    return new Joke(res.id, res.setup ?? res.joke ?? '', res.delivery);
+  }
+
+  /**
    * Fetch Joke
    * @returns Promise<AxiosResponse<JokeResponse>>
    */
-  private getResponse = (): Promise<AxiosResponse<JokeResponse>> =>
-    this.instance.get('https://icanhazdadjoke.com/', {
+  private getResponse = (): Promise<AxiosResponse<ApiJokeResponse>> =>
+    this.instance.get('https://v2.jokeapi.dev/joke/Miscellaneous,Pun,Spooky,Christmas', {
       headers: {
-        Accept: 'application/json',
-      },
+        Accept: 'application/json'
+      }
     });
 
   /**
    * Get formatted response
    * @returns Promise<JokeResponse>
    */
-  public async getJoke(): Promise<JokeResponse> {
-    return this.getResponse();
+  public async getJoke(): Promise<Joke> {
+    const { data } = await this.getResponse();
+    return this.fromPayload(data);
   }
 }

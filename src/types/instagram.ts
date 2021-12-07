@@ -41,7 +41,7 @@ export interface ApiInstaUserResponse {
       highlight_reel_count: 2;
       has_requested_viewer: boolean;
       hide_like_and_view_counts: boolean;
-      id: '7213073124';
+      id: string;
       is_business_account: boolean;
       is_professional_account: boolean;
       is_joined_recently: boolean;

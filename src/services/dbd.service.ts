@@ -4,7 +4,7 @@ import {
   KillerOffering,
   PlayerKiller,
   SurvivorLoot,
-  SurvivorOffering,
+  SurvivorOffering
 } from 'Types/dbd';
 
 export class DBDService {

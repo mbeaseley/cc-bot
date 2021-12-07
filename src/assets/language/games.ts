@@ -18,5 +18,5 @@ export const games = {
   mcNoServer: `**This server does not exist**`,
   mcError: `An error has occured. Most likely you have not set your ip/domain and port correctly. If this error keeps occurring, please contact support.`,
   mcNoGuild: '**No guild Id found!**',
-  mcIpSet: '**Minecraft service domain/ip and port have been set!**',
+  mcIpSet: '**Minecraft service domain/ip and port have been set!**'
 };

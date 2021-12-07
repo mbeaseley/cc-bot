@@ -1,4 +1,4 @@
-import { HttpClient } from 'Interceptor/httpClient';
+import { HttpClient } from 'Interceptor/http-client';
 import { MemeItem } from 'Types/meme';
 import { AxiosResponse } from 'axios';
 
@@ -14,8 +14,8 @@ export class MemeModelService extends HttpClient {
   private getResponse = (): Promise<AxiosResponse<MemeItem>> =>
     this.instance.get('meme', {
       headers: {
-        Accept: 'application/json',
-      },
+        Accept: 'application/json'
+      }
     });
 
   /**
@@ -23,6 +23,6 @@ export class MemeModelService extends HttpClient {
    * @returns Promise<MemeItem>
    */
   public async getMeme(): Promise<MemeItem> {
-    return this.getResponse();
+    return (await this.getResponse())?.data;
   }
 }
