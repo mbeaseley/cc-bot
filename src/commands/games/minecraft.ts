@@ -71,7 +71,7 @@ export abstract class Minecraft {
     })
     port: string,
     interaction: CommandInteraction
-  ): Promise<void> {
+  ): Promise<any> {
     const server = await this.findMcUrl(interaction.guild?.id ?? '', new McUrl(ip, +port ?? 25565));
 
     if (!server.domain) {
@@ -80,18 +80,19 @@ export abstract class Minecraft {
       return interaction.deleteReply();
     }
 
+    await interaction.deferReply();
     const res = await status(server.domain, {
       port: server.port || 25565
-    }).catch(() => this.logger.error('**Fail to find server**'));
+    }).catch(() => undefined);
 
     if (!res) {
-      await interaction.reply(Translate.find('mcFormatError'));
+      await interaction.followUp(Translate.find('mcFormatError'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
     const msg = this.createMessage(res);
-    return interaction.reply({ embeds: [msg] });
+    return interaction.followUp({ embeds: [msg] });
   }
 
   /**

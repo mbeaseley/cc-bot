@@ -32,15 +32,15 @@ export abstract class Koala {
     description: `Image of a koala?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
-    const { link } = await this.animalService.getKoala();
+    const koala = await this.animalService.getKoala();
 
-    if (!link) {
+    if (!koala?.link) {
       await interaction.reply('**No koala was given!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
-    const msg = this.createMessage(link, interaction.client.user);
+    const msg = this.createMessage(koala.link, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }

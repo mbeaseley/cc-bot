@@ -23,6 +23,6 @@ export class MemeModelService extends HttpClient {
    * @returns Promise<MemeItem>
    */
   public async getMeme(): Promise<MemeItem> {
-    return (await this.getResponse())?.data;
+    return (await this.getResponse())?.data ?? new MemeItem();
   }
 }

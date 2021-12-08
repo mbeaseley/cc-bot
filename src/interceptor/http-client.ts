@@ -15,7 +15,7 @@ export abstract class HttpClient {
     this.instance.interceptors.response.use(this._handleResponse, this._handleError);
   };
 
-  private _handleResponse = ({ data }: AxiosResponse<any>) => data;
+  private _handleResponse = (data: AxiosResponse<any>) => data;
 
   protected _handleError = (error: Error) => Promise.reject(error);
 }

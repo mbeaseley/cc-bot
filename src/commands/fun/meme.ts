@@ -34,7 +34,7 @@ export abstract class Insult {
   async init(interaction: CommandInteraction): Promise<void> {
     const meme = await this.memeService.getMeme();
 
-    if (!meme.image) {
+    if (!meme?.image) {
       await interaction.reply('**No meme was given!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();

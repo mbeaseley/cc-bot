@@ -32,15 +32,15 @@ export abstract class Fox {
     description: `Image of a fox?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
-    const { link } = await this.animalService.getFox();
+    const fox = await this.animalService.getFox();
 
-    if (!link) {
+    if (!fox?.link) {
       await interaction.reply('**No fox was given!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
-    const msg = this.createMessage(link, interaction.client.user);
+    const msg = this.createMessage(fox.link, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }

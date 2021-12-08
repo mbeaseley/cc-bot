@@ -13,8 +13,8 @@ export class AdviceModelService extends HttpClient {
    * @returns AdviceItem
    */
   private fromPayload(data: ApiAdviceResponse): AdviceItem {
-    const { slip } = data;
-    return new AdviceItem(slip.id, slip.advice);
+    const slip = data?.slip;
+    return new AdviceItem(slip?.id, slip?.advice);
   }
 
   /**
