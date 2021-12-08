@@ -32,15 +32,15 @@ export abstract class Panda {
     description: `Image of a panda?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
-    const { link } = await this.animalService.getPanda();
+    const panda = await this.animalService.getPanda();
 
-    if (!link) {
+    if (!panda?.link) {
       await interaction.reply('**No panda was given!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
-    const msg = this.createMessage(link, interaction.client.user);
+    const msg = this.createMessage(panda.link, interaction.client.user);
     return interaction.reply({ embeds: [msg] });
   }
 }
