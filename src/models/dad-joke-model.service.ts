@@ -13,7 +13,7 @@ export class DadJokeModelService extends HttpClient {
    * @returns AdviceItem
    */
   private fromPayload(res: ApiJokeResponse): Joke {
-    return new Joke(res.id, res.setup ?? res.joke ?? '', res.delivery);
+    return new Joke(res?.id, res.setup ?? res.joke ?? '', res?.delivery);
   }
 
   /**

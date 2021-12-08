@@ -23,6 +23,6 @@ export class ComplimentModelService extends HttpClient {
    * @returns Promise<ComplimentObject>
    */
   public async getCompliment(): Promise<ComplimentObject> {
-    return (await this.getResponse())?.data;
+    return (await this.getResponse())?.data ?? new ComplimentObject();
   }
 }
