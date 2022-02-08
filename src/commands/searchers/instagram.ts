@@ -42,8 +42,7 @@ export abstract class Instagram {
   })
   async init(
     @SlashOption('user', {
-      description: 'Username?',
-      required: true
+      description: 'Username?'
     })
     user: string,
     interaction: CommandInteraction

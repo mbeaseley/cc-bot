@@ -73,10 +73,16 @@ export abstract class Killer {
     description: 'Get a random dbd killer build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.member) {
+      await interaction.reply('**Sorry, I could not find you!**');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
+    }
+
     const build = await this.createKillerBuild(interaction.member.user.id);
 
     const users = await interaction.guild?.members.fetch();
-    const user = users?.find((u) => u.id === interaction.member.user.id);
+    const user = users?.find((u) => u.id === interaction.member?.user.id);
 
     const msg = this.createMessage(build);
 

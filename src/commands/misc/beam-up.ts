@@ -70,11 +70,11 @@ export abstract class BeamUp {
   @Slash('beam-up', {
     description: 'Beam up member to restrictive voice channel!'
   })
-  async init(interaction: CommandInteraction): Promise<GuildCacheMessage<any> | void> {
+  async init(interaction: CommandInteraction): Promise<any> {
     this.previousInteraction = interaction;
     const { member, guild, client } = interaction;
     const members = await guild?.members.fetch();
-    const user = members?.find((m) => m.id === member.user.id);
+    const user = members?.find((m) => m.id === member?.user.id);
 
     if (!user?.id) {
       const noRestrictmsg = this.createMessage(
@@ -112,7 +112,7 @@ export abstract class BeamUp {
 
     this.beamUpItem = new BeamUpItem(validChannels[0], user);
     const msg = this.createMessage(
-      Translate.find('beamUpDescription', member.user.id),
+      Translate.find('beamUpDescription', member?.user.id ?? '~'),
       this.author,
       client.user ?? undefined
     );
@@ -145,7 +145,7 @@ export abstract class BeamUp {
   private async isModerator(interaction: ButtonInteraction): Promise<boolean> {
     const { member, guild } = interaction;
     const members = await guild?.members.fetch();
-    const user = members?.find((m) => m.id === member.user.id);
+    const user = members?.find((m) => m.id === member?.user.id);
     return !!user?.roles.cache.find((r) => r.id === environment.moderatorRoles[0].id);
   }
 

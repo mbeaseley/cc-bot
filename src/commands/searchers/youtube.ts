@@ -20,8 +20,7 @@ export abstract class Youtube {
   })
   async init(
     @SlashOption('id', {
-      description: 'Channel Id you want to add',
-      required: true
+      description: 'Channel Id you want to add'
     })
     id: string,
     interaction: CommandInteraction

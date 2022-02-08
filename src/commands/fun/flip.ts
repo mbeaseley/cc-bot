@@ -6,6 +6,7 @@ import {
   MessageButton
 } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
+import { AnyNaptrRecord } from 'dns';
 
 type Coin = 'Heads' | 'Tails';
 
@@ -27,7 +28,7 @@ export abstract class CoinFlip {
    * @param interaction
    */
   @Slash('flip', { description: `Flip a coin` })
-  async init(interaction: CommandInteraction): Promise<GuildCacheMessage<any> | void> {
+  async init(interaction: CommandInteraction): Promise<any> {
     await interaction.deferReply();
 
     const headsBtn = new MessageButton()

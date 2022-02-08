@@ -34,8 +34,7 @@ export abstract class Urban {
   })
   async init(
     @SlashOption('phrase', {
-      description: 'What do you want to search?',
-      required: true
+      description: 'What do you want to search?'
     })
     phrase: string,
     interaction: CommandInteraction

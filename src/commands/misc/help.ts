@@ -1,4 +1,4 @@
-import { Pagination } from '@discordx/utilities';
+import { Pagination } from '@discordx/pagination';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, MetadataStorage, Slash } from 'discordx';
 

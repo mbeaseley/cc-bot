@@ -124,7 +124,7 @@ export abstract class CustomQuestion {
   async init(
     @SlashChoice('Server Rules', QUESTION_TYPES[0])
     @SlashChoice('Game Roles', QUESTION_TYPES[1])
-    @SlashOption('question', { description: 'Which question?', required: true })
+    @SlashOption('question', { description: 'Which question?' })
     question: string,
     interaction: CommandInteraction
   ): Promise<void> {

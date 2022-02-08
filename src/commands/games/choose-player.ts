@@ -57,7 +57,7 @@ export abstract class ChoosePlayer {
     interaction: CommandInteraction | ButtonInteraction,
     users: Collection<string, GuildMember>,
     msg: MessageEmbed
-  ): Promise<GuildCacheMessage<any> | void> {
+  ): Promise<any> {
     if (users.size > 1) {
       await interaction.deferReply();
 
@@ -90,7 +90,7 @@ export abstract class ChoosePlayer {
   ): Promise<GuildCacheMessage<any> | void> {
     this.previousInteraction = interaction;
     const users = await interaction.guild?.members.fetch();
-    const user = users?.find((u) => u.id === interaction.member.user.id);
+    const user = users?.find((u) => u.id === interaction.member?.user.id);
 
     if (!user) {
       await interaction.reply('**Sorry, failed to find user!**');

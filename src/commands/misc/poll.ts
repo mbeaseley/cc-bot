@@ -36,13 +36,11 @@ export abstract class Poll {
   })
   async init(
     @SlashOption('question', {
-      description: 'What is your poll question?',
-      required: true
+      description: 'What is your poll question?'
     })
     question: string,
     @SlashOption('options', {
-      description: 'What are your poll options? (Split each option using a comma)',
-      required: true
+      description: 'What are your poll options? (Split each option using a comma)'
     })
     options: string,
     interaction: CommandInteraction

@@ -127,8 +127,7 @@ export abstract class Minecraft {
   })
   async setMCServer(
     @SlashOption('ip', {
-      description: 'IP of your minecraft server ',
-      required: true
+      description: 'IP of your minecraft server '
     })
     ip: string,
     @SlashOption('port', {

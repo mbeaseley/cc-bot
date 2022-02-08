@@ -35,8 +35,7 @@ export abstract class Mute {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to deafen?',
-      required: true
+      description: 'Who do you want to deafen?'
     })
     user: string,
     interaction: CommandInteraction
@@ -58,7 +57,7 @@ export abstract class Mute {
       return interaction.deleteReply();
     }
 
-    if (target.user.id === member.user.id) {
+    if (target.user.id === member?.user.id) {
       await interaction.reply(Translate.find('selfPunish'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();

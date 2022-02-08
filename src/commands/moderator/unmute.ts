@@ -35,8 +35,7 @@ export abstract class Unmute {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to unmute?',
-      required: true
+      description: 'Who do you want to unmute?'
     })
     user: string,
     interaction: CommandInteraction

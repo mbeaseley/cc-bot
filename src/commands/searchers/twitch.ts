@@ -51,8 +51,7 @@ export abstract class Twitch {
   })
   async init(
     @SlashOption('user', {
-      description: 'Username?',
-      required: true
+      description: 'Username?'
     })
     username: string,
     interaction: CommandInteraction

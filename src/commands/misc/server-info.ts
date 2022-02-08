@@ -114,7 +114,7 @@ export abstract class ServerInfo {
   async init(interaction: CommandInteraction): Promise<void> {
     const { guild, member } = interaction;
 
-    if (!guild) {
+    if (!guild || !member) {
       await interaction.reply('**No guild was found!**');
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();

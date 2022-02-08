@@ -81,8 +81,7 @@ export abstract class Weather {
   })
   async init(
     @SlashOption('location', {
-      description: 'Enter a major city?',
-      required: true
+      description: 'Enter a major city?'
     })
     location: string,
     interaction: CommandInteraction

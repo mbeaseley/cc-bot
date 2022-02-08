@@ -57,7 +57,7 @@ export abstract class Surviver {
     const build = await this.createSurviverBuild();
 
     const users = await interaction.guild?.members.fetch();
-    const user = users?.find((u) => u.id === interaction.member.user.id);
+    const user = users?.find((u) => u.id === interaction.member?.user.id);
 
     const msg = this.createMessage(build);
 

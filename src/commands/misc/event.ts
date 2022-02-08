@@ -103,20 +103,17 @@ export abstract class Event {
   })
   async init(
     @SlashOption('title', {
-      description: 'Title of event',
-      required: true
+      description: 'Title of event'
     })
     title: string,
     @SlashOption('description', {
-      description: 'description of event',
-      required: true
+      description: 'description of event'
     })
     description: string,
     @SlashChoice('Yes', 'true')
     @SlashChoice('No', 'false')
     @SlashOption('poll', {
-      description: 'description of event',
-      required: true
+      description: 'description of event'
     })
     poll: string,
     interaction: CommandInteraction

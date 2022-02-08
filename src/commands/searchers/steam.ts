@@ -46,8 +46,7 @@ export abstract class Steam {
   })
   async init(
     @SlashOption('name', {
-      description: 'Vanity Url?',
-      required: true
+      description: 'Vanity Url?'
     })
     url: string,
     interaction: CommandInteraction
