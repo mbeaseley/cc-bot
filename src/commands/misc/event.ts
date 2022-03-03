@@ -1,4 +1,5 @@
 import { PollQuestion, selectionEmojis } from 'Types/poll';
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import { ClientUser, CommandInteraction, EmbedField, MessageEmbed } from 'discord.js';
 import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
@@ -10,8 +11,12 @@ import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
   type: 'ROLE',
   permission: true
 })
-export abstract class Event {
+export abstract class Event extends Command {
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
+
+  constructor() {
+    super();
+  }
 
   /**
    * Create message for created channel
@@ -27,17 +32,13 @@ export abstract class Event {
     poll: boolean,
     bot: ClientUser | null
   ): MessageEmbed {
-    const defaultPoll = `To create a poll, please use '/poll' and follow the instructions when adding a poll question and options!`;
-    const pollCopy = poll
-      ? 'A poll has been created to check who is interested in this event! '
-      : '';
+    const defaultPoll = this.c('eventPollDefaultMessage');
+    const pollCopy = poll ? this.c('eventPollWanted') : '';
 
     return new MessageEmbed()
       .setColor(8720506)
-      .setAuthor('New Event Announcement', bot?.displayAvatarURL())
-      .setDescription(
-        `Welcome to ${title} event channel, lets organise this event!\n\nTo help your friends, <@!${author}> is the creator of this event. Any questions should be placed towards this person!\n\n${pollCopy}${defaultPoll}\n\n Enjoy! Hope everything goes to plan!`
-      );
+      .setAuthor({ name: this.c('eventHeading'), iconURL: bot?.displayAvatarURL() })
+      .setDescription(this.c('eventDescription', title, author, pollCopy, defaultPoll));
   }
 
   /**
@@ -60,7 +61,7 @@ export abstract class Event {
     } as EmbedField;
 
     return new MessageEmbed()
-      .setAuthor('Poll Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('eventPollAuthor'), iconURL: user?.displayAvatarURL() })
       .setColor(8720506)
       .addField(field.name, field.value, field.inline);
   }
@@ -79,16 +80,12 @@ export abstract class Event {
     poll: boolean,
     bot: ClientUser | null
   ): MessageEmbed {
-    const pollCopy = poll
-      ? 'A poll has been created to find out interest levels, please respond!'
-      : '';
+    const pollCopy = poll ? this.c('eventAnnouncmentPoll') : '';
 
     return new MessageEmbed()
       .setColor(8720506)
-      .setAuthor('New Event Announcement', bot?.displayAvatarURL())
-      .setDescription(
-        `🎟️ New event! @everyone, <@!${author}> has created a event called ${title}.\n\n${pollCopy}`
-      );
+      .setAuthor({ name: this.c('eventAnnouncmentPollHeading'), iconURL: bot?.displayAvatarURL() })
+      .setDescription(this.c('eventActionComplete', author, title, pollCopy));
   }
 
   /**
@@ -126,13 +123,13 @@ export abstract class Event {
     );
 
     if (!category) {
-      await interaction.reply('**Unable to find category channel**');
+      await interaction.reply(this.c('eventNoCategory'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
     if (!isGeneralChannel) {
-      await interaction.reply('**Please create event on general channel**');
+      await interaction.reply(this.c('eventNoChannel'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
@@ -147,7 +144,7 @@ export abstract class Event {
     });
 
     if (!newChannel) {
-      await interaction.reply('**Unable to create text channel**');
+      await interaction.reply(this.c('eventNoNewChannel'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
@@ -158,7 +155,10 @@ export abstract class Event {
     await newChannel.send({ embeds: [msg] });
 
     if (pollWanted) {
-      const pollQuestion = new PollQuestion('Are you interested?', ['Yes', 'No'] ?? []);
+      const pollQuestion = new PollQuestion(
+        this.c('eventPollQuestion'),
+        [this.c('eventPollYes'), this.c('eventPollNo')] ?? []
+      );
       const pollMsg = this.createPollMessage(pollQuestion, client.user);
       const pollInteraction = await newChannel.send({ embeds: [pollMsg] });
       pollQuestion.answers.forEach(async (_, i) => {

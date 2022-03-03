@@ -1,12 +1,11 @@
 import { BeamUpItem } from 'Types/beam-up';
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
 import {
   ButtonInteraction,
   ClientUser,
   Collection,
   CommandInteraction,
-  GuildCacheMessage,
   GuildChannel,
   GuildChannelManager,
   GuildMember,
@@ -17,7 +16,7 @@ import {
 import { ButtonComponent, Discord, Slash } from 'discordx';
 
 @Discord()
-export abstract class BeamUp {
+export abstract class BeamUp extends Command {
   private _beamUpItem: BeamUpItem | undefined;
   private author: GuildMember | undefined;
   private previousInteraction: CommandInteraction | undefined;
@@ -59,7 +58,7 @@ export abstract class BeamUp {
   private createMessage(description: string, member?: GuildMember, bot?: ClientUser): MessageEmbed {
     return new MessageEmbed()
       .setColor(member?.displayHexColor ?? 11166957)
-      .setAuthor(Translate.find('beamUpAuthor'), bot?.displayAvatarURL())
+      .setAuthor({ name: this.c('beamUpAuthor'), iconURL: bot?.displayAvatarURL() })
       .setDescription(description);
   }
 
@@ -78,7 +77,7 @@ export abstract class BeamUp {
 
     if (!user?.id) {
       const noRestrictmsg = this.createMessage(
-        `**Sorry, I was unable to find you!**`,
+        this.c('beamUpNoUserFound'),
         this.author,
         client.user ?? undefined
       );
@@ -99,7 +98,7 @@ export abstract class BeamUp {
 
     if (!validChannels.length) {
       const noRestrictmsg = this.createMessage(
-        Translate.find('beamUpNotRestrictive'),
+        this.c('beamUpNotRestrictive'),
         this.author,
         client.user ?? undefined
       );
@@ -112,19 +111,19 @@ export abstract class BeamUp {
 
     this.beamUpItem = new BeamUpItem(validChannels[0], user);
     const msg = this.createMessage(
-      Translate.find('beamUpDescription', member?.user.id ?? '~'),
+      this.c('beamUpDescription', member?.user.id ?? '~'),
       this.author,
       client.user ?? undefined
     );
 
     const acceptBtn = new MessageButton()
-      .setLabel('Accept')
+      .setLabel(this.c('beamUpAccept'))
       .setEmoji('✅')
       .setStyle('PRIMARY')
       .setCustomId('accept-btn');
 
     const rejectBtn = new MessageButton()
-      .setLabel('Reject')
+      .setLabel(this.c('beamUpReject'))
       .setEmoji('🛑')
       .setStyle('SECONDARY')
       .setCustomId('reject-btn');
@@ -175,7 +174,7 @@ export abstract class BeamUp {
     await this.moveMemberToChannel();
     await this.previousInteraction?.deleteReply();
     const msg = this.createMessage(
-      `<@${this.author?.id}>, request was accepted!`,
+      this.c('beamUpRequestAccepted', this.author?.id ?? ''),
       this.author,
       interaction.client.user ?? undefined
     );
@@ -197,7 +196,7 @@ export abstract class BeamUp {
 
     await this.previousInteraction?.deleteReply();
     const msg = this.createMessage(
-      `<@${this.author?.id}>, request was rejected!`,
+      this.c('beamUpRequestRejected', this.author?.id ?? ''),
       this.author,
       interaction.client.user ?? undefined
     );

@@ -1,18 +1,19 @@
 import { Logger } from 'Services/logger.service';
 import { MinecraftService } from 'Services/minecraft.service';
 import { McServerDetail, McUrl } from 'Types/minecraft';
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import { status } from 'minecraft-server-util';
 import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
 
 @Discord()
-export abstract class Minecraft {
+export abstract class Minecraft extends Command {
   private minecraftService: MinecraftService;
   private logger: Logger;
 
   constructor() {
+    super();
     this.minecraftService = new MinecraftService();
     this.logger = new Logger();
   }
@@ -40,15 +41,12 @@ export abstract class Minecraft {
   private createMessage(status: StatusResponse): MessageEmbed {
     return new MessageEmbed()
       .setColor(0x00cc06)
-      .setTitle(Translate.find('mcTitle'))
-      .setThumbnail(status.favicon ? Translate.find('mcThumbnail', 'attachment://favicon.png') : '')
-      .setURL(Translate.find('mcUrl'))
-      .addField(
-        Translate.find('mcServerTitle'),
-        Translate.find('mcIp', status.host, status.port.toString())
-      )
-      .addField(Translate.find('mcVersion'), status.version ?? '~')
-      .addField(Translate.find('mcOnline'), `${status.onlinePlayers}/${status.maxPlayers}`);
+      .setTitle(this.c('mcTitle'))
+      .setThumbnail(status.favicon ? this.c('mcThumbnail', 'attachment://favicon.png') : '')
+      .setURL(this.c('mcUrl'))
+      .addField(this.c('mcServerTitle'), this.c('mcIp', status.host, status.port.toString()))
+      .addField(this.c('mcVersion'), status.version ?? '~')
+      .addField(this.c('mcOnline'), `${status.onlinePlayers}/${status.maxPlayers}`);
   }
 
   /**
@@ -63,11 +61,13 @@ export abstract class Minecraft {
   })
   async getMCServer(
     @SlashOption('ip', {
-      description: 'IP of your minecraft server '
+      description: 'IP of your minecraft server ',
+      required: false
     })
     ip: string,
     @SlashOption('port', {
-      description: 'Port of your minecraft server '
+      description: 'Port of your minecraft server ',
+      required: false
     })
     port: string,
     interaction: CommandInteraction
@@ -75,7 +75,7 @@ export abstract class Minecraft {
     const server = await this.findMcUrl(interaction.guild?.id ?? '', new McUrl(ip, +port ?? 25565));
 
     if (!server.domain) {
-      await interaction.reply(Translate.find('mcFormatError'));
+      await interaction.reply(this.c('mcFormatError'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
@@ -86,7 +86,7 @@ export abstract class Minecraft {
     }).catch(() => undefined);
 
     if (!res) {
-      await interaction.followUp(Translate.find('mcFormatError'));
+      await interaction.followUp(this.c('mcFormatError'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
@@ -131,7 +131,8 @@ export abstract class Minecraft {
     })
     ip: string,
     @SlashOption('port', {
-      description: 'Port of your minecraft server '
+      description: 'Port of your minecraft server ',
+      required: false
     })
     port: string,
     interaction: CommandInteraction
@@ -139,14 +140,14 @@ export abstract class Minecraft {
     const server = new McUrl(ip, +port ?? 25565);
 
     if (!interaction.guild?.id) {
-      await interaction.reply(Translate.find('mcNoGuild'));
+      await interaction.reply(this.c('mcNoGuild'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
     await this.getAndSetServer(interaction.guild.id, server);
 
-    await interaction.reply(Translate.find('mcIpSet'));
+    await interaction.reply(this.c('mcIpSet'));
     await new Promise((resolve) => setTimeout(resolve, 5000));
     return interaction.deleteReply();
   }

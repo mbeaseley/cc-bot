@@ -1,10 +1,10 @@
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 import * as urban from 'urban-dictionary';
 
 @Discord()
-export abstract class Urban {
+export abstract class Urban extends Command {
   /**
    * Create custom message
    * @param phrase
@@ -15,11 +15,11 @@ export abstract class Urban {
     const formattedPhrase = phrase.charAt(0).toUpperCase() + lower.slice(1);
 
     return new MessageEmbed()
-      .setTitle(Translate.find('urbanTitle', formattedPhrase))
+      .setTitle(this.c('urbanTitle', formattedPhrase))
       .setColor(1079)
       .setURL(entry.permalink)
       .setThumbnail('https://i.imgur.com/LmyPRai.png')
-      .setDescription(Translate.find('urbanDes', entry.definition, entry.example))
+      .setDescription(this.c('urbanDes', entry.definition, entry.example))
       .addField('👍', entry.thumbs_up.toString(), true)
       .addField('👎', entry.thumbs_down.toString(), true);
   }
@@ -41,7 +41,7 @@ export abstract class Urban {
   ): Promise<void> {
     return urban.define(phrase, async (err, entries) => {
       if (err) {
-        await interaction.reply(Translate.find('urbanError'));
+        await interaction.reply(this.c('urbanError'));
         await new Promise((resolve) => setTimeout(resolve, 5000));
         return interaction.deleteReply();
       }

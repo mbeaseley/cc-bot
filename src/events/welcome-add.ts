@@ -1,5 +1,5 @@
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
 import * as Canvas from 'canvas';
 import {
   GuildMember,
@@ -12,7 +12,7 @@ import { ArgsOf, Discord, On } from 'discordx';
 import path from 'path';
 
 @Discord()
-export abstract class WelcomeAdd {
+export abstract class WelcomeAdd extends Command {
   private color = '#ffffff';
   private strokeColor = '#74037b';
   private font = 'sans-serif';
@@ -57,7 +57,7 @@ export abstract class WelcomeAdd {
     // Welcome
     context.font = `28px ${this.font}`;
     context.fillStyle = this.color;
-    context.fillText(Translate.find('memberWelcome'), canvas.width / 2.5, canvas.height / 3.5);
+    context.fillText(this.c('memberWelcome'), canvas.width / 2.5, canvas.height / 3.5);
 
     // Member Name
     context.font = this.applyText(canvas, `${member.displayName}!`);
@@ -68,7 +68,7 @@ export abstract class WelcomeAdd {
     context.font = `20px ${this.font}`;
     context.fillStyle = this.color;
     context.fillText(
-      Translate.find('memberCount', memberCount.toString()),
+      this.c('memberCount', memberCount.toString()),
       canvas.width / 2.5,
       canvas.height / 1.4
     );
@@ -126,7 +126,7 @@ export abstract class WelcomeAdd {
     const attachment = new MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
 
     return channel.send({
-      content: Translate.find('memberSend', `<@!${member.id}>`),
+      content: this.c('memberSend', `<@!${member.id}>`),
       files: [attachment]
     });
   }

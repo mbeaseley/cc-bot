@@ -1,12 +1,14 @@
 import { ComplimentService } from 'Services/compliment.service';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class Compliment {
+export abstract class Compliment extends Command {
   private complimentService: ComplimentService;
 
   constructor() {
+    super();
     this.complimentService = new ComplimentService();
   }
 
@@ -18,7 +20,7 @@ export abstract class Compliment {
    */
   private createMessage(compliment: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Compliment Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('complimentTitle'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setDescription(compliment);
   }
@@ -33,7 +35,8 @@ export abstract class Compliment {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send a compliment to?'
+      description: 'Who do you want to send a compliment to?',
+      required: false
     })
     user: string,
     interaction: CommandInteraction
@@ -41,7 +44,7 @@ export abstract class Compliment {
     const { compliment } = await this.complimentService.getCompliment();
 
     if (!compliment) {
-      await interaction.reply('**No compliment was given!**');
+      await interaction.reply(this.c('noCompliment'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

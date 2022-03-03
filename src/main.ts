@@ -55,7 +55,7 @@ export class Main {
       silent: false
     });
 
-    await importx(...[`${__dirname}/commands/**/*.{ts,js}`, `${__dirname}/events/**/*.{ts,js}`]);
+    await importx(`${__dirname}/**/*.{ts,js}`);
     await Main.Client.login(environment.token ?? '');
 
     Main.Client.once('ready', async () => {

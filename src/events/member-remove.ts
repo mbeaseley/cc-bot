@@ -1,10 +1,10 @@
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
 import { GuildMember, Message, PartialGuildMember, TextChannel } from 'discord.js';
 import { ArgsOf, Discord, On } from 'discordx';
 
 @Discord()
-export abstract class memberRemove {
+export abstract class memberRemove extends Command {
   /**
    * Handle leaving member
    * @param member
@@ -26,7 +26,7 @@ export abstract class memberRemove {
       return Promise.reject();
     }
 
-    return channel.send(Translate.find('memberRemoveLeft', member.user?.username as string));
+    return channel.send(this.c('memberRemoveLeft', member.user?.username as string));
   }
 
   /**

@@ -1,4 +1,4 @@
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import dayjs = require('dayjs');
 import {
   Collection,
@@ -12,7 +12,7 @@ import {
 import { Discord, Slash } from 'discordx';
 
 @Discord()
-export abstract class ServerInfo {
+export abstract class ServerInfo extends Command {
   /**
    * Get size of member proportion
    * @param member
@@ -22,12 +22,13 @@ export abstract class ServerInfo {
   private filterMembers(
     member: Collection<string, GuildMember>,
     status: PresenceStatus | 'bot' | 'human'
-  ): number {
+  ): string {
     return (
-      ['bot', 'human'].indexOf(status) < 0
+      (['bot', 'human'].indexOf(status) < 0
         ? member.filter((m) => m.presence?.status === status)
         : member.filter((m) => (status === 'bot' ? m.user.bot : !m.user.bot))
-    ).size;
+      ).size.toString() ?? '~'
+    );
   }
 
   /**
@@ -38,49 +39,50 @@ export abstract class ServerInfo {
    */
   private async createMessage(guild: Guild, user: User): Promise<MessageEmbed> {
     const member = guild.members.cache;
-    const iconUrl = guild.iconURL() ?? '';
+    const iconURL = guild.iconURL() ?? '';
     const owner = member.find((m) => m.id === guild.ownerId)?.user.tag;
     const roles = [...guild.roles.cache.sort((a, b) => b.position - a.position).values()];
 
     const fields = [
       {
-        name: Translate.find('serverName'),
-        value: `\`${guild.name}\``,
+        name: this.c('serverName'),
+        value: this.c('serverInsert', guild.name),
         inline: true
       },
       {
-        name: Translate.find('serverOwner'),
-        value: `\`${owner}\``,
+        name: this.c('serverOwner'),
+        value: this.c('serverInsert', owner ?? '~'),
         inline: true
       },
       {
-        name: Translate.find('serverId'),
-        value: `\`${guild.id}\``,
+        name: this.c('serverId'),
+        value: this.c('serverInsert', guild.id),
         inline: true
       },
       {
-        name: Translate.find('serverDate'),
+        name: this.c('serverDate'),
         value: dayjs(guild.createdAt).format('DD/MM/YYYY'),
         inline: true
       },
       {
-        name: Translate.find('serverVerification'),
-        value: `\`${guild.verificationLevel}\``,
+        name: this.c('serverVerification'),
+        value: this.c('serverInsert', guild.verificationLevel),
         inline: true
       },
       {
-        name: Translate.find('serverCount', guild.memberCount.toString()),
-        value: `\`${this.filterMembers(member, 'online')} online, ${this.filterMembers(
-          member,
-          'idle'
-        )} idle and  ${this.filterMembers(member, 'dnd')} DnD \n ${this.filterMembers(
-          member,
-          'bot'
-        )} bots, ${this.filterMembers(member, 'human')} humans\``,
+        name: this.c('serverCount', guild.memberCount.toString()),
+        value: this.c(
+          'serverCountValue',
+          this.filterMembers(member, 'online'),
+          this.filterMembers(member, 'idle'),
+          this.filterMembers(member, 'dnd'),
+          this.filterMembers(member, 'bot'),
+          this.filterMembers(member, 'human')
+        ),
         inline: true
       },
       {
-        name: Translate.find('serverFeature'),
+        name: this.c('serverFeature'),
         value: `\`${
           guild.features.length === 0
             ? 'NONE'
@@ -89,19 +91,19 @@ export abstract class ServerInfo {
         inline: true
       },
       {
-        name: Translate.find('serverRoles', guild.roles.cache.size.toString()),
+        name: this.c('serverRoles', guild.roles.cache.size.toString()),
         value: `${roles.join(', ')}${roles.length != guild.roles.cache.size ? '...' : '.'}`,
         inline: true
       }
     ];
 
     return new MessageEmbed()
-      .setAuthor(Translate.find('serverAuthor', guild.name), iconUrl)
+      .setAuthor({ name: this.c('serverAuthor', guild.name), iconURL })
       .setColor(3447003)
-      .setThumbnail(iconUrl)
+      .setThumbnail(iconURL)
       .addFields(fields)
       .setTimestamp()
-      .setFooter(Translate.find('serverRequest', user.username));
+      .setFooter({ text: this.c('serverRequest', user.username) });
   }
 
   /**
@@ -115,7 +117,7 @@ export abstract class ServerInfo {
     const { guild, member } = interaction;
 
     if (!guild || !member) {
-      await interaction.reply('**No guild was found!**');
+      await interaction.reply(this.c('serverNoGuild'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

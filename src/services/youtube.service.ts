@@ -2,20 +2,21 @@ import { DatabaseService } from 'Services/database.service';
 import { Logger } from 'Services/logger.service';
 import { ServersCollection } from 'Types/database';
 import { Channel, ChannelRssResponse, Video, YoutubeChannel } from 'Types/youtube';
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
 import chalk = require('chalk');
 import dayjs = require('dayjs');
 import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Client } from 'discordx';
 import Parser from 'rss-parser';
 
-export class YoutubeService {
+export class YoutubeService extends Command {
   private interval: number = 300 * 1000; // 5 minutes
   private logger: Logger;
   private databaseService: DatabaseService;
 
   constructor() {
+    super();
     this.logger = new Logger();
     this.databaseService = new DatabaseService();
   }
@@ -47,10 +48,10 @@ export class YoutubeService {
    */
   private createMessage(video: Video, botIcon: string): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor(Translate.find('youtubeAuthor', video.author), botIcon)
+      .setAuthor({ name: this.c('youtubeAuthor', video.author), iconURL: botIcon })
       .setTitle(video.title)
       .setColor(16711680)
-      .setDescription(Translate.find('youtubeDes', video.link))
+      .setDescription(this.c('youtubeDes', video.link))
       .setImage(`https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`)
       .setFooter(dayjs().format('DD/MM/YYYY'));
   }

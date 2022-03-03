@@ -1,12 +1,14 @@
 import { AnimalsService } from 'Services/animal.service';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 
 @Discord()
-export abstract class Koala {
+export abstract class Koala extends Command {
   private animalService: AnimalsService;
 
   constructor() {
+    super();
     this.animalService = new AnimalsService();
   }
 
@@ -18,7 +20,7 @@ export abstract class Koala {
    */
   private createMessage(koala: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Koala Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('koalaCommand'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setImage(koala);
   }
@@ -35,7 +37,7 @@ export abstract class Koala {
     const koala = await this.animalService.getKoala();
 
     if (!koala?.link) {
-      await interaction.reply('**No koala was given!**');
+      await interaction.reply(this.c('koalaNotFound'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

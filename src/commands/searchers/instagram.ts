@@ -1,14 +1,15 @@
 import { InstagramService } from 'Services/instagram.service';
 import { InstaUser } from 'Types/instagram';
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class Instagram {
+export abstract class Instagram extends Command {
   private instagramService: InstagramService;
 
   constructor() {
+    super();
     this.instagramService = new InstagramService();
   }
 
@@ -20,16 +21,16 @@ export abstract class Instagram {
     return new MessageEmbed()
       .setColor(0x0099ff)
       .setTitle(u.fullName ?? '~')
-      .setURL(Translate.find('instaUrl', u.username as string))
+      .setURL(this.c('instaUrl', u.username as string))
       .setThumbnail(u.profileImage ?? '')
-      .addField(Translate.find('instaUsernameHeader'), u.username ?? '~')
-      .addField(Translate.find('instaNameHeader'), u.fullName ?? '~')
-      .addField(Translate.find('instaBioHeader'), u.biography ?? '~')
-      .addField(Translate.find('instaPostHeader'), u.posts?.toString() ?? '~', true)
-      .addField(Translate.find('instaFollowersHeader'), u.followers?.toString() || '~', true)
-      .addField(Translate.find('instaFollowingHeader'), u.following?.toString() || '~', true)
-      .addField(Translate.find('instaPrivateHeader'), u.private ? 'Yes 🔐' : 'No 🔓', true)
-      .addField(Translate.find('instaVerifiedHeader'), u.verified ? 'Yes ✅' : 'No ❌', true);
+      .addField(this.c('instaUsernameHeader'), u.username ?? '~')
+      .addField(this.c('instaNameHeader'), u.fullName ?? '~')
+      .addField(this.c('instaBioHeader'), u.biography ?? '~')
+      .addField(this.c('instaPostHeader'), u.posts?.toString() ?? '~', true)
+      .addField(this.c('instaFollowersHeader'), u.followers?.toString() || '~', true)
+      .addField(this.c('instaFollowingHeader'), u.following?.toString() || '~', true)
+      .addField(this.c('instaPrivateHeader'), u.private ? 'Yes 🔐' : 'No 🔓', true)
+      .addField(this.c('instaVerifiedHeader'), u.verified ? 'Yes ✅' : 'No ❌', true);
   }
 
   /**
@@ -50,7 +51,7 @@ export abstract class Instagram {
     const userAccount = await this.instagramService.getInstaUser(user);
 
     if (!userAccount) {
-      await interaction.reply('**No valid instagram username was given!**');
+      await interaction.reply(this.c('instaNoUser'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

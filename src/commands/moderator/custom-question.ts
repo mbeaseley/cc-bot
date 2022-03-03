@@ -2,8 +2,8 @@ import { hasPermission } from 'Guards/has-permission';
 import { ReactionService } from 'Services/reaction.service';
 import { RulesService } from 'Services/rules.service';
 import { QuestionMessage } from 'Types/question';
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
 import Utility from 'Utils/utility';
 import {
   BaseGuildEmojiManager,
@@ -21,15 +21,22 @@ const QUESTION_TYPES = ['rules', 'game roles'];
 @Discord()
 @Permission(false)
 @Permission(hasPermission(environment.moderatorRoles))
-export abstract class CustomQuestion {
+export abstract class CustomQuestion extends Command {
   private rulesService: RulesService;
   private reactionService: ReactionService;
 
   constructor() {
+    super();
     this.rulesService = new RulesService();
     this.reactionService = new ReactionService();
   }
 
+  /**
+   * Get emoji
+   * @param emojis
+   * @param target
+   * @returns GuildEmoji | undefined
+   */
   getEmoji(emojis: BaseGuildEmojiManager, target: string): GuildEmoji | undefined {
     return emojis.cache.find((emoji) => emoji.name === target);
   }
@@ -43,7 +50,7 @@ export abstract class CustomQuestion {
   private createRulesEmbed(message: string, bot: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
       .setColor(2424832)
-      .setAuthor(`Discord Server Rules`, bot?.displayAvatarURL())
+      .setAuthor({ name: this.c('customHeading'), iconURL: bot?.displayAvatarURL() })
       .setDescription(message);
   }
 
@@ -99,13 +106,13 @@ export abstract class CustomQuestion {
       }
       const r = Utility.findRole(roles, role?.[name as string]);
       const roleCopy = r?.mentionable ? '<@&' + r?.id + '>' : (r?.name as string);
-      return Translate.find('roleAction', name as string, id, roleCopy);
+      return this.c('roleAction', name as string, id, roleCopy);
     });
 
     const message = new MessageEmbed()
-      .setAuthor(Translate.find('questionAuthor'), bot?.displayAvatarURL())
+      .setAuthor({ name: this.c('questionAuthor'), iconURL: bot?.displayAvatarURL() })
       .setColor(3093237)
-      .setDescription(Translate.find('questionDescription', games.toString()));
+      .setDescription(this.c('questionDescription', games.toString()));
 
     return {
       message,
@@ -143,9 +150,7 @@ export abstract class CustomQuestion {
     }
 
     if (!questionMessage?.message || !questionMessage.emoji?.length) {
-      await interaction.reply(
-        `**Sorry, there was an issue with create message or finding emojis!**`
-      );
+      await interaction.reply(this.c('customQuestionMessage'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
