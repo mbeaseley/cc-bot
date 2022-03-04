@@ -52,7 +52,7 @@ export class Main {
         Intents.FLAGS.GUILD_VOICE_STATES
       ],
       botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
-      silent: false
+      silent: environment.environment === 'production' ? undefined : false
     });
 
     await importx(`${__dirname}/**/*.{ts,js}`);

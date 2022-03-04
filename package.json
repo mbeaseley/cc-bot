@@ -7,8 +7,8 @@
     "build": "tsc && copyfiles -u 1 ./src/assets/images/*.png build",
     "postinstall": "npm run build",
     "prestart": "npm run build",
-    "start": "node -r ts-node/register -r tsconfig-paths/register build/main.js",
-    "dev": "nodemon",
+    "start": "NODE_ENV=production node -r ts-node/register -r tsconfig-paths/register build/main.js",
+    "dev": "NODE_ENV=development nodemon",
     "lint": "eslint --ext ts .",
     "lint:fix": "npm run lint -- --fix",
     "npm:clear": "rm -rf $PWD/node_modules && rm $PWD/package-lock.json && npm cache verify && npm install"
