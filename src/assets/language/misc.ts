@@ -1,7 +1,8 @@
 export const misc = {
   beamUpFail: '**Unable to allow member to join!**',
   beamUpAuthor: 'Beam Up Command',
-  beamUpDescription: '<@!{0}> is asking to be beamed up to a restrictive channel!\n',
+  beamUpDescription:
+    '<@!{0}> is asking to be beamed up to a restrictive channel where <@!{1}> is!\n\n<@!{2}>, can you either accept or reject the request please?',
   beamUpNotRestrictive: '**No admin member are within restrictive voice channels!**',
   beamUpPermission:
     '**You have permission to join the voice channel named ${BeamUp.voiceChannel.name}!**',

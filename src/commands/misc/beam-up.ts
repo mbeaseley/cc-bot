@@ -1,6 +1,5 @@
 import { BeamUpItem } from 'Types/beam-up';
 import { Command } from 'Utils/command';
-import { environment } from 'Utils/environment';
 import {
   ButtonInteraction,
   ClientUser,
@@ -13,12 +12,13 @@ import {
   MessageButton,
   MessageEmbed
 } from 'discord.js';
-import { ButtonComponent, Discord, Slash } from 'discordx';
+import { ButtonComponent, Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class BeamUp extends Command {
   private _beamUpItem: BeamUpItem | undefined;
   private author: GuildMember | undefined;
+  private selectedUser: GuildMember | undefined;
   private previousInteraction: CommandInteraction | undefined;
 
   /**
@@ -69,13 +69,20 @@ export abstract class BeamUp extends Command {
   @Slash('beam-up', {
     description: 'Beam up member to restrictive voice channel!'
   })
-  async init(interaction: CommandInteraction): Promise<any> {
+  async init(
+    @SlashOption('user', {
+      description: 'Who do you want to join?'
+    })
+    user: string,
+    interaction: CommandInteraction
+  ): Promise<any> {
     this.previousInteraction = interaction;
     const { member, guild, client } = interaction;
     const members = await guild?.members.fetch();
-    const user = members?.find((m) => m.id === member?.user.id);
+    const u = members?.find((m) => m.id === member?.user.id);
+    this.selectedUser = guild?.members.cache.find((m) => m.id === user.replace(/\D/g, ''));
 
-    if (!user?.id) {
+    if (!u?.id || !this.selectedUser?.id) {
       const noRestrictmsg = this.createMessage(
         this.c('beamUpNoUserFound'),
         this.author,
@@ -86,17 +93,15 @@ export abstract class BeamUp extends Command {
       return interaction.deleteReply();
     }
 
-    const mods = environment.moderatorRoles.map((m) => m.id);
-    const voiceChannels = members
-      ?.filter((m) => !!m.roles.cache.find((r) => mods.indexOf(r.id) > -1))
-      .map((a) => this.findUserChannel(guild?.channels, a))
-      .filter(Boolean)
-      .filter((c) => !c?.permissionsFor(user).has('CONNECT', false));
+    const voiceChannel = this.findUserChannel(guild?.channels, this.selectedUser);
 
-    this.author = user;
-    const validChannels = [...new Set(voiceChannels)];
+    const validChannel = !voiceChannel?.permissionsFor(u).has('CONNECT', false)
+      ? voiceChannel
+      : undefined;
 
-    if (!validChannels.length) {
+    this.author = u;
+
+    if (!validChannel?.id) {
       const noRestrictmsg = this.createMessage(
         this.c('beamUpNotRestrictive'),
         this.author,
@@ -109,9 +114,14 @@ export abstract class BeamUp extends Command {
 
     await interaction.deferReply();
 
-    this.beamUpItem = new BeamUpItem(validChannels[0], user);
+    this.beamUpItem = new BeamUpItem(validChannel, u);
     const msg = this.createMessage(
-      this.c('beamUpDescription', member?.user.id ?? '~'),
+      this.c(
+        'beamUpDescription',
+        member?.user.id ?? '~',
+        this.selectedUser.id,
+        this.selectedUser.id
+      ),
       this.author,
       client.user ?? undefined
     );
@@ -141,11 +151,11 @@ export abstract class BeamUp extends Command {
    * @param interaction
    * @returns Promise<boolean>
    */
-  private async isModerator(interaction: ButtonInteraction): Promise<boolean> {
+  private async isSelectedUser(interaction: ButtonInteraction): Promise<boolean> {
     const { member, guild } = interaction;
     const members = await guild?.members.fetch();
     const user = members?.find((m) => m.id === member?.user.id);
-    return !!user?.roles.cache.find((r) => r.id === environment.moderatorRoles[0].id);
+    return user?.id === this.selectedUser?.id;
   }
 
   /**
@@ -166,8 +176,8 @@ export abstract class BeamUp extends Command {
    */
   @ButtonComponent('accept-btn')
   async acceptAction(interaction: ButtonInteraction): Promise<void> {
-    const isMod = await this.isModerator(interaction);
-    if (!isMod) {
+    const isValid = await this.isSelectedUser(interaction);
+    if (!isValid) {
       return Promise.resolve();
     }
 
@@ -189,8 +199,8 @@ export abstract class BeamUp extends Command {
    */
   @ButtonComponent('reject-btn')
   async rejectAction(interaction: ButtonInteraction): Promise<void> {
-    const isMod = await this.isModerator(interaction);
-    if (!isMod) {
+    const isValid = await this.isSelectedUser(interaction);
+    if (!isValid) {
       return Promise.resolve();
     }
 
