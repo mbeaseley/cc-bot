@@ -56,5 +56,8 @@ export const misc = {
   serverFetch: `**:hourglass: Fetching Info...**`,
   serverInsert: `\`{0}\``,
   serverCountValue: '{0} online, {1} idle and {2} DnD \n {3} bots, {4} humans',
-  serverNoGuild: '**No guild was found!**'
+  serverNoGuild: '**No guild was found!**',
+  voiceChannelErrorTitle: 'Creating Voice Channel Event',
+  voiceChannelDescription:
+    'Sorry, we unable to create a new voice channel due to an unexpected error.\n**Please give a moment and try again or contact this bot owner.**'
 };
