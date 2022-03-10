@@ -1,5 +1,4 @@
 import { admin } from 'Assets/language/admin';
-import { error } from 'Assets/language/error';
 import { fun } from 'Assets/language/fun';
 import { games } from 'Assets/language/games';
 import { image } from 'Assets/language/image';
@@ -18,7 +17,6 @@ export class Command {
   constructor() {
     this.copy = {
       ...admin,
-      ...error,
       ...fun,
       ...games,
       ...image,

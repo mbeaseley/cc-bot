@@ -1,15 +1,10 @@
 export const fun = {
   adviceTitle: 'Advice Command',
-  adviceDescription: `Send some friendly advice to yourself or a friend.`,
-  adviceFetch: '**:hourglass: Fetching Advice...**',
   noAdvice: '**No advice was given!**',
   complimentTitle: 'Compliment Command',
-  complimentFetch: '**:hourglass: Fetching Compliment...**',
   noCompliment: '**No compliment was given!**',
-  jokeFetch: '**:hourglass: Fetching Joke...**',
   jokeTitle: 'Dad Joke Command',
   noJoke: '**No joke was given!**',
-  flipFetch: '**:hourglass: Flipping coin!**',
   flipWin: 'You win!',
   flipLose: 'You lose!',
   heads: 'Heads',
@@ -18,16 +13,13 @@ export const fun = {
   flip: '**{0} :coin:**',
   Heads: `**{0}, {1} :coin:**`,
   insultTitle: 'Insult Command',
-  insultFetch: '**:hourglass: Fetching Insult...**',
   noInsult: '**No insult was given!**',
   memeTitle: 'Meme Command',
   memeAuthor: 'Very Bad Meme Command',
   memeDescription: '**{0}**',
-  memeFetch: '**:hourglass: Fetching Meme...**',
   noMeme: '**No meme was given!**',
   pong: 'pong',
   sayItTitle: 'Say It Command',
   noSayIt: '**No insult or compliment was given!**',
-  pollAuthor: '{0} Poll',
-  pollFormat: '**Please use correct formatting**'
+  pollAuthor: '{0} Poll'
 };

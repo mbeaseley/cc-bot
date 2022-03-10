@@ -53,7 +53,6 @@ export const misc = {
   serverRoles: 'Roles {0}:',
   serverAuthor: `{0}'s server info`,
   serverRequest: `Requested by {0}`,
-  serverFetch: `**:hourglass: Fetching Info...**`,
   serverInsert: `\`{0}\``,
   serverCountValue: '{0} online, {1} idle and {2} DnD \n {3} bots, {4} humans',
   serverNoGuild: '**No guild was found!**',
