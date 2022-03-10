@@ -2,10 +2,8 @@ import { windDirections } from 'Data/weather';
 import { WeatherService } from 'Services/weather.service';
 import { WeatherObject } from 'Types/weather';
 import { Command } from 'Utils/command';
-import Utility from 'Utils/utility';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
-import { runInThisContext } from 'vm';
 
 @Discord()
 export abstract class Weather extends Command {
