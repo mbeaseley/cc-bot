@@ -1,12 +1,14 @@
 import { AnimalsService } from 'Services/animal.service';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 
 @Discord()
-export abstract class RedPanda {
+export abstract class RedPanda extends Command {
   private animalService: AnimalsService;
 
   constructor() {
+    super();
     this.animalService = new AnimalsService();
   }
 
@@ -18,7 +20,7 @@ export abstract class RedPanda {
    */
   private createMessage(panda: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Red Panda Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('redPandaCommand'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setImage(panda);
   }
@@ -35,7 +37,7 @@ export abstract class RedPanda {
     const panda = await this.animalService.getRedPanda();
 
     if (!panda?.link) {
-      await interaction.reply('**No red panda was given!**');
+      await interaction.reply(this.c('redPandaNotFound'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

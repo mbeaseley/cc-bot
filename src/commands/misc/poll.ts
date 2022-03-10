@@ -1,10 +1,15 @@
 import { PollQuestion, selectionEmojis } from 'Types/poll';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, EmbedField, Message, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class Poll {
+export abstract class Poll extends Command {
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
+
+  constructor() {
+    super();
+  }
 
   /**
    * Create embed messaged
@@ -26,7 +31,7 @@ export abstract class Poll {
     } as EmbedField;
 
     return new MessageEmbed()
-      .setAuthor('Poll Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('pollHeading'), iconURL: user?.displayAvatarURL() })
       .setColor(19100)
       .addField(field.name, field.value, field.inline);
   }
@@ -36,13 +41,11 @@ export abstract class Poll {
   })
   async init(
     @SlashOption('question', {
-      description: 'What is your poll question?',
-      required: true
+      description: 'What is your poll question?'
     })
     question: string,
     @SlashOption('options', {
-      description: 'What are your poll options? (Split each option using a comma)',
-      required: true
+      description: 'What are your poll options? (Split each option using a comma)'
     })
     options: string,
     interaction: CommandInteraction

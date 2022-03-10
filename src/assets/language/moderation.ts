@@ -5,5 +5,9 @@ export const moderation = {
   deafenSuccess: '**<@{0}> was succesfully deafen!**',
   undeafenSuccess: '**<@{0}> was succesfully undeafen!**',
   mutedSuccess: '**<@{0}> was succesfully muted!**',
-  unmutedSuccess: '**<@{0}> was succesfully unmuted!**'
+  unmutedSuccess: '**<@{0}> was succesfully unmuted!**',
+  customHeading: `Discord Server Rules`,
+  customQuestionMessage: `**Sorry, there was an issue with create message or finding emojis!**`,
+  purgeNumberError: '**Please add a number less than 101!**',
+  purgeSuccess: '**Deleted Messages!**'
 };

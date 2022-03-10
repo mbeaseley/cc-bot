@@ -1,9 +1,14 @@
-import { Pagination } from '@discordx/utilities';
+import { Command } from 'Utils/command';
+import { Pagination } from '@discordx/pagination';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, MetadataStorage, Slash } from 'discordx';
 
 @Discord()
-export abstract class Help {
+export abstract class Help extends Command {
+  constructor() {
+    super();
+  }
+
   /**
    * Help Command
    * @param interaction
@@ -18,11 +23,14 @@ export abstract class Help {
 
     const pages = commands.map((cmd, i) => {
       return new MessageEmbed()
-        .setFooter(`Page ${i + 1} of ${commands.length}`)
-        .setAuthor('Slash command info', interaction.client.user?.displayAvatarURL())
+        .setFooter({ text: this.c('helpFooter', (i + 1).toString(), commands.length.toString()) })
+        .setAuthor({
+          name: this.c('helpHeading'),
+          iconURL: interaction.client.user?.displayAvatarURL()
+        })
         .setColor(10181046)
-        .addField('Name', cmd.name)
-        .addField('Description', cmd.description);
+        .addField(this.c('helpName'), cmd.name)
+        .addField(this.c('helpDescription'), cmd.description);
     });
 
     const pagination = new Pagination(interaction, pages);

@@ -1,14 +1,15 @@
+import { Command } from 'Root/utils/command';
 import { SteamService } from 'Services/steam.service';
 import { PlayerSummary, UserBans } from 'Types/steam';
-import Translate from 'Utils/translate';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class Steam {
+export abstract class Steam extends Command {
   private steamService: SteamService;
 
   constructor() {
+    super();
     this.steamService = new SteamService();
   }
 
@@ -21,12 +22,12 @@ export abstract class Steam {
   private createMessage(playerSummary: PlayerSummary, userBans: UserBans): MessageEmbed {
     return new MessageEmbed()
       .setColor(0x0099ff)
-      .setAuthor(Translate.find('steamAuthor'), playerSummary?.avatarFull)
+      .setAuthor({ name: this.c('steamAuthor'), iconURL: playerSummary?.avatarFull })
       .setTitle(playerSummary.name ?? '~')
       .setURL(playerSummary?.profileUrl ?? '')
       .setThumbnail(playerSummary.avatarFull)
       .setDescription(
-        Translate.find(
+        this.c(
           'steamDes',
           playerSummary.realName ?? '~',
           playerSummary.nameState ?? '~',
@@ -46,8 +47,7 @@ export abstract class Steam {
   })
   async init(
     @SlashOption('name', {
-      description: 'Vanity Url?',
-      required: true
+      description: 'Vanity Url?'
     })
     url: string,
     interaction: CommandInteraction
@@ -55,7 +55,7 @@ export abstract class Steam {
     const user = await this.steamService.getVanityUser(url);
 
     if (!user.steamId) {
-      await interaction.reply('**No valid steam vanity url was given!**');
+      await interaction.reply(this.c('steamNoUser'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

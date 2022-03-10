@@ -1,12 +1,14 @@
 import { AnimalsService } from 'Services/animal.service';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 
 @Discord()
-export abstract class Dog {
+export abstract class Dog extends Command {
   private animalService: AnimalsService;
 
   constructor() {
+    super();
     this.animalService = new AnimalsService();
   }
 
@@ -18,7 +20,7 @@ export abstract class Dog {
    */
   private createMessage(dog: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Dog Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('dogAuthor'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setImage(dog);
   }
@@ -35,7 +37,7 @@ export abstract class Dog {
     const dog = await this.animalService.getDog();
 
     if (!dog?.link) {
-      await interaction.reply('**No dog was given!**');
+      await interaction.reply(this.c('dogNotFound'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

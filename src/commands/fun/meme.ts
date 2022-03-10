@@ -1,13 +1,15 @@
 import { MemeService } from 'Services/meme.service';
 import { MemeItem } from 'Types/meme';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 
 @Discord()
-export abstract class Insult {
+export abstract class Insult extends Command {
   private memeService: MemeService;
 
   constructor() {
+    super();
     this.memeService = new MemeService();
   }
 
@@ -19,7 +21,7 @@ export abstract class Insult {
    */
   private createMessage(meme: MemeItem, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Meme Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('memeTitle'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setDescription(meme.caption ?? '')
       .setImage(meme.image ?? '');
@@ -35,7 +37,7 @@ export abstract class Insult {
     const meme = await this.memeService.getMeme();
 
     if (!meme?.image) {
-      await interaction.reply('**No meme was given!**');
+      await interaction.reply(this.c('noMeme'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

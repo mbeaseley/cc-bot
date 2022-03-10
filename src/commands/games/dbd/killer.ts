@@ -1,6 +1,6 @@
 import { DBDService } from 'Services/dbd.service';
 import { KillerBuild, KillerItem } from 'Types/dbd';
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import Utility from 'Utils/utility';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
@@ -8,10 +8,11 @@ import { Discord, Slash } from 'discordx';
 const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 
 @Discord()
-export abstract class Killer {
+export abstract class Killer extends Command {
   private dbdService: DBDService;
 
   constructor() {
+    super();
     this.dbdService = new DBDService();
   }
 
@@ -62,7 +63,7 @@ export abstract class Killer {
   private createMessage(build: KillerBuild): MessageEmbed {
     const { image, ...b } = { ...build };
 
-    return Utility.createEmbedMessage(b, Translate.find('dbdKillerTitle'), image);
+    return Utility.createEmbedMessage(b, this.c('dbdKillerTitle'), image);
   }
 
   /**
@@ -73,17 +74,23 @@ export abstract class Killer {
     description: 'Get a random dbd killer build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.member) {
+      await interaction.reply(this.c('dbdNoMember'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
+    }
+
     const build = await this.createKillerBuild(interaction.member.user.id);
 
     const users = await interaction.guild?.members.fetch();
-    const user = users?.find((u) => u.id === interaction.member.user.id);
+    const user = users?.find((u) => u.id === interaction.member?.user.id);
 
     const msg = this.createMessage(build);
 
     const dmChannel = await user?.createDM(true);
     await dmChannel?.send({ embeds: [msg] });
 
-    await interaction.reply('**Killer build sent!**');
+    await interaction.reply(this.c('dbdKillerSent'));
     await new Promise((resolve) => setTimeout(resolve, 2000));
     return interaction.deleteReply();
   }

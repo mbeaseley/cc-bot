@@ -1,12 +1,14 @@
 import { DadJokeService } from 'Services/dad-joke.service';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class DadJoke {
+export abstract class DadJoke extends Command {
   private dadJokeService: DadJokeService;
 
   constructor() {
+    super();
     this.dadJokeService = new DadJokeService();
   }
 
@@ -18,7 +20,7 @@ export abstract class DadJoke {
    */
   private createMessage(joke: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Dad Joke Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('jokeTitle'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setDescription(joke);
   }
@@ -33,7 +35,8 @@ export abstract class DadJoke {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send a joke to?'
+      description: 'Who do you want to send a joke to?',
+      required: false
     })
     user: string,
     interaction: CommandInteraction
@@ -41,7 +44,7 @@ export abstract class DadJoke {
     const { joke, delivery } = await this.dadJokeService.getJoke();
 
     if (!joke) {
-      await interaction.reply('**No dad joke was given!**');
+      await interaction.reply(this.c('noJoke'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

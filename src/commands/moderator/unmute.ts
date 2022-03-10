@@ -1,17 +1,18 @@
 import { hasPermission } from 'Guards/has-permission';
 import { ModerationService } from 'Services/moderation.service';
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
 import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
 import { Discord, Permission, Slash, SlashOption } from 'discordx';
 
 @Discord()
 @Permission(false)
 @Permission(hasPermission(environment.moderatorRoles))
-export abstract class Unmute {
+export abstract class Unmute extends Command {
   private moderationService: ModerationService;
 
   constructor() {
+    super();
     this.moderationService = new ModerationService();
   }
 
@@ -22,7 +23,7 @@ export abstract class Unmute {
   private createMessage(member: GuildMember): MessageEmbed {
     return new MessageEmbed()
       .setColor(member.displayHexColor)
-      .setDescription(Translate.find('unmutedSuccess', member.id));
+      .setDescription(this.c('unmutedSuccess', member.id));
   }
 
   /**
@@ -35,8 +36,7 @@ export abstract class Unmute {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to unmute?',
-      required: true
+      description: 'Who do you want to unmute?'
     })
     user: string,
     interaction: CommandInteraction
@@ -47,13 +47,13 @@ export abstract class Unmute {
     const target = members?.find((m) => m.id === userId);
 
     if (!target?.id) {
-      await interaction.reply(Translate.find('noUser'));
+      await interaction.reply(this.c('noUser'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
 
     if (!target.voice.channel) {
-      await interaction.reply(Translate.find('notInVoiceChannel'));
+      await interaction.reply(this.c('notInVoiceChannel'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

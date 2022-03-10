@@ -3,6 +3,7 @@ import { Permission } from 'Types/permission';
 require('dotenv').config({ path: `.env` });
 
 interface EnvironmentObject {
+  environment: 'development' | 'production';
   token: string;
   botId: string;
   moderatorRoles: Permission[];
@@ -28,6 +29,7 @@ interface EnvironmentObject {
 }
 
 export const environment = {
+  environment: process.env.NODE_ENV ?? 'production',
   token: process.env.TOKEN ?? '',
   botId: process.env.BOTID ?? '',
   moderatorRoles: (process.env.MODROLES ?? '').split(' ').map((id) => {

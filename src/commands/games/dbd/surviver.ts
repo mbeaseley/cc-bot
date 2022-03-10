@@ -1,15 +1,16 @@
 import { DBDService } from 'Services/dbd.service';
 import { SurviverBuild } from 'Types/dbd';
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import Utility from 'Utils/utility';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash } from 'discordx';
 
 @Discord()
-export abstract class Surviver {
+export abstract class Surviver extends Command {
   private dbdService: DBDService;
 
   constructor() {
+    super();
     this.dbdService = new DBDService();
   }
 
@@ -43,7 +44,7 @@ export abstract class Surviver {
    * @returns MessageEmbed
    */
   private createMessage(build: SurviverBuild): MessageEmbed {
-    return Utility.createEmbedMessage(build, Translate.find('dbdSurviverTitle'));
+    return Utility.createEmbedMessage(build, this.c('dbdSurviverTitle'));
   }
 
   /**
@@ -57,14 +58,14 @@ export abstract class Surviver {
     const build = await this.createSurviverBuild();
 
     const users = await interaction.guild?.members.fetch();
-    const user = users?.find((u) => u.id === interaction.member.user.id);
+    const user = users?.find((u) => u.id === interaction.member?.user.id);
 
     const msg = this.createMessage(build);
 
     const dmChannel = await user?.createDM(true);
     await dmChannel?.send({ embeds: [msg] });
 
-    await interaction.reply('**Surviver build sent!**');
+    await interaction.reply(this.c('dbdSurviverSent'));
     await new Promise((resolve) => setTimeout(resolve, 2000));
     return interaction.deleteReply();
   }
