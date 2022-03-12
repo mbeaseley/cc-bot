@@ -1,12 +1,10 @@
 import { BeamUpItem } from 'Types/beam-up';
-import { environment } from 'Utils/environment';
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import {
   ButtonInteraction,
   ClientUser,
   Collection,
   CommandInteraction,
-  GuildCacheMessage,
   GuildChannel,
   GuildChannelManager,
   GuildMember,
@@ -14,12 +12,13 @@ import {
   MessageButton,
   MessageEmbed
 } from 'discord.js';
-import { ButtonComponent, Discord, Slash } from 'discordx';
+import { ButtonComponent, Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class BeamUp {
+export abstract class BeamUp extends Command {
   private _beamUpItem: BeamUpItem | undefined;
   private author: GuildMember | undefined;
+  private selectedUser: GuildMember | undefined;
   private previousInteraction: CommandInteraction | undefined;
 
   /**
@@ -59,7 +58,7 @@ export abstract class BeamUp {
   private createMessage(description: string, member?: GuildMember, bot?: ClientUser): MessageEmbed {
     return new MessageEmbed()
       .setColor(member?.displayHexColor ?? 11166957)
-      .setAuthor(Translate.find('beamUpAuthor'), bot?.displayAvatarURL())
+      .setAuthor({ name: this.c('beamUpAuthor'), iconURL: bot?.displayAvatarURL() })
       .setDescription(description);
   }
 
@@ -70,15 +69,22 @@ export abstract class BeamUp {
   @Slash('beam-up', {
     description: 'Beam up member to restrictive voice channel!'
   })
-  async init(interaction: CommandInteraction): Promise<GuildCacheMessage<any> | void> {
+  async init(
+    @SlashOption('user', {
+      description: 'Who do you want to join?'
+    })
+    user: string,
+    interaction: CommandInteraction
+  ): Promise<any> {
     this.previousInteraction = interaction;
     const { member, guild, client } = interaction;
     const members = await guild?.members.fetch();
-    const user = members?.find((m) => m.id === member.user.id);
+    const u = members?.find((m) => m.id === member?.user.id);
+    this.selectedUser = guild?.members.cache.find((m) => m.id === user.replace(/\D/g, ''));
 
-    if (!user?.id) {
+    if (!u?.id || !this.selectedUser?.id) {
       const noRestrictmsg = this.createMessage(
-        `**Sorry, I was unable to find you!**`,
+        this.c('beamUpNoUserFound'),
         this.author,
         client.user ?? undefined
       );
@@ -87,19 +93,17 @@ export abstract class BeamUp {
       return interaction.deleteReply();
     }
 
-    const mods = environment.moderatorRoles.map((m) => m.id);
-    const voiceChannels = members
-      ?.filter((m) => !!m.roles.cache.find((r) => mods.indexOf(r.id) > -1))
-      .map((a) => this.findUserChannel(guild?.channels, a))
-      .filter(Boolean)
-      .filter((c) => !c?.permissionsFor(user).has('CONNECT', false));
+    const voiceChannel = this.findUserChannel(guild?.channels, this.selectedUser);
 
-    this.author = user;
-    const validChannels = [...new Set(voiceChannels)];
+    const validChannel = !voiceChannel?.permissionsFor(u).has('CONNECT', false)
+      ? voiceChannel
+      : undefined;
 
-    if (!validChannels.length) {
+    this.author = u;
+
+    if (!validChannel?.id) {
       const noRestrictmsg = this.createMessage(
-        Translate.find('beamUpNotRestrictive'),
+        this.c('beamUpNotRestrictive'),
         this.author,
         client.user ?? undefined
       );
@@ -110,21 +114,26 @@ export abstract class BeamUp {
 
     await interaction.deferReply();
 
-    this.beamUpItem = new BeamUpItem(validChannels[0], user);
+    this.beamUpItem = new BeamUpItem(validChannel, u);
     const msg = this.createMessage(
-      Translate.find('beamUpDescription', member.user.id),
+      this.c(
+        'beamUpDescription',
+        member?.user.id ?? '~',
+        this.selectedUser.id,
+        this.selectedUser.id
+      ),
       this.author,
       client.user ?? undefined
     );
 
     const acceptBtn = new MessageButton()
-      .setLabel('Accept')
+      .setLabel(this.c('beamUpAccept'))
       .setEmoji('✅')
       .setStyle('PRIMARY')
       .setCustomId('accept-btn');
 
     const rejectBtn = new MessageButton()
-      .setLabel('Reject')
+      .setLabel(this.c('beamUpReject'))
       .setEmoji('🛑')
       .setStyle('SECONDARY')
       .setCustomId('reject-btn');
@@ -142,11 +151,11 @@ export abstract class BeamUp {
    * @param interaction
    * @returns Promise<boolean>
    */
-  private async isModerator(interaction: ButtonInteraction): Promise<boolean> {
+  private async isSelectedUser(interaction: ButtonInteraction): Promise<boolean> {
     const { member, guild } = interaction;
     const members = await guild?.members.fetch();
-    const user = members?.find((m) => m.id === member.user.id);
-    return !!user?.roles.cache.find((r) => r.id === environment.moderatorRoles[0].id);
+    const user = members?.find((m) => m.id === member?.user.id);
+    return user?.id === this.selectedUser?.id;
   }
 
   /**
@@ -167,15 +176,15 @@ export abstract class BeamUp {
    */
   @ButtonComponent('accept-btn')
   async acceptAction(interaction: ButtonInteraction): Promise<void> {
-    const isMod = await this.isModerator(interaction);
-    if (!isMod) {
+    const isValid = await this.isSelectedUser(interaction);
+    if (!isValid) {
       return Promise.resolve();
     }
 
     await this.moveMemberToChannel();
     await this.previousInteraction?.deleteReply();
     const msg = this.createMessage(
-      `<@${this.author?.id}>, request was accepted!`,
+      this.c('beamUpRequestAccepted', this.author?.id ?? ''),
       this.author,
       interaction.client.user ?? undefined
     );
@@ -190,14 +199,14 @@ export abstract class BeamUp {
    */
   @ButtonComponent('reject-btn')
   async rejectAction(interaction: ButtonInteraction): Promise<void> {
-    const isMod = await this.isModerator(interaction);
-    if (!isMod) {
+    const isValid = await this.isSelectedUser(interaction);
+    if (!isValid) {
       return Promise.resolve();
     }
 
     await this.previousInteraction?.deleteReply();
     const msg = this.createMessage(
-      `<@${this.author?.id}>, request was rejected!`,
+      this.c('beamUpRequestRejected', this.author?.id ?? ''),
       this.author,
       interaction.client.user ?? undefined
     );

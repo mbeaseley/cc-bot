@@ -1,14 +1,16 @@
 import { ComplimentService } from 'Services/compliment.service';
 import { InsultService } from 'Services/insult.service';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class SayIt {
+export abstract class SayIt extends Command {
   private insultService: InsultService;
   private complimentService: ComplimentService;
 
   constructor() {
+    super();
     this.insultService = new InsultService();
     this.complimentService = new ComplimentService();
   }
@@ -21,7 +23,7 @@ export abstract class SayIt {
    */
   private createMessage(copy: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Say It Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('sayItTitle'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setDescription(copy);
   }
@@ -36,7 +38,8 @@ export abstract class SayIt {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send this to?'
+      description: 'Who do you want to send this to?',
+      required: false
     })
     user: string,
     interaction: CommandInteraction
@@ -50,7 +53,7 @@ export abstract class SayIt {
       : await this.insultService.getInsult().then((i) => i);
 
     if (!copy) {
-      await interaction.reply('**No insult or compliment was given!**');
+      await interaction.reply(this.c('noSayIt'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

@@ -1,12 +1,14 @@
 import { AdviceService } from 'Services/advice.service';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class Advice {
+export abstract class Advice extends Command {
   private adviceService: AdviceService;
 
   constructor() {
+    super();
     this.adviceService = new AdviceService();
   }
 
@@ -18,7 +20,7 @@ export abstract class Advice {
    */
   private createMessage(advice: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Advice Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('adviceTitle'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setDescription(advice);
   }
@@ -33,7 +35,8 @@ export abstract class Advice {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send advice to?'
+      description: 'Who do you want to send advice to?',
+      required: false
     })
     user: string,
     interaction: CommandInteraction
@@ -41,7 +44,7 @@ export abstract class Advice {
     const { advice } = await this.adviceService.getAdvice();
 
     if (!advice) {
-      await interaction.reply('**No advice was given!**');
+      await interaction.reply(this.c('noAdvice'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

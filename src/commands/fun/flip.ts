@@ -1,16 +1,11 @@
-import {
-  ButtonInteraction,
-  CommandInteraction,
-  GuildCacheMessage,
-  MessageActionRow,
-  MessageButton
-} from 'discord.js';
+import { Command } from 'Utils/command';
+import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import { ButtonComponent, Discord, Slash } from 'discordx';
 
 type Coin = 'Heads' | 'Tails';
 
 @Discord()
-export abstract class CoinFlip {
+export abstract class CoinFlip extends Command {
   /**
    * Create message
    * @param guess
@@ -18,8 +13,8 @@ export abstract class CoinFlip {
    * @returns string
    */
   createMessage(guess: Coin, result: Coin): string {
-    const guessResult = `${result === guess ? 'You win!' : 'You lose!'}`;
-    return `**${result}, ${guessResult} :coin:**`;
+    const guessResult = `${result === guess ? this.c('flipWin') : this.c('flipLose')}`;
+    return this.c('flipResult', result, guessResult);
   }
 
   /**
@@ -27,17 +22,17 @@ export abstract class CoinFlip {
    * @param interaction
    */
   @Slash('flip', { description: `Flip a coin` })
-  async init(interaction: CommandInteraction): Promise<GuildCacheMessage<any> | void> {
+  async init(interaction: CommandInteraction): Promise<any> {
     await interaction.deferReply();
 
     const headsBtn = new MessageButton()
-      .setLabel('Heads')
+      .setLabel(this.c('heads'))
       .setEmoji('🪙')
       .setStyle('PRIMARY')
       .setCustomId('heads-btn');
 
     const tailsBtn = new MessageButton()
-      .setLabel('Tails')
+      .setLabel(this.c('tails'))
       .setEmoji('🪙')
       .setStyle('SECONDARY')
       .setCustomId('tails-btn');
@@ -45,7 +40,7 @@ export abstract class CoinFlip {
     const row = new MessageActionRow().addComponents([headsBtn, tailsBtn]);
 
     return interaction.editReply({
-      content: `Heads or Tails?`,
+      content: this.c('flipChoice'),
       components: [row]
     });
   }

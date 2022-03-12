@@ -52,10 +52,11 @@ export class Main {
         Intents.FLAGS.GUILD_VOICE_STATES
       ],
       botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
-      silent: true
+      silent: environment.environment === 'production' ? undefined : false
     });
 
-    await importx(...[`${__dirname}/commands/**/*.{ts,js}`, `${__dirname}/events/**/*.{ts,js}`]);
+    await importx(`${__dirname}/commands/**/*.{ts,js}`);
+    await importx(`${__dirname}/events/**/*.{ts,js}`);
     await Main.Client.login(environment.token ?? '');
 
     Main.Client.once('ready', async () => {

@@ -1,16 +1,16 @@
 import { windDirections } from 'Data/weather';
 import { WeatherService } from 'Services/weather.service';
 import { WeatherObject } from 'Types/weather';
-import Translate from 'Utils/translate';
-import Utility from 'Utils/utility';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class Weather {
+export abstract class Weather extends Command {
   private weatherService: WeatherService;
 
   constructor() {
+    super();
     this.weatherService = new WeatherService();
   }
 
@@ -35,42 +35,52 @@ export abstract class Weather {
    */
   private createMessage = (w: WeatherObject, user: ClientUser | null): MessageEmbed => {
     return new MessageEmbed()
-      .setAuthor(
-        Translate.find('weatherAuthor', w.name || '', w.area?.country || ''),
-        user?.displayAvatarURL()
-      )
+      .setAuthor({
+        name: this.c('weatherAuthor', w.name || '', w.area?.country || ''),
+        iconURL: user?.displayAvatarURL()
+      })
       .setColor(5602003)
-      .setThumbnail(Translate.find('weatherUrl', w.weather?.icon as string))
-      .setDescription(`**${Utility.captaliseFirstLetter(w.weather?.description ?? '')}**`)
+      .setThumbnail(this.c('weatherUrl', w.weather?.icon as string))
+      .setDescription(this.cBold('weatherBold', w.weather?.description ?? ''))
       .addFields([
         {
-          name: Translate.find('weatherTimezone'),
+          name: this.c('weatherTimezone'),
           value: `${w.timezone}`,
           inline: true
         },
         {
-          name: Translate.find('weatherDegree'),
-          value: 'Celsius',
+          name: this.c('weatherDegree'),
+          value: this.c('weatherDegreeValue'),
           inline: true
         },
         {
-          name: Translate.find('weatherTemp'),
-          value: w.weatherDetails ? `${Math.round(w.weatherDetails.temp)}°` : 'Unknown',
+          name: this.c('weatherTemp'),
+          value: this.c(
+            'weatherTempValue',
+            w.weatherDetails ? Math.round(w.weatherDetails?.temp)?.toString() : '~'
+          ),
           inline: true
         },
         {
-          name: Translate.find('weatherWind'),
-          value: `${w.wind?.speed} m/s ${this.getWindDirection(w.wind?.degree)}`,
+          name: this.c('weatherWind'),
+          value: this.c(
+            'weatherWindValue',
+            w.wind?.speed.toString() ?? '~',
+            this.getWindDirection(w.wind?.degree) ?? '~'
+          ),
           inline: true
         },
         {
-          name: Translate.find('weatherFeelLike'),
-          value: w.weatherDetails ? `${Math.round(w.weatherDetails.feelingTempLike)}°` : 'Unknown',
+          name: this.c('weatherFeelLike'),
+          value: this.c(
+            'weatherTempValue',
+            w.weatherDetails ? Math.round(w.weatherDetails?.feelingTempLike)?.toString() : '~'
+          ),
           inline: true
         },
         {
-          name: Translate.find('weatherHumidity'),
-          value: `${w.weatherDetails?.humidity}%`,
+          name: this.c('weatherHumidity'),
+          value: this.c('weatherPercent', w.weatherDetails?.humidity.toString() ?? '~'),
           inline: true
         }
       ]);
@@ -81,8 +91,7 @@ export abstract class Weather {
   })
   async init(
     @SlashOption('location', {
-      description: 'Enter a major city?',
-      required: true
+      description: 'Enter a major city?'
     })
     location: string,
     interaction: CommandInteraction
@@ -90,7 +99,7 @@ export abstract class Weather {
     const weather = await this.weatherService.getCurrentWeather(location);
 
     if (!weather) {
-      await interaction.reply(Translate.find('weatherNoLocation'));
+      await interaction.reply(this.c('weatherNoLocation'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

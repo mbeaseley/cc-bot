@@ -1,14 +1,15 @@
 import { TwitchService } from 'Services/twitch.service';
 import { Followers, Stream, User } from 'Types/twitch';
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class Twitch {
+export abstract class Twitch extends Command {
   private twitchService: TwitchService;
 
   constructor() {
+    super();
     this.twitchService = new TwitchService();
   }
 
@@ -23,21 +24,20 @@ export abstract class Twitch {
     const m = new MessageEmbed()
       .setTitle(user.displayName ?? '~')
       .setColor(6570405)
-      .setURL(Translate.find('twitchUrl'))
+      .setURL(this.c('twitchUrl'))
       .setThumbnail(`${user.profileImageUrl}`)
-      .setAuthor(Translate.find('twitchAuthor'), 'https://i.imgur.com/4b9X738.png')
-      .addField(
-        Translate.find('twitchBio'),
-        user.description || Translate.find('twitchNoUser'),
-        true
-      )
-      .addField(Translate.find('twitchViews'), user.viewCount?.toString() ?? '~', true)
-      .addField(Translate.find('twitchFollowers'), followers?.total?.toString() ?? '~', true);
+      .setAuthor({
+        name: this.c('twitchAuthor'),
+        iconURL: 'https://i.imgur.com/4b9X738.png'
+      })
+      .addField(this.c('twitchBio'), user.description || this.c('twitchNoUser'), true)
+      .addField(this.c('twitchViews'), user.viewCount?.toString() ?? '~', true)
+      .addField(this.c('twitchFollowers'), followers?.total?.toString() ?? '~', true);
 
     if (stream?.id) {
       m.addField(
         '\u200B',
-        Translate.find('twitchSteam', stream.title || '~', stream.viewerCount?.toString() || '~')
+        this.c('twitchSteam', stream.title || '~', stream.viewerCount?.toString() || '~')
       ).setImage(
         `${stream.thumbnailUrl?.replace('{width}', `${1920}`).replace('{height}', `${1080}`)}`
       );
@@ -51,8 +51,7 @@ export abstract class Twitch {
   })
   async init(
     @SlashOption('user', {
-      description: 'Username?',
-      required: true
+      description: 'Username?'
     })
     username: string,
     interaction: CommandInteraction
@@ -60,7 +59,7 @@ export abstract class Twitch {
     const user = await this.twitchService.getUser(username);
 
     if (!user.id) {
-      await interaction.reply(Translate.find('twitchNotFound'));
+      await interaction.reply(this.c('twitchNotFound'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

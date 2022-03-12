@@ -1,4 +1,5 @@
 import { hasPermission } from 'Guards/has-permission';
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import { CommandInteraction, TextChannel } from 'discord.js';
 import { Discord, Permission, Slash, SlashOption } from 'discordx';
@@ -6,7 +7,7 @@ import { Discord, Permission, Slash, SlashOption } from 'discordx';
 @Discord()
 @Permission(false)
 @Permission(hasPermission(environment.moderatorRoles))
-export abstract class Purge {
+export abstract class Purge extends Command {
   /**
    * Purge Command
    * @param number
@@ -24,7 +25,7 @@ export abstract class Purge {
     interaction: CommandInteraction
   ): Promise<void> {
     if (number > 100) {
-      await interaction.reply('**Please add a number less than 101!**');
+      await interaction.reply(this.c('purgeNumberError'));
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return interaction.deleteReply();
     }
@@ -35,7 +36,7 @@ export abstract class Purge {
 
     await channel?.bulkDelete(number ?? 1, true);
 
-    await interaction.reply('**Deleted Messages!**');
+    await interaction.reply(this.c('purgeSuccess'));
     await new Promise((resolve) => setTimeout(resolve, 3000));
     return interaction.deleteReply();
   }

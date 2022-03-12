@@ -1,12 +1,14 @@
 import { InsultService } from 'Services/insult.service';
+import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-export abstract class Insult {
+export abstract class Insult extends Command {
   private insultService: InsultService;
 
   constructor() {
+    super();
     this.insultService = new InsultService();
   }
 
@@ -18,7 +20,7 @@ export abstract class Insult {
    */
   private createMessage(insult: string, user: ClientUser | null): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor('Insult Command', user?.displayAvatarURL())
+      .setAuthor({ name: this.c('insultTitle'), iconURL: user?.displayAvatarURL() })
       .setColor('RANDOM')
       .setDescription(insult);
   }
@@ -33,7 +35,8 @@ export abstract class Insult {
   })
   async init(
     @SlashOption('user', {
-      description: 'Who do you want to send a insult to?'
+      description: 'Who do you want to send a insult to?',
+      required: false
     })
     user: string,
     interaction: CommandInteraction
@@ -41,7 +44,7 @@ export abstract class Insult {
     const insult = await this.insultService.getInsult();
 
     if (!insult) {
-      await interaction.reply('**No insult was given!**');
+      await interaction.reply(this.c('noInsult'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }

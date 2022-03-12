@@ -1,4 +1,4 @@
-import Translate from 'Utils/translate';
+import { Command } from 'Utils/command';
 import {
   ButtonInteraction,
   Collection,
@@ -13,9 +13,13 @@ import {
 import { ButtonComponent, Discord, Slash } from 'discordx';
 
 @Discord()
-export abstract class ChoosePlayer {
+export abstract class ChoosePlayer extends Command {
   private currentUser: User | undefined;
   private previousInteraction: CommandInteraction | ButtonInteraction | undefined;
+
+  constructor() {
+    super();
+  }
 
   /**
    * Find random user from voice channel
@@ -44,7 +48,7 @@ export abstract class ChoosePlayer {
   private createMessage(selectedUser: User): MessageEmbed {
     return new MessageEmbed()
       .setColor(selectedUser.hexAccentColor ?? 'RANDOM')
-      .setDescription(Translate.find('playerChoiceDescription', selectedUser.username));
+      .setDescription(this.c('playerChoiceDescription', selectedUser.username));
   }
 
   /**
@@ -57,12 +61,12 @@ export abstract class ChoosePlayer {
     interaction: CommandInteraction | ButtonInteraction,
     users: Collection<string, GuildMember>,
     msg: MessageEmbed
-  ): Promise<GuildCacheMessage<any> | void> {
+  ): Promise<any> {
     if (users.size > 1) {
       await interaction.deferReply();
 
       const rollAgainBtn = new MessageButton()
-        .setLabel('Someone else?')
+        .setLabel(this.c('playerChoiceCta'))
         .setEmoji('🎲')
         .setStyle('SECONDARY')
         .setCustomId('roll-again-btn');
@@ -90,10 +94,10 @@ export abstract class ChoosePlayer {
   ): Promise<GuildCacheMessage<any> | void> {
     this.previousInteraction = interaction;
     const users = await interaction.guild?.members.fetch();
-    const user = users?.find((u) => u.id === interaction.member.user.id);
+    const user = users?.find((u) => u.id === interaction.member?.user.id);
 
     if (!user) {
-      await interaction.reply('**Sorry, failed to find user!**');
+      await interaction.reply(this.c('playerChoiceUserError'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
@@ -101,7 +105,7 @@ export abstract class ChoosePlayer {
     const channel = user?.voice.channel;
 
     if (!channel) {
-      await interaction.reply('**Please join voice channel to use this command!**');
+      await interaction.reply(this.c('playerChoiceChannelError'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
@@ -110,7 +114,7 @@ export abstract class ChoosePlayer {
     const selectedUser = this.findRandomUser(channelUsers);
 
     if (!selectedUser) {
-      await interaction.reply('**Sorry, failed to select user!**');
+      await interaction.reply(this.c('playerChoiceSelectedError'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
