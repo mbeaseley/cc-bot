@@ -26,6 +26,7 @@ interface EnvironmentObject {
     channel: string;
     role: string;
   };
+  feedbackChannel: string;
 }
 
 export const environment = {
@@ -53,5 +54,6 @@ export const environment = {
     category: process.env.EVENTCATEGORYID,
     channel: process.env.EVENTCHANNELID,
     role: process.env.EVENTROLEID
-  }
+  },
+  feedbackChannel: process.env.FEEDBACKCHANNELID
 } as EnvironmentObject;

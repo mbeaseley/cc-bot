@@ -58,5 +58,7 @@ export const misc = {
   serverNoGuild: '**No guild was found!**',
   voiceChannelErrorTitle: 'Creating Voice Channel Event',
   voiceChannelDescription:
-    'Sorry, we unable to create a new voice channel due to an unexpected error.\n**Please give a moment and try again or contact this bot owner.**'
+    'Sorry, we unable to create a new voice channel due to an unexpected error.\n**Please give a moment and try again or contact this bot owner.**',
+  supportTitle: `Support Request Sent By {0}`,
+  supportSuccessTitle: 'Support Request Sent'
 };
