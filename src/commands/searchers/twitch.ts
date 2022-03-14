@@ -1,3 +1,4 @@
+import { Logger } from 'Services/logger.service';
 import { TwitchService } from 'Services/twitch.service';
 import { Followers, Stream, User } from 'Types/twitch';
 import { Command } from 'Utils/command';
@@ -7,10 +8,12 @@ import { Discord, Slash, SlashOption } from 'discordx';
 @Discord()
 export abstract class Twitch extends Command {
   private twitchService: TwitchService;
+  private logger: Logger;
 
   constructor() {
     super();
     this.twitchService = new TwitchService();
+    this.logger = new Logger();
   }
 
   /**
@@ -24,7 +27,7 @@ export abstract class Twitch extends Command {
     const m = new MessageEmbed()
       .setTitle(user.displayName ?? '~')
       .setColor(6570405)
-      .setURL(this.c('twitchUrl'))
+      .setURL(this.c('twitchUrl', user?.loginName ?? ''))
       .setThumbnail(`${user.profileImageUrl}`)
       .setAuthor({
         name: this.c('twitchAuthor'),
@@ -46,6 +49,11 @@ export abstract class Twitch extends Command {
     return m;
   }
 
+  /**
+   * Twitch command init
+   * @param username
+   * @param interaction
+   */
   @Slash('twitch', {
     description: 'Find your favourites streamers.'
   })
@@ -56,9 +64,15 @@ export abstract class Twitch extends Command {
     username: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const user = await this.twitchService.getUser(username);
+    let user: User | undefined;
 
-    if (!user.id) {
+    try {
+      user = await this.twitchService.getUser(username);
+    } catch (e: unknown) {
+      this.logger.error(this.c('twitchUserError'));
+    }
+
+    if (!user?.id) {
       await interaction.reply(this.c('twitchNotFound'));
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
