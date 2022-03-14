@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 
 export abstract class HttpClient {
   readonly instance: AxiosInstance;
@@ -17,5 +17,6 @@ export abstract class HttpClient {
 
   private _handleResponse = (data: AxiosResponse<any>) => data;
 
-  protected _handleError = (error: Error) => Promise.reject(error);
+  protected _handleError = (error: Error | AxiosError<any, { data: { message: string } }>) =>
+    Promise.reject(error);
 }

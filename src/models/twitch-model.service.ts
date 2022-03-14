@@ -48,15 +48,11 @@ export class TwitchModelService extends HttpClient {
   /**
    * Get Token Response
    */
-  private getTokenResponse = (): Promise<AxiosResponse<ApiTokenResponseObject>> =>
-    this.instance.post<ApiTokenResponseObject>(
-      `https://id.twitch.tv/oauth2/token?client_id=${environment.twitchClientId}&client_secret=${environment.twitchSecret}&grant_type=client_credentials&scope=user:read:email`,
-      {
-        headers: {
-          Accept: 'application/json'
-        }
-      }
+  private getTokenResponse = (): Promise<AxiosResponse<ApiTokenResponseObject>> => {
+    return this.instance.post<ApiTokenResponseObject>(
+      `https://id.twitch.tv/oauth2/token?client_id=${environment.twitchClientId}&client_secret=${environment.twitchSecret}&grant_type=client_credentials&scope=user:read:email`
     );
+  };
 
   /**
    * Get Token response
