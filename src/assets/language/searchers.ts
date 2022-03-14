@@ -20,6 +20,7 @@ export const searchers = {
   twitchFollowers: 'Followers: ',
   twitchSteam: `**{0}** for {1} viewers`,
   twitchNotFound: '**Twitch user not found.**',
+  twitchUserError: 'Issue with fetching user, check twitch integration.',
   urbanTitle: `{0} Definition`,
   urbanDes: `{0}\nFor example: {1}`,
   urbanNoPhrase: '**Try again, please add word to define!**',

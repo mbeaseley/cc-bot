@@ -18,8 +18,6 @@ export abstract class Instagram extends Command {
    * @param u
    */
   private createMessage(u: InstaUser): MessageEmbed {
-    console.log(u);
-
     return new MessageEmbed()
       .setColor(0x0099ff)
       .setTitle(u.fullName ?? '~')
