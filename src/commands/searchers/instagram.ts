@@ -18,6 +18,8 @@ export abstract class Instagram extends Command {
    * @param u
    */
   private createMessage(u: InstaUser): MessageEmbed {
+    console.log(u);
+
     return new MessageEmbed()
       .setColor(0x0099ff)
       .setTitle(u.fullName ?? '~')
@@ -25,7 +27,7 @@ export abstract class Instagram extends Command {
       .setThumbnail(u.profileImage ?? '')
       .addField(this.c('instaUsernameHeader'), u.username ?? '~')
       .addField(this.c('instaNameHeader'), u.fullName ?? '~')
-      .addField(this.c('instaBioHeader'), u.biography ?? '~')
+      .addField(this.c('instaBioHeader'), u.biography?.length ? u.biography : '~')
       .addField(this.c('instaPostHeader'), u.posts?.toString() ?? '~', true)
       .addField(this.c('instaFollowersHeader'), u.followers?.toString() || '~', true)
       .addField(this.c('instaFollowingHeader'), u.following?.toString() || '~', true)

@@ -16,11 +16,16 @@ export class Support extends Command {
    * @param bot
    * @returns MessageEmbed
    */
-  private createSupportMessage(support: string, member?: GuildMember, bot?: User): MessageEmbed {
+  private createSupportMessage(
+    support: string,
+    member: GuildMember | undefined,
+    fallbackUser: User,
+    bot?: User
+  ): MessageEmbed {
     return new MessageEmbed()
       .setColor(member?.displayHexColor ?? 11166957)
       .setAuthor({
-        name: this.c('supportTitle', member?.nickname ?? '~'),
+        name: this.c('supportTitle', member?.nickname || fallbackUser?.username || '~'),
         iconURL: bot?.displayAvatarURL()
       })
       .setDescription(support);
@@ -70,7 +75,7 @@ export class Support extends Command {
       return interaction.deleteReply();
     }
 
-    const msg = this.createSupportMessage(support, member, bot);
+    const msg = this.createSupportMessage(support, member, member?.user, bot);
     await channel.send({ embeds: [msg] });
     const successMsg = this.createSuccessMessage(member, bot);
     await interaction.reply({ embeds: [successMsg] });
