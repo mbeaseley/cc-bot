@@ -37,16 +37,6 @@ export class KillerBuild {
   }
 }
 
-export class KillerOffering {
-  name: string | undefined;
-  rarity: string | undefined;
-
-  constructor(name?: string, rarity?: string) {
-    this.name = name;
-    this.rarity = rarity;
-  }
-}
-
 export class KillerAddon {
   name: string | undefined;
   rarity: string | undefined;
@@ -54,6 +44,20 @@ export class KillerAddon {
   constructor(name?: string, rarity?: string) {
     this.name = name;
     this.rarity = rarity;
+  }
+
+  /**
+   * Get in one line
+   * @returns string
+   */
+  getOneLine(): string {
+    return `${this.name ?? '~'} (${this.rarity ?? '~'})`;
+  }
+}
+
+export class KillerOffering extends KillerAddon {
+  constructor(name?: string, rarity?: string) {
+    super(name, rarity);
   }
 }
 
@@ -122,26 +126,27 @@ export class SurvivorAddon {
     this.name = name;
     this.rarity = rarity;
   }
-}
 
-export class SurvivorLoot {
-  name: string | undefined;
-  rarity: string | undefined;
-  addons: SurvivorAddon[] | [] = [];
-
-  constructor(name?: string, rarity?: string) {
-    this.name = name;
-    this.rarity = rarity;
+  /**
+   * Get in one line
+   * @returns string
+   */
+  getOneLine(): string {
+    return `${this.name ?? '~'} (${this.rarity ?? '~'})`;
   }
 }
 
-export class SurvivorOffering {
-  name: string | undefined;
-  rarity: string | undefined;
+export class SurvivorLoot extends SurvivorAddon {
+  addons: SurvivorAddon[] | [] = [];
 
   constructor(name?: string, rarity?: string) {
-    this.name = name;
-    this.rarity = rarity;
+    super(name, rarity);
+  }
+}
+
+export class SurvivorOffering extends SurvivorAddon {
+  constructor(name?: string, rarity?: string) {
+    super(name, rarity);
   }
 }
 

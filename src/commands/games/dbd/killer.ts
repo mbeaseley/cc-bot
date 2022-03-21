@@ -62,8 +62,19 @@ export abstract class Killer extends Command {
    */
   private createMessage(build: KillerBuild): MessageEmbed {
     const { image, ...b } = { ...build };
+    const msg = new MessageEmbed()
+      .setColor(10181046)
+      .setTitle(this.c('dbdKillerTitle'))
+      .addField('Killer', b.killer ?? '~', false)
+      .addField('Addon', b.addons?.map((a) => a.getOneLine()).join('\n') ?? '~', false)
+      .addField('Offering', b.offering?.map((a) => a.getOneLine()).join('\n') ?? '~', false)
+      .addField('Perks', b.perks?.join('\n') ?? '~', false);
 
-    return Utility.createEmbedMessage(b, this.c('dbdKillerTitle'), image);
+    if (image) {
+      msg.setThumbnail(image);
+    }
+
+    return msg;
   }
 
   /**
@@ -85,10 +96,16 @@ export abstract class Killer extends Command {
     const users = await interaction.guild?.members.fetch();
     const user = users?.find((u) => u.id === interaction.member?.user.id);
 
+    if (!user) {
+      await interaction.reply(this.c('dbdNoMember'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
+    }
+
     const msg = this.createMessage(build);
 
-    const dmChannel = await user?.createDM(true);
-    await dmChannel?.send({ embeds: [msg] });
+    const dmChannel = await user.createDM(true);
+    await dmChannel.send({ embeds: [msg] });
 
     await interaction.reply(this.c('dbdKillerSent'));
     await new Promise((resolve) => setTimeout(resolve, 2000));

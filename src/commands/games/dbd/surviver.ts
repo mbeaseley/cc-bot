@@ -44,7 +44,17 @@ export abstract class Surviver extends Command {
    * @returns MessageEmbed
    */
   private createMessage(build: SurviverBuild): MessageEmbed {
-    return Utility.createEmbedMessage(build, this.c('dbdSurviverTitle'));
+    return new MessageEmbed()
+      .setColor(10181046)
+      .setTitle(this.c('dbdSurviverTitle'))
+      .addField('Loot', build.loot?.map((l) => l.getOneLine()).join('\n') ?? '~', false)
+      .addField(
+        'Loot Addons',
+        build.lootAddons?.map((l) => l.getOneLine()).join('\n') ?? '~',
+        false
+      )
+      .addField('Offering', build.offering?.map((o) => o.getOneLine()).join('\n') ?? '~', false)
+      .addField('Perks', build.perks?.join('\n') ?? '~', false);
   }
 
   /**
@@ -60,10 +70,16 @@ export abstract class Surviver extends Command {
     const users = await interaction.guild?.members.fetch();
     const user = users?.find((u) => u.id === interaction.member?.user.id);
 
+    if (!user) {
+      await interaction.reply(this.c('dbdNoMember'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
+    }
+    console.log(build);
     const msg = this.createMessage(build);
 
-    const dmChannel = await user?.createDM(true);
-    await dmChannel?.send({ embeds: [msg] });
+    const dmChannel = await user.createDM(true);
+    await dmChannel.send({ embeds: [msg] });
 
     await interaction.reply(this.c('dbdSurviverSent'));
     await new Promise((resolve) => setTimeout(resolve, 2000));
