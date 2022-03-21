@@ -1,7 +1,7 @@
 import { DatabaseService } from 'Services/database.service';
+import { ApiServerRules } from 'Types/api/rules';
 import { RulesCollection } from 'Types/database';
 import { RuleItem, RuleType } from 'Types/question';
-import { ApiServerRules } from 'Types/rules';
 import Utility from 'Utils/utility';
 import { GuildEmoji } from 'discord.js';
 

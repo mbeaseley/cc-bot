@@ -1,5 +1,4 @@
 import { DatabaseService } from 'Services/database.service';
-import { DBDCollections } from 'Types/database';
 import {
   ApiKillerOffering,
   ApiKillerPerk,
@@ -7,7 +6,10 @@ import {
   ApiPlayerKillers,
   ApiSurvivorLoot,
   ApiSurvivorOffering,
-  ApiSurvivorPerk,
+  ApiSurvivorPerk
+} from 'Types/api/dbd';
+import { DBDCollections } from 'Types/database';
+import {
   KillerAddon,
   KillerItem,
   KillerOffering,

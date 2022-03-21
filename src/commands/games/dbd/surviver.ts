@@ -75,7 +75,7 @@ export abstract class Surviver extends Command {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return interaction.deleteReply();
     }
-    console.log(build);
+
     const msg = this.createMessage(build);
 
     const dmChannel = await user.createDM(true);
