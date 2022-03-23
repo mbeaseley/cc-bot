@@ -47,22 +47,26 @@ export abstract class Surviver extends Command {
     return new MessageEmbed()
       .setColor(10181046)
       .setTitle(this.c('dbdSurviverTitle'))
-      .addField('Loot', build.loot?.map((l) => l.getOneLine()).join('\n') ?? '~', false)
+      .addField(this.c('dbdLoot'), build.loot?.map((l) => l.getOneLine()).join('\n') ?? '~', false)
       .addField(
-        'Loot Addons',
+        this.c('dbdLookAddon'),
         build.lootAddons?.map((l) => l.getOneLine()).join('\n') ?? '~',
         false
       )
-      .addField('Offering', build.offering?.map((o) => o.getOneLine()).join('\n') ?? '~', false)
-      .addField('Perks', build.perks?.join('\n') ?? '~', false);
+      .addField(
+        this.c('dbdOffering'),
+        build.offering?.map((o) => o.getOneLine()).join('\n') ?? '~',
+        false
+      )
+      .addField(this.c('dbdPerk'), build.perks?.join('\n') ?? '~', false);
   }
 
   /**
-   * DBD surviver commmand
+   * DBD survivor commmand
    * @param interaction
    */
-  @Slash('dbd-surviver', {
-    description: 'Get a random dbd surviver build.'
+  @Slash('dbd-survivor', {
+    description: 'Get a random dbd survivor build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createSurviverBuild();

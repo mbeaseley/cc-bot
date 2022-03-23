@@ -41,3 +41,11 @@ export interface ApiSurvivorOffering {
   name: string;
   rarity: string;
 }
+
+/*=============
+Challenges
+==============*/
+
+export interface ApiChallenge {
+  challenge: string;
+}

@@ -12,7 +12,9 @@ export enum DBDCollections {
   playerKillers = 'player_killers',
   survivorLoots = 'survivor_loots',
   survivorOfferings = 'survivor_offerings',
-  survivorPerks = 'survivor_perks'
+  survivorPerks = 'survivor_perks',
+  killerChallenges = 'killer_challenges',
+  survivorChallenges = 'survivor_challenges'
 }
 
 export enum EmojisCollections {

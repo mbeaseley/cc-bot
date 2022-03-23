@@ -65,10 +65,14 @@ export abstract class Killer extends Command {
     const msg = new MessageEmbed()
       .setColor(10181046)
       .setTitle(this.c('dbdKillerTitle'))
-      .addField('Killer', b.killer ?? '~', false)
-      .addField('Addon', b.addons?.map((a) => a.getOneLine()).join('\n') ?? '~', false)
-      .addField('Offering', b.offering?.map((a) => a.getOneLine()).join('\n') ?? '~', false)
-      .addField('Perks', b.perks?.join('\n') ?? '~', false);
+      .addField(this.c('dbdKiller'), b.killer ?? '~', false)
+      .addField(this.c('dbdAddon'), b.addons?.map((a) => a.getOneLine()).join('\n') ?? '~', false)
+      .addField(
+        this.c('dbdOffering'),
+        b.offering?.map((a) => a.getOneLine()).join('\n') ?? '~',
+        false
+      )
+      .addField(this.c('dbdPerk'), b.perks?.join('\n') ?? '~', false);
 
     if (image) {
       msg.setThumbnail(image);

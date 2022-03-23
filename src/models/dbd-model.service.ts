@@ -1,5 +1,6 @@
 import { DatabaseService } from 'Services/database.service';
 import {
+  ApiChallenge,
   ApiKillerOffering,
   ApiKillerPerk,
   ApiKillers,
@@ -28,6 +29,8 @@ export class DBDModelService {
   private _survivorLoot: SurvivorLoot[] | undefined;
   private _survivorOffering: SurvivorOffering[] | undefined;
   private _playerKillers: PlayerKiller[] | undefined;
+  private _killerChallenges: string[] = [];
+  private _survivorChallenges: string[] = [];
 
   constructor() {
     this.databaseService = new DatabaseService();
@@ -358,5 +361,82 @@ export class DBDModelService {
     );
     this.survivorOfferings = this.fromSurvivorOfferingsPayload(res);
     return Promise.resolve(this.survivorOfferings);
+  }
+
+  /**
+   * ==================================
+   * Fetch Challenges
+   * ==================================
+   */
+
+  /**
+   * Get killer challenges
+   */
+  private get killerChallenges() {
+    return this._killerChallenges;
+  }
+
+  /**
+   * Set killer challenges
+   */
+  private set killerChallenges(value: string[]) {
+    this._killerChallenges = value;
+  }
+
+  /**
+   * Format challenge payload
+   * @param res
+   * @returns string[]
+   */
+  fromChallengePayload(res: ApiChallenge[]): string[] {
+    return res.map((r) => r.challenge) ?? [];
+  }
+
+  /**
+   * Get killer challenges
+   * @returns promise<string[]>
+   */
+  public async getKillerChallenges(): Promise<string[]> {
+    if (this.killerChallenges.length) {
+      return Promise.resolve(this.killerChallenges);
+    }
+
+    const res = await this.databaseService.get<any, ApiChallenge>(
+      'dbd',
+      DBDCollections.killerChallenges
+    );
+    this.killerChallenges = this.fromChallengePayload(res);
+    return Promise.resolve(this.killerChallenges);
+  }
+
+  /**
+   * Get survivor challenges
+   */
+  private get survivorChallenges() {
+    return this._survivorChallenges;
+  }
+
+  /**
+   * Set survivor challenges
+   */
+  private set survivorChallenges(value: string[]) {
+    this._survivorChallenges = value;
+  }
+
+  /**
+   * Get survivor challenges
+   * @returns promise<string[]>
+   */
+  public async getSurvivorChallenges(): Promise<string[]> {
+    if (this.survivorChallenges.length) {
+      return Promise.resolve(this.survivorChallenges);
+    }
+
+    const res = await this.databaseService.get<any, ApiChallenge>(
+      'dbd',
+      DBDCollections.survivorChallenges
+    );
+    this.survivorChallenges = this.fromChallengePayload(res);
+    return Promise.resolve(this.survivorChallenges);
   }
 }
