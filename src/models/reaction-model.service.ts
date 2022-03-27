@@ -1,6 +1,7 @@
 import { DatabaseService } from 'Services/database.service';
+import { ApiEmojiRole, ApiReactionAction } from 'Types/api/reaction';
 import { EmojisCollections } from 'Types/database';
-import { ApiEmojiRole, ApiReactionAction, Reaction } from 'Types/reaction';
+import { Reaction } from 'Types/reaction';
 
 export class ReactionModelService {
   private databaseService: DatabaseService;

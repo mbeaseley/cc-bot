@@ -44,15 +44,29 @@ export abstract class Surviver extends Command {
    * @returns MessageEmbed
    */
   private createMessage(build: SurviverBuild): MessageEmbed {
-    return Utility.createEmbedMessage(build, this.c('dbdSurviverTitle'));
+    return new MessageEmbed()
+      .setColor(10181046)
+      .setTitle(this.c('dbdSurviverTitle'))
+      .addField(this.c('dbdLoot'), build.loot?.map((l) => l.getOneLine()).join('\n') ?? '~', false)
+      .addField(
+        this.c('dbdLookAddon'),
+        build.lootAddons?.map((l) => l.getOneLine()).join('\n') ?? '~',
+        false
+      )
+      .addField(
+        this.c('dbdOffering'),
+        build.offering?.map((o) => o.getOneLine()).join('\n') ?? '~',
+        false
+      )
+      .addField(this.c('dbdPerk'), build.perks?.join('\n') ?? '~', false);
   }
 
   /**
-   * DBD surviver commmand
+   * DBD survivor commmand
    * @param interaction
    */
-  @Slash('dbd-surviver', {
-    description: 'Get a random dbd surviver build.'
+  @Slash('dbd-survivor', {
+    description: 'Get a random dbd survivor build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createSurviverBuild();
@@ -60,10 +74,16 @@ export abstract class Surviver extends Command {
     const users = await interaction.guild?.members.fetch();
     const user = users?.find((u) => u.id === interaction.member?.user.id);
 
+    if (!user) {
+      await interaction.reply(this.c('dbdNoMember'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
+    }
+
     const msg = this.createMessage(build);
 
-    const dmChannel = await user?.createDM(true);
-    await dmChannel?.send({ embeds: [msg] });
+    const dmChannel = await user.createDM(true);
+    await dmChannel.send({ embeds: [msg] });
 
     await interaction.reply(this.c('dbdSurviverSent'));
     await new Promise((resolve) => setTimeout(resolve, 2000));

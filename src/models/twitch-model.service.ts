@@ -3,12 +3,9 @@ import {
   ApiFollowersResponseObject,
   ApiStreamResponseObject,
   ApiTokenResponseObject,
-  ApiUserResponseObject,
-  Followers,
-  Stream,
-  Token,
-  User
-} from 'Types/twitch';
+  ApiUserResponseObject
+} from 'Types/api/twitch';
+import { Followers, Stream, Token, User } from 'Types/twitch';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');

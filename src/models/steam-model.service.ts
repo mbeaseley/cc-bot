@@ -3,13 +3,9 @@ import {
   ApiLocationResponseObject,
   ApiPlayerSummaryResponseObject,
   ApiUserBanResponseObject,
-  ApiVanityUserResponseObject,
-  playerStatus,
-  PlayerSummary,
-  SteamLocation,
-  UserBans,
-  VanityUser
-} from 'Types/steam';
+  ApiVanityUserResponseObject
+} from 'Types/api/steam';
+import { playerStatus, PlayerSummary, SteamLocation, UserBans, VanityUser } from 'Types/steam';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');
