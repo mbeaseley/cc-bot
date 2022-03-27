@@ -6,6 +6,7 @@ import {
   SurvivorLoot,
   SurvivorOffering
 } from 'Types/dbd';
+import Utility from 'Utils/utility';
 
 export class DBDService {
   private dbdModelService: DBDModelService;
@@ -68,5 +69,39 @@ export class DBDService {
    */
   public async getSurvivorOfferings(): Promise<SurvivorOffering[]> {
     return this.dbdModelService.getSurvivorOfferings();
+  }
+
+  /**
+   * Get Killer Challenges
+   * @returns string[]
+   */
+  public async getKillerChallenges(): Promise<string[]> {
+    return this.dbdModelService.getKillerChallenges();
+  }
+
+  /**
+   * Get Single Killer Challenges
+   * @returns string[]
+   */
+  public async getKillerChallenge(): Promise<string | undefined> {
+    const challenges = await this.dbdModelService.getKillerChallenges();
+    return challenges.length ? Utility.random(challenges) : undefined;
+  }
+
+  /**
+   * Get Survivor Challenges
+   * @returns string[]
+   */
+  public async getSurvivorChallenges(): Promise<string[]> {
+    return this.dbdModelService.getSurvivorChallenges();
+  }
+
+  /**
+   * Get Single Survivor Challenges
+   * @returns string[]
+   */
+  public async getSurvivorChallenge(): Promise<string | undefined> {
+    const challenges = await this.dbdModelService.getSurvivorChallenges();
+    return challenges.length ? Utility.random(challenges) : undefined;
   }
 }

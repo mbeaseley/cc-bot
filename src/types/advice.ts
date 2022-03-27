@@ -7,10 +7,3 @@ export class AdviceItem {
     this.advice = advice;
   }
 }
-
-export interface ApiAdviceResponse {
-  slip: {
-    id: number;
-    advice: string;
-  };
-}

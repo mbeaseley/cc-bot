@@ -1,5 +1,6 @@
 import { HttpClient } from 'Interceptor/http-client';
-import { AdviceItem, ApiAdviceResponse } from 'Types/advice';
+import { AdviceItem } from 'Types/advice';
+import { ApiAdviceResponse } from 'Types/api/advice';
 import { AxiosResponse } from 'axios';
 
 export class AdviceModelService extends HttpClient {
