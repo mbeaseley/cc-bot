@@ -37,3 +37,5 @@ export class DadJokeModelService extends HttpClient {
     return this.fromPayload(data);
   }
 }
+
+export const dadJokeModelService = new DadJokeModelService();

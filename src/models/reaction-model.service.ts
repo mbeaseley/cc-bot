@@ -108,3 +108,5 @@ export class ReactionModelService {
     return Promise.resolve(this.reactionActions);
   }
 }
+
+export const reactionModelService = new ReactionModelService();

@@ -13,6 +13,10 @@ import dayjs = require('dayjs');
 export class TwitchModelService extends HttpClient {
   private _token: Token | undefined;
 
+  constructor() {
+    super('');
+  }
+
   /**
    * ==================================
    * Fetch Token
@@ -208,3 +212,5 @@ export class TwitchModelService extends HttpClient {
     return this.fromFollowersPayload(data);
   }
 }
+
+export const twitchModelService = new TwitchModelService();

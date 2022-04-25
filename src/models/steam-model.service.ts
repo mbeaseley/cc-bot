@@ -11,6 +11,10 @@ import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');
 
 export class SteamModelService extends HttpClient {
+  constructor() {
+    super('');
+  }
+
   /**
    * Get General Response
    * @param endpoint
@@ -216,3 +220,5 @@ export class SteamModelService extends HttpClient {
     return this.fromUserBansPayload(data);
   }
 }
+
+export const steamModelService = new SteamModelService();

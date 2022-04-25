@@ -6,6 +6,10 @@ import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');
 
 export class WeatherModelService extends HttpClient {
+  constructor() {
+    super('');
+  }
+
   /**
    * Current Weather Payload
    * @param res
@@ -100,3 +104,5 @@ export class WeatherModelService extends HttpClient {
     return this.fromPayload(data);
   }
 }
+
+export const weatherModelService = new WeatherModelService();

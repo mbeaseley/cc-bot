@@ -79,3 +79,5 @@ export class AnimalsModelService extends HttpClient {
     return (await this.getResponse('koala'))?.data;
   }
 }
+
+export const animalsModelService = new AnimalsModelService();

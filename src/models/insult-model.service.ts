@@ -25,3 +25,5 @@ export class InsultModelService extends HttpClient {
     return (await this.getResponse())?.data;
   }
 }
+
+export const insultModelService = new InsultModelService();

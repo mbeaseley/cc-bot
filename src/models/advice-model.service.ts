@@ -38,3 +38,5 @@ export class AdviceModelService extends HttpClient {
     return this.fromPayload(data);
   }
 }
+
+export const adviceModelService = new AdviceModelService();

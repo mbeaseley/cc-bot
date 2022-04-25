@@ -4,6 +4,10 @@ import { InstaUser } from 'Types/instagram';
 import { AxiosResponse } from 'axios';
 
 export class InstagramModelService extends HttpClient {
+  constructor() {
+    super('https://www.instagram.com/');
+  }
+
   /**
    * Format response into correct type
    * @param res
@@ -32,7 +36,7 @@ export class InstagramModelService extends HttpClient {
    * @returns Promise<ApiInstaUserResponse>
    */
   private getResponse = (username: string): Promise<AxiosResponse<ApiInstaUserResponse>> =>
-    this.instance.get<ApiInstaUserResponse>(`https://www.instagram.com/${username}/feed/?__a=1`, {
+    this.instance.get<ApiInstaUserResponse>(`${username}/feed/?__a=1`, {
       headers: {
         Accept: 'application/json'
       }
@@ -47,3 +51,5 @@ export class InstagramModelService extends HttpClient {
     return this.fromPayload(data);
   }
 }
+
+export const instagramModelService = new InstagramModelService();

@@ -1,4 +1,4 @@
-import { DBDModelService } from 'Models/dbd-model.service';
+import { dbdModelService } from 'Models/dbd-model.service';
 import {
   KillerItem,
   KillerOffering,
@@ -9,18 +9,12 @@ import {
 import Utility from 'Utils/utility';
 
 export class DBDService {
-  private dbdModelService: DBDModelService;
-
-  constructor() {
-    this.dbdModelService = new DBDModelService();
-  }
-
   /**
    * Fetch Player Killers
    * @returns PlayerKiller[]
    */
   public async getPlayerKillers(): Promise<PlayerKiller[]> {
-    return this.dbdModelService.getPlayerKillers();
+    return dbdModelService.getPlayerKillers();
   }
 
   /**
@@ -28,7 +22,7 @@ export class DBDService {
    * @returns KillerItem[]
    */
   public async getKillers(): Promise<KillerItem[]> {
-    return this.dbdModelService.getKillers();
+    return dbdModelService.getKillers();
   }
 
   /**
@@ -36,7 +30,7 @@ export class DBDService {
    * @returns string[]
    */
   public async getKillerPerks(): Promise<string[]> {
-    return this.dbdModelService.getKillerPerks();
+    return dbdModelService.getKillerPerks();
   }
 
   /**
@@ -44,7 +38,7 @@ export class DBDService {
    * @returns KillerOffering[]
    */
   public async getKillerOfferings(): Promise<KillerOffering[]> {
-    return this.dbdModelService.getKillerOfferings();
+    return dbdModelService.getKillerOfferings();
   }
 
   /**
@@ -52,7 +46,7 @@ export class DBDService {
    * @returns string[]
    */
   public async getSurvivorPerks(): Promise<string[]> {
-    return this.dbdModelService.getSurvivorPerks();
+    return dbdModelService.getSurvivorPerks();
   }
 
   /**
@@ -60,7 +54,7 @@ export class DBDService {
    * @returns SurvivorLoot[]
    */
   public async getSurvivorLoot(): Promise<SurvivorLoot[]> {
-    return this.dbdModelService.getSurvivorLoot();
+    return dbdModelService.getSurvivorLoot();
   }
 
   /**
@@ -68,7 +62,7 @@ export class DBDService {
    * @returns SurvivorOffering[]
    */
   public async getSurvivorOfferings(): Promise<SurvivorOffering[]> {
-    return this.dbdModelService.getSurvivorOfferings();
+    return dbdModelService.getSurvivorOfferings();
   }
 
   /**
@@ -76,7 +70,7 @@ export class DBDService {
    * @returns string[]
    */
   public async getKillerChallenges(): Promise<string[]> {
-    return this.dbdModelService.getKillerChallenges();
+    return dbdModelService.getKillerChallenges();
   }
 
   /**
@@ -84,7 +78,7 @@ export class DBDService {
    * @returns string[]
    */
   public async getKillerChallenge(): Promise<string | undefined> {
-    const challenges = await this.dbdModelService.getKillerChallenges();
+    const challenges = await dbdModelService.getKillerChallenges();
     return challenges.length ? Utility.random(challenges) : undefined;
   }
 
@@ -93,7 +87,7 @@ export class DBDService {
    * @returns string[]
    */
   public async getSurvivorChallenges(): Promise<string[]> {
-    return this.dbdModelService.getSurvivorChallenges();
+    return dbdModelService.getSurvivorChallenges();
   }
 
   /**
@@ -101,7 +95,7 @@ export class DBDService {
    * @returns string[]
    */
   public async getSurvivorChallenge(): Promise<string | undefined> {
-    const challenges = await this.dbdModelService.getSurvivorChallenges();
+    const challenges = await dbdModelService.getSurvivorChallenges();
     return challenges.length ? Utility.random(challenges) : undefined;
   }
 }

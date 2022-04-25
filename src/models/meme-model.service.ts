@@ -26,3 +26,5 @@ export class MemeModelService extends HttpClient {
     return (await this.getResponse())?.data ?? new MemeItem();
   }
 }
+
+export const memeModelService = new MemeModelService();

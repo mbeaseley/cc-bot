@@ -440,3 +440,5 @@ export class DBDModelService {
     return Promise.resolve(this.survivorChallenges);
   }
 }
+
+export const dbdModelService = new DBDModelService();

@@ -88,3 +88,5 @@ export class RulesModelService {
     return this.serverRules;
   }
 }
+
+export const rulesModelService = new RulesModelService();
