@@ -1,15 +1,12 @@
-import { DadJokeService } from 'Services/dad-joke.service';
+import { dadJokeService } from 'Services/dad-joke.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class DadJoke extends Command {
-  private dadJokeService: DadJokeService;
-
   constructor() {
     super();
-    this.dadJokeService = new DadJokeService();
   }
 
   /**
@@ -41,7 +38,7 @@ export abstract class DadJoke extends Command {
     user: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const { joke, delivery } = await this.dadJokeService.getJoke();
+    const { joke, delivery } = await dadJokeService.getJoke();
 
     if (!joke) {
       await interaction.reply(this.c('noJoke'));

@@ -17,3 +17,5 @@ export class RulesService {
     return this.rulesModelService.getServerRules(acceptEmoji);
   }
 }
+
+export const rulesService = new RulesService();

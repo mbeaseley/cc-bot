@@ -16,3 +16,5 @@ export class MemeService {
     return this.memeModelService.getMeme();
   }
 }
+
+export const memeService = new MemeService();

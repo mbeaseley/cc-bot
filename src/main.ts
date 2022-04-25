@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { Logger } from 'Services/logger.service';
-import { YoutubeService } from 'Services/youtube.service';
+import { logger } from 'Services/logger.service';
+import { youtubeService } from 'Services/youtube.service';
 import { environment as env } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import { importx } from '@discordx/importer';
@@ -14,13 +14,6 @@ dotenv.config();
 @Discord()
 export class Main {
   private static _client: Client;
-  private static logger: Logger;
-  private static youtubeService: YoutubeService;
-
-  constructor() {
-    Main.logger = new Logger();
-    Main.youtubeService = new YoutubeService();
-  }
 
   static get Client(): Client {
     return this._client;
@@ -64,15 +57,18 @@ export class Main {
     await Main.Client.login(token ?? '');
 
     Main.Client.once('ready', async () => {
-      Main.logger.info('info check');
-      Main.logger.warn('warning check');
-      Main.logger.error('error check');
+      logger.info('info check');
+      logger.warn('warning check');
+      logger.error('error check');
 
-      await Main.Client.clearApplicationCommands();
+      Main.Client.clearApplicationCommands();
+
       await Main.Client.initApplicationCommands({
         guild: { log: true },
         global: { log: true }
       });
+
+      console.log('1');
 
       // init permissions; enabled log to see changes
       await Main.Client.initApplicationPermissions(true);
@@ -85,9 +81,11 @@ export class Main {
         type: 'LISTENING'
       });
 
-      // await Main.youtubeService.check(Main.Client);
+      console.log('2');
 
-      Main.logger.info(chalk.bold('BOT READY'));
+      // await youtubeService.check(Main.Client);
+
+      logger.info(chalk.bold('BOT READY'));
     });
 
     Main.Client.on('interactionCreate', (interaction: Interaction) => {

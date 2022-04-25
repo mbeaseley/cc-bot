@@ -64,3 +64,5 @@ export class AnimalsService {
     return this.animalsModelService.getKoala();
   }
 }
+
+export const animalsService = new AnimalsService();

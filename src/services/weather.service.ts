@@ -16,3 +16,5 @@ export class WeatherService {
     return this.weatherModelService.getCurrentWeather(location);
   }
 }
+
+export const weatherService = new WeatherService();

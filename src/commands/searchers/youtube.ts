@@ -1,5 +1,5 @@
 import { hasPermission } from 'Guards/has-permission';
-import { YoutubeService } from 'Services/youtube.service';
+import { youtubeService } from 'Services/youtube.service';
 import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import { CommandInteraction } from 'discord.js';
@@ -14,11 +14,8 @@ import { Discord, Permission, Slash, SlashOption } from 'discordx';
 })
 @Permission(hasPermission(environment.moderatorRoles))
 export abstract class Youtube extends Command {
-  private youtubeService: YoutubeService;
-
   constructor() {
     super();
-    this.youtubeService = new YoutubeService();
   }
 
   @Slash('add-youtube', {
@@ -32,7 +29,7 @@ export abstract class Youtube extends Command {
     interaction: CommandInteraction
   ): Promise<void> {
     try {
-      await this.youtubeService.addChannelToWatch(id);
+      await youtubeService.addChannelToWatch(id);
       await interaction.reply(this.c('youtubeSuccess'));
     } catch (e: unknown) {
       await interaction.reply(this.c('youtubeError'));

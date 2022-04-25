@@ -61,3 +61,5 @@ export class MinecraftService {
     });
   }
 }
+
+export const minecraftService = new MinecraftService();

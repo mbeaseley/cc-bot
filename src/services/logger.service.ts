@@ -25,3 +25,5 @@ export class Logger {
     return Logger.logger;
   }
 }
+
+export const logger = new Logger();

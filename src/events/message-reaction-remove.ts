@@ -1,4 +1,4 @@
-import { ReactionService } from 'Services/reaction.service';
+import { reactionService } from 'Services/reaction.service';
 import { Reaction } from 'Types/reaction';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
@@ -7,12 +7,6 @@ import { ArgsOf, Discord, On } from 'discordx';
 
 @Discord()
 export abstract class messageReactionRemove {
-  private reactionService: ReactionService;
-
-  constructor() {
-    this.reactionService = new ReactionService();
-  }
-
   /**
    * Get choosen role or action
    * @param reactions
@@ -76,7 +70,7 @@ export abstract class messageReactionRemove {
       return Promise.resolve();
     }
 
-    const reactionRoles = await this.reactionService.getReactionRoles();
+    const reactionRoles = await reactionService.getReactionRoles();
     const member = await guild.members.fetch(user.id);
     const choosenRole = this.getChoosenRoleOrAction(
       reactionRoles,

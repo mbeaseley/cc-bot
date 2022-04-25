@@ -1,4 +1,4 @@
-import { InstagramService } from 'Services/instagram.service';
+import { instagramService } from 'Services/instagram.service';
 import { InstaUser } from 'Types/instagram';
 import { Command } from 'Utils/command';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
@@ -6,11 +6,8 @@ import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class Instagram extends Command {
-  private instagramService: InstagramService;
-
   constructor() {
     super();
-    this.instagramService = new InstagramService();
   }
 
   /**
@@ -48,7 +45,7 @@ export abstract class Instagram extends Command {
     user: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const userAccount = await this.instagramService.getInstaUser(user);
+    const userAccount = await instagramService.getInstaUser(user);
 
     if (!userAccount) {
       await interaction.reply(this.c('instaNoUser'));

@@ -16,3 +16,5 @@ export class ComplimentService {
     return this.complimentModelService.getCompliment();
   }
 }
+
+export const complimentService = new ComplimentService();

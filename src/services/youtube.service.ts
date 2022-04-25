@@ -1,5 +1,5 @@
 import { DatabaseService } from 'Services/database.service';
-import { Logger } from 'Services/logger.service';
+import { logger } from 'Services/logger.service';
 import { ServersCollection } from 'Types/database';
 import { Channel, ChannelRssResponse, Video, YoutubeChannel } from 'Types/youtube';
 import { Command } from 'Utils/command';
@@ -12,12 +12,10 @@ import Parser from 'rss-parser';
 
 export class YoutubeService extends Command {
   private interval: number = 300 * 1000; // 5 minutes
-  private logger: Logger;
   private databaseService: DatabaseService;
 
   constructor() {
     super();
-    this.logger = new Logger();
     this.databaseService = new DatabaseService();
   }
 
@@ -58,7 +56,7 @@ export class YoutubeService extends Command {
 
   public async check(client: Client): Promise<Message | void> {
     setInterval(async () => {
-      this.logger.info(chalk.bold('Checking channels'));
+      logger.info(chalk.bold('Checking channels'));
       const channels = await this.getDBStoredChannels();
       const parser = new Parser();
       channels.forEach(async (c) => {
@@ -113,3 +111,5 @@ export class YoutubeService extends Command {
     });
   }
 }
+
+export const youtubeService = new YoutubeService();

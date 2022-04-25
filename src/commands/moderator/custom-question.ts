@@ -1,6 +1,6 @@
 import { hasPermission } from 'Guards/has-permission';
-import { ReactionService } from 'Services/reaction.service';
-import { RulesService } from 'Services/rules.service';
+import { reactionService } from 'Services/reaction.service';
+import { rulesService } from 'Services/rules.service';
 import { QuestionMessage } from 'Types/question';
 import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
@@ -27,13 +27,8 @@ const QUESTION_TYPES = ['rules', 'game roles'];
 })
 @Permission(hasPermission(environment.moderatorRoles))
 export abstract class CustomQuestion extends Command {
-  private rulesService: RulesService;
-  private reactionService: ReactionService;
-
   constructor() {
     super();
-    this.rulesService = new RulesService();
-    this.reactionService = new ReactionService();
   }
 
   /**
@@ -69,7 +64,7 @@ export abstract class CustomQuestion extends Command {
   ): Promise<QuestionMessage> {
     const e = this.getEmoji(emojis, environment.emojiAcceptRules.name);
 
-    const rules = await this.rulesService.getServerRules(e);
+    const rules = await rulesService.getServerRules(e);
     const rulesMessage = rules
       .map((r, i) => {
         return rules.length !== i ? (r.content += `\n\n`) : r;
@@ -92,7 +87,7 @@ export abstract class CustomQuestion extends Command {
     roles: RoleManager | undefined,
     bot: ClientUser | null
   ): Promise<QuestionMessage> {
-    const reactionRoles = await this.reactionService.getReactionRoles('game');
+    const reactionRoles = await reactionService.getReactionRoles('game');
     const reactionNames: string[] = [];
 
     const guildEmojis = reactionRoles

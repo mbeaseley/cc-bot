@@ -32,3 +32,5 @@ export class TwitchService {
     return this.twitchModelService.getFollowersById(id);
   }
 }
+
+export const twitchService = new TwitchService();

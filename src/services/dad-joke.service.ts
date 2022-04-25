@@ -16,3 +16,5 @@ export class DadJokeService {
     return this.dadJokeModelService.getJoke();
   }
 }
+
+export const dadJokeService = new DadJokeService();

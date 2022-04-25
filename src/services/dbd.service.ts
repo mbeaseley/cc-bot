@@ -105,3 +105,5 @@ export class DBDService {
     return challenges.length ? Utility.random(challenges) : undefined;
   }
 }
+
+export const dbdService = new DBDService();

@@ -15,3 +15,5 @@ export class InsultService {
     return this.insultModelService.getInsult();
   }
 }
+
+export const insultService = new InsultService();

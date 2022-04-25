@@ -16,3 +16,5 @@ export class AdviceService {
     return this.adviceModelService.getAdvice();
   }
 }
+
+export const adviceService = new AdviceService();

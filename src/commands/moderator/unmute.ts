@@ -1,5 +1,5 @@
 import { hasPermission } from 'Guards/has-permission';
-import { ModerationService } from 'Services/moderation.service';
+import { moderationService } from 'Services/moderation.service';
 import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
@@ -14,11 +14,8 @@ import { Discord, Permission, Slash, SlashOption } from 'discordx';
 })
 @Permission(hasPermission(environment.moderatorRoles))
 export abstract class Unmute extends Command {
-  private moderationService: ModerationService;
-
   constructor() {
     super();
-    this.moderationService = new ModerationService();
   }
 
   /**
@@ -63,7 +60,7 @@ export abstract class Unmute extends Command {
       return interaction.deleteReply();
     }
 
-    await this.moderationService.setMute(target, false);
+    await moderationService.setMute(target, false);
     const msg = this.createMessage(target);
     return interaction.reply({ embeds: [msg] });
   }

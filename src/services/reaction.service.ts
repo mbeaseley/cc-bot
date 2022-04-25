@@ -25,3 +25,5 @@ export class ReactionService {
     return this.reactionModelService.getReactionActions();
   }
 }
+
+export const reactionService = new ReactionService();

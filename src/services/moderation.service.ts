@@ -19,3 +19,5 @@ export class ModerationService {
     return member.voice.setMute(value);
   }
 }
+
+export const moderationService = new ModerationService();

@@ -17,3 +17,5 @@ export class InstagramService {
     return this.instagramModelService.getInstaUser(username);
   }
 }
+
+export const instagramService = new InstagramService();

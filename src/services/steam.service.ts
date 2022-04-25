@@ -36,3 +36,5 @@ export class SteamService {
     return this.steamModelService.getUserBans(steamId);
   }
 }
+
+export const steamService = new SteamService();

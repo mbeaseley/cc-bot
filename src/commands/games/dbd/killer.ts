@@ -1,4 +1,4 @@
-import { DBDService } from 'Services/dbd.service';
+import { dbdService } from 'Services/dbd.service';
 import { KillerBuild, KillerItem } from 'Types/dbd';
 import { Command } from 'Utils/command';
 import Utility from 'Utils/utility';
@@ -11,11 +11,8 @@ const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 @SlashGroup({ name: 'dbd', description: 'Dead By Daylight Commands' })
 @SlashGroup('dbd')
 export abstract class Killer extends Command {
-  private dbdService: DBDService;
-
   constructor() {
     super();
-    this.dbdService = new DBDService();
   }
 
   /**
@@ -27,11 +24,11 @@ export abstract class Killer extends Command {
     const killerBuild = new KillerBuild();
 
     // Killer
-    const playerKillers = await this.dbdService.getPlayerKillers();
+    const playerKillers = await dbdService.getPlayerKillers();
     const availableKillers =
       playerKillers.find((p) => p.userId === authorId)?.availableKiller || DEFAULTKILLERS;
 
-    const allKillers = await this.dbdService.getKillers();
+    const allKillers = await dbdService.getKillers();
     const killers = allKillers
       .map((k) => {
         return availableKillers.find((ak) => ak === k.id) ? k : undefined;
@@ -47,11 +44,11 @@ export abstract class Killer extends Command {
     killerBuild.addons = Utility.random(addons || [], 2);
 
     // Offering
-    const killerOffering = await this.dbdService.getKillerOfferings();
+    const killerOffering = await dbdService.getKillerOfferings();
     killerBuild.offering = [Utility.random(killerOffering)];
 
     // Perks
-    const killerPerks = await this.dbdService.getKillerPerks();
+    const killerPerks = await dbdService.getKillerPerks();
     killerBuild.perks = Utility.random(killerPerks, 4);
 
     return Promise.resolve(killerBuild);
