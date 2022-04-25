@@ -3,11 +3,13 @@ import { KillerBuild, KillerItem } from 'Types/dbd';
 import { Command } from 'Utils/command';
 import Utility from 'Utils/utility';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash } from 'discordx';
+import { Discord, Slash, SlashGroup } from 'discordx';
 
 const DEFAULTKILLERS: number[] = [1, 2, 3, 4, 7, 8];
 
 @Discord()
+@SlashGroup({ name: 'dbd', description: 'Dead By Daylight Commands' })
+@SlashGroup('dbd')
 export abstract class Killer extends Command {
   private dbdService: DBDService;
 
@@ -85,7 +87,7 @@ export abstract class Killer extends Command {
    * DBD killer commmand
    * @param interaction
    */
-  @Slash('dbd-killer', {
+  @Slash('killer', {
     description: 'Get a random dbd killer build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {

@@ -1,3 +1,4 @@
+import { hasPermission } from 'Guards/has-permission';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
 import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
@@ -7,10 +8,11 @@ import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
 @Discord()
 @Permission(false)
 @Permission({
-  id: environment.eventIds.role,
-  type: 'ROLE',
+  id: environment.ownerId,
+  type: 'USER',
   permission: true
 })
+@Permission(hasPermission([{ id: environment.eventIds.role, type: 'ROLE' }]))
 export abstract class Event extends Command {
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
 

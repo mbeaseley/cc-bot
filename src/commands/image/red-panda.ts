@@ -1,9 +1,11 @@
 import { AnimalsService } from 'Services/animal.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash } from 'discordx';
+import { Discord, Slash, SlashGroup } from 'discordx';
 
 @Discord()
+@SlashGroup({ name: 'image', description: 'Images of animals' })
+@SlashGroup('image')
 export abstract class RedPanda extends Command {
   private animalService: AnimalsService;
 

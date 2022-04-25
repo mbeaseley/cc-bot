@@ -3,9 +3,11 @@ import { SurviverBuild } from 'Types/dbd';
 import { Command } from 'Utils/command';
 import Utility from 'Utils/utility';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash } from 'discordx';
+import { Discord, Slash, SlashGroup } from 'discordx';
 
 @Discord()
+@SlashGroup({ name: 'dbd', description: 'Dead By Daylight Commands' })
+@SlashGroup('dbd')
 export abstract class Surviver extends Command {
   private dbdService: DBDService;
 
@@ -65,7 +67,7 @@ export abstract class Surviver extends Command {
    * DBD survivor commmand
    * @param interaction
    */
-  @Slash('dbd-survivor', {
+  @Slash('survivor', {
     description: 'Get a random dbd survivor build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {

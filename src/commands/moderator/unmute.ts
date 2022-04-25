@@ -7,6 +7,11 @@ import { Discord, Permission, Slash, SlashOption } from 'discordx';
 
 @Discord()
 @Permission(false)
+@Permission({
+  id: environment.ownerId,
+  type: 'USER',
+  permission: true
+})
 @Permission(hasPermission(environment.moderatorRoles))
 export abstract class Unmute extends Command {
   private moderationService: ModerationService;

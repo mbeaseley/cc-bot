@@ -1,9 +1,11 @@
 import { DBDService } from 'Services/dbd.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, Slash, SlashChoice, SlashGroup, SlashOption } from 'discordx';
 
 @Discord()
+@SlashGroup({ name: 'dbd', description: 'Dead By Daylight Commands' })
+@SlashGroup('dbd')
 export class KillerChallenge extends Command {
   private dbdService: DBDService;
 
@@ -53,7 +55,7 @@ export class KillerChallenge extends Command {
     return interaction.deleteReply();
   }
 
-  @Slash('dbd-killer-challenge', {
+  @Slash('killer-challenge', {
     description: 'Get a random dbd killer challenge'
   })
   async init(

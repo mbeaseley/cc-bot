@@ -20,6 +20,11 @@ const QUESTION_TYPES = ['rules', 'game roles'];
 
 @Discord()
 @Permission(false)
+@Permission({
+  id: environment.ownerId,
+  type: 'USER',
+  permission: true
+})
 @Permission(hasPermission(environment.moderatorRoles))
 export abstract class CustomQuestion extends Command {
   private rulesService: RulesService;

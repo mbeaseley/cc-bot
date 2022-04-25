@@ -1,3 +1,4 @@
+import { hasPermission } from 'Guards/has-permission';
 import { ReactionService } from 'Services/reaction.service';
 import { Reaction, ReactionActions } from 'Types/reaction';
 import { environment } from 'Utils/environment';
@@ -108,7 +109,13 @@ export abstract class messageReactionAdd {
       return this.addRole(member, role);
     }
 
-    const mods = environment.moderatorRoles.map((m) => m.id);
+    const { moderatorRoles, ownerId } = environment;
+    const mods = hasPermission(moderatorRoles)?.map((m) => m.id);
+
+    if (ownerId.length) {
+      mods.push(ownerId);
+    }
+
     const isMod = member.roles.cache.find((r) => mods.indexOf(r.id) > -1);
 
     const reactionActions = await this.reactionService.getReactionActions();

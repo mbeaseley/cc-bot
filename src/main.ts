@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Logger } from 'Services/logger.service';
 import { YoutubeService } from 'Services/youtube.service';
-import { environment } from 'Utils/environment';
+import { environment as env } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import { importx } from '@discordx/importer';
 import chalk from 'chalk';
@@ -35,6 +35,7 @@ export class Main {
    * @description Starts up discord bot
    */
   static async start(): Promise<void> {
+    const { environment, serverId, token } = env;
     Main.Client = new Client({
       intents: [
         Intents.FLAGS.GUILDS,
@@ -51,19 +52,23 @@ export class Main {
         Intents.FLAGS.GUILD_MEMBERS,
         Intents.FLAGS.GUILD_VOICE_STATES
       ],
-      botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
-      silent: environment.environment === 'production' ? undefined : false
+      botGuilds:
+        environment === 'production'
+          ? [(client) => client.guilds.cache.map((guild) => guild.id)]
+          : [serverId],
+      silent: environment === 'production' ? undefined : false
     });
 
     await importx(`${__dirname}/commands/**/*.{ts,js}`);
     await importx(`${__dirname}/events/**/*.{ts,js}`);
-    await Main.Client.login(environment.token ?? '');
+    await Main.Client.login(token ?? '');
 
     Main.Client.once('ready', async () => {
       Main.logger.info('info check');
       Main.logger.warn('warning check');
       Main.logger.error('error check');
 
+      await Main.Client.clearApplicationCommands();
       await Main.Client.initApplicationCommands({
         guild: { log: true },
         global: { log: true }
@@ -80,7 +85,7 @@ export class Main {
         type: 'LISTENING'
       });
 
-      await Main.youtubeService.check(Main.Client);
+      // await Main.youtubeService.check(Main.Client);
 
       Main.logger.info(chalk.bold('BOT READY'));
     });

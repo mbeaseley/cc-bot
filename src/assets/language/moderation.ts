@@ -9,5 +9,10 @@ export const moderation = {
   customHeading: `Discord Server Rules`,
   customQuestionMessage: `**Sorry, there was an issue with create message or finding emojis!**`,
   purgeNumberError: '**Please add a number less than 101!**',
-  purgeSuccess: '**Deleted Messages!**'
+  purgeSuccess: '**Deleted Messages!**',
+  noRole: '**No role found!**',
+  noRoleAdded: '**Sorry, no role has been added due to unknown error.**',
+  roleAdded: '**{0} role has been added to {1}**',
+  noRoleAddedOrRemove: '**Sorry, no role has been added due to unknown error.**',
+  roleRemove: '**{0} role has been remove from {1}**'
 };

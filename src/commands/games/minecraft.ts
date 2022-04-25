@@ -3,11 +3,13 @@ import { MinecraftService } from 'Services/minecraft.service';
 import { McServerDetail, McUrl } from 'Types/minecraft';
 import { Command } from 'Utils/command';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, Slash, SlashGroup, SlashOption } from 'discordx';
 import { status } from 'minecraft-server-util';
 import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
 
 @Discord()
+@SlashGroup({ name: 'minecraft', description: 'Minecraft Commands' })
+@SlashGroup('minecraft')
 export abstract class Minecraft extends Command {
   private minecraftService: MinecraftService;
   private logger: Logger;
@@ -55,7 +57,7 @@ export abstract class Minecraft extends Command {
    * @param port
    * @param interaction
    */
-  @Slash('minecraft', {
+  @Slash('ping', {
     description:
       'Ping a minecraft server for information. Command: /minecraft ip(optional) port(optional)'
   })
@@ -122,7 +124,7 @@ export abstract class Minecraft extends Command {
    * @param port
    * @param interaction
    */
-  @Slash('set-minecraft', {
+  @Slash('set', {
     description: 'Set default IP and Port for server. '
   })
   async setMCServer(
