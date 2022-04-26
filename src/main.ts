@@ -68,8 +68,6 @@ export class Main {
         global: { log: true }
       });
 
-      console.log('1');
-
       // init permissions; enabled log to see changes
       await Main.Client.initApplicationPermissions(true);
 
@@ -80,8 +78,6 @@ export class Main {
       Main.Client.user?.setActivity(`@${Main.Client.user.username} • /help`, {
         type: 'LISTENING'
       });
-
-      console.log('2');
 
       // await youtubeService.check(Main.Client);
 

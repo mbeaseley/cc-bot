@@ -14,5 +14,9 @@ export const moderation = {
   noRoleAdded: '**Sorry, no role has been added due to unknown error.**',
   roleAdded: '**{0} role has been added to {1}**',
   noRoleAddedOrRemove: '**Sorry, no role has been added due to unknown error.**',
-  roleRemove: '**{0} role has been remove from {1}**'
+  roleRemove: '**{0} role has been remove from {1}**',
+  unexpectedError: '**Unknown error! Please contact moderators or owner**',
+  membersWithoutRole: `Following members are without role: **{0}**`,
+  noMembersWithoutRole: `**No members are without role!**`,
+  noRoleTitle: 'No Role Members'
 };
