@@ -1,4 +1,4 @@
-import { DatabaseService } from 'Services/database.service';
+import { databaseService } from 'Services/database.service';
 import { ApiServerRules } from 'Types/api/rules';
 import { RulesCollection } from 'Types/database';
 import { RuleItem, RuleType } from 'Types/question';
@@ -6,12 +6,7 @@ import Utility from 'Utils/utility';
 import { GuildEmoji } from 'discord.js';
 
 export class RulesModelService {
-  private databaseService: DatabaseService;
   private _serverRules: RuleItem[] | undefined;
-
-  constructor() {
-    this.databaseService = new DatabaseService();
-  }
 
   /**
    * ==================================
@@ -80,10 +75,7 @@ export class RulesModelService {
       return Promise.resolve(this.serverRules);
     }
 
-    const res = await this.databaseService.get<any, ApiServerRules>(
-      'rules',
-      RulesCollection.server
-    );
+    const res = await databaseService.get<any, ApiServerRules>('rules', RulesCollection.server);
     this.serverRules = this.fromServerPayload(res, acceptEmoji);
     return this.serverRules;
   }

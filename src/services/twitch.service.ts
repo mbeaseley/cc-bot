@@ -1,12 +1,13 @@
 import { logger } from './logger.service';
 import { twitchModelService } from 'Models/twitch-model.service';
 import { Followers, Stream, Streamers, User } from 'Types/twitch';
+import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import chalk = require('chalk');
 import dayjs = require('dayjs');
 import { Client, ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
 
-export class TwitchService {
+export class TwitchService extends Command {
   private interval: number = 60 * 1000; // 5 minutes
 
   /**
@@ -50,9 +51,9 @@ export class TwitchService {
    */
   private createMessage(stream: Stream, iconURL: string): MessageEmbed {
     return new MessageEmbed()
-      .setAuthor({ name: `${stream.username}`, iconURL })
-      .setTitle(`${stream.title}](https://twitch.tv/${stream.userLoginName})`)
-      .setURL(`https://twitch.tv/${stream.userLoginName}`)
+      .setAuthor({ name: this.c(`twitchFreeText`, stream.username ?? '~'), iconURL })
+      .setTitle(this.c(`twitchFreeText`, stream.title ?? '~'))
+      .setURL(this.c('twitchUrl', stream.userLoginName ?? '~'))
       .setColor(6570405)
       .setImage(`${stream.thumbnailUrl}`);
   }
@@ -85,7 +86,7 @@ export class TwitchService {
           (c) => c.id === environment.streamsBase && c.isText()
         ) as TextChannel;
 
-        const msg = `Hey, ${stream.username} is now live on <https://twitch.tv/${stream.userLoginName}>! Go check it out and say hi!`;
+        const msg = this.c('twitchNotifyLive', stream.username ?? '~', stream.userLoginName ?? '~');
         const embedMsg = this.createMessage(stream, (member.user as ClientUser).displayAvatarURL());
         await textChannel.send(msg);
         return textChannel.send({ embeds: [embedMsg] });

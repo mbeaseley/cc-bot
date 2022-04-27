@@ -1,4 +1,4 @@
-import { DatabaseService } from 'Services/database.service';
+import { databaseService } from 'Services/database.service';
 import {
   ApiChallenge,
   ApiKillerOffering,
@@ -21,7 +21,6 @@ import {
 } from 'Types/dbd';
 
 export class DBDModelService {
-  private databaseService: DatabaseService;
   private _killers: KillerItem[] | undefined;
   private _killerPerks: string[] | undefined;
   private _killerOfferings: KillerOffering[] | undefined;
@@ -31,10 +30,6 @@ export class DBDModelService {
   private _playerKillers: PlayerKiller[] | undefined;
   private _killerChallenges: string[] = [];
   private _survivorChallenges: string[] = [];
-
-  constructor() {
-    this.databaseService = new DatabaseService();
-  }
 
   /**
    * ==================================
@@ -74,7 +69,7 @@ export class DBDModelService {
       return Promise.resolve(this.playerKillers);
     }
 
-    const res = await this.databaseService.get<any, ApiPlayerKillers>(
+    const res = await databaseService.get<any, ApiPlayerKillers>(
       'dbd',
       DBDCollections.playerKillers
     );
@@ -124,7 +119,7 @@ export class DBDModelService {
       return Promise.resolve(this.killers);
     }
 
-    const res = await this.databaseService.get<any, ApiKillers>('dbd', DBDCollections.killers);
+    const res = await databaseService.get<any, ApiKillers>('dbd', DBDCollections.killers);
     this.killers = this.fromKillersPayload(res);
     return Promise.resolve(this.killers);
   }
@@ -167,10 +162,7 @@ export class DBDModelService {
       return Promise.resolve(this.killerPerks);
     }
 
-    const res = await this.databaseService.get<any, ApiKillerPerk>(
-      'dbd',
-      DBDCollections.killerPerks
-    );
+    const res = await databaseService.get<any, ApiKillerPerk>('dbd', DBDCollections.killerPerks);
     this.killerPerks = this.fromKillerPerksPayload(res);
     return Promise.resolve(this.killerPerks);
   }
@@ -213,7 +205,7 @@ export class DBDModelService {
       return Promise.resolve(this.killerOfferings);
     }
 
-    const res = await this.databaseService.get<any, ApiKillerOffering>(
+    const res = await databaseService.get<any, ApiKillerOffering>(
       'dbd',
       DBDCollections.killerOfferings
     );
@@ -259,7 +251,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorPerks);
     }
 
-    const res = await this.databaseService.get<any, ApiSurvivorPerk>(
+    const res = await databaseService.get<any, ApiSurvivorPerk>(
       'dbd',
       DBDCollections.survivorPerks
     );
@@ -309,7 +301,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorLoot);
     }
 
-    const res = await this.databaseService.get<any, ApiSurvivorLoot>(
+    const res = await databaseService.get<any, ApiSurvivorLoot>(
       'dbd',
       DBDCollections.survivorLoots
     );
@@ -355,7 +347,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorOfferings);
     }
 
-    const res = await this.databaseService.get<any, ApiSurvivorOffering>(
+    const res = await databaseService.get<any, ApiSurvivorOffering>(
       'dbd',
       DBDCollections.survivorOfferings
     );
@@ -401,7 +393,7 @@ export class DBDModelService {
       return Promise.resolve(this.killerChallenges);
     }
 
-    const res = await this.databaseService.get<any, ApiChallenge>(
+    const res = await databaseService.get<any, ApiChallenge>(
       'dbd',
       DBDCollections.killerChallenges
     );
@@ -432,7 +424,7 @@ export class DBDModelService {
       return Promise.resolve(this.survivorChallenges);
     }
 
-    const res = await this.databaseService.get<any, ApiChallenge>(
+    const res = await databaseService.get<any, ApiChallenge>(
       'dbd',
       DBDCollections.survivorChallenges
     );

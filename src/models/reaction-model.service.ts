@@ -1,16 +1,11 @@
-import { DatabaseService } from 'Services/database.service';
+import { databaseService } from 'Services/database.service';
 import { ApiEmojiRole, ApiReactionAction } from 'Types/api/reaction';
 import { EmojisCollections } from 'Types/database';
 import { Reaction } from 'Types/reaction';
 
 export class ReactionModelService {
-  private databaseService: DatabaseService;
   private _roles: Reaction[] | undefined;
   private _actions: Reaction[] | undefined;
-
-  constructor() {
-    this.databaseService = new DatabaseService();
-  }
 
   /**
    * ==================================
@@ -52,10 +47,7 @@ export class ReactionModelService {
       return Promise.resolve(this.reactionRoles);
     }
 
-    const res = await this.databaseService.get<any, ApiEmojiRole>(
-      'emojis',
-      EmojisCollections.roles
-    );
+    const res = await databaseService.get<any, ApiEmojiRole>('emojis', EmojisCollections.roles);
     this.reactionRoles = this.fromReactionRolesPayload(res);
     return Promise.resolve(this.reactionRoles);
   }
@@ -100,7 +92,7 @@ export class ReactionModelService {
       return Promise.resolve(this.reactionActions);
     }
 
-    const res = await this.databaseService.get<any, ApiReactionAction>(
+    const res = await databaseService.get<any, ApiReactionAction>(
       'emojis',
       EmojisCollections.actions
     );
