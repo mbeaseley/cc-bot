@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { logger } from 'Services/logger.service';
-import { youtubeService } from 'Services/youtube.service';
+// import { youtubeService } from 'Services/youtube.service';
 import { environment as env } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import { importx } from '@discordx/importer';
@@ -8,6 +8,7 @@ import chalk from 'chalk';
 import { Guild, Intents, Interaction, Message } from 'discord.js';
 import { Client, Discord } from 'discordx';
 import * as dotenv from 'dotenv';
+import { twitchService } from 'Services/twitch.service';
 
 dotenv.config();
 
@@ -79,7 +80,9 @@ export class Main {
         type: 'LISTENING'
       });
 
-      // await youtubeService.check(Main.Client);
+      if (guild) {
+        await twitchService.check(Main.Client, guild);
+      }
 
       logger.info(chalk.bold('BOT READY'));
     });

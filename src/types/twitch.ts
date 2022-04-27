@@ -61,3 +61,12 @@ export class Stream {
 export class Followers {
   total: number | undefined;
 }
+
+/**=============================
+  whitelist twitch streamers Objects
+===============================*/
+
+export interface Streamers {
+  userLoginName: string;
+  id: string;
+}

@@ -3,6 +3,11 @@ export type Databases = {
   emojis: EmojisCollections;
   rules: RulesCollection;
   servers: ServersCollection;
+  twitch: TwitchCollection;
+};
+
+type StringOfLength<Min extends number, Max extends number> = string & {
+  __value__: never;
 };
 
 export enum DBDCollections {
@@ -23,12 +28,15 @@ export enum EmojisCollections {
 }
 
 export enum RulesCollection {
-  server = 'server'
+  server = 'server',
+  theclumsykie = '964068685838958682'
 }
 
 export enum ServersCollection {
   minecraft = 'minecraft',
   youtube = 'youtube'
 }
+
+export type TwitchCollection = StringOfLength<18, 18>;
 
 export type DatabaseName = keyof Databases;
