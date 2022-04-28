@@ -3,7 +3,7 @@ import { ApiServerRules } from 'Types/api/rules';
 import { RulesCollection } from 'Types/database';
 import { RuleItem, RuleType } from 'Types/question';
 import Utility from 'Utils/utility';
-import { GuildEmoji } from 'discord.js';
+import { Guild, GuildEmoji } from 'discord.js';
 
 export class RulesModelService {
   private _serverRules: RuleItem[] | undefined;
@@ -70,12 +70,18 @@ export class RulesModelService {
    * @param acceptEmoji
    * @returns RuleItem[]
    */
-  public async getServerRules(acceptEmoji: GuildEmoji | undefined): Promise<RuleItem[]> {
+  public async getServerRules(
+    guild: Guild,
+    acceptEmoji: GuildEmoji | undefined
+  ): Promise<RuleItem[]> {
     if (this.serverRules.length) {
       return Promise.resolve(this.serverRules);
     }
 
-    const res = await databaseService.get<any, ApiServerRules>('rules', RulesCollection.server);
+    const res = await databaseService.get<any, ApiServerRules>(
+      'rules',
+      guild.id as RulesCollection
+    );
     this.serverRules = this.fromServerPayload(res, acceptEmoji);
     return this.serverRules;
   }

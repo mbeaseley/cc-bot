@@ -27,10 +27,7 @@ export enum EmojisCollections {
   roles = 'roles'
 }
 
-export enum RulesCollection {
-  server = 'server',
-  theclumsykie = '964068685838958682'
-}
+export type RulesCollection = StringOfLength<18, 18>;
 
 export enum ServersCollection {
   minecraft = 'minecraft',

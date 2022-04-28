@@ -1,18 +1,10 @@
-import { hasPermission } from 'Guards/has-permission';
 import { PollQuestion, selectionEmojis } from 'Types/poll';
 import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import { ClientUser, CommandInteraction, EmbedField, MessageEmbed } from 'discord.js';
-import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 
 @Discord()
-@Permission(false)
-@Permission({
-  id: environment.ownerId,
-  type: 'USER',
-  permission: true
-})
-@Permission(hasPermission([{ id: environment.eventIds.role, type: 'ROLE' }]))
 export abstract class Event extends Command {
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
 
@@ -98,7 +90,7 @@ export abstract class Event extends Command {
    * @param interaction
    */
   @Slash('create-event', {
-    description: 'Create an event include creating channel and poll'
+    description: 'Create an event include creating channel and poll (must have EVENT role)'
   })
   async init(
     @SlashOption('title', {
@@ -118,6 +110,15 @@ export abstract class Event extends Command {
     interaction: CommandInteraction
   ): Promise<void> {
     const { guild, user, client, channel } = interaction;
+
+    const m = await guild?.members.fetch(user.id);
+
+    const { ownerId, eventIds } = environment;
+    if (m?.id !== ownerId && !m?.roles.cache.find((r) => r.id === eventIds.role)) {
+      await interaction.reply(this.c('noPermission'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
+    }
 
     const category = guild?.channels.cache.find((c) => c.id === environment.eventIds.category);
     const isGeneralChannel = !!guild?.channels.cache.find(

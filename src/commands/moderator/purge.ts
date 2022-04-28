@@ -1,17 +1,8 @@
-import { hasPermission } from 'Guards/has-permission';
 import { Command } from 'Utils/command';
-import { environment } from 'Utils/environment';
 import { CommandInteraction, TextChannel } from 'discord.js';
-import { Discord, Permission, Slash, SlashOption } from 'discordx';
+import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-@Permission(false)
-@Permission({
-  id: environment.ownerId,
-  type: 'USER',
-  permission: true
-})
-@Permission(hasPermission(environment.moderatorRoles))
 export abstract class Purge extends Command {
   /**
    * Purge Command
@@ -29,20 +20,24 @@ export abstract class Purge extends Command {
     number: number,
     interaction: CommandInteraction
   ): Promise<void> {
-    if (number > 100) {
-      await interaction.reply(this.c('purgeNumberError'));
+    try {
+      const { channel } = interaction;
+
+      if (number > 100) {
+        await interaction.reply(this.c('purgeNumberError'));
+        throw new Error();
+      }
+
+      const ch = channel?.isText() ? (channel as TextChannel) : undefined;
+
+      await ch?.bulkDelete(number ?? 1, true);
+
+      await interaction.reply(this.c('purgeSuccess'));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      return interaction.deleteReply();
+    } catch (e: unknown) {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return interaction.deleteReply();
     }
-
-    const channel = interaction.channel?.isText()
-      ? (interaction.channel as TextChannel)
-      : undefined;
-
-    await channel?.bulkDelete(number ?? 1, true);
-
-    await interaction.reply(this.c('purgeSuccess'));
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    return interaction.deleteReply();
   }
 }

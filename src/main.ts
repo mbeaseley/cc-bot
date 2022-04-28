@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { logger } from 'Services/logger.service';
 // import { youtubeService } from 'Services/youtube.service';
+import { twitchService } from 'Services/twitch.service';
 import { environment as env } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import { importx } from '@discordx/importer';
@@ -8,7 +9,6 @@ import chalk from 'chalk';
 import { Guild, Intents, Interaction, Message } from 'discord.js';
 import { Client, Discord } from 'discordx';
 import * as dotenv from 'dotenv';
-import { twitchService } from 'Services/twitch.service';
 
 dotenv.config();
 
@@ -62,14 +62,8 @@ export class Main {
       logger.warn('warning check');
       logger.error('error check');
 
-      Main.Client.clearApplicationCommands();
-
-      await Main.Client.initApplicationCommands({
-        guild: { log: true },
-        global: { log: true }
-      });
-
-      // init permissions; enabled log to see changes
+      await Main.Client.clearApplicationCommands();
+      await Main.Client.initApplicationCommands();
       await Main.Client.initApplicationPermissions(true);
 
       const guild = Utility.getGuild(Main.Client.guilds);

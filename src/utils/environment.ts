@@ -35,6 +35,7 @@ export const environment = {
   environment: process.env.NODE_ENV ?? 'production',
   token: process.env.TOKEN ?? '',
   botId: process.env.BOTID ?? '',
+  serverId: process.env.SERVERID ?? '',
   ownerId: process.env.OWNERID ?? '',
   moderatorRoles: (process.env.MODROLES ?? '').split(' ').map((id) => {
     return new Permission(id, 'ROLE');

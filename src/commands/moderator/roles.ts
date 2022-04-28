@@ -1,18 +1,9 @@
-import { hasPermission } from 'Guards/has-permission';
 import { roleService } from 'Services/roles.service';
 import { Command } from 'Utils/command';
-import { environment } from 'Utils/environment';
 import { CommandInteraction, Guild, Role } from 'discord.js';
-import { Discord, Permission, Slash, SlashGroup, SlashOption } from 'discordx';
+import { Discord, Slash, SlashGroup, SlashOption } from 'discordx';
 
 @Discord()
-@Permission(false)
-@Permission({
-  id: environment.ownerId,
-  type: 'USER',
-  permission: true
-})
-@Permission(hasPermission(environment.moderatorRoles))
 @SlashGroup({ name: 'role', description: 'Manage roles' })
 @SlashGroup('role')
 export class Roles extends Command {
