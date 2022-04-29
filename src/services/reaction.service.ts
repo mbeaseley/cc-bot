@@ -1,22 +1,30 @@
 import { reactionModelService } from 'Models/reaction-model.service';
-import { Reaction } from 'Types/reaction';
+import { Reaction, ReactionRoleTypes } from 'Types/reaction';
+import { Guild } from 'discord.js';
 
+interface ApiReactionRolesOption {
+  type?: ReactionRoleTypes | 'action' | 'all-role';
+}
 export class ReactionService {
   /**
    * Fetch Reaction Roles
    * @returns Reaction[]
    */
-  public async getReactionRoles(type?: 'user' | 'social' | 'game'): Promise<Reaction[]> {
-    const roles = await reactionModelService.getReactionRoles();
-    return type ? roles.filter((r) => r.type === type) : roles;
-  }
+  public async getReactionRoles(
+    guild: Guild,
+    options?: ApiReactionRolesOption
+  ): Promise<Reaction[]> {
+    const roles = await reactionModelService.getReactionRoles(guild);
 
-  /**
-   * Fetch Reaction Actions
-   * @returns Reaction[]
-   */
-  public async getReactionActions(): Promise<Reaction[]> {
-    return reactionModelService.getReactionActions();
+    if (options?.type === 'action') {
+      return roles.filter((r) => r.eventType === options?.type);
+    }
+
+    if (options?.type === 'all-role') {
+      return roles.filter((r) => r.eventType !== 'action');
+    }
+
+    return roles.filter((r) => r.roleType === options?.type);
   }
 }
 

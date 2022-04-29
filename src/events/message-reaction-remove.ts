@@ -70,7 +70,7 @@ export abstract class messageReactionRemove {
       return Promise.resolve();
     }
 
-    const reactionRoles = await reactionService.getReactionRoles();
+    const reactionRoles = await reactionService.getReactionRoles(guild);
     const member = await guild.members.fetch(user.id);
     const choosenRole = this.getChoosenRoleOrAction(
       reactionRoles,

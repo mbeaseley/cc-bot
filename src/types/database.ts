@@ -22,10 +22,7 @@ export enum DBDCollections {
   survivorChallenges = 'survivor_challenges'
 }
 
-export enum EmojisCollections {
-  actions = 'actions',
-  roles = 'roles'
-}
+export type EmojisCollections = StringOfLength<18, 18>;
 
 export type RulesCollection = StringOfLength<18, 18>;
 

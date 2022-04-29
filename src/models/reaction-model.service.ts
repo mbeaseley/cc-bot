@@ -1,3 +1,4 @@
+import { Guild } from 'discord.js';
 import { databaseService } from 'Services/database.service';
 import { ApiEmojiRole, ApiReactionAction } from 'Types/api/reaction';
 import { EmojisCollections } from 'Types/database';
@@ -34,7 +35,11 @@ export class ReactionModelService {
    */
   private fromReactionRolesPayload(res: ApiEmojiRole[]): Reaction[] {
     return res.map((r) => {
-      return { [r.emoji_name]: r.role_name, type: r.type } as Reaction;
+      return {
+        [r.emoji_name]: r.emoji_role_name ?? r.emoji_action,
+        eventType: r.emoji_type,
+        roleType: r.emoji_role_type
+      } as Reaction;
     });
   }
 
@@ -42,12 +47,15 @@ export class ReactionModelService {
    * Get Reaction Roles
    * @returns Reaction[]
    */
-  public async getReactionRoles(): Promise<Reaction[]> {
+  public async getReactionRoles(guild: Guild): Promise<Reaction[]> {
     if (this.reactionRoles.length) {
       return Promise.resolve(this.reactionRoles);
     }
 
-    const res = await databaseService.get<any, ApiEmojiRole>('emojis', EmojisCollections.roles);
+    const res = await databaseService.get<any, ApiEmojiRole>(
+      'emojis',
+      guild.id as EmojisCollections
+    );
     this.reactionRoles = this.fromReactionRolesPayload(res);
     return Promise.resolve(this.reactionRoles);
   }
@@ -70,34 +78,6 @@ export class ReactionModelService {
    */
   private set reactionActions(value: Reaction[]) {
     this._actions = value;
-  }
-
-  /**
-   * Format Reaction actions into type
-   * @param res
-   * @returns Reaction[]
-   */
-  private fromReactionActionsPayload(res: ApiReactionAction[]): Reaction[] {
-    return res.map((r) => {
-      return { [r.emoji_name]: r.action } as Reaction;
-    });
-  }
-
-  /**
-   * Get Reaction Actions
-   * @returns Reaction[]
-   */
-  public async getReactionActions(): Promise<Reaction[]> {
-    if (this.reactionActions.length) {
-      return Promise.resolve(this.reactionActions);
-    }
-
-    const res = await databaseService.get<any, ApiReactionAction>(
-      'emojis',
-      EmojisCollections.actions
-    );
-    this.reactionActions = this.fromReactionActionsPayload(res);
-    return Promise.resolve(this.reactionActions);
   }
 }
 

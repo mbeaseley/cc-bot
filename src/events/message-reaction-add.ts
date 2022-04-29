@@ -60,6 +60,7 @@ export abstract class messageReactionAdd {
         return message.delete();
       }
     } catch (e: unknown) {
+      console.log(e);
       return Promise.resolve();
     }
   }
@@ -90,7 +91,7 @@ export abstract class messageReactionAdd {
       return Promise.resolve();
     }
 
-    const reactionRoles = await reactionService.getReactionRoles();
+    const reactionRoles = await reactionService.getReactionRoles(guild, { type: 'all-role' });
     const member = await guild.members.fetch(user.id);
     const choosenRole = this.getChoosenRoleOrAction(
       reactionRoles,
@@ -106,17 +107,15 @@ export abstract class messageReactionAdd {
     const { moderatorRoles, ownerId } = environment;
     const mods = hasPermission(moderatorRoles)?.map((m) => m.id);
 
-    if (ownerId.length) {
-      mods.push(ownerId);
-    }
+    const isMod = member.roles.cache.find((r) => mods.indexOf(r.id) > -1) || member.id === ownerId;
 
-    const isMod = member.roles.cache.find((r) => mods.indexOf(r.id) > -1);
+    const reactionActions = await reactionService.getReactionRoles(guild, { type: 'action' });
 
-    const reactionActions = await reactionService.getReactionActions();
     const choosenAction = this.getChoosenRoleOrAction(
       reactionActions,
       messageReaction.emoji?.name ?? ''
     ) as ReactionActions;
+
     if (choosenAction && isMod) {
       return this.handleAction(messageReaction.message, choosenAction);
     }
