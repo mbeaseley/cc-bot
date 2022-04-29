@@ -1,12 +1,8 @@
-import { hasPermission } from 'Guards/has-permission';
 import { Command } from 'Utils/command';
-import { environment } from 'Utils/environment';
 import { CommandInteraction, TextChannel } from 'discord.js';
-import { Discord, Permission, Slash, SlashOption } from 'discordx';
+import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-@Permission(false)
-@Permission(hasPermission(environment.moderatorRoles))
 export abstract class Purge extends Command {
   /**
    * Purge Command
