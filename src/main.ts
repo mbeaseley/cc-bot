@@ -64,6 +64,8 @@ export class Main {
       Main.logger.warn('warning check');
       Main.logger.error('error check');
 
+      await Main.Client.clearApplicationCommands();
+
       await Main.Client.initApplicationCommands({
         guild: { log: true },
         global: { log: true }
