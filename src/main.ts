@@ -82,8 +82,6 @@ export class Main {
         type: 'LISTENING'
       });
 
-      await Main.youtubeService.check(Main.Client);
-
       Main.logger.info(chalk.bold('BOT READY'));
     });
 
