@@ -1,6 +1,5 @@
 import { ModerationService } from 'Services/moderation.service';
 import { Command } from 'Utils/command';
-import { environment } from 'Utils/environment';
 import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
