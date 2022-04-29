@@ -1,4 +1,4 @@
-import { Reaction, ReactionRoleTypes } from 'Root/types/reaction';
+import { Reaction } from 'Root/types/reaction';
 import { reactionService } from 'Services/reaction.service';
 import { rulesService } from 'Services/rules.service';
 import { Command } from 'Utils/command';
@@ -13,7 +13,7 @@ import {
   Message,
   MessageEmbed
 } from 'discord.js';
-import { Discord, Slash, SlashGroup } from 'discordx';
+import { Discord, Slash, SlashChoice, SlashGroup, SlashOption } from 'discordx';
 
 @Discord()
 @SlashGroup({ name: 'custom-question', description: 'Manage custom server messaging' })
@@ -46,7 +46,7 @@ export abstract class CustomQuestion extends Command {
     guild?: Guild
   ): MessageEmbed {
     const msg = new MessageEmbed()
-      .setColor(2424832)
+      .setColor('RANDOM')
       .setAuthor({ name: title, iconURL: bot?.displayAvatarURL() })
       .setDescription(message);
 
@@ -63,7 +63,15 @@ export abstract class CustomQuestion extends Command {
    * @param interaction
    */
   @Slash('rules', { description: 'Post custom server rules with accept emoji' })
-  async rulesInit(interaction: CommandInteraction): Promise<void> {
+  async rulesInit(
+    @SlashChoice('Yes', 'true')
+    @SlashChoice('No', 'false')
+    @SlashOption('react', {
+      description: 'Do you want your community to react to this message? (Mark to agree)'
+    })
+    react: string,
+    interaction: CommandInteraction
+  ): Promise<void> {
     const { guild, client, channel } = interaction;
 
     try {
@@ -79,12 +87,19 @@ export abstract class CustomQuestion extends Command {
         client.user,
         g as Guild
       );
-      const msg = (await channel?.send({
-        embeds: [ruleMsg as MessageEmbed]
-      })) as Message;
-      await msg.react(e as GuildEmoji);
 
-      await interaction.reply('All setup!');
+      if (react) {
+        await channel?.send({
+          embeds: [ruleMsg as MessageEmbed]
+        });
+      } else {
+        const msg = (await channel?.send({
+          embeds: [ruleMsg as MessageEmbed]
+        })) as Message;
+        await msg.react(e as GuildEmoji);
+      }
+
+      await interaction.reply(this.c('questionSetup'));
     } catch (e: unknown) {
       await interaction.reply(this.c('unexpectedError'));
     }
@@ -148,8 +163,6 @@ export abstract class CustomQuestion extends Command {
         type: 'game'
       });
 
-      console.log(reactionRoles);
-
       const { guildEmojis, roleArray } = this.getFormattedRoles(
         client.emojis,
         reactionRoles,
@@ -167,7 +180,7 @@ export abstract class CustomQuestion extends Command {
       })) as Message;
       guildEmojis.forEach(async (e) => await msg.react(e.id ? e : `${e.name}`));
 
-      await interaction.reply('All setup!');
+      await interaction.reply(this.c('questionSetup'));
     } catch (e: unknown) {
       await interaction.reply(this.c('unexpectedError'));
     }
@@ -198,8 +211,8 @@ export abstract class CustomQuestion extends Command {
       );
 
       const message = this.createMessage(
-        this.c('questionAuthor'),
-        this.c('questionDescription', roleArray.toString()),
+        this.c('questionDevices'),
+        this.c('questionNoDescrption', roleArray.toString()),
         client.user
       );
 
@@ -208,7 +221,7 @@ export abstract class CustomQuestion extends Command {
       })) as Message;
       guildEmojis.forEach(async (e) => await msg.react(e.id ? e : `${e.name}`));
 
-      await interaction.reply('All setup!');
+      await interaction.reply(this.c('questionSetup'));
     } catch (e: unknown) {
       await interaction.reply(this.c('unexpectedError'));
     }
@@ -239,8 +252,8 @@ export abstract class CustomQuestion extends Command {
       );
 
       const message = this.createMessage(
-        this.c('questionAuthor'),
-        this.c('questionDescription', roleArray.toString()),
+        this.c('questionPronoun'),
+        this.c('questionNoDescrption', roleArray.toString()),
         client.user
       );
 
@@ -249,7 +262,7 @@ export abstract class CustomQuestion extends Command {
       })) as Message;
       guildEmojis.forEach(async (e) => await msg.react(e.id ? e : `${e.name}`));
 
-      await interaction.reply('All setup!');
+      await interaction.reply(this.c('questionSetup'));
     } catch (e: unknown) {
       await interaction.reply(this.c('unexpectedError'));
     }
