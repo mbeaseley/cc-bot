@@ -2,15 +2,9 @@ import { PollQuestion, selectionEmojis } from 'Types/poll';
 import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import { ClientUser, CommandInteraction, EmbedField, MessageEmbed } from 'discord.js';
-import { Discord, Permission, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 
 @Discord()
-@Permission(false)
-@Permission({
-  id: environment.eventIds.role,
-  type: 'ROLE',
-  permission: true
-})
 export abstract class Event extends Command {
   private alphabet: string[] = [...'abcdefghijklmnopqrstuvwxyz'];
 

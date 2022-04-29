@@ -1,13 +1,10 @@
-import { hasPermission } from 'Guards/has-permission';
 import { ModerationService } from 'Services/moderation.service';
 import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import { CommandInteraction, GuildMember, MessageEmbed } from 'discord.js';
-import { Discord, Permission, Slash, SlashOption } from 'discordx';
+import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
-@Permission(false)
-@Permission(hasPermission(environment.moderatorRoles))
 export abstract class Mute extends Command {
   private moderationService: ModerationService;
 
