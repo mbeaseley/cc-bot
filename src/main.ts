@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import { logger } from 'Services/logger.service';
-// import { youtubeService } from 'Services/youtube.service';
 import { twitchService } from 'Services/twitch.service';
 import { environment as env } from 'Utils/environment';
 import Utility from 'Utils/utility';
@@ -29,7 +28,7 @@ export class Main {
    * @description Starts up discord bot
    */
   static async start(): Promise<void> {
-    const { environment, serverId, token } = env;
+    const { environment, server, token } = env;
     Main.Client = new Client({
       intents: [
         Intents.FLAGS.GUILDS,
@@ -49,7 +48,7 @@ export class Main {
       botGuilds:
         environment === 'production'
           ? [(client) => client.guilds.cache.map((guild) => guild.id)]
-          : [serverId],
+          : [server],
       silent: environment === 'production' ? undefined : false
     });
 
