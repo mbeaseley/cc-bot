@@ -5,7 +5,7 @@ import { Guild } from 'discord.js';
 interface ApiReactionRolesOption {
   type?: ReactionRoleTypes | 'action' | 'all-role';
 }
-export class ReactionService {
+class ReactionService {
   /**
    * Fetch Reaction Roles
    * @returns Reaction[]

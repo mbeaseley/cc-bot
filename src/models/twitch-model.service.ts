@@ -14,7 +14,7 @@ import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');
 import { Guild } from 'discord.js';
 
-export class TwitchModelService extends HttpClient {
+class TwitchModelService extends HttpClient {
   private _token: Token | undefined;
 
   constructor() {

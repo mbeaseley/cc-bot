@@ -8,7 +8,7 @@ import {
 } from 'Types/dbd';
 import Utility from 'Utils/utility';
 
-export class DBDService {
+class DBDService {
   /**
    * Fetch Player Killers
    * @returns PlayerKiller[]

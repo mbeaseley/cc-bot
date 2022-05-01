@@ -1,7 +1,7 @@
 import { steamModelService } from 'Models/steam-model.service';
 import { PlayerSummary, UserBans, VanityUser } from 'Types/steam';
 
-export class SteamService {
+class SteamService {
   /**
    * Get Vanity Url User
    * @param vanityurl

@@ -2,7 +2,7 @@ import { rulesModelService } from 'Models/rules-model.service';
 import { RuleItem } from 'Types/question';
 import { Guild, GuildEmoji } from 'discord.js';
 
-export class RulesService {
+class RulesService {
   /**
    * Fetch Server Rules
    * @returns RuleItem[]

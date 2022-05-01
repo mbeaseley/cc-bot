@@ -5,7 +5,7 @@ import { RuleItem, RuleType } from 'Types/question';
 import Utility from 'Utils/utility';
 import { Guild, GuildEmoji } from 'discord.js';
 
-export class RulesModelService {
+class RulesModelService {
   private _serverRules: RuleItem[] | undefined;
 
   /**

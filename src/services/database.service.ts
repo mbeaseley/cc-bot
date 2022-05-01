@@ -4,7 +4,7 @@ import { environment } from 'Utils/environment';
 import * as chalk from 'chalk';
 import { InsertOneResult, MongoClient, UpdateResult } from 'mongodb';
 
-export class DatabaseService {
+class DatabaseService {
   private _client: MongoClient | undefined;
 
   /**

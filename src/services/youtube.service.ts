@@ -10,7 +10,7 @@ import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Client } from 'discordx';
 import Parser from 'rss-parser';
 
-export class YoutubeService extends Command {
+class YoutubeService extends Command {
   private interval: number = 300 * 1000; // 5 minutes
 
   constructor() {

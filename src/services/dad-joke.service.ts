@@ -1,7 +1,7 @@
 import { dadJokeModelService } from 'Models/dad-joke-model.service';
 import { Joke } from 'Types/dad-joke';
 
-export class DadJokeService {
+class DadJokeService {
   /**
    * Fetch Joke
    * @returns Promise<Joke>

@@ -1,10 +1,10 @@
-import { Guild } from 'discord.js';
 import { databaseService } from 'Services/database.service';
-import { ApiEmojiRole, ApiReactionAction } from 'Types/api/reaction';
+import { ApiEmojiRole } from 'Types/api/reaction';
 import { EmojisCollections } from 'Types/database';
 import { Reaction } from 'Types/reaction';
+import { Guild } from 'discord.js';
 
-export class ReactionModelService {
+class ReactionModelService {
   private _roles: Reaction[] | undefined;
   private _actions: Reaction[] | undefined;
 

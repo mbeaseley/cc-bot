@@ -1,7 +1,7 @@
 import { instagramModelService } from 'Models/instagram-model.service';
 import { InstaUser } from 'Types/instagram';
 
-export class InstagramService {
+class InstagramService {
   /**
    * Get InstaUser
    * @param username

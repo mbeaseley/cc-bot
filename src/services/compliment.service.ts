@@ -1,7 +1,7 @@
 import { complimentModelService } from 'Models/compliment-model.service';
 import { ComplimentObject } from 'Types/compliment';
 
-export class ComplimentService {
+class ComplimentService {
   /**
    * Fetch Compliment
    * @returns Promise<ComplimentObject>

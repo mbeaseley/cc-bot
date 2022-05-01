@@ -1,6 +1,6 @@
 import { Collection, Guild, GuildMember, Role } from 'discord.js';
 
-export class RoleService {
+class RoleService {
   /**
    * Get all roles
    * @param guild

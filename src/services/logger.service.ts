@@ -2,7 +2,7 @@
 import chalk from 'chalk';
 import dayjs from 'dayjs';
 
-export class Logger {
+class Logger {
   private static logger: Logger;
 
   public info(message: string): void {

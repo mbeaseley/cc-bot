@@ -5,7 +5,7 @@ import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');
 
-export class WeatherModelService extends HttpClient {
+class WeatherModelService extends HttpClient {
   constructor() {
     super('');
   }

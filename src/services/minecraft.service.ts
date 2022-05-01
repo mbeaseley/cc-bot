@@ -2,7 +2,7 @@ import { databaseService } from 'Services/database.service';
 import { ServersCollection } from 'Types/database';
 import { McServerDetail } from 'Types/minecraft';
 
-export class MinecraftService {
+class MinecraftService {
   /**
    * Get Minecraft server details related to guild
    * @param guildId

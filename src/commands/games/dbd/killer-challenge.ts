@@ -56,8 +56,7 @@ export class KillerChallenge extends Command {
     description: 'Get a random dbd killer challenge'
   })
   async init(
-    @SlashChoice('Yes', 'true')
-    @SlashChoice('No', 'false')
+    @SlashChoice('Yes', 'No')
     @SlashOption('dm', {
       description: 'Do you want the challenge to be dm only to you?'
     })
@@ -72,7 +71,7 @@ export class KillerChallenge extends Command {
       return interaction.deleteReply();
     }
 
-    if (dm === 'true') {
+    if (dm === 'Yes') {
       return this.onSendingDM(interaction, challenge);
     }
 

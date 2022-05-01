@@ -1,7 +1,7 @@
 export interface Reaction {
   [key: string]: string;
   eventType: 'role' | 'action';
-  roleType?: string | undefined;
+  roleType: string;
 }
 
 export type ReactionActions = 'delete' | 'beam_up';

@@ -64,8 +64,7 @@ export abstract class CustomQuestion extends Command {
    */
   @Slash('rules', { description: 'Post custom server rules with accept emoji' })
   async rulesInit(
-    @SlashChoice('Yes', 'true')
-    @SlashChoice('No', 'false')
+    @SlashChoice('Yes', 'No')
     @SlashOption('react', {
       description: 'Do you want your community to react to this message? (Mark to agree)'
     })
@@ -88,7 +87,7 @@ export abstract class CustomQuestion extends Command {
         g as Guild
       );
 
-      if (react) {
+      if (react === 'No') {
         await channel?.send({
           embeds: [ruleMsg as MessageEmbed]
         });

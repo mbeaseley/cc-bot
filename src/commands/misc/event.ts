@@ -101,8 +101,7 @@ export abstract class Event extends Command {
       description: 'description of event'
     })
     description: string,
-    @SlashChoice('Yes', 'true')
-    @SlashChoice('No', 'false')
+    @SlashChoice('Yes', 'No')
     @SlashOption('poll', {
       description: 'description of event'
     })
@@ -152,7 +151,7 @@ export abstract class Event extends Command {
       return interaction.deleteReply();
     }
 
-    const pollWanted = poll === 'true';
+    const pollWanted = poll === 'Yes';
     await newChannel?.setParent(category.id);
     const msg = this.createChannelBaseMessage(title, user.id, pollWanted, client.user);
     await newChannel.send({ embeds: [msg] });

@@ -1,7 +1,7 @@
 import { animalsModelService } from 'Models/animal-model.service';
 import { Animal } from 'Types/animal';
 
-export class AnimalsService {
+class AnimalsService {
   /**
    * Fetch cat
    * @returns Promise<Animal>

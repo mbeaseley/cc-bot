@@ -1,6 +1,6 @@
 import { insultModelService } from 'Models/insult-model.service';
 
-export class InsultService {
+class InsultService {
   /**
    * Fetch insult
    * @returns Promise<string>

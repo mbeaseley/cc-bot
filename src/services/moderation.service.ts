@@ -1,6 +1,6 @@
 import { GuildMember } from 'discord.js';
 
-export class ModerationService {
+class ModerationService {
   /**
    * Set active member deafen state
    * @param member

@@ -1,7 +1,7 @@
 import { memeModelService } from 'Models/meme-model.service';
 import { MemeItem } from 'Types/meme';
 
-export class MemeService {
+class MemeService {
   /**
    * Fetch meme
    * @returns Promise<MemeItem>

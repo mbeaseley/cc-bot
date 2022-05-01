@@ -60,8 +60,7 @@ export class SuvivorChallenge extends Command {
     description: 'Get a random dbd survivor challenge'
   })
   async init(
-    @SlashChoice('Yes', 'true')
-    @SlashChoice('No', 'false')
+    @SlashChoice('Yes', 'No')
     @SlashOption('dm', {
       description: 'Do you want the challenge to be dm only to you?'
     })
@@ -76,7 +75,7 @@ export class SuvivorChallenge extends Command {
       return interaction.deleteReply();
     }
 
-    if (dm === 'true') {
+    if (dm === 'Yes') {
       return this.onSendingDM(interaction, challenge);
     }
 

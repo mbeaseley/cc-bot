@@ -1,7 +1,7 @@
 import { weatherModelService } from 'Models/weather-model.service';
 import { WeatherObject } from 'Types/weather';
 
-export class WeatherService {
+class WeatherService {
   /**
    * Get Current Weather
    * @returns Promise<WeatherObject>

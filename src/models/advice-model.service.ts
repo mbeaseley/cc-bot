@@ -3,7 +3,7 @@ import { AdviceItem } from 'Types/advice';
 import { ApiAdviceResponse } from 'Types/api/advice';
 import { AxiosResponse } from 'axios';
 
-export class AdviceModelService extends HttpClient {
+class AdviceModelService extends HttpClient {
   constructor() {
     super('');
   }

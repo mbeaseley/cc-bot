@@ -20,7 +20,7 @@ import {
   SurvivorOffering
 } from 'Types/dbd';
 
-export class DBDModelService {
+class DBDModelService {
   private _killers: KillerItem[] | undefined;
   private _killerPerks: string[] | undefined;
   private _killerOfferings: KillerOffering[] | undefined;

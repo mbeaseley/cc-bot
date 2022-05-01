@@ -3,7 +3,7 @@ import { ApiInstaUserResponse } from 'Types/api/instagram';
 import { InstaUser } from 'Types/instagram';
 import { AxiosResponse } from 'axios';
 
-export class InstagramModelService extends HttpClient {
+class InstagramModelService extends HttpClient {
   constructor() {
     super('https://www.instagram.com/');
   }
