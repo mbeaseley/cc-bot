@@ -29,7 +29,7 @@ export abstract class SayIt extends Command {
    * @param interaction
    */
   @Slash('say-it', {
-    description: `Try your luck, get or send a user with a insult or compliment!`
+    description: `fun command to try your luck, get or send a user with a insult or compliment!`
   })
   async init(
     @SlashOption('user', {

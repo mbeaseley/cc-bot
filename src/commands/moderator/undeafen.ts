@@ -25,7 +25,7 @@ export abstract class Mute extends Command {
    * @param interaction
    */
   @Slash('undeafen', {
-    description: 'Undeafen a user!'
+    description: 'moderator command to undeafen a user!'
   })
   async init(
     @SlashOption('user', {

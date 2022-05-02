@@ -65,7 +65,7 @@ export abstract class Surviver extends Command {
    * @param interaction
    */
   @Slash('survivor', {
-    description: 'Get a random dbd survivor build.'
+    description: 'Dead By Daylight command for getting a random dbd survivor build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createSurviverBuild();

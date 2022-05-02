@@ -28,7 +28,7 @@ export abstract class Advice extends Command {
    * @param interaction
    */
   @Slash('advice', {
-    description: `Send some friendly advice to yourself or a friend.`
+    description: `fun command to send some friendly advice to yourself or a friend.`
   })
   async init(
     @SlashOption('user', {

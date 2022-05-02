@@ -10,7 +10,7 @@ export abstract class Purge extends Command {
    * @param interaction
    */
   @Slash('purge', {
-    description: `Delete up to 100 messages!`
+    description: `moderator command to delete up to 100 messages!`
   })
   async init(
     @SlashOption('number', {

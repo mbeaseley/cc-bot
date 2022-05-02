@@ -111,7 +111,7 @@ export abstract class ServerInfo extends Command {
    * @param interaction
    */
   @Slash('server-info', {
-    description: 'Get to know this server.'
+    description: 'miscellaneous command to get to know this server.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const { guild, member } = interaction;

@@ -24,7 +24,7 @@ export abstract class Mute extends Command {
    * @param user
    * @param interaction
    */
-  @Slash('mute', { description: 'Mute a user!' })
+  @Slash('mute', { description: 'moderator command to mute a user!' })
   async init(
     @SlashOption('user', {
       description: 'Who do you want to mute?'

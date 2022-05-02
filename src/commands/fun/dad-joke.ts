@@ -28,7 +28,7 @@ export abstract class DadJoke extends Command {
    * @param interaction
    */
   @Slash('joke', {
-    description: `Make your friends laugh with a dad joke.`
+    description: `fun comand to make your friends laugh with a dad joke.`
   })
   async init(
     @SlashOption('user', {

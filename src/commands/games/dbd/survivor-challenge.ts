@@ -57,7 +57,7 @@ export class SuvivorChallenge extends Command {
    * @param interaction
    */
   @Slash('survivor-challenge', {
-    description: 'Get a random dbd survivor challenge'
+    description: 'Dead By Daylight command for getting a random dbd survivor challenge'
   })
   async init(
     @SlashChoice('Yes', 'No')

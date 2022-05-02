@@ -84,7 +84,7 @@ export abstract class Weather extends Command {
   };
 
   @Slash('weather', {
-    description: 'Get today weather!'
+    description: 'searcher command to get today weather!'
   })
   async init(
     @SlashOption('location', {

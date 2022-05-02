@@ -30,7 +30,7 @@ export abstract class Cat extends Command {
    * @param interaction
    */
   @Slash('cat', {
-    description: `Image of a cat?`
+    description: `image of a cat?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const cat = await animalsService.getCat();

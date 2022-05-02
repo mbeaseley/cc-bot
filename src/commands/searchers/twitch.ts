@@ -50,7 +50,7 @@ export abstract class Twitch extends Command {
    * @param interaction
    */
   @Slash('twitch', {
-    description: 'Find your favourites streamers.'
+    description: 'searcher command to find your favourites streamers.'
   })
   async init(
     @SlashOption('user', {

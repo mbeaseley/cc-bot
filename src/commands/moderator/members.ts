@@ -29,7 +29,9 @@ export class Members extends Command {
    * @param interaction
    * @returns
    */
-  @Slash('with-no-role', { description: 'Find all members with no roles assigned' })
+  @Slash('with-no-role', {
+    description: 'moderator command to find all members with no roles assigned'
+  })
   async noRoleInit(interaction: CommandInteraction): Promise<void> {
     try {
       const { client, guild } = interaction;

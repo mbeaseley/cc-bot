@@ -62,7 +62,9 @@ export abstract class CustomQuestion extends Command {
    * Server rules init
    * @param interaction
    */
-  @Slash('rules', { description: 'Post custom server rules with accept emoji' })
+  @Slash('rules', {
+    description: 'moderator command to post custom server rules with accept emoji'
+  })
   async rulesInit(
     @SlashChoice('Yes', 'No')
     @SlashOption('react', {

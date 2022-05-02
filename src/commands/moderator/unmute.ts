@@ -25,7 +25,7 @@ export abstract class Unmute extends Command {
    * @param interaction
    */
   @Slash('unmute', {
-    description: 'Unmute a user!'
+    description: 'moderator command to unmute a user!'
   })
   async init(
     @SlashOption('user', {

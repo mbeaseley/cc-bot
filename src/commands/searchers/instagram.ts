@@ -36,7 +36,7 @@ export abstract class Instagram extends Command {
    * @param interaction
    */
   @Slash('instagram', {
-    description: 'Find someone you know on Instagram.'
+    description: 'searcher command to find someone you know on Instagram.'
   })
   async init(
     @SlashOption('user', {

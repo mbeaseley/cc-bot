@@ -40,7 +40,7 @@ export abstract class Steam extends Command {
   }
 
   @Slash('steam', {
-    description: 'Check and share your profile with friends on steam.'
+    description: 'searcher command to check and share your profile with friends on steam.'
   })
   async init(
     @SlashOption('name', {

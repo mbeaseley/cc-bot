@@ -53,7 +53,7 @@ export class KillerChallenge extends Command {
   }
 
   @Slash('killer-challenge', {
-    description: 'Get a random dbd killer challenge'
+    description: 'Dead By Daylight command for getting a random dbd killer challenge'
   })
   async init(
     @SlashChoice('Yes', 'No')

@@ -30,7 +30,7 @@ export abstract class RedPanda extends Command {
    * @param interaction
    */
   @Slash('red-panda', {
-    description: `Image of a red panda?`
+    description: `image of a red panda?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const panda = await animalsService.getRedPanda();

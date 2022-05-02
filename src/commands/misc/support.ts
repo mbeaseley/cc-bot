@@ -50,7 +50,8 @@ export class Support extends Command {
    * @param interaction
    */
   @Slash('support', {
-    description: 'Having issues within the discord, want to suggest a feature, use this command!'
+    description:
+      'miscellaneous command, having issues, want to suggest a feature, use this command!'
   })
   async init(
     @SlashOption('support', {

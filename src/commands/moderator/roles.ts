@@ -17,7 +17,7 @@ export class Roles extends Command {
     return await (await roleService.getAll(guild))?.find((r) => r.name === role || r.id === role);
   }
 
-  @Slash('add', { description: 'Add role to user' })
+  @Slash('add', { description: 'moderator command to add role to user' })
   async addInit(
     @SlashOption('role', {
       description: 'Please add role name or id'
@@ -61,7 +61,7 @@ export class Roles extends Command {
     }
   }
 
-  @Slash('remove', { description: 'Remove role from user' })
+  @Slash('remove', { description: 'moderator command to remove role from user' })
   async removeInit(
     @SlashOption('role', {
       description: 'Please add role name or id'

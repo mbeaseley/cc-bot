@@ -85,7 +85,7 @@ export abstract class Killer extends Command {
    * @param interaction
    */
   @Slash('killer', {
-    description: 'Get a random dbd killer build.'
+    description: 'Dead By Daylight command for getting a random dbd killer build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     if (!interaction.member) {
