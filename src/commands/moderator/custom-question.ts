@@ -76,7 +76,13 @@ export abstract class CustomQuestion extends Command {
     const { guild, client, channel } = interaction;
 
     try {
-      const e = this.getEmoji(client.emojis, environment.emojiAcceptRules.name);
+      const { emojiAcceptRules } = environment;
+
+      if (!emojiAcceptRules?.name) {
+        throw new Error();
+      }
+
+      const e = this.getEmoji(client.emojis, emojiAcceptRules.name);
 
       const rules = await rulesService.getServerRules(guild as Guild, e);
       const rulesMessage = rules.map((r) => r.content).join(`\n\n`);

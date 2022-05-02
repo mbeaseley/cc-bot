@@ -77,7 +77,7 @@ export abstract class messageReactionRemove {
       messageReaction.emoji?.name ?? ''
     );
 
-    if (messageReaction.emoji.name === environment.emojiAcceptRules.name) {
+    if (messageReaction.emoji.name === environment?.emojiAcceptRules?.name) {
       return Promise.resolve();
     }
 
