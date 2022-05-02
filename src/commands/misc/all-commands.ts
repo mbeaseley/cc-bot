@@ -4,9 +4,9 @@ import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
 
 @Discord()
 export class allCommands extends Command {
-  // private fetchContent(commands: ApplicationCommand[] | ApplicationCommandOption[]): string {
-  //   return;
-  // }
+  constructor() {
+    super();
+  }
 
   /**
    * Create message
