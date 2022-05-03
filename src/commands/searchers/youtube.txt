@@ -5,11 +5,8 @@ import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class Youtube extends Command {
-  private youtubeService: YoutubeService;
-
   constructor() {
     super();
-    this.youtubeService = new YoutubeService();
   }
 
   @Slash('add-youtube', {
@@ -23,7 +20,7 @@ export abstract class Youtube extends Command {
     interaction: CommandInteraction
   ): Promise<void> {
     try {
-      await this.youtubeService.addChannelToWatch(id);
+      await youtubeService.addChannelToWatch(id);
       await interaction.reply(this.c('youtubeSuccess'));
     } catch (e: unknown) {
       await interaction.reply(this.c('youtubeError'));

@@ -1,15 +1,12 @@
-import { ComplimentService } from 'Services/compliment.service';
+import { complimentService } from 'Services/compliment.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class Compliment extends Command {
-  private complimentService: ComplimentService;
-
   constructor() {
     super();
-    this.complimentService = new ComplimentService();
   }
 
   /**
@@ -31,7 +28,7 @@ export abstract class Compliment extends Command {
    * @param interaction
    */
   @Slash('compliment', {
-    description: `Send a nice compliment to yourself or a friend.`
+    description: `fun command to send a nice compliment to yourself or a friend.`
   })
   async init(
     @SlashOption('user', {
@@ -41,7 +38,7 @@ export abstract class Compliment extends Command {
     user: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const { compliment } = await this.complimentService.getCompliment();
+    const { compliment } = await complimentService.getCompliment();
 
     if (!compliment) {
       await interaction.reply(this.c('noCompliment'));

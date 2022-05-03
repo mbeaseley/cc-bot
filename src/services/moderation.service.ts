@@ -1,6 +1,6 @@
 import { GuildMember } from 'discord.js';
 
-export class ModerationService {
+class ModerationService {
   /**
    * Set active member deafen state
    * @param member
@@ -19,3 +19,5 @@ export class ModerationService {
     return member.voice.setMute(value);
   }
 }
+
+export const moderationService = new ModerationService();

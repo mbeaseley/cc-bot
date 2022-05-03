@@ -1,17 +1,16 @@
-import { DBDService } from 'Services/dbd.service';
+import { dbdService } from 'Services/dbd.service';
 import { SurviverBuild } from 'Types/dbd';
 import { Command } from 'Utils/command';
 import Utility from 'Utils/utility';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash } from 'discordx';
+import { Discord, Slash, SlashGroup } from 'discordx';
 
 @Discord()
+@SlashGroup({ name: 'dbd', description: 'Dead By Daylight Commands' })
+@SlashGroup('dbd')
 export abstract class Surviver extends Command {
-  private dbdService: DBDService;
-
   constructor() {
     super();
-    this.dbdService = new DBDService();
   }
 
   /**
@@ -21,15 +20,15 @@ export abstract class Surviver extends Command {
     const build = new SurviverBuild();
 
     // Perks
-    const perks = await this.dbdService.getSurvivorPerks();
+    const perks = await dbdService.getSurvivorPerks();
     build.perks = Utility.random(perks, 4);
 
     // offering
-    const offerings = await this.dbdService.getSurvivorOfferings();
+    const offerings = await dbdService.getSurvivorOfferings();
     build.offering = [Utility.random(offerings)];
 
     // loot
-    const loot = await this.dbdService.getSurvivorLoot();
+    const loot = await dbdService.getSurvivorLoot();
     build.loot = [Utility.random(loot)];
 
     // Loot Addon
@@ -65,8 +64,8 @@ export abstract class Surviver extends Command {
    * DBD survivor commmand
    * @param interaction
    */
-  @Slash('dbd-survivor', {
-    description: 'Get a random dbd survivor build.'
+  @Slash('survivor', {
+    description: 'Dead By Daylight command for getting a random dbd survivor build.'
   })
   async init(interaction: CommandInteraction): Promise<void> {
     const build = await this.createSurviverBuild();

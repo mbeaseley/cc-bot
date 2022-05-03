@@ -1,5 +1,5 @@
 import { windDirections } from 'Data/weather';
-import { WeatherService } from 'Services/weather.service';
+import { weatherService } from 'Services/weather.service';
 import { WeatherObject } from 'Types/weather';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
@@ -7,11 +7,8 @@ import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class Weather extends Command {
-  private weatherService: WeatherService;
-
   constructor() {
     super();
-    this.weatherService = new WeatherService();
   }
 
   /**
@@ -87,7 +84,7 @@ export abstract class Weather extends Command {
   };
 
   @Slash('weather', {
-    description: 'Get today weather!'
+    description: 'searcher command to get today weather!'
   })
   async init(
     @SlashOption('location', {
@@ -96,7 +93,7 @@ export abstract class Weather extends Command {
     location: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const weather = await this.weatherService.getCurrentWeather(location);
+    const weather = await weatherService.getCurrentWeather(location);
 
     if (!weather) {
       await interaction.reply(this.c('weatherNoLocation'));

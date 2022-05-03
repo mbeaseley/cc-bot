@@ -60,5 +60,6 @@ export const misc = {
   voiceChannelDescription:
     'Sorry, we unable to create a new voice channel due to an unexpected error.\n**Please give a moment and try again or contact this bot owner.**',
   supportTitle: `Support Request Sent By {0}`,
-  supportSuccessTitle: 'Support Request Sent'
+  supportSuccessTitle: 'Support Request Sent',
+  noPermission: `**Sorry, you don't have access rights for this command**`
 };

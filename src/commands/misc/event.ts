@@ -90,7 +90,7 @@ export abstract class Event extends Command {
    * @param interaction
    */
   @Slash('create-event', {
-    description: 'Create an event include creating channel and poll'
+    description: 'Create an event include creating channel and poll (must have EVENT role)'
   })
   async init(
     @SlashOption('title', {
@@ -101,8 +101,7 @@ export abstract class Event extends Command {
       description: 'description of event'
     })
     description: string,
-    @SlashChoice('Yes', 'true')
-    @SlashChoice('No', 'false')
+    @SlashChoice('Yes', 'No')
     @SlashOption('poll', {
       description: 'description of event'
     })
@@ -110,6 +109,15 @@ export abstract class Event extends Command {
     interaction: CommandInteraction
   ): Promise<void> {
     const { guild, user, client, channel } = interaction;
+
+    const m = await guild?.members.fetch(user.id);
+
+    const { ownerId, eventIds } = environment;
+    if (m?.id !== ownerId && !m?.roles.cache.find((r) => r.id === eventIds.role)) {
+      await interaction.reply(this.c('noPermission'));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return interaction.deleteReply();
+    }
 
     const category = guild?.channels.cache.find((c) => c.id === environment.eventIds.category);
     const isGeneralChannel = !!guild?.channels.cache.find(
@@ -143,7 +151,7 @@ export abstract class Event extends Command {
       return interaction.deleteReply();
     }
 
-    const pollWanted = poll === 'true';
+    const pollWanted = poll === 'Yes';
     await newChannel?.setParent(category.id);
     const msg = this.createChannelBaseMessage(title, user.id, pollWanted, client.user);
     await newChannel.send({ embeds: [msg] });

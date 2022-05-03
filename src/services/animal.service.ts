@@ -1,19 +1,13 @@
-import { AnimalsModelService } from 'Models/animal-model.service';
+import { animalsModelService } from 'Models/animal-model.service';
 import { Animal } from 'Types/animal';
 
-export class AnimalsService {
-  private animalsModelService: AnimalsModelService;
-
-  constructor() {
-    this.animalsModelService = new AnimalsModelService();
-  }
-
+class AnimalsService {
   /**
    * Fetch cat
    * @returns Promise<Animal>
    */
   public async getCat(): Promise<Animal> {
-    return this.animalsModelService.getCat();
+    return animalsModelService.getCat();
   }
 
   /**
@@ -21,7 +15,7 @@ export class AnimalsService {
    * @returns Promise<Animal>
    */
   public async getDog(): Promise<Animal> {
-    return this.animalsModelService.getDog();
+    return animalsModelService.getDog();
   }
 
   /**
@@ -29,7 +23,7 @@ export class AnimalsService {
    * @returns Promise<Animal>
    */
   public async getPanda(): Promise<Animal> {
-    return this.animalsModelService.getPanda();
+    return animalsModelService.getPanda();
   }
 
   /**
@@ -37,7 +31,7 @@ export class AnimalsService {
    * @returns Promise<Animal>
    */
   public async getRedPanda(): Promise<Animal> {
-    return this.animalsModelService.getRedPanda();
+    return animalsModelService.getRedPanda();
   }
 
   /**
@@ -45,7 +39,7 @@ export class AnimalsService {
    * @returns Promise<Animal>
    */
   public async getBird(): Promise<Animal> {
-    return this.animalsModelService.getBird();
+    return animalsModelService.getBird();
   }
 
   /**
@@ -53,7 +47,7 @@ export class AnimalsService {
    * @returns Promise<Animal>
    */
   public async getFox(): Promise<Animal> {
-    return this.animalsModelService.getFox();
+    return animalsModelService.getFox();
   }
 
   /**
@@ -61,6 +55,8 @@ export class AnimalsService {
    * @returns Promise<Animal>
    */
   public async getKoala(): Promise<Animal> {
-    return this.animalsModelService.getKoala();
+    return animalsModelService.getKoala();
   }
 }
+
+export const animalsService = new AnimalsService();

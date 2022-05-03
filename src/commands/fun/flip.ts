@@ -21,7 +21,7 @@ export abstract class CoinFlip extends Command {
    * Coin flip Command
    * @param interaction
    */
-  @Slash('flip', { description: `Flip a coin` })
+  @Slash('flip', { description: `fun command to flip a coin and try your luck` })
   async init(interaction: CommandInteraction): Promise<any> {
     await interaction.deferReply();
 

@@ -2,7 +2,7 @@ import { HttpClient } from 'Interceptor/http-client';
 import { Animal, AnimalKind } from 'Types/animal';
 import { AxiosResponse } from 'axios';
 
-export class AnimalsModelService extends HttpClient {
+class AnimalsModelService extends HttpClient {
   constructor() {
     super('https://some-random-api.ml/img/');
   }
@@ -79,3 +79,5 @@ export class AnimalsModelService extends HttpClient {
     return (await this.getResponse('koala'))?.data;
   }
 }
+
+export const animalsModelService = new AnimalsModelService();

@@ -3,7 +3,7 @@ import { ApiJokeResponse } from 'Types/api/dad-joke';
 import { Joke } from 'Types/dad-joke';
 import { AxiosResponse } from 'axios';
 
-export class DadJokeModelService extends HttpClient {
+class DadJokeModelService extends HttpClient {
   constructor() {
     super('');
   }
@@ -37,3 +37,5 @@ export class DadJokeModelService extends HttpClient {
     return this.fromPayload(data);
   }
 }
+
+export const dadJokeModelService = new DadJokeModelService();

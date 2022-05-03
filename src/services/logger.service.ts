@@ -2,20 +2,27 @@
 import chalk from 'chalk';
 import dayjs from 'dayjs';
 
-export class Logger {
+class Logger {
   private static logger: Logger;
-  private date: string = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
   public info(message: string): void {
-    console.log(chalk.bgCyan(`✔ ${this.date} : `, chalk.underline(message)));
+    console.log(
+      chalk.bgCyan(`✔ ${dayjs().format('YYYY-MM-DD HH:mm:ss')} : `, chalk.underline(message))
+    );
   }
 
   public warn(message: string): void {
-    console.log(chalk.bgYellow(chalk.black(`⚠ ${this.date} : `, chalk.underline(message))));
+    console.log(
+      chalk.bgYellow(
+        chalk.black(`⚠ ${dayjs().format('YYYY-MM-DD HH:mm:ss')} : `, chalk.underline(message))
+      )
+    );
   }
 
   public error(message: string): void {
-    console.log(chalk.bgRed(`⛔ ${this.date} : `, chalk.underline(message)));
+    console.log(
+      chalk.bgRed(`⛔ ${dayjs().format('YYYY-MM-DD HH:mm:ss')} : `, chalk.underline(message))
+    );
   }
 
   public getInstance(): Logger {
@@ -25,3 +32,5 @@ export class Logger {
     return Logger.logger;
   }
 }
+
+export const logger = new Logger();

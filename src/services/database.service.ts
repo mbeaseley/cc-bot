@@ -1,16 +1,11 @@
-import { Logger } from 'Services/logger.service';
+import { logger } from 'Services/logger.service';
 import { DatabaseName, Databases } from 'Types/database';
 import { environment } from 'Utils/environment';
 import * as chalk from 'chalk';
 import { InsertOneResult, MongoClient, UpdateResult } from 'mongodb';
 
-export class DatabaseService {
+class DatabaseService {
   private _client: MongoClient | undefined;
-  private logger: Logger;
-
-  constructor() {
-    this.logger = new Logger();
-  }
 
   /**
    * Get Client
@@ -77,7 +72,7 @@ export class DatabaseService {
       await this.Client.connect();
       res = await this.getCollection(dbName, collectionName);
     } catch (e: unknown) {
-      this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
+      logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {
       await this.Client.close();
     }
@@ -123,7 +118,7 @@ export class DatabaseService {
       await this.Client.connect();
       await this.createDocument(dbName, collectionName, document);
     } catch (e: unknown) {
-      this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
+      logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {
       await this.Client.close();
     }
@@ -161,9 +156,11 @@ export class DatabaseService {
       await this.Client.connect();
       await this.updateDocument(dbName, collectionName, existDocument, document);
     } catch (e: unknown) {
-      this.logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
+      logger.error(`${chalk.bold('BOT ERROR')}: ${e}`);
     } finally {
       await this.Client.close();
     }
   }
 }
+
+export const databaseService = new DatabaseService();
