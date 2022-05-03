@@ -63,7 +63,6 @@ export class Main {
 
       await Main.Client.clearApplicationCommands();
       await Main.Client.initApplicationCommands();
-      await Main.Client.initApplicationPermissions(true);
 
       const guild = Utility.getGuild(Main.Client.guilds);
       this.prototype.preFetchAllMessages(guild);
