@@ -50,3 +50,8 @@ export interface ApiFollowersResponseObject {
     followed_at: string | undefined;
   }[];
 }
+
+export interface ApiWatchlistStreamersObject {
+  user_login: string;
+  member_id: string;
+}

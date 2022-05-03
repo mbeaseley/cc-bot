@@ -1,15 +1,12 @@
-import { InsultService } from 'Services/insult.service';
+import { insultService } from 'Services/insult.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class Insult extends Command {
-  private insultService: InsultService;
-
   constructor() {
     super();
-    this.insultService = new InsultService();
   }
 
   /**
@@ -31,7 +28,7 @@ export abstract class Insult extends Command {
    * @param interaction
    */
   @Slash('insult', {
-    description: `Send a fun insult to yourself or a friend.`
+    description: `fun command to send a fun insult to yourself or a friend.`
   })
   async init(
     @SlashOption('user', {
@@ -41,7 +38,7 @@ export abstract class Insult extends Command {
     user: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const insult = await this.insultService.getInsult();
+    const insult = await insultService.getInsult();
 
     if (!insult) {
       await interaction.reply(this.c('noInsult'));

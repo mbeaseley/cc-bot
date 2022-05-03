@@ -1,15 +1,14 @@
-import { AnimalsService } from 'Services/animal.service';
+import { animalsService } from 'Services/animal.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash } from 'discordx';
+import { Discord, Slash, SlashGroup } from 'discordx';
 
 @Discord()
+@SlashGroup({ name: 'image', description: 'Images of animals' })
+@SlashGroup('image')
 export abstract class Bird extends Command {
-  private animalService: AnimalsService;
-
   constructor() {
     super();
-    this.animalService = new AnimalsService();
   }
 
   /**
@@ -31,10 +30,10 @@ export abstract class Bird extends Command {
    * @param interaction
    */
   @Slash('bird', {
-    description: `Image of a bird?`
+    description: `image of a bird?`
   })
   async init(interaction: CommandInteraction): Promise<void> {
-    const bird = await this.animalService.getBird();
+    const bird = await animalsService.getBird();
 
     if (!bird?.link) {
       await interaction.reply(this.c('birdNotFound'));

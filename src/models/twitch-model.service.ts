@@ -1,17 +1,25 @@
 import { HttpClient } from 'Interceptor/http-client';
+import { databaseService } from 'Services/database.service';
 import {
   ApiFollowersResponseObject,
   ApiStreamResponseObject,
   ApiTokenResponseObject,
-  ApiUserResponseObject
+  ApiUserResponseObject,
+  ApiWatchlistStreamersObject
 } from 'Types/api/twitch';
-import { Followers, Stream, Token, User } from 'Types/twitch';
+import { TwitchCollection } from 'Types/database';
+import { Followers, Stream, Streamers, Token, User } from 'Types/twitch';
 import { environment } from 'Utils/environment';
 import { AxiosResponse } from 'axios';
 import dayjs = require('dayjs');
+import { Guild } from 'discord.js';
 
-export class TwitchModelService extends HttpClient {
+class TwitchModelService extends HttpClient {
   private _token: Token | undefined;
+
+  constructor() {
+    super('');
+  }
 
   /**
    * ==================================
@@ -138,10 +146,9 @@ export class TwitchModelService extends HttpClient {
    * @param res
    * @returns Stream
    */
-  private fromStreamPayload(res: ApiStreamResponseObject): Stream {
-    const s = new Stream();
-
+  private fromStreamPayload(res: ApiStreamResponseObject): Stream | undefined {
     if (res.data.length > 0) {
+      const s = new Stream();
       s.id = res.data[0].id;
       s.userId = res.data[0].user_id;
       s.userLoginName = res.data[0].user_login;
@@ -153,12 +160,14 @@ export class TwitchModelService extends HttpClient {
       s.viewerCount = res.data[0].viewer_count;
       s.startedAt = dayjs(res.data[0].started_at);
       s.language = res.data[0].language;
-      s.thumbnailUrl = res.data[0].thumbnail_url;
+      s.thumbnailUrl = res.data[0].thumbnail_url
+        .replace('{width}', '1280')
+        .replace('{height}', '720');
       s.tagIds = res.data[0].tag_ids;
       s.isMature = res.data[0].is_mature;
-    }
 
-    return s;
+      return s;
+    }
   }
 
   /**
@@ -207,4 +216,30 @@ export class TwitchModelService extends HttpClient {
     });
     return this.fromFollowersPayload(data);
   }
+
+  /**
+   * ==================================
+   * Fetch streamer
+   * ==================================
+   */
+
+  /**
+   * Get watchlist channels
+   * @returns string[]
+   */
+  public async getDBStoredChannels(guild: Guild): Promise<Streamers[]> {
+    const res = (await databaseService.get(
+      'twitch',
+      guild.id as TwitchCollection
+    )) as ApiWatchlistStreamersObject[];
+
+    return res.map((r) => {
+      return {
+        userLoginName: r.user_login,
+        id: r.member_id
+      };
+    });
+  }
 }
+
+export const twitchModelService = new TwitchModelService();

@@ -1,18 +1,14 @@
-import { ComplimentModelService } from 'Models/compliment-model.service';
+import { complimentModelService } from 'Models/compliment-model.service';
 import { ComplimentObject } from 'Types/compliment';
 
-export class ComplimentService {
-  private complimentModelService: ComplimentModelService;
-
-  constructor() {
-    this.complimentModelService = new ComplimentModelService();
-  }
-
+class ComplimentService {
   /**
    * Fetch Compliment
    * @returns Promise<ComplimentObject>
    */
   public async getCompliment(): Promise<ComplimentObject> {
-    return this.complimentModelService.getCompliment();
+    return complimentModelService.getCompliment();
   }
 }
+
+export const complimentService = new ComplimentService();

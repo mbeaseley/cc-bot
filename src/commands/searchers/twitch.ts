@@ -1,5 +1,5 @@
-import { Logger } from 'Services/logger.service';
-import { TwitchService } from 'Services/twitch.service';
+import { logger } from 'Services/logger.service';
+import { twitchService } from 'Services/twitch.service';
 import { Followers, Stream, User } from 'Types/twitch';
 import { Command } from 'Utils/command';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
@@ -7,13 +7,8 @@ import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class Twitch extends Command {
-  private twitchService: TwitchService;
-  private logger: Logger;
-
   constructor() {
     super();
-    this.twitchService = new TwitchService();
-    this.logger = new Logger();
   }
 
   /**
@@ -55,7 +50,7 @@ export abstract class Twitch extends Command {
    * @param interaction
    */
   @Slash('twitch', {
-    description: 'Find your favourites streamers.'
+    description: 'searcher command to find your favourites streamers.'
   })
   async init(
     @SlashOption('user', {
@@ -67,9 +62,9 @@ export abstract class Twitch extends Command {
     let user: User | undefined;
 
     try {
-      user = await this.twitchService.getUser(username);
+      user = await twitchService.getUser(username);
     } catch (e: unknown) {
-      this.logger.error(this.c('twitchUserError'));
+      logger.error(this.c('twitchUserError'));
     }
 
     if (!user?.id) {
@@ -78,8 +73,8 @@ export abstract class Twitch extends Command {
       return interaction.deleteReply();
     }
 
-    const stream = await this.twitchService.getStreams(username);
-    const followers = await this.twitchService.getFollowersById(user.id);
+    const stream = await twitchService.getStreams(username);
+    const followers = await twitchService.getFollowersById(user.id);
     const msg = this.createMessage(user, followers, stream);
     return interaction.reply({ embeds: [msg] });
   }

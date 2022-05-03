@@ -1,31 +1,25 @@
-import { ReactionService } from 'Services/reaction.service';
-import { RulesService } from 'Services/rules.service';
-import { QuestionMessage } from 'Types/question';
+import { Reaction } from 'Root/types/reaction';
+import { reactionService } from 'Services/reaction.service';
+import { rulesService } from 'Services/rules.service';
 import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import {
   BaseGuildEmojiManager,
-  ClientUser,
   CommandInteraction,
+  Guild,
   GuildEmoji,
   Message,
-  MessageEmbed,
-  RoleManager
+  MessageEmbed
 } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
-
-const QUESTION_TYPES = ['rules', 'game roles'];
+import { Discord, Slash, SlashChoice, SlashGroup, SlashOption } from 'discordx';
 
 @Discord()
+@SlashGroup({ name: 'custom-question', description: 'Manage custom server messaging' })
+@SlashGroup('custom-question')
 export abstract class CustomQuestion extends Command {
-  private rulesService: RulesService;
-  private reactionService: ReactionService;
-
   constructor() {
     super();
-    this.rulesService = new RulesService();
-    this.reactionService = new ReactionService();
   }
 
   /**
@@ -44,118 +38,247 @@ export abstract class CustomQuestion extends Command {
    * @param bot
    * @returns MessageEmbed
    */
-  private createRulesEmbed(message: string, bot: ClientUser | null): MessageEmbed {
-    return new MessageEmbed()
-      .setColor(2424832)
-      .setAuthor({ name: this.c('customHeading'), iconURL: bot?.displayAvatarURL() })
+  private createMessage(
+    title: string,
+    message: string,
+    iconURL?: string,
+    guild?: Guild
+  ): MessageEmbed {
+    const msg = new MessageEmbed()
+      .setColor('RANDOM')
+      .setAuthor({ name: title, iconURL })
       .setDescription(message);
+
+    const img = guild?.iconURL();
+    if (img) {
+      msg.setThumbnail(img);
+    }
+
+    return msg;
   }
 
   /**
-   * Create rules message to display
-   * @param command
+   * Server rules init
+   * @param interaction
    */
-  private async createRulesMessage(
-    emojis: BaseGuildEmojiManager,
-    bot: ClientUser | null
-  ): Promise<QuestionMessage> {
-    const e = this.getEmoji(emojis, environment.emojiAcceptRules.name);
+  @Slash('rules', {
+    description: 'moderator command to post custom server rules with accept emoji'
+  })
+  async rulesInit(
+    @SlashChoice('Yes', 'No')
+    @SlashOption('react', {
+      description: 'Do you want your community to react to this message? (Mark to agree)'
+    })
+    react: string,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    const { guild, client, channel } = interaction;
 
-    const rules = await this.rulesService.getServerRules(e);
-    const rulesMessage = rules
-      .map((r, i) => {
-        return rules.length !== i ? (r.content += `\n\n`) : r;
-      })
-      .join('');
-    const message = this.createRulesEmbed(rulesMessage, bot);
+    try {
+      const { emojiAcceptRules } = environment;
 
-    return {
-      message,
-      emoji: [`${e?.name}:${e?.id}`]
-    };
+      if (!emojiAcceptRules?.name) {
+        throw new Error();
+      }
+
+      const e = this.getEmoji(client.emojis, emojiAcceptRules.name);
+
+      const rules = await rulesService.getServerRules(guild as Guild, e);
+      const rulesMessage = rules.map((r) => r.content).join(`\n\n`);
+
+      const g = await guild?.fetch();
+      const ruleMsg = this.createMessage(
+        this.c('customHeading', guild?.name ?? 'Discord'),
+        rulesMessage,
+        guild?.iconURL() ?? undefined,
+        g as Guild
+      );
+
+      if (react === 'No') {
+        await channel?.send({
+          embeds: [ruleMsg as MessageEmbed]
+        });
+      } else {
+        const msg = (await channel?.send({
+          embeds: [ruleMsg as MessageEmbed]
+        })) as Message;
+        await msg.react(e as GuildEmoji);
+      }
+
+      await interaction.reply(this.c('questionSetup'));
+    } catch (e: unknown) {
+      await interaction.reply(this.c('unexpectedError'));
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return interaction.deleteReply();
   }
 
   /**
-   * Create game roles message
-   * @param command
+   * Get formatted emojis and role reactions
+   * @param emojis
+   * @param reactionRoles
+   * @param guild
+   * @returns { guildEmojis: GuildEmoji[]; roleArray: string[] }
    */
-  private async createGameRolesMessage(
+  private getFormattedRoles(
     emojis: BaseGuildEmojiManager,
-    roles: RoleManager | undefined,
-    bot: ClientUser | null
-  ): Promise<QuestionMessage> {
-    const reactionRoles = await this.reactionService.getReactionRoles('game');
-    const reactionNames: string[] = [];
-
+    reactionRoles: Reaction[],
+    guild: Guild
+  ): { guildEmojis: GuildEmoji[]; roleArray: string[] } {
     const guildEmojis = reactionRoles
       .map((r) => {
         const keys = Object.keys(r);
-        reactionNames.push(keys[0]);
-        return this.getEmoji(emojis, keys[0]);
+        return this.getEmoji(emojis, keys[0]) ?? { name: keys[0] };
       })
       .filter((g) => g?.name) as GuildEmoji[];
 
-    const games = guildEmojis.map((ge) => {
+    const arr = guildEmojis.map((ge) => {
       const { name, id } = ge;
       const role = reactionRoles.find((r) => r[name as string] !== undefined);
-      if (!role?.[name as string] && !roles) {
+      if (!role?.[name as string] && !guild?.roles) {
         return '';
       }
-      const r = Utility.findRole(roles, role?.[name as string]);
+      const r = Utility.findRole(guild.roles, role?.[name as string]);
+
+      if (!r) {
+        throw new Error();
+      }
+
       const roleCopy = r?.mentionable ? '<@&' + r?.id + '>' : (r?.name as string);
-      return this.c('roleAction', name as string, id, roleCopy);
+      return id
+        ? this.c('roleAction', name as string, id, roleCopy)
+        : this.c('roleActionDefault', name as string, roleCopy);
     });
 
-    const message = new MessageEmbed()
-      .setAuthor({ name: this.c('questionAuthor'), iconURL: bot?.displayAvatarURL() })
-      .setColor(3093237)
-      .setDescription(this.c('questionDescription', games.toString()));
-
     return {
-      message,
-      emoji: guildEmojis.map((e) => `${e?.name}:${e?.id}`)
+      guildEmojis,
+      roleArray: arr
     };
   }
 
   /**
-   * Custom question command
-   * @param question
+   * Server game roles init
    * @param interaction
    */
-  @Slash('custom-question', {
-    description: 'Display a custom message like game roles and server rules!'
-  })
-  async init(
-    @SlashChoice('Server Rules', QUESTION_TYPES[0])
-    @SlashChoice('Game Roles', QUESTION_TYPES[1])
-    @SlashOption('question', { description: 'Which question?' })
-    question: string,
-    interaction: CommandInteraction
-  ): Promise<void> {
-    const { client, guild } = interaction;
-    let questionMessage: QuestionMessage = {
-      message: undefined,
-      emoji: []
-    };
+  @Slash('game-roles', { description: 'Post custom server game roles with accept emoji' })
+  async gameInit(interaction: CommandInteraction): Promise<void> {
+    const { client, guild, channel } = interaction;
+    try {
+      if (!guild) {
+        await interaction.reply(this.c('unexpectedError'));
+        throw new Error();
+      }
 
-    if (question === QUESTION_TYPES[0]) {
-      questionMessage = await this.createRulesMessage(client.emojis, client.user);
+      const reactionRoles = await reactionService.getReactionRoles(guild, {
+        type: 'game'
+      });
+
+      const { guildEmojis, roleArray } = this.getFormattedRoles(
+        client.emojis,
+        reactionRoles,
+        guild
+      );
+
+      const message = this.createMessage(
+        this.c('questionAuthor'),
+        this.c('questionDescription', roleArray.toString()),
+        client.user?.displayAvatarURL()
+      );
+
+      const msg = (await channel?.send({
+        embeds: [message as MessageEmbed]
+      })) as Message;
+      guildEmojis.forEach(async (e) => await msg.react(e.id ? e : `${e.name}`));
+
+      await interaction.reply(this.c('questionSetup'));
+    } catch (e: unknown) {
+      await interaction.reply(this.c('unexpectedError'));
     }
 
-    if (question === QUESTION_TYPES[1]) {
-      questionMessage = await this.createGameRolesMessage(client.emojis, guild?.roles, client.user);
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return interaction.deleteReply();
+  }
+
+  /**
+   * Server devices init
+   * @param interaction
+   */
+  @Slash('device-roles', { description: 'Post custom server device roles with accept emoji' })
+  async deviceInit(interaction: CommandInteraction): Promise<void> {
+    const { client, guild, channel } = interaction;
+    try {
+      if (!guild) {
+        await interaction.reply(this.c('unexpectedError'));
+        throw new Error();
+      }
+
+      const reactionRoles = await reactionService.getReactionRoles(guild, { type: 'device' });
+
+      const { guildEmojis, roleArray } = this.getFormattedRoles(
+        client.emojis,
+        reactionRoles,
+        guild
+      );
+
+      const message = this.createMessage(
+        this.c('questionDevices'),
+        this.c('questionNoDescrption', roleArray.toString()),
+        client.user?.displayAvatarURL()
+      );
+
+      const msg = (await channel?.send({
+        embeds: [message as MessageEmbed]
+      })) as Message;
+      guildEmojis.forEach(async (e) => await msg.react(e.id ? e : `${e.name}`));
+
+      await interaction.reply(this.c('questionSetup'));
+    } catch (e: unknown) {
+      await interaction.reply(this.c('unexpectedError'));
     }
 
-    if (!questionMessage?.message || !questionMessage.emoji?.length) {
-      await interaction.reply(this.c('customQuestionMessage'));
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      return interaction.deleteReply();
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return interaction.deleteReply();
+  }
+
+  /**
+   * Server pronoun init
+   * @param interaction
+   */
+  @Slash('pronoun-roles', { description: 'Post custom server pronoun roles with accept emoji' })
+  async pronounInit(interaction: CommandInteraction): Promise<void> {
+    const { client, guild, channel } = interaction;
+    try {
+      if (!guild) {
+        await interaction.reply(this.c('unexpectedError'));
+        throw new Error();
+      }
+
+      const reactionRoles = await reactionService.getReactionRoles(guild, { type: 'pronoun' });
+
+      const { guildEmojis, roleArray } = this.getFormattedRoles(
+        client.emojis,
+        reactionRoles,
+        guild
+      );
+
+      const message = this.createMessage(
+        this.c('questionPronoun'),
+        this.c('questionNoDescrption', roleArray.toString()),
+        client.user?.displayAvatarURL()
+      );
+
+      const msg = (await channel?.send({
+        embeds: [message as MessageEmbed]
+      })) as Message;
+      guildEmojis.forEach(async (e) => await msg.react(e.id ? e : `${e.name}`));
+
+      await interaction.reply(this.c('questionSetup'));
+    } catch (e: unknown) {
+      await interaction.reply(this.c('unexpectedError'));
     }
 
-    const msg = (await interaction.reply({
-      embeds: [questionMessage.message as MessageEmbed],
-      fetchReply: true
-    })) as Message;
-    return questionMessage.emoji?.forEach((e) => msg.react(e));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return interaction.deleteReply();
   }
 }

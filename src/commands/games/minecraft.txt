@@ -1,21 +1,17 @@
-import { Logger } from 'Services/logger.service';
-import { MinecraftService } from 'Services/minecraft.service';
+import { minecraftService } from 'Services/minecraft.service';
 import { McServerDetail, McUrl } from 'Types/minecraft';
 import { Command } from 'Utils/command';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { Discord, Slash, SlashGroup, SlashOption } from 'discordx';
 import { status } from 'minecraft-server-util';
 import { StatusResponse } from 'minecraft-server-util/dist/model/StatusResponse';
 
 @Discord()
+@SlashGroup({ name: 'minecraft', description: 'Minecraft Commands' })
+@SlashGroup('minecraft')
 export abstract class Minecraft extends Command {
-  private minecraftService: MinecraftService;
-  private logger: Logger;
-
   constructor() {
     super();
-    this.minecraftService = new MinecraftService();
-    this.logger = new Logger();
   }
 
   /**
@@ -26,7 +22,7 @@ export abstract class Minecraft extends Command {
    */
   private async findMcUrl(guildId: string, server: McUrl): Promise<McUrl> {
     if (!server.domain && guildId) {
-      const res = await this.minecraftService.getServerDetails(guildId.toString());
+      const res = await minecraftService.getServerDetails(guildId.toString());
       return Promise.resolve(new McUrl(res?.domain, res?.port ? +res.port : 25565));
     }
 
@@ -55,7 +51,7 @@ export abstract class Minecraft extends Command {
    * @param port
    * @param interaction
    */
-  @Slash('minecraft', {
+  @Slash('ping', {
     description:
       'Ping a minecraft server for information. Command: /minecraft ip(optional) port(optional)'
   })
@@ -101,19 +97,15 @@ export abstract class Minecraft extends Command {
    * @param mcUrl
    */
   private async getAndSetServer(guildId: string, mcUrl: McUrl): Promise<void> {
-    const serverUrl = (await this.minecraftService.getServerDetails(guildId)) as McServerDetail;
+    const serverUrl = (await minecraftService.getServerDetails(guildId)) as McServerDetail;
 
     return serverUrl
-      ? this.minecraftService.updateServerDetails(
+      ? minecraftService.updateServerDetails(
           guildId,
           mcUrl.domain,
           mcUrl.port?.toString() || '25565'
         )
-      : this.minecraftService.setServerDetails(
-          guildId,
-          mcUrl.domain,
-          mcUrl.port?.toString() || '25565'
-        );
+      : minecraftService.setServerDetails(guildId, mcUrl.domain, mcUrl.port?.toString() || '25565');
   }
 
   /**
@@ -122,7 +114,7 @@ export abstract class Minecraft extends Command {
    * @param port
    * @param interaction
    */
-  @Slash('set-minecraft', {
+  @Slash('set', {
     description: 'Set default IP and Port for server. '
   })
   async setMCServer(

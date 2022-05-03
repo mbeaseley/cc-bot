@@ -11,8 +11,14 @@ export abstract class memberRemove extends Command {
    * @returns Promise<Message>
    */
   private async handleRemoval(member: GuildMember | PartialGuildMember): Promise<Message | void> {
+    const { memberRemove } = environment;
+
+    if (!memberRemove) {
+      return Promise.resolve();
+    }
+
     const { guild } = member;
-    const channel = guild.channels.cache.get(environment.memberRemove);
+    const channel = guild.channels.cache.get(memberRemove);
 
     if (!channel) {
       return Promise.resolve();

@@ -1,7 +1,7 @@
 import { HttpClient } from 'Interceptor/http-client';
 import { AxiosResponse } from 'axios';
 
-export class InsultModelService extends HttpClient {
+class InsultModelService extends HttpClient {
   constructor() {
     super('https://insult.mattbas.org/api');
   }
@@ -25,3 +25,5 @@ export class InsultModelService extends HttpClient {
     return (await this.getResponse())?.data;
   }
 }
+
+export const insultModelService = new InsultModelService();

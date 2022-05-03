@@ -1,15 +1,12 @@
-import { AdviceService } from 'Services/advice.service';
+import { adviceService } from 'Services/advice.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class Advice extends Command {
-  private adviceService: AdviceService;
-
   constructor() {
     super();
-    this.adviceService = new AdviceService();
   }
 
   /**
@@ -31,7 +28,7 @@ export abstract class Advice extends Command {
    * @param interaction
    */
   @Slash('advice', {
-    description: `Send some friendly advice to yourself or a friend.`
+    description: `fun command to send some friendly advice to yourself or a friend.`
   })
   async init(
     @SlashOption('user', {
@@ -41,7 +38,7 @@ export abstract class Advice extends Command {
     user: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const { advice } = await this.adviceService.getAdvice();
+    const { advice } = await adviceService.getAdvice();
 
     if (!advice) {
       await interaction.reply(this.c('noAdvice'));

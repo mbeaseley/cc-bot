@@ -1,5 +1,5 @@
-import { DatabaseService } from 'Services/database.service';
-import { Logger } from 'Services/logger.service';
+import { databaseService } from 'Services/database.service';
+import { logger } from 'Services/logger.service';
 import { ServersCollection } from 'Types/database';
 import { Channel, ChannelRssResponse, Video, YoutubeChannel } from 'Types/youtube';
 import { Command } from 'Utils/command';
@@ -10,15 +10,11 @@ import { ClientUser, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Client } from 'discordx';
 import Parser from 'rss-parser';
 
-export class YoutubeService extends Command {
+class YoutubeService extends Command {
   private interval: number = 300 * 1000; // 5 minutes
-  private logger: Logger;
-  private databaseService: DatabaseService;
 
   constructor() {
     super();
-    this.logger = new Logger();
-    this.databaseService = new DatabaseService();
   }
 
   /**
@@ -26,10 +22,7 @@ export class YoutubeService extends Command {
    * @returns string[]
    */
   private async getDBStoredChannels(): Promise<YoutubeChannel[]> {
-    return (await this.databaseService.get(
-      'servers',
-      ServersCollection.youtube
-    )) as YoutubeChannel[];
+    return (await databaseService.get('servers', ServersCollection.youtube)) as YoutubeChannel[];
   }
 
   /**
@@ -58,7 +51,7 @@ export class YoutubeService extends Command {
 
   public async check(client: Client): Promise<Message | void> {
     setInterval(async () => {
-      this.logger.info(chalk.bold('Checking channels'));
+      logger.info(chalk.bold('Checking channels'));
       const channels = await this.getDBStoredChannels();
       const parser = new Parser();
       channels.forEach(async (c) => {
@@ -70,7 +63,7 @@ export class YoutubeService extends Command {
         const latestVideo = channelResponse.items?.[0];
 
         if (c.latestVideoId !== latestVideo.id) {
-          await this.databaseService.update(
+          await databaseService.update(
             'servers',
             ServersCollection.youtube,
             {
@@ -108,8 +101,10 @@ export class YoutubeService extends Command {
       return Promise.reject();
     }
 
-    return this.databaseService.create('servers', ServersCollection.youtube, {
+    return databaseService.create('servers', ServersCollection.youtube, {
       channelId
     });
   }
 }
+
+export const youtubeService = new YoutubeService();

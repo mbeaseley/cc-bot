@@ -1,4 +1,4 @@
-import { MemeService } from 'Services/meme.service';
+import { memeService } from 'Services/meme.service';
 import { MemeItem } from 'Types/meme';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
@@ -6,11 +6,8 @@ import { Discord, Slash } from 'discordx';
 
 @Discord()
 export abstract class Insult extends Command {
-  private memeService: MemeService;
-
   constructor() {
     super();
-    this.memeService = new MemeService();
   }
 
   /**
@@ -32,9 +29,9 @@ export abstract class Insult extends Command {
    * @param user
    * @param interaction
    */
-  @Slash('meme', { description: `Want a bad meme?` })
+  @Slash('meme', { description: `fun command if want a bad meme?` })
   async init(interaction: CommandInteraction): Promise<void> {
-    const meme = await this.memeService.getMeme();
+    const meme = await memeService.getMeme();
 
     if (!meme?.image) {
       await interaction.reply(this.c('noMeme'));

@@ -37,7 +37,7 @@ export abstract class Poll extends Command {
   }
 
   @Slash('poll', {
-    description: 'Create a poll for friends to answer (max 26 options). '
+    description: 'miscellaneous command to create a poll for friends to answer (max 26 options). '
   })
   async init(
     @SlashOption('question', {

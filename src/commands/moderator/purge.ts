@@ -10,7 +10,7 @@ export abstract class Purge extends Command {
    * @param interaction
    */
   @Slash('purge', {
-    description: `Delete up to 100 messages!`
+    description: `moderator command to delete up to 100 messages!`
   })
   async init(
     @SlashOption('number', {
@@ -20,20 +20,24 @@ export abstract class Purge extends Command {
     number: number,
     interaction: CommandInteraction
   ): Promise<void> {
-    if (number > 100) {
-      await interaction.reply(this.c('purgeNumberError'));
+    try {
+      const { channel } = interaction;
+
+      if (number > 100) {
+        await interaction.reply(this.c('purgeNumberError'));
+        throw new Error();
+      }
+
+      const ch = channel?.isText() ? (channel as TextChannel) : undefined;
+
+      await ch?.bulkDelete(number ?? 1, true);
+
+      await interaction.reply(this.c('purgeSuccess'));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      return interaction.deleteReply();
+    } catch (e: unknown) {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       return interaction.deleteReply();
     }
-
-    const channel = interaction.channel?.isText()
-      ? (interaction.channel as TextChannel)
-      : undefined;
-
-    await channel?.bulkDelete(number ?? 1, true);
-
-    await interaction.reply(this.c('purgeSuccess'));
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    return interaction.deleteReply();
   }
 }

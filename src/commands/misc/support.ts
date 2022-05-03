@@ -50,7 +50,8 @@ export class Support extends Command {
    * @param interaction
    */
   @Slash('support', {
-    description: 'Having issues within the discord, want to suggest a feature, use this command!'
+    description:
+      'miscellaneous command, having issues, want to suggest a feature, use this command!'
   })
   async init(
     @SlashOption('support', {
@@ -59,26 +60,31 @@ export class Support extends Command {
     support: string,
     interaction: CommandInteraction
   ): Promise<any> {
-    const member = await (interaction.member as GuildMember).fetch();
-    const guild = interaction.guild?.fetch();
-    const bot = await interaction.client.user?.fetch();
+    try {
+      const member = await (interaction.member as GuildMember).fetch();
+      const guild = interaction.guild?.fetch();
+      const bot = await interaction.client.user?.fetch();
 
-    if (!guild) {
-      return interaction.deleteReply();
+      if (!guild) {
+        throw new Error();
+      }
+
+      const channel = (await guild).channels.cache.find(
+        (c) => c.id === environment.feedbackChannel && c.isText()
+      ) as TextChannel;
+
+      if (!channel) {
+        throw new Error();
+      }
+
+      const msg = this.createSupportMessage(support, member, member?.user, bot);
+      await channel.send({ embeds: [msg] });
+      const successMsg = this.createSuccessMessage(member, bot);
+      await interaction.reply({ embeds: [successMsg] });
+    } catch (e: unknown) {
+      await interaction.reply(this.c('unexpectedError'));
     }
 
-    const channel = (await guild).channels.cache.find(
-      (c) => c.id === environment.feedbackChannel && c.isText()
-    ) as TextChannel;
-
-    if (!channel) {
-      return interaction.deleteReply();
-    }
-
-    const msg = this.createSupportMessage(support, member, member?.user, bot);
-    await channel.send({ embeds: [msg] });
-    const successMsg = this.createSuccessMessage(member, bot);
-    await interaction.reply({ embeds: [successMsg] });
     await new Promise((resolve) => setTimeout(resolve, 5000));
     return interaction.deleteReply();
   }

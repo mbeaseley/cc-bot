@@ -1,15 +1,14 @@
-import { DBDService } from 'Services/dbd.service';
+import { dbdService } from 'Services/dbd.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { Discord, Slash, SlashChoice, SlashGroup, SlashOption } from 'discordx';
 
 @Discord()
+@SlashGroup({ name: 'dbd', description: 'Dead By Daylight Commands' })
+@SlashGroup('dbd')
 export class SuvivorChallenge extends Command {
-  private dbdService: DBDService;
-
   constructor() {
     super();
-    this.dbdService = new DBDService();
   }
 
   /**
@@ -57,19 +56,18 @@ export class SuvivorChallenge extends Command {
    * DBD Survivor commmand
    * @param interaction
    */
-  @Slash('dbd-survivor-challenge', {
-    description: 'Get a random dbd survivor challenge'
+  @Slash('survivor-challenge', {
+    description: 'Dead By Daylight command for getting a random dbd survivor challenge'
   })
   async init(
-    @SlashChoice('Yes', 'true')
-    @SlashChoice('No', 'false')
+    @SlashChoice('Yes', 'No')
     @SlashOption('dm', {
       description: 'Do you want the challenge to be dm only to you?'
     })
     dm: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const challenge = await this.dbdService.getSurvivorChallenge();
+    const challenge = await dbdService.getSurvivorChallenge();
 
     if (!challenge) {
       await interaction.reply(this.c('dbdNoChallenge'));
@@ -77,7 +75,7 @@ export class SuvivorChallenge extends Command {
       return interaction.deleteReply();
     }
 
-    if (dm === 'true') {
+    if (dm === 'Yes') {
       return this.onSendingDM(interaction, challenge);
     }
 

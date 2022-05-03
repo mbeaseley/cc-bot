@@ -1,4 +1,5 @@
-import { ReactionService } from 'Services/reaction.service';
+import { hasPermission } from 'Guards/has-permission';
+import { reactionService } from 'Services/reaction.service';
 import { Reaction, ReactionActions } from 'Types/reaction';
 import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
@@ -7,12 +8,6 @@ import { ArgsOf, Discord, On } from 'discordx';
 
 @Discord()
 export abstract class messageReactionAdd {
-  private reactionService: ReactionService;
-
-  constructor() {
-    this.reactionService = new ReactionService();
-  }
-
   /**
    * Get choosen role or action
    * @param reactions
@@ -95,7 +90,7 @@ export abstract class messageReactionAdd {
       return Promise.resolve();
     }
 
-    const reactionRoles = await this.reactionService.getReactionRoles();
+    const reactionRoles = await reactionService.getReactionRoles(guild, { type: 'all-role' });
     const member = await guild.members.fetch(user.id);
     const choosenRole = this.getChoosenRoleOrAction(
       reactionRoles,
@@ -108,14 +103,18 @@ export abstract class messageReactionAdd {
       return this.addRole(member, role);
     }
 
-    const mods = environment.moderatorRoles.map((m) => m.id);
-    const isMod = member.roles.cache.find((r) => mods.indexOf(r.id) > -1);
+    const { moderatorRoles, ownerId } = environment;
+    const mods = hasPermission(moderatorRoles)?.map((m) => m.id);
 
-    const reactionActions = await this.reactionService.getReactionActions();
+    const isMod = member.roles.cache.find((r) => mods.indexOf(r.id) > -1) || member.id === ownerId;
+
+    const reactionActions = await reactionService.getReactionRoles(guild, { type: 'action' });
+
     const choosenAction = this.getChoosenRoleOrAction(
       reactionActions,
       messageReaction.emoji?.name ?? ''
     ) as ReactionActions;
+
     if (choosenAction && isMod) {
       return this.handleAction(messageReaction.message, choosenAction);
     }

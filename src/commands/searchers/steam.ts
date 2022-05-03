@@ -1,16 +1,13 @@
 import { Command } from 'Root/utils/command';
-import { SteamService } from 'Services/steam.service';
+import { steamService } from 'Services/steam.service';
 import { PlayerSummary, UserBans } from 'Types/steam';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class Steam extends Command {
-  private steamService: SteamService;
-
   constructor() {
     super();
-    this.steamService = new SteamService();
   }
 
   /**
@@ -43,7 +40,7 @@ export abstract class Steam extends Command {
   }
 
   @Slash('steam', {
-    description: 'Check and share your profile with friends on steam.'
+    description: 'searcher command to check and share your profile with friends on steam.'
   })
   async init(
     @SlashOption('name', {
@@ -52,7 +49,7 @@ export abstract class Steam extends Command {
     url: string,
     interaction: CommandInteraction
   ): Promise<void> {
-    const user = await this.steamService.getVanityUser(url);
+    const user = await steamService.getVanityUser(url);
 
     if (!user.steamId) {
       await interaction.reply(this.c('steamNoUser'));
@@ -60,8 +57,8 @@ export abstract class Steam extends Command {
       return interaction.deleteReply();
     }
 
-    const playerSummary = await this.steamService.getPlayerSummary(user.steamId);
-    const userBans = await this.steamService.getUserBans(user.steamId);
+    const playerSummary = await steamService.getPlayerSummary(user.steamId);
+    const userBans = await steamService.getUserBans(user.steamId);
 
     const msg = this.createMessage(playerSummary, userBans);
     return interaction.reply({ embeds: [msg] });

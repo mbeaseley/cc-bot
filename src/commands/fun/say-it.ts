@@ -1,18 +1,13 @@
-import { ComplimentService } from 'Services/compliment.service';
-import { InsultService } from 'Services/insult.service';
+import { complimentService } from 'Services/compliment.service';
+import { insultService } from 'Services/insult.service';
 import { Command } from 'Utils/command';
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js';
 import { Discord, Slash, SlashOption } from 'discordx';
 
 @Discord()
 export abstract class SayIt extends Command {
-  private insultService: InsultService;
-  private complimentService: ComplimentService;
-
   constructor() {
     super();
-    this.insultService = new InsultService();
-    this.complimentService = new ComplimentService();
   }
 
   /**
@@ -34,7 +29,7 @@ export abstract class SayIt extends Command {
    * @param interaction
    */
   @Slash('say-it', {
-    description: `Try your luck, get or send a user with a insult or compliment!`
+    description: `fun command to try your luck, get or send a user with a insult or compliment!`
   })
   async init(
     @SlashOption('user', {
@@ -47,10 +42,10 @@ export abstract class SayIt extends Command {
     const index = Math.round(Math.random());
 
     const copy = index
-      ? await this.complimentService.getCompliment().then((c) => {
+      ? await complimentService.getCompliment().then((c) => {
           return c.compliment;
         })
-      : await this.insultService.getInsult().then((i) => i);
+      : await insultService.getInsult().then((i) => i);
 
     if (!copy) {
       await interaction.reply(this.c('noSayIt'));

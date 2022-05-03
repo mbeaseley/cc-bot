@@ -2,7 +2,7 @@ import { HttpClient } from 'Interceptor/http-client';
 import { MemeItem } from 'Types/meme';
 import { AxiosResponse } from 'axios';
 
-export class MemeModelService extends HttpClient {
+class MemeModelService extends HttpClient {
   constructor() {
     super('https://some-random-api.ml/');
   }
@@ -26,3 +26,5 @@ export class MemeModelService extends HttpClient {
     return (await this.getResponse())?.data ?? new MemeItem();
   }
 }
+
+export const memeModelService = new MemeModelService();

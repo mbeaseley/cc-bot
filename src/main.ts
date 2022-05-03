@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import { Logger } from 'Services/logger.service';
-import { YoutubeService } from 'Services/youtube.service';
-import { environment } from 'Utils/environment';
+import { logger } from 'Services/logger.service';
+import { twitchService } from 'Services/twitch.service';
+import { environment as env } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import { importx } from '@discordx/importer';
 import chalk from 'chalk';
@@ -14,13 +14,6 @@ dotenv.config();
 @Discord()
 export class Main {
   private static _client: Client;
-  private static logger: Logger;
-  private static youtubeService: YoutubeService;
-
-  constructor() {
-    Main.logger = new Logger();
-    Main.youtubeService = new YoutubeService();
-  }
 
   static get Client(): Client {
     return this._client;
@@ -35,6 +28,7 @@ export class Main {
    * @description Starts up discord bot
    */
   static async start(): Promise<void> {
+    const { environment, server, token } = env;
     Main.Client = new Client({
       intents: [
         Intents.FLAGS.GUILDS,
@@ -51,27 +45,24 @@ export class Main {
         Intents.FLAGS.GUILD_MEMBERS,
         Intents.FLAGS.GUILD_VOICE_STATES
       ],
-      botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
-      silent: environment.environment === 'production' ? undefined : false
+      botGuilds:
+        environment === 'production'
+          ? [(client) => client.guilds.cache.map((guild) => guild.id)]
+          : [server],
+      silent: environment === 'production' ? undefined : false
     });
 
     await importx(`${__dirname}/commands/**/*.{ts,js}`);
     await importx(`${__dirname}/events/**/*.{ts,js}`);
-    await Main.Client.login(environment.token ?? '');
+    await Main.Client.login(token ?? '');
 
     Main.Client.once('ready', async () => {
-      Main.logger.info('info check');
-      Main.logger.warn('warning check');
-      Main.logger.error('error check');
+      logger.info('info check');
+      logger.warn('warning check');
+      logger.error('error check');
 
       await Main.Client.clearApplicationCommands();
-
-      await Main.Client.initApplicationCommands({
-        guild: { log: true },
-        global: { log: true }
-      });
-
-      // init permissions; enabled log to see changes
+      await Main.Client.initApplicationCommands();
       await Main.Client.initApplicationPermissions(true);
 
       const guild = Utility.getGuild(Main.Client.guilds);
@@ -82,7 +73,11 @@ export class Main {
         type: 'LISTENING'
       });
 
-      Main.logger.info(chalk.bold('BOT READY'));
+      if (guild) {
+        await twitchService.check(Main.Client, guild);
+      }
+
+      logger.info(chalk.bold('BOT READY'));
     });
 
     Main.Client.on('interactionCreate', (interaction: Interaction) => {

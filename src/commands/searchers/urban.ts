@@ -30,7 +30,7 @@ export abstract class Urban extends Command {
    * @param interaction
    */
   @Slash('urban', {
-    description: `Get urban definition of word.`
+    description: `searcher command to get urban definition of a word/phrase.`
   })
   async init(
     @SlashOption('phrase', {

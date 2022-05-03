@@ -2,7 +2,7 @@ import { HttpClient } from 'Interceptor/http-client';
 import { ComplimentObject } from 'Types/compliment';
 import { AxiosResponse } from 'axios';
 
-export class ComplimentModelService extends HttpClient {
+class ComplimentModelService extends HttpClient {
   constructor() {
     super('');
   }
@@ -26,3 +26,5 @@ export class ComplimentModelService extends HttpClient {
     return (await this.getResponse())?.data ?? new ComplimentObject();
   }
 }
+
+export const complimentModelService = new ComplimentModelService();
