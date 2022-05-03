@@ -6,6 +6,7 @@ export type Databases = {
   twitch: TwitchCollection;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type StringOfLength<Min extends number, Max extends number> = string & {
   __value__: never;
 };

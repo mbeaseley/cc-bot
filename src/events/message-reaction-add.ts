@@ -60,7 +60,6 @@ export abstract class messageReactionAdd {
         return message.delete();
       }
     } catch (e: unknown) {
-      console.log(e);
       return Promise.resolve();
     }
   }
