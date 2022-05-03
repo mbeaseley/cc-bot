@@ -137,6 +137,10 @@ export abstract class WelcomeAdd extends Command {
    */
   @On('guildMemberAdd')
   async init([guildMember]: ArgsOf<'guildMemberAdd'>): Promise<Message | void> {
+    if (!environment.memberAdd) {
+      return Promise.resolve();
+    }
+
     return this.handleMessage(guildMember);
   }
 }

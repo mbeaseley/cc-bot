@@ -6,7 +6,6 @@ import { environment } from 'Utils/environment';
 import Utility from 'Utils/utility';
 import {
   BaseGuildEmojiManager,
-  ClientUser,
   CommandInteraction,
   Guild,
   GuildEmoji,
@@ -42,12 +41,12 @@ export abstract class CustomQuestion extends Command {
   private createMessage(
     title: string,
     message: string,
-    bot: ClientUser | null,
+    iconURL?: string,
     guild?: Guild
   ): MessageEmbed {
     const msg = new MessageEmbed()
       .setColor('RANDOM')
-      .setAuthor({ name: title, iconURL: bot?.displayAvatarURL() })
+      .setAuthor({ name: title, iconURL })
       .setDescription(message);
 
     const img = guild?.iconURL();
@@ -91,7 +90,7 @@ export abstract class CustomQuestion extends Command {
       const ruleMsg = this.createMessage(
         this.c('customHeading', guild?.name ?? 'Discord'),
         rulesMessage,
-        client.user,
+        guild?.iconURL() ?? undefined,
         g as Guild
       );
 
@@ -141,6 +140,11 @@ export abstract class CustomQuestion extends Command {
         return '';
       }
       const r = Utility.findRole(guild.roles, role?.[name as string]);
+
+      if (!r) {
+        throw new Error();
+      }
+
       const roleCopy = r?.mentionable ? '<@&' + r?.id + '>' : (r?.name as string);
       return id
         ? this.c('roleAction', name as string, id, roleCopy)
@@ -179,7 +183,7 @@ export abstract class CustomQuestion extends Command {
       const message = this.createMessage(
         this.c('questionAuthor'),
         this.c('questionDescription', roleArray.toString()),
-        client.user
+        client.user?.displayAvatarURL()
       );
 
       const msg = (await channel?.send({
@@ -220,7 +224,7 @@ export abstract class CustomQuestion extends Command {
       const message = this.createMessage(
         this.c('questionDevices'),
         this.c('questionNoDescrption', roleArray.toString()),
-        client.user
+        client.user?.displayAvatarURL()
       );
 
       const msg = (await channel?.send({
@@ -261,7 +265,7 @@ export abstract class CustomQuestion extends Command {
       const message = this.createMessage(
         this.c('questionPronoun'),
         this.c('questionNoDescrption', roleArray.toString()),
-        client.user
+        client.user?.displayAvatarURL()
       );
 
       const msg = (await channel?.send({
