@@ -5,7 +5,7 @@ import { Command } from 'Utils/command';
 import { environment } from 'Utils/environment';
 import chalk = require('chalk');
 import dayjs = require('dayjs');
-import { Client, ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
+import { ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
 
 class TwitchService extends Command {
   private interval: number = 30 * 1000; // 5 minutes
