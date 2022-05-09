@@ -161,7 +161,7 @@ export abstract class CustomQuestion extends Command {
    * Server game roles init
    * @param interaction
    */
-  @Slash('game-roles', { description: 'Post custom server game roles with accept emoji' })
+  @Slash('game-roles', { description: 'Post custom server game roles' })
   async gameInit(interaction: CommandInteraction): Promise<void> {
     const { client, guild, channel } = interaction;
     try {
@@ -204,7 +204,7 @@ export abstract class CustomQuestion extends Command {
    * Server devices init
    * @param interaction
    */
-  @Slash('device-roles', { description: 'Post custom server device roles with accept emoji' })
+  @Slash('device-roles', { description: 'Post custom server device roles' })
   async deviceInit(interaction: CommandInteraction): Promise<void> {
     const { client, guild, channel } = interaction;
     try {
@@ -245,7 +245,7 @@ export abstract class CustomQuestion extends Command {
    * Server pronoun init
    * @param interaction
    */
-  @Slash('pronoun-roles', { description: 'Post custom server pronoun roles with accept emoji' })
+  @Slash('pronoun-roles', { description: 'Post custom server pronoun roles' })
   async pronounInit(interaction: CommandInteraction): Promise<void> {
     const { client, guild, channel } = interaction;
     try {
@@ -264,6 +264,47 @@ export abstract class CustomQuestion extends Command {
 
       const message = this.createMessage(
         this.c('questionPronoun'),
+        this.c('questionNoDescrption', roleArray.toString()),
+        client.user?.displayAvatarURL()
+      );
+
+      const msg = (await channel?.send({
+        embeds: [message as MessageEmbed]
+      })) as Message;
+      guildEmojis.forEach(async (e) => await msg.react(e.id ? e : `${e.name}`));
+
+      await interaction.reply(this.c('questionSetup'));
+    } catch (e: unknown) {
+      await interaction.reply(this.c('unexpectedError'));
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return interaction.deleteReply();
+  }
+
+  /**
+   * Server pronoun init
+   * @param interaction
+   */
+  @Slash('community-roles', { description: 'Post custom server community roles' })
+  async communityInit(interaction: CommandInteraction): Promise<void> {
+    const { client, guild, channel } = interaction;
+    try {
+      if (!guild) {
+        await interaction.reply(this.c('unexpectedError'));
+        throw new Error();
+      }
+
+      const reactionRoles = await reactionService.getReactionRoles(guild, { type: 'community' });
+
+      const { guildEmojis, roleArray } = this.getFormattedRoles(
+        client.emojis,
+        reactionRoles,
+        guild
+      );
+
+      const message = this.createMessage(
+        this.c('questionCommunity'),
         this.c('questionNoDescrption', roleArray.toString()),
         client.user?.displayAvatarURL()
       );
