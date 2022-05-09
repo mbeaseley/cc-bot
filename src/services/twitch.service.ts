@@ -76,7 +76,17 @@ class TwitchService extends Command {
         const limitPastMS = dayjs().subtract(this.interval, 'milliseconds').valueOf();
         const streamMS = stream.startedAt.valueOf();
 
-        if (streamMS + this.interval < limitPastMS) {
+        logger.info(
+          chalk.bold(
+            stream.userLoginName,
+            ' -> difference between max and stream start; ',
+            limitPastMS - streamMS,
+            ', interval mark: ',
+            this.interval
+          )
+        );
+
+        if (limitPastMS - streamMS > this.interval) {
           return Promise.resolve();
         }
 
