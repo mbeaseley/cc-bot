@@ -6,4 +6,4 @@ export interface Reaction {
 
 export type ReactionActions = 'delete' | 'beam_up';
 
-export type ReactionRoleTypes = 'game' | 'device' | 'pronoun';
+export type ReactionRoleTypes = 'game' | 'device' | 'pronoun' | 'community';

@@ -8,7 +8,7 @@ import dayjs = require('dayjs');
 import { Client, ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
 
 class TwitchService extends Command {
-  private interval: number = 300 * 1000; // 5 minutes
+  private interval: number = 30 * 1000; // 5 minutes
 
   /**
    * Get User
@@ -49,7 +49,7 @@ class TwitchService extends Command {
    * @param iconURL
    * @returns MessageEmbed
    */
-  private createMessage(stream: Stream, iconURL: string): MessageEmbed {
+  private createMessage(stream: Stream, iconURL?: string): MessageEmbed {
     return new MessageEmbed()
       .setAuthor({ name: this.c(`twitchFreeText`, stream.username ?? '~'), iconURL })
       .setTitle(this.c(`twitchFreeText`, stream.title ?? '~'))
@@ -61,7 +61,7 @@ class TwitchService extends Command {
   /**
    * Check if streamers are live
    */
-  public async check(client: Client, guild: Guild): Promise<void> {
+  public async check(guild: Guild): Promise<void> {
     setInterval(async () => {
       logger.info(chalk.bold('Checking channels'));
       const channels = await this.getDBStoredChannels(guild);
@@ -91,13 +91,21 @@ class TwitchService extends Command {
         }
 
         const member = await guild.members.fetch(c.id);
+        const channels = await guild.channels.fetch();
 
-        const textChannel = client.channels.cache.find(
+        const textChannel = channels.find(
           (c) => c.id === environment.streamsBase && c.isText()
         ) as TextChannel;
 
+        if (!textChannel) {
+          return Promise.resolve();
+        }
+
         const msg = this.c('twitchNotifyLive', stream.username ?? '~', stream.userLoginName ?? '~');
-        const embedMsg = this.createMessage(stream, (member.user as ClientUser).displayAvatarURL());
+        const embedMsg = this.createMessage(
+          stream,
+          (member.user as ClientUser)?.displayAvatarURL()
+        );
         await textChannel.send(msg);
         return textChannel.send({ embeds: [embedMsg] });
       });

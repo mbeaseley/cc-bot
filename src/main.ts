@@ -73,7 +73,7 @@ export class Main {
       });
 
       if (guild) {
-        await twitchService.check(Main.Client, guild);
+        await twitchService.check(guild);
       }
 
       logger.info(chalk.bold('BOT READY'));
