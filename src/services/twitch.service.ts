@@ -86,7 +86,9 @@ class TwitchService extends Command {
           )
         );
 
-        if (limitPastMS - streamMS > this.interval) {
+        // twitch api ends up being 1 or 2 minutes behind
+        const apiCache = 60 * 1000;
+        if (limitPastMS - streamMS > this.interval - apiCache) {
           return Promise.resolve();
         }
 
