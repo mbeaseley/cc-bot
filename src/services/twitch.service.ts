@@ -115,9 +115,6 @@ class TwitchService extends Command {
           return Promise.resolve();
         }
 
-        // Update and remember previous streamers
-        this.streamers = streamersChannels.slice();
-
         const msg = this.c('twitchNotifyLive', stream.username ?? '~', stream.userLoginName ?? '~');
         const embedMsg = this.createMessage(
           stream,
