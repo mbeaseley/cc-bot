@@ -9,6 +9,7 @@ import { ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
 
 class TwitchService extends Command {
   private interval: number = 300 * 1000; // 5 minutes
+  private streams: Stream[] = [];
 
   /**
    * Get User
@@ -64,14 +65,27 @@ class TwitchService extends Command {
   public async check(guild: Guild): Promise<void> {
     setInterval(async () => {
       logger.info(chalk.bold('Checking channels'));
-      const channels = await this.getDBStoredChannels(guild);
 
-      channels.forEach(async (c) => {
+      // cleans up stored streams by removing any with no start at date/time and any live longer than interval
+      const streamCopy = this.streams.filter((c) => c.startedAt !== undefined);
+      this.streams = streamCopy.filter(
+        (c) => dayjs().diff(c.startedAt as dayjs.Dayjs, 'milliseconds') < this.interval
+      );
+
+      const streamersChannels = await this.getDBStoredChannels(guild);
+
+      streamersChannels.forEach(async (c) => {
         const stream = await this.getStreams(c.userLoginName);
 
-        if (!stream?.startedAt) {
+        // Due to twitch api caching being 1 or 2 minutes
+        // Need to make sure we are only posting streams once
+        const LiveLongerThanInterval = this.streams.find((s) => s.id === stream.id);
+        if (!stream?.startedAt || LiveLongerThanInterval) {
           return Promise.resolve();
         }
+
+        // Add to memory of live streams
+        this.streams.push(stream);
 
         const limitPastMS = dayjs().subtract(this.interval, 'milliseconds').valueOf();
         const streamMS = stream.startedAt.valueOf();
@@ -86,9 +100,7 @@ class TwitchService extends Command {
           )
         );
 
-        // twitch api ends up being 1 or 2 minutes behind
-        const apiCache = 60 * 1000;
-        if (limitPastMS - streamMS > this.interval - apiCache) {
+        if (limitPastMS - streamMS > this.interval) {
           return Promise.resolve();
         }
 
@@ -102,6 +114,9 @@ class TwitchService extends Command {
         if (!textChannel) {
           return Promise.resolve();
         }
+
+        // Update and remember previous streamers
+        this.streamers = streamersChannels.slice();
 
         const msg = this.c('twitchNotifyLive', stream.username ?? '~', stream.userLoginName ?? '~');
         const embedMsg = this.createMessage(
