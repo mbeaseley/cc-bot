@@ -79,7 +79,7 @@ class TwitchService extends Command {
 
         // Due to twitch api caching being 1 or 2 minutes
         // Need to make sure we are only posting streams once
-        const LiveLongerThanInterval = this.streams.find((s) => s.id === stream.id);
+        const LiveLongerThanInterval = this.streams.find((s) => s?.id === stream?.id);
         if (!stream?.startedAt || LiveLongerThanInterval) {
           return Promise.resolve();
         }
