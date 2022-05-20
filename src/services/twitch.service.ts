@@ -98,7 +98,7 @@ class TwitchService extends Command {
 
         if (
           latestMessage?.createdTimestamp &&
-          +dayjs() - +dayjs(latestMessage?.createdTimestamp) <= this.interval
+          +dayjs() - +dayjs(latestMessage?.createdTimestamp) > this.interval
         ) {
           console.log(+dayjs(), +dayjs(latestMessage?.createdTimestamp));
           return Promise.resolve();
