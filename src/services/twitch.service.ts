@@ -9,7 +9,6 @@ import { ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
 
 class TwitchService extends Command {
   private interval: number = 300 * 1000; // 5 minutes
-  private streams: Stream[] = [];
 
   /**
    * Get User
@@ -66,29 +65,47 @@ class TwitchService extends Command {
     setInterval(async () => {
       logger.info(chalk.bold('Checking channels'));
 
-      // cleans up stored streams by removing any with no start at date/time and any live longer than interval
-      const streamCopy = this.streams.filter((c) => c.startedAt !== undefined);
-      this.streams = streamCopy.filter(
-        (c) => dayjs().diff(c.startedAt as dayjs.Dayjs, 'milliseconds') < this.interval
-      );
-
       const streamersChannels = await this.getDBStoredChannels(guild);
 
       streamersChannels.forEach(async (c) => {
         const stream = await this.getStreams(c.userLoginName);
 
-        // Due to twitch api caching being 1 or 2 minutes
-        // Need to make sure we are only posting streams once
-        const LiveLongerThanInterval = this.streams.find((s) => s?.id === stream?.id);
-        if (!stream?.startedAt || LiveLongerThanInterval) {
+        if (!stream?.startedAt) {
           return Promise.resolve();
         }
 
-        // Add to memory of live streams
-        this.streams.push(stream);
+        const channels = await guild.channels.fetch();
+
+        const textChannel = channels.find(
+          (c) => c.id === environment.streamsBase && c.isText()
+        ) as TextChannel;
+
+        if (!textChannel) {
+          return Promise.resolve();
+        }
+
+        const messages = await textChannel.messages.fetch({ limit: 100 });
+
+        if (!messages?.size) {
+          return Promise.resolve();
+        }
+
+        const lastIntervalMessages = messages.filter(
+          (m) => !!m.embeds.find((e) => e.url?.match(c.userLoginName))
+        );
+
+        const latestMessage = lastIntervalMessages.first();
+
+        if (
+          latestMessage?.createdTimestamp &&
+          +dayjs() - +dayjs(latestMessage?.createdTimestamp) <= this.interval
+        ) {
+          console.log(+dayjs(), +dayjs(latestMessage?.createdTimestamp));
+          return Promise.resolve();
+        }
 
         const limitPastMS = dayjs().subtract(this.interval, 'milliseconds').valueOf();
-        const streamMS = stream.startedAt.valueOf();
+        const streamMS = stream?.startedAt.valueOf();
 
         logger.info(
           chalk.bold(
@@ -100,20 +117,7 @@ class TwitchService extends Command {
           )
         );
 
-        if (limitPastMS - streamMS > this.interval) {
-          return Promise.resolve();
-        }
-
         const member = await guild.members.fetch(c.id);
-        const channels = await guild.channels.fetch();
-
-        const textChannel = channels.find(
-          (c) => c.id === environment.streamsBase && c.isText()
-        ) as TextChannel;
-
-        if (!textChannel) {
-          return Promise.resolve();
-        }
 
         const msg = this.c('twitchNotifyLive', stream.username ?? '~', stream.userLoginName ?? '~');
         const embedMsg = this.createMessage(
