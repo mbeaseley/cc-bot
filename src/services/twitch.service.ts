@@ -98,7 +98,9 @@ class TwitchService extends Command {
             chalk.bold(
               `${
                 stream.username
-              } already sent! ${messagesInTime} since stream started at ${stream.startedAt.format()}`
+              } already sent! ${messagesInTime} since stream started at ${stream.startedAt.format(
+                'YYYY-MM-DD HH:mm:ssZ[Z]'
+              )}`
             )
           );
           return Promise.resolve();
