@@ -93,8 +93,6 @@ class TwitchService extends Command {
           (m) => !!(stream?.startedAt && m.createdTimestamp > stream.startedAt.valueOf())
         ).size;
 
-        console.log(stream, messagesInTime);
-
         if (messagesInTime) {
           logger.info(
             chalk.bold(
