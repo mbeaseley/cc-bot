@@ -8,7 +8,7 @@ import dayjs = require('dayjs');
 import { ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
 
 class TwitchService extends Command {
-  private interval: number = 300 * 1000; // 5 minutes
+  private interval: number = 1000 * 60 * 0.5; // 5 minutes
 
   /**
    * Get User
@@ -85,37 +85,28 @@ class TwitchService extends Command {
         }
 
         const messages = await textChannel.messages.fetch({ limit: 100 });
+        const streamerMessages = messages.filter(
+          (m) => !!m.embeds.find((e) => e.url?.includes(stream?.userLoginName ?? 'n/a'))
+        );
 
-        if (!messages?.size) {
+        const messagesInTime = streamerMessages.filter(
+          (m) => !!(stream?.startedAt && m.createdTimestamp > stream.startedAt.valueOf())
+        ).size;
+
+        console.log(stream, messagesInTime);
+
+        if (messagesInTime) {
+          logger.info(
+            chalk.bold(
+              `${
+                stream.username
+              } already sent! ${messagesInTime} since stream started at ${stream.startedAt.format()}`
+            )
+          );
           return Promise.resolve();
         }
 
-        const lastIntervalMessages = messages.filter(
-          (m) => !!m.embeds.find((e) => e.url?.match(c.userLoginName))
-        );
-
-        const latestMessage = lastIntervalMessages.first();
-
-        if (
-          latestMessage?.createdTimestamp &&
-          +dayjs() - +dayjs(latestMessage?.createdTimestamp) > this.interval
-        ) {
-          console.log(+dayjs(), +dayjs(latestMessage?.createdTimestamp));
-          return Promise.resolve();
-        }
-
-        const limitPastMS = dayjs().subtract(this.interval, 'milliseconds').valueOf();
-        const streamMS = stream?.startedAt.valueOf();
-
-        logger.info(
-          chalk.bold(
-            stream.userLoginName,
-            ' -> difference between max and stream start; ',
-            limitPastMS - streamMS,
-            ', interval mark: ',
-            this.interval
-          )
-        );
+        logger.info(chalk.bold(`${stream.username} notification sending!`));
 
         const member = await guild.members.fetch(c.id);
 
