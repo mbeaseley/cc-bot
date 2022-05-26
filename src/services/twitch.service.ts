@@ -8,7 +8,7 @@ import dayjs = require('dayjs');
 import { ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
 
 class TwitchService extends Command {
-  private interval: number = 1000 * 60 * 5; // 5 minutes
+  private interval: number = 1000 * 60 * 0.5; // 5 minutes
 
   /**
    * Get User
@@ -67,6 +67,8 @@ class TwitchService extends Command {
 
       const streamersChannels = await this.getDBStoredChannels(guild);
 
+      console.log(streamersChannels);
+
       streamersChannels.forEach(async (c) => {
         const stream = await this.getStreams(c.userLoginName);
 
@@ -89,8 +91,15 @@ class TwitchService extends Command {
           (m) => !!m.embeds.find((e) => e.url?.includes(stream?.userLoginName ?? 'n/a'))
         );
 
+        const hourInPast = dayjs(streamerMessages.first()?.createdAt).subtract(1, 'hour').unix();
+
         const messagesInTime = streamerMessages.filter(
-          (m) => !!(stream?.startedAt && m.createdTimestamp > stream.startedAt.valueOf())
+          (m) =>
+            !!(
+              stream?.startedAt &&
+              m.createdTimestamp > stream.startedAt.valueOf() &&
+              m.createdTimestamp > hourInPast
+            )
         ).size;
 
         if (messagesInTime) {
