@@ -44,6 +44,6 @@ export const searchers = {
   youtubeError: '**Channel Id have already been set on watchlist!**',
   youtubeAuthor: '{0} new video is live on Youtube!',
   youtubeDes: '[Watch Now]({0})',
-  twitchNotifyLive: `Hey, {0} is now live on <https://twitch.tv/{1}>! Go check it out and say hi!`,
+  twitchNotifyLive: `Hey, <@!{0}> is now live on <https://twitch.tv/{1}> ! Go check it out and say hi!`,
   twitchFreeText: '{0}'
 };

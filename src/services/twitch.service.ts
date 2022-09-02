@@ -67,8 +67,6 @@ class TwitchService extends Command {
 
       const streamersChannels = await this.getDBStoredChannels(guild);
 
-      console.log(streamersChannels);
-
       streamersChannels.forEach(async (c) => {
         const stream = await this.getStreams(c.userLoginName);
 
@@ -119,7 +117,7 @@ class TwitchService extends Command {
 
         const member = await guild.members.fetch(c.id);
 
-        const msg = this.c('twitchNotifyLive', stream.username ?? '~', stream.userLoginName ?? '~');
+        const msg = this.c('twitchNotifyLive', c.id ?? '~', stream.userLoginName ?? '~');
         const embedMsg = this.createMessage(
           stream,
           (member.user as ClientUser)?.displayAvatarURL()
