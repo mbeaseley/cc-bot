@@ -8,7 +8,7 @@ import dayjs = require('dayjs');
 import { ClientUser, Guild, MessageEmbed, TextChannel } from 'discord.js';
 
 class TwitchService extends Command {
-  private interval: number = 1000 * 60 * 0.5; // 5 minutes
+  private interval: number = 1000 * 240; // 4 minutes
 
   /**
    * Get User
