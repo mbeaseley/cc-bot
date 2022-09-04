@@ -161,8 +161,9 @@ class TwitchModelService extends HttpClient {
       s.startedAt = dayjs(res.data[0].started_at);
       s.language = res.data[0].language;
       s.thumbnailUrl = res.data[0].thumbnail_url
-        .replace('{width}', '1280')
-        .replace('{height}', '720');
+        .replace('{width}', '400')
+        .replace('{height}', '225');
+      s.thumbnailUrl += `?r=${s.gameId}`;
       s.tagIds = res.data[0].tag_ids;
       s.isMature = res.data[0].is_mature;
 
