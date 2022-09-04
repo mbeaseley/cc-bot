@@ -50,12 +50,19 @@ class TwitchService extends Command {
    * @returns MessageEmbed
    */
   private createMessage(stream: Stream, iconURL?: string): MessageEmbed {
-    return new MessageEmbed()
+    const m = new MessageEmbed()
       .setAuthor({ name: this.c(`twitchFreeText`, stream.username ?? '~'), iconURL })
       .setTitle(this.c(`twitchFreeText`, stream.title ?? '~'))
       .setURL(this.c('twitchUrl', stream.userLoginName ?? '~'))
       .setColor(6570405)
-      .setImage(`${stream.thumbnailUrl}`);
+      .setImage(`${stream.thumbnailUrl}`)
+      .addFields({ name: 'Viewers', value: `${stream.viewerCount}` });
+
+    if (iconURL) {
+      m.setAuthor({ name: this.c(`twitchFreeText`, stream.username ?? '~'), iconURL });
+    }
+
+    return m;
   }
 
   /**
