@@ -75,7 +75,7 @@ class TwitchService extends Command {
       const streamersChannels = await this.getDBStoredChannels(guild);
 
       streamersChannels.forEach(async (c) => {
-        const stream = await this.getStreams(c.userLoginName);
+        const stream = await this.getStreams(c.userLoginName).catch(() => {});
 
         if (!stream?.startedAt) {
           return Promise.resolve();
