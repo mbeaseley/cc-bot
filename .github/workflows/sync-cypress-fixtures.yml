@@ -42,7 +42,12 @@ jobs:
           git push origin $CYPRESS_FIXTURES_BRANCH
 
       - name: Create PR
+        env:
+          TRANSLATION_BRANCH_NAME: $CYPRESS_FIXTURES_BRANCH
+          BASE_BRANCH_NAME: 'dev'
         uses: peter-evans/create-pull-request@v4
         with:
           title: '[E2E] Cypress fixtures pulled $CURRENT_DATE'
+          branch: $CYPRESS_FIXTURES_BRANCH
+          base: 'dev'
           delete-branch: true
