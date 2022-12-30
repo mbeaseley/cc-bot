@@ -19,10 +19,10 @@ jobs:
           node-version: 14
 
       - name: Get date
-        run: echo "CURRENT_DATE=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+        run: echo "CURRENT_DATE=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
 
       - name: Set branch name
-        run: echo "CYPRESS_FIXTURES_BRANCH=feature/e2e-{{$CURRENT_DATE}}" >> $GITHUB_ENV
+        run: echo "CYPRESS_FIXTURES_BRANCH=feature/e2e-$CURRENT_DATE" >> $GITHUB_ENV
 
       - name: Create new branch
         run: |
