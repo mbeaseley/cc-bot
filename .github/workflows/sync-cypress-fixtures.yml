@@ -27,7 +27,6 @@ jobs:
       - name: Create new branch
         run: |
           echo "Creating $CYPRESS_FIXTURES_BRANCH"
-          git checkout dev
           git checkout -b $CYPRESS_FIXTURES_BRANCH
           git config --global user.email "cypress-fixtures-spy@bloomandwild.com"
           git config --global user.name "Cypress Fixtures Spy"
