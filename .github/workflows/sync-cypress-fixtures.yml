@@ -50,6 +50,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `[E2E] Cypress Fixtures $CURRENT_DATE`,
-              head: $CYPRESS_FIXTURES_BRANCH,
+              head: `$CYPRESS_FIXTURES_BRANCH`,
               base: `dev`
             })
