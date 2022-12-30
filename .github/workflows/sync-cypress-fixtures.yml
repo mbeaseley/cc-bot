@@ -47,7 +47,7 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@v4
         with:
-          title: '[E2E] Cypress fixtures pulled $CURRENT_DATE'
-          branch: `${env.CYPRESS_FIXTURES_BRANCH}`
-          base: `${process.env.BASE_BRANCH_NAME}`
+          title: '[E2E] Cypress fixtures pulled  at ${{CURRENT_DATE}}'
+          branch: '${{env.CYPRESS_FIXTURES_BRANCH}}'
+          base: '${{process.env.BASE_BRANCH_NAME}}'
           delete-branch: true
