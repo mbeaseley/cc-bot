@@ -49,5 +49,5 @@ jobs:
         with:
           title: '[E2E] Cypress fixtures pulled  at ${{env.CURRENT_DATE}}'
           branch: '${{env.CYPRESS_FIXTURES_BRANCH}}'
-          base: '${{process.env.STAGING_BRANCH}}'
+          base: 'dev'
           delete-branch: true
