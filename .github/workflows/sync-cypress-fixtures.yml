@@ -48,6 +48,6 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           title: '[E2E] Cypress fixtures pulled $CURRENT_DATE'
-          branch: '$CYPRESS_FIXTURES_BRANCH'
-          base: 'dev'
+          branch: `${process.env.TRANSLATION_BRANCH_NAME}`
+          base: `${process.env.BASE_BRANCH_NAME}`
           delete-branch: true
