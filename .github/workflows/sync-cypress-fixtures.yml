@@ -33,7 +33,6 @@ jobs:
           git checkout -b $CYPRESS_FIXTURES_BRANCH
           git config --global user.email "cypress-fixtures-spy@bloomandwild.com"
           git config --global user.name "Cypress Fixtures Spy"
-          git push -u origin $CYPRESS_FIXTURES_BRANCH
 
       - name: Run record
         # TODO
@@ -42,7 +41,7 @@ jobs:
           echo hello world! >> hello-world.txt
           git add .
           git commit -m  "Fixtures pulled at $CURRENT_DATE"
-          git push origin $CYPRESS_FIXTURES_BRANCH
+          git push -u origin $CYPRESS_FIXTURES_BRANCH
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v4
