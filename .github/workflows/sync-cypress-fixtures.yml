@@ -43,13 +43,12 @@ jobs:
           git push origin $CYPRESS_FIXTURES_BRANCH
 
       - name: Create PR
-        run: |
-          github-token: ${{github.token}}
-          script: |
-            github.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `[E2E] Cypress Fixtures $CURRENT_DATE`,
-              head: $CYPRESS_FIXTURES_BRANCH,
-              base: `dev`
-            })
+        github-token: ${{github.token}}
+        script: |
+          github.pulls.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `[E2E] Cypress Fixtures $CURRENT_DATE`,
+            head: $CYPRESS_FIXTURES_BRANCH,
+            base: `dev`
+          })
