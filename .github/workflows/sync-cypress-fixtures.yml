@@ -41,13 +41,13 @@ jobs:
           touch hello-world.txt
           echo hello world! >> hello-world.txt
           git add .
-          git commit -m  "Fixtures pulled at `CURRENT_DATE`"
+          git commit -m  "Fixtures pulled at $CURRENT_DATE"
           git push origin $CYPRESS_FIXTURES_BRANCH
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v4
         with:
-          title: '[E2E] Cypress fixtures pulled  at ${{CURRENT_DATE}}'
+          title: '[E2E] Cypress fixtures pulled  at ${{env.CURRENT_DATE}}'
           branch: '${{env.CYPRESS_FIXTURES_BRANCH}}'
-          base: '${{process.env.BASE_BRANCH_NAME}}'
+          base: '${{process.env.STAGING_BRANCH}}'
           delete-branch: true
