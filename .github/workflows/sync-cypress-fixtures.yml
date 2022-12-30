@@ -45,5 +45,5 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@v4
         with:
-          title: `[E2E] Cypress fixtures pulled $CURRENT_DATE`
+          title: '[E2E] Cypress fixtures pulled $CURRENT_DATE'
           delete-branch: true
