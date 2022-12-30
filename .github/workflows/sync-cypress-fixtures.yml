@@ -1,4 +1,4 @@
-name: 'Sync cypress fixtures'
+name: 'Cypress fixtures'
 on: pull_request # For testing purposes
 # Every Monday at 1PM UTC (9AM EST)
 # on:
@@ -27,7 +27,29 @@ jobs:
       - name: Create new branch
         run: |
           echo "Creating $CYPRESS_FIXTURES_BRANCH"
+          git checkout staging
           git checkout -b $CYPRESS_FIXTURES_BRANCH
           git config --global user.email "cypress-fixtures-spy@bloomandwild.com"
           git config --global user.name "Cypress Fixtures Spy"
           git push -u origin $CYPRESS_FIXTURES_BRANCH
+
+      - name: Run record
+        # TODO
+        run: |
+          touch hello-world.txt
+          echo hello world! >> hello-world.txt
+          git add .
+          git commit -m  "Fixtures pulled at `CURRENT_DATE`"
+          git push origin $CYPRESS_FIXTURES_BRANCH
+
+      - name: Create PR
+        run: |
+          github-token: ${{github.token}}
+          script: |
+            github.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[E2E] Cypress Fixtures $CURRENT_DATE`,
+              head: $CYPRESS_FIXTURES_BRANCH,
+              base: `dev`
+            })
