@@ -5,6 +5,9 @@ on: pull_request # For testing purposes
 #   schedule:
 #     - cron: 0 13 * * 1
 
+env:
+  STAGING_BRANCH: staging
+
 jobs:
   update_fixtures:
     runs-on: ubuntu-latest
@@ -42,12 +45,9 @@ jobs:
           git push origin $CYPRESS_FIXTURES_BRANCH
 
       - name: Create PR
-        env:
-          TRANSLATION_BRANCH_NAME: $CYPRESS_FIXTURES_BRANCH
-          BASE_BRANCH_NAME: 'dev'
         uses: peter-evans/create-pull-request@v4
         with:
           title: '[E2E] Cypress fixtures pulled $CURRENT_DATE'
-          branch: `${process.env.TRANSLATION_BRANCH_NAME}`
+          branch: `${env.CYPRESS_FIXTURES_BRANCH}`
           base: `${process.env.BASE_BRANCH_NAME}`
           delete-branch: true
