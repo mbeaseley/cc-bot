@@ -33,6 +33,7 @@ jobs:
           git checkout -b $CYPRESS_FIXTURES_BRANCH
           git config --global user.email "cypress-fixtures-spy@bloomandwild.com"
           git config --global user.name "Cypress Fixtures Spy"
+          git push -u origin $CYPRESS_FIXTURES_BRANCH
 
       - name: Run record
         # TODO
